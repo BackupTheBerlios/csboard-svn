@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="800"
+   height="800"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg618"
+   sodipodi:version="0.34"
+   sodipodi:docname="/home/shmyrev/local/src/csboard/images/black-pawn.svg"
+   sodipodi:docbase="/home/shmyrev/local/src/csboard/images/">
+  <defs
+     id="defs621" />
+  <sodipodi:namedview
+     id="base" />
+  <path
+     d="M 688.0238 750.9763 L 688.0238 624.9763 C 688.0238 579.9763 661.6238 452.4763 553.0238 408.9763 C 598.0238 354.9763 607.0238 255.9763 517.0238 192.9763 C 544.0238 156.9763 517.0238 30.97622 409.0238 30.97622 C 301.0238 30.97622 274.0238 156.9763 301.0238 192.9763 C 211.0238 255.9763 220.0238 354.9763 265.0238 408.9763 C 157.0238 453.9763 130.0238 579.9763 130.0238 624.9763 L 130.0238 750.9763 L 688.0238 750.9763 z "
+     id="path619" />
+</svg>

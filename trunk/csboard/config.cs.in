@@ -1,0 +1,10 @@
+namespace CsBoard {
+
+        public class Config {
+	
+		public static string prefix="@prefix@";
+		public static string packageName = "@PACKAGE@";
+		public static string packageVersion = "@VERSION@";
+		public static bool Debug = false;
+	}
+}

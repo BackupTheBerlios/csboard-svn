@@ -1,0 +1,62 @@
+<Project name="csboard" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name="./../src/App.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Board.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Figure.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/GnuChess.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Crafty.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Phalanx.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/FileChooser.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Session.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Position.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Book.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Promotion.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Gettext.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/Window.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../src/IControl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./../TODO" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../csboard" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/black-bishop.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/black-king.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/black-knight.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/black-pawn.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/black-queen.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/black-rook.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/white-bishop.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/white-king.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/white-knight.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/white-pawn.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/white-queen.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/white-rook.svg" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/AUTHOR" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../images/LICENSE.html" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name="./../resource/csboard.glade" subtype="Code" buildaction="Nothing" dependson="" data="" />
+  </Contents>./
+  <References>
+    <Reference type="Gac" refto="gtk-sharp.dll" localcopy="True" />
+    <Reference type="Gac" refto="gdk-sharp.dll" localcopy="True" />
+    <Reference type="Gac" refto="glib-sharp.dll" localcopy="True" />
+    <Reference type="Gac" refto="rsvg-sharp.dll" localcopy="True" />
+    <Reference type="Gac" refto="glade-sharp.dll" localcopy="True" />
+    <Reference type="Gac" refto="pango-sharp.dll" localcopy="True" />
+    <Reference type="Gac" refto="glade-sharp.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="False" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" warninglevel="4" nowarn="" includedebuginformation="True" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Exe" definesymbols="" generatexmldocumentation="False" win32Icon="" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="./" assembly="csboard" executeScript="" executeBeforeBuild="" executeAfterBuild="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="False" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" warninglevel="4" nowarn="" includedebuginformation="True" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Exe" definesymbols="" generatexmldocumentation="False" win32Icon="" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="./" assembly="csboard" executeScript="" executeBeforeBuild="" executeAfterBuild="" />
+    </Configuration>
+    <Configuration runwithwarnings="False" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" warninglevel="4" nowarn="" includedebuginformation="True" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Exe" definesymbols="" generatexmldocumentation="False" win32Icon="" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="./" assembly="csboard" executeScript="" executeBeforeBuild="" executeAfterBuild="" />
+    </Configuration>
+  </Configurations>
+</Project>

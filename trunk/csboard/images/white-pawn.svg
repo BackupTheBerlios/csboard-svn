@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="800"
+   height="800"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg642"
+   sodipodi:version="0.34"
+   sodipodi:docname="/home/shmyrev/local/src/csboard/images/white-pawn.svg"
+   sodipodi:docbase="/home/shmyrev/local/src/csboard/images/">
+  <defs
+     id="defs645" />
+  <sodipodi:namedview
+     id="base" />
+  <path
+     d="M 688.0238 753.5159 L 688.0238 627.5159 C 688.0238 582.5159 661.6238 455.0159 553.0238 411.5159 C 598.0238 357.5159 607.0238 258.5159 517.0238 195.5159 C 544.0238 159.5159 517.0238 33.5159 409.0238 33.5159 C 301.0238 33.5159 274.0238 159.5159 301.0238 195.5159 C 211.0238 258.5159 220.0238 357.5159 265.0238 411.5159 C 157.0238 456.5159 130.0238 582.5159 130.0238 627.5159 L 130.0238 753.5159 L 688.0238 753.5159 z M 409.0238 87.5159 C 490.0238 87.5159 490.0238 177.5159 454.0238 213.5159 C 562.0238 258.5159 535.0238 375.5159 481.0238 429.5159 C 571.0238 456.5159 634.0238 546.5159 634.0238 609.5159 L 634.0238 699.5159 L 184.0238 699.5159 L 184.0238 609.5159 C 184.0238 546.5159 247.0238 456.5159 337.0238 429.5159 C 283.0238 375.5159 256.0238 258.5159 364.0238 213.5159 C 328.0238 177.5159 328.0238 87.5159 409.0238 87.5159 z "
+     id="path643" />
+</svg>
