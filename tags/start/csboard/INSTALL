@@ -1,0 +1,16 @@
+You need the following software
+
+    gnuchess 5.07 
+    gtk 2.4
+    mono-0.91
+    gtk-sharp-0.91
+    librsvg-2.6
+    
+Also note, that for book opening you need correct install of gnuchess book,
+some distributions, for example, Fedora, doesn't do it correctly.
+
+To run the game, execute followng steps:
+
+1. Copy csboard directory anywhere you like, for example in /usr/share/csboard
+2. Copy csboard file to your path and modify it according to csboard dir prefix.
+3. Enjoy the game.

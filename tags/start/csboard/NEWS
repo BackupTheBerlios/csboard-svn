@@ -1,0 +1,30 @@
+Release 0.5 contains:
+
+* UI improvments, like progress bar on thinking, possible move highligh for
+  newbies, animation.
+* Better error handling.
+* Updated documentation.
+* Work for playing with ICS servers.
+
+Release 0.4, where you can find:
+
+* Some UI options help you customize CSBoard look.
+* Now we use GConf to store preferences.
+* Support for Crafty and Phalanx engines (check GConf key).
+
+Release 0.3 can break the world with:
+
+* Full build process. Now you can just configure && make && make install
+* Keyboard navigation. Just play with arrows without mouse.
+* Full GNOME integration. In this release, we support pgn mime type, icons and 
+  documentation.
+* Internationalization started. Russian translation already in place.
+
+This release 0.2 has number of features:
+
+* Usage of gtk-2.4 file dialogs.
+* Figures dragging.
+* Hints and book openening
+* Level adjustment.
+* Session saving and implemented revert.
+

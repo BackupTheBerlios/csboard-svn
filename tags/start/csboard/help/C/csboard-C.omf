@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<omf>
+  <resource>
+    <creator>
+      docs@gnome.org (GDP)
+    </creator>
+    <maintainer>
+      docs@gnome.org (GDP)
+    </maintainer>
+    <title>
+      CSBoard Manual V0.4
+    </title>
+    <date>
+      2004-06-09
+    </date>
+    <version identifier="0.4" date="2004-10-22" description="Revision for 0.4"/>
+    <subject category="GNOME|Games"/>
+    <description>
+      User manual for CSBoard chess application. 
+    </description>
+    <type>
+      user's guide
+    </type>
+    <format mime="text/xml" dtd="-//OASIS//DTD DocBook XML V4.1.2//EN"/>
+    <identifier url="csboard.xml"/>
+    <language code="C"/>
+    <relation seriesid="0b658a8e-ba19-11d8-8272-f34b51e056de"/>
+    <rights type="GNU FDL" license.version="1.1" holder="Sun Microsystems"/>
+  </resource>
+</omf>

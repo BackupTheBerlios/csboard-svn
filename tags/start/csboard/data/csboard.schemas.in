@@ -1,0 +1,107 @@
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/csboard/engine</key>
+      <applyto>/apps/csboard/engine</applyto>
+      <owner>csboard</owner>
+      <type>string</type>
+      <default>gnuchess -x -e</default>
+      <locale name="C">
+	<short>Command line to start engine</short>
+	<long>Command line to start engine. Be careful, this key can
+	break programm. Possible engines are 'gnuchess', 'crafty', 'ICS' and 'phalanx'.
+	For crafty please give path to log, books and databases as arguments.
+	For phalanx please disable learing with argument -l- or give the
+	path to learning directory, also give path to Phalanx books. For 
+	details look at engine's help. For ICS this string should look like:
+	&quot;ICS --server freechess.org --user jimmy --password bar&quot;. </long>
+      </locale>
+    </schema>
+    
+    <schema>
+      <key>/schemas/apps/csboard/session/level</key>
+      <applyto>/apps/csboard/session/level</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>1</default>
+      <locale name="C">
+	<short>Level of player</short>
+	<long>This key adjusts engine strenght</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/width</key>
+      <applyto>/apps/csboard/session/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Window width</short>
+	<long>Saved board window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/height</key>
+      <applyto>/apps/csboard/session/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Window height</short>
+	<long>Saved board window height</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/show_coords</key>
+      <applyto>/apps/csboard/session/show_coords</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Show Coords</short>
+	<long>Show Coordinates on Chess Board</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/last_move</key>
+      <applyto>/apps/csboard/session/last_move</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Highligh last move</short>
+	<long>Draw rectangle around last move</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/possible_moves</key>
+      <applyto>/apps/csboard/session/possible_moves</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+	<short>Highligh possible moves</short>
+	<long>Should I highlight all possible moves for newbe.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/animate</key>
+      <applyto>/apps/csboard/session/animate</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Animate moves</short>
+	<long>Add nice visual animate effect.</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>
