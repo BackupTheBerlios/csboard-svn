@@ -1,0 +1,11 @@
+resource/csboard.glade
+data/csboard.desktop.in
+data/csboard.schemas.in
+src/App.cs
+src/Window.cs
+src/Promotion.cs
+src/Book.cs
+src/GnuChess.cs
+src/ICSSeek.cs
+src/ICS.cs
+src/ICSClient.cs
