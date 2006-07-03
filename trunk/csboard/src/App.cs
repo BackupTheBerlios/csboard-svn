@@ -30,24 +30,19 @@ namespace CsBoard {
 		
 		Catalog.Init (Config.packageName, Config.prefix + "/share/locale");
 
+
 			try {
-		
 				session = new Session ();
-				
 				string filename = null;
-				
 				if (args.Length == 1 && System.IO.File.Exists (args[0])) {
 				   filename = args[0];
 				} 
-
 	                        ChessWindow win = new ChessWindow (filename);
-
 	                        Application.Run ();
-
 			} catch (ApplicationException) {
 				return 1;
 			} catch (System.Exception e) {	
-				
+
 				 try {
 					 MessageDialog md =
 		                                        new MessageDialog (null,
@@ -55,11 +50,10 @@ namespace CsBoard {
 	        	                                               DestroyWithParent,
 	                	                                       MessageType.Error,
 	                    	                                       ButtonsType.Close, 
-				    				       Catalog.GetString ("An unexpected exception occured:\n\n") +
-								       e.ToString() + "\n" +
-				                                       Catalog.GetString ("Please report about this exception to \n") +
-								      "Nickolay V. Shmyrev <nshmyrev@yandex.ru>");
-	    							   
+				    				       Catalog.GetString ("This is really sad\n") +
+								       Catalog.GetString ("Please send this bug repport to\n") +
+								       Catalog.GetString ("Nickolay V. Shmyrev  <nshmyrev@yandex.ru>\n") +
+								      GLib.Markup.EscapeText (e.ToString()));
 					 md.Run ();
 	        	                 md.Hide ();
 	    	        	         md.Dispose ();
