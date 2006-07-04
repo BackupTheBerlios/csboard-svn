@@ -23,13 +23,12 @@ namespace CsBoard {
         public class App {
 
 		public static Session session;	
-	
+
                 public static int Main (string [] args) {
 
                 Application.Init ();
-		
-		Catalog.Init (Config.packageName, Config.prefix + "/share/locale");
 
+		Catalog.Init (Config.packageName, Config.prefix + "/share/locale");
 
 			try {
 				session = new Session ();
@@ -45,15 +44,15 @@ namespace CsBoard {
 
 				 try {
 					 MessageDialog md =
-		                                        new MessageDialog (null,
-	    	                                                       DialogFlags.
-	        	                                               DestroyWithParent,
-	                	                                       MessageType.Error,
-	                    	                                       ButtonsType.Close, 
-				    				       Catalog.GetString ("This is really sad\n") +
-								       Catalog.GetString ("Please send this bug repport to\n") +
-								       Catalog.GetString ("Nickolay V. Shmyrev  <nshmyrev@yandex.ru>\n") +
-								      GLib.Markup.EscapeText (e.ToString()));
+		                    	   new MessageDialog (null,
+	    	                                              DialogFlags.DestroyWithParent,
+	                	                              MessageType.Error,
+	                    	                              ButtonsType.Close, 
+				    	   	              Catalog.GetString ("Unexpected exception occured\n") +
+				    	   	              GLib.Markup.EscapeText (e.ToString()) +
+				    	   	              "\n" +
+							      Catalog.GetString ("Please send this bug report to\n") +
+							      "Nickolay V. Shmyrev  &lt;nshmyrev@yandex.ru&gt;\n");
 					 md.Run ();
 	        	                 md.Hide ();
 	    	        	         md.Dispose ();

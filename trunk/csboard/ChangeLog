@@ -1,3 +1,9 @@
+2006-07-04  Sergey E. Kvyato <kvantos@plotinka.ru>
+
+	* src/App.cs: 
+	
+	- Escape markup before passing to message dialog
+
 2005-10-10  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* README:

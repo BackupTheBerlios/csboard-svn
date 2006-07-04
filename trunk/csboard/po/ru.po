@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csboard 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-25 22:01+0400\n"
+"POT-Creation-Date: 2006-07-04 11:24+0400\n"
 "PO-Revision-Date: 2004-10-20 18:07+0400\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -15,163 +15,163 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resource/csboard.glade.h:1
+#: ../resource/csboard.glade.h:1
 msgid "<b>Available games:</b>"
 msgstr "<b>Доступные игры:</b>"
 
-#: resource/csboard.glade.h:2
+#: ../resource/csboard.glade.h:2
 msgid "<b>For this position there are moves in a book</b>"
 msgstr "<b>Для этой позиции в книге найдено:</b>"
 
-#: resource/csboard.glade.h:3
+#: ../resource/csboard.glade.h:3
 msgid "Bishop"
 msgstr "Слон"
 
-#: resource/csboard.glade.h:4 src/Book.cs:38
+#: ../resource/csboard.glade.h:4 ../src/Book.cs:38
 msgid "Book Opening"
 msgstr "Открыть книгу"
 
-#: resource/csboard.glade.h:5
+#: ../resource/csboard.glade.h:5
 msgid "Knight"
 msgstr "Конь"
 
-#: resource/csboard.glade.h:6
+#: ../resource/csboard.glade.h:6
 msgid "Queen"
 msgstr "Ферзь"
 
-#: resource/csboard.glade.h:7
+#: ../resource/csboard.glade.h:7
 msgid "Rook"
 msgstr "Ладья"
 
-#: resource/csboard.glade.h:8
+#: ../resource/csboard.glade.h:8
 msgid "Select figure to promote"
 msgstr "Выбирите фигуру"
 
-#: resource/csboard.glade.h:9 src/ICSSeek.cs:46
+#: ../resource/csboard.glade.h:9 ../src/ICSSeek.cs:46
 msgid "Start new ICS game"
 msgstr "Начать новую игру на шахматном сервере"
 
-#: resource/csboard.glade.h:10
+#: ../resource/csboard.glade.h:10
 msgid "Welcome to CS Board"
 msgstr "Добро пожаловать в CS Board"
 
-#: resource/csboard.glade.h:11
+#: ../resource/csboard.glade.h:11
 msgid "_About"
 msgstr "_О программе"
 
-#: resource/csboard.glade.h:12
+#: ../resource/csboard.glade.h:12
 msgid "_Action"
 msgstr "_Действия"
 
-#: resource/csboard.glade.h:13
+#: ../resource/csboard.glade.h:13
 msgid "_Advanced"
 msgstr "_Сильный"
 
-#: resource/csboard.glade.h:14
+#: ../resource/csboard.glade.h:14
 msgid "_Animate"
 msgstr "_Анимировать"
 
-#: resource/csboard.glade.h:15
+#: ../resource/csboard.glade.h:15
 msgid "_Beginner"
 msgstr "_Начинающий"
 
-#: resource/csboard.glade.h:16
+#: ../resource/csboard.glade.h:16
 msgid "_Book"
 msgstr "_Книга"
 
-#: resource/csboard.glade.h:17
+#: ../resource/csboard.glade.h:17
 msgid "_Contents"
 msgstr "_Содержание"
 
-#: resource/csboard.glade.h:18
+#: ../resource/csboard.glade.h:18
 msgid "_Coords"
 msgstr "_Координаты"
 
-#: resource/csboard.glade.h:19
+#: ../resource/csboard.glade.h:19
 msgid "_Expert"
 msgstr "_Эксперт"
 
-#: resource/csboard.glade.h:20
+#: ../resource/csboard.glade.h:20
 msgid "_Game"
 msgstr "_Игра"
 
-#: resource/csboard.glade.h:21
+#: ../resource/csboard.glade.h:21
 msgid "_Help"
 msgstr "_Справка"
 
-#: resource/csboard.glade.h:22
+#: ../resource/csboard.glade.h:22
 msgid "_Hint"
 msgstr "_Подсказка"
 
-#: resource/csboard.glade.h:23
+#: ../resource/csboard.glade.h:23
 msgid "_Intermediate"
 msgstr "_Средний"
 
-#: resource/csboard.glade.h:24
+#: ../resource/csboard.glade.h:24
 msgid "_Last Move"
 msgstr "_Последний ход"
 
-#: resource/csboard.glade.h:25
+#: ../resource/csboard.glade.h:25
 msgid "_Level"
 msgstr "_Уровень"
 
-#: resource/csboard.glade.h:26
+#: ../resource/csboard.glade.h:26
 msgid "_New"
 msgstr "_Новая"
 
-#: resource/csboard.glade.h:27
+#: ../resource/csboard.glade.h:27
 msgid "_Open"
 msgstr "_Открыть"
 
-#: resource/csboard.glade.h:28
+#: ../resource/csboard.glade.h:28
 msgid "_Possible Moves"
 msgstr "_Возможные ходы"
 
-#: resource/csboard.glade.h:29
+#: ../resource/csboard.glade.h:29
 msgid "_Quit"
 msgstr "_Выйти"
 
-#: resource/csboard.glade.h:30
+#: ../resource/csboard.glade.h:30
 msgid "_Redo"
 msgstr "_Возвратить"
 
-#: resource/csboard.glade.h:31
+#: ../resource/csboard.glade.h:31
 msgid "_Save"
 msgstr "_Сохранить"
 
-#: resource/csboard.glade.h:32
+#: ../resource/csboard.glade.h:32
 msgid "_Switch Side"
 msgstr "_Переключить сторону"
 
-#: resource/csboard.glade.h:33
+#: ../resource/csboard.glade.h:33
 msgid "_Undo"
 msgstr "_Отменить"
 
-#: resource/csboard.glade.h:34
+#: ../resource/csboard.glade.h:34
 msgid "_View"
 msgstr "_Вид"
 
-#: data/csboard.desktop.in.h:1
+#: ../data/csboard.desktop.in.h:1
 msgid "CSBoard chess "
 msgstr "Шахматы CSBoard"
 
-#: data/csboard.desktop.in.h:2
+#: ../data/csboard.desktop.in.h:2
 msgid "Play chess with gnuchess engine"
 msgstr "Игра в шахматы с gnuchess"
 
-#: data/csboard.schemas.in.h:1
+#: ../data/csboard.schemas.in.h:1
 msgid "Add nice visual animate effect."
 msgstr "Неплохая примочка"
 
-#: data/csboard.schemas.in.h:2
+#: ../data/csboard.schemas.in.h:2
 msgid "Animate moves"
 msgstr "Анимировать ходы"
 
-#: data/csboard.schemas.in.h:3
+#: ../data/csboard.schemas.in.h:3
 msgid "Command line to start engine"
 msgstr "Командная строка для запуска шахматной программы"
 
-#: data/csboard.schemas.in.h:4
+#: ../data/csboard.schemas.in.h:4
 msgid ""
 "Command line to start engine. Be careful, this key can break programm. "
 "Possible engines are 'gnuchess', 'crafty', 'ICS' and 'phalanx'. For crafty "
@@ -190,85 +190,81 @@ msgstr ""
 "строка должна выглядеть как \"ICS --server freechess.org --user jimmy --"
 "password bar\"."
 
-#: data/csboard.schemas.in.h:5
+#: ../data/csboard.schemas.in.h:5
 msgid "Draw rectangle around last move"
 msgstr "Рисовать ли квадрат вокруг последнего хода"
 
-#: data/csboard.schemas.in.h:6
+#: ../data/csboard.schemas.in.h:6
 msgid "Highligh last move"
 msgstr "Показывать последний ход"
 
-#: data/csboard.schemas.in.h:7
+#: ../data/csboard.schemas.in.h:7
 msgid "Highligh possible moves"
 msgstr "Показывать возможные ходы"
 
-#: data/csboard.schemas.in.h:8
+#: ../data/csboard.schemas.in.h:8
 msgid "Level of player"
 msgstr "Уровень игрока"
 
-#: data/csboard.schemas.in.h:9
+#: ../data/csboard.schemas.in.h:9
 msgid "Saved board window height"
 msgstr "Сохраненная высота окна"
 
-#: data/csboard.schemas.in.h:10
+#: ../data/csboard.schemas.in.h:10
 msgid "Saved board window width"
 msgstr "Сохраненная ширина окна"
 
-#: data/csboard.schemas.in.h:11
+#: ../data/csboard.schemas.in.h:11
 msgid "Should I highlight all possible moves for newbe."
 msgstr "Показывать возможные ходы для новичков."
 
-#: data/csboard.schemas.in.h:12
+#: ../data/csboard.schemas.in.h:12
 msgid "Show Coordinates on Chess Board"
 msgstr "Показывать координаты на доске"
 
-#: data/csboard.schemas.in.h:13
+#: ../data/csboard.schemas.in.h:13
 msgid "Show Coords"
 msgstr "Показывать координаты"
 
-#: data/csboard.schemas.in.h:14
+#: ../data/csboard.schemas.in.h:14
 msgid "This key adjusts engine strenght"
 msgstr "Это поле изменяет силу игры"
 
-#: data/csboard.schemas.in.h:15
+#: ../data/csboard.schemas.in.h:15
 msgid "Window height"
 msgstr "Высота окна"
 
-#: data/csboard.schemas.in.h:16
+#: ../data/csboard.schemas.in.h:16
 msgid "Window width"
 msgstr "Ширина окна"
 
-#: src/App.cs:58
-msgid ""
-"An unexpected exception occured:\n"
-"\n"
-msgstr ""
-"Возникла непредвиденная ошибка:\n"
-"\n"
+#: ../src/App.cs:51
+msgid "Unexpected exception occured\n"
+msgstr "Возникла непредвиденная ошибка\n"
 
-#: src/App.cs:60
-msgid "Please report about this exception to \n"
-msgstr "Пожалуйста, сообщите об этой ошибке \n"
+#: ../src/App.cs:54
+msgid "Please send this bug report to\n"
+msgstr "Пожалуйста, отправьте эту информацию\n"
 
-#: src/Window.cs:80
+#: ../src/Window.cs:80
 msgid "Unknown engine. Please check gconf keys of csboard"
 msgstr ""
 "Неизвестная шахматная программа. Пожалуйста, проверьте значение настроек "
 "csboard в gconf"
 
-#: src/Window.cs:192
+#: ../src/Window.cs:192
 msgid "Open Game"
 msgstr "Открыть файл игры"
 
-#: src/Window.cs:207
+#: ../src/Window.cs:207
 msgid "Save Game"
 msgstr "Сохранить игру"
 
-#: src/Window.cs:224
+#: ../src/Window.cs:224
 msgid "File "
 msgstr "Файл "
 
-#: src/Window.cs:225
+#: ../src/Window.cs:225
 msgid ""
 " already exists\n"
 "\n"
@@ -276,19 +272,19 @@ msgstr ""
 "уже существует\n"
 "\n"
 
-#: src/Window.cs:226
+#: ../src/Window.cs:226
 msgid "Do you wish to overwrite it?"
 msgstr "Вы хотите переписать его?"
 
-#: src/Window.cs:267
+#: ../src/Window.cs:267
 msgid "There is no book move in this position"
 msgstr "Для этой позиции в книге нет ходов"
 
-#: src/Window.cs:308
+#: ../src/Window.cs:308
 msgid "You can move "
 msgstr "Вы можете пойти "
 
-#: src/Window.cs:385
+#: ../src/Window.cs:385
 msgid ""
 "Frontend to gnuchess written in C#\n"
 "\n"
@@ -296,87 +292,90 @@ msgstr ""
 "Оболочка для GNU Chess написанная на языке C#\n"
 "\n"
 
-#: src/Window.cs:423
+#: ../src/Window.cs:423
 msgid "Illegal move"
 msgstr "Некорректный ход"
 
-#: src/Window.cs:443 src/Window.cs:452
+#: ../src/Window.cs:443 ../src/Window.cs:452
 msgid "Game Over"
 msgstr "Игра закончена"
 
-#: src/Window.cs:464
+#: ../src/Window.cs:464
 msgid "Thinking"
 msgstr "Думаю"
 
-#: src/Promotion.cs:42
+#: ../src/Promotion.cs:42
 msgid "Select a figure to promote"
 msgstr "Выбирите фигуру"
 
-#: src/Book.cs:65
+#: ../src/Book.cs:65
 msgid "Move"
 msgstr "Ход"
 
-#: src/Book.cs:71
+#: ../src/Book.cs:71
 msgid "Score"
 msgstr "Рейтинг"
 
-#: src/Book.cs:77
+#: ../src/Book.cs:77
 msgid "Wins"
 msgstr "Побед"
 
-#: src/Book.cs:83
+#: ../src/Book.cs:83
 msgid "Loses"
 msgstr "Поражений"
 
-#: src/Book.cs:89
+#: ../src/Book.cs:89
 msgid "Draws"
 msgstr "Ничьих"
 
-#: src/ICSSeek.cs:63
+#: ../src/ICSSeek.cs:63
 msgid "Index"
 msgstr "Индекс"
 
-#: src/ICSSeek.cs:64
+#: ../src/ICSSeek.cs:64
 msgid "Rating"
 msgstr "Уровень"
 
-#: src/ICSSeek.cs:65
+#: ../src/ICSSeek.cs:65
 msgid "Player"
 msgstr "Игрок"
 
-#: src/ICSSeek.cs:66
+#: ../src/ICSSeek.cs:66
 msgid "Time"
 msgstr "Время"
 
-#: src/ICSSeek.cs:67
+#: ../src/ICSSeek.cs:67
 msgid "Increment"
 msgstr "Увеличение"
 
-#: src/ICSSeek.cs:68
+#: ../src/ICSSeek.cs:68
 msgid "R/U"
 msgstr "Учет уровня"
 
-#: src/ICSSeek.cs:69
+#: ../src/ICSSeek.cs:69
 msgid "Type"
 msgstr "Тип"
 
-#: src/ICSSeek.cs:70
+#: ../src/ICSSeek.cs:70
 msgid "Color"
 msgstr "Цвет"
 
-#: src/ICSSeek.cs:71
+#: ../src/ICSSeek.cs:71
 msgid "Range"
 msgstr "Промежуток"
 
-#: src/ICSSeek.cs:72
+#: ../src/ICSSeek.cs:72
 msgid "Flags"
 msgstr "Флаги"
 
-#: src/ICS.cs:60
+#: ../src/ICS.cs:60
 msgid "Can't parse command line"
 msgstr "Не могу разобрать командную строку"
 
-#: src/ICSClient.cs:59
+#: ../src/ICSClient.cs:59
 #, csharp-format
 msgid "Can't connect to {0} port {1}"
 msgstr "Не могу соединиться с сервером {0} порт {1}"
+
+#~ msgid "Please report about this exception to \n"
+#~ msgstr "Пожалуйста, сообщите об этой ошибке \n"
