@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([csboard], [0.5], [nshmyrev@yandex.ru])
+AC_INIT([csboard], [0.6], [nshmyrev@yandex.ru])
 AM_INIT_AUTOMAKE
 
 #This is a requirement for gettext and future use
@@ -16,33 +16,35 @@ AM_GLIB_GNU_GETTEXT
 
 # Dependencies
 
-MONO_REQUIRED_VERSION=0.95
-GTKSHARP_REQUIRED_VERSION=0.93
+MONO_REQUIRED_VERSION=1.1.0
+GTKSHARP_REQUIRED_VERSION=2.8.0
 
 PKG_CHECK_MODULES(MONO,
 mono >= $MONO_REQUIRED_VERSION
 )
 
 PKG_CHECK_MODULES(BASE_DEPENDENCIES,
-gtk-sharp >= $GTKSHARP_REQUIRED_VERSION
-glade-sharp >= $GTKSHARP_REQUIRED_VERSION
-rsvg-sharp >= $GTKSHARP_REQUIRED_VERSION
-gconf-sharp >= $GTKSHARP_REQUIRED_VERSION
+gtk-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+glade-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+rsvg-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+gconf-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
 )
 AC_SUBST(BASE_DEPENDENCIES_LIBS)
 
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
+GNOME_DOC_INIT
+
 AC_CONFIG_FILES([
     Makefile
     data/Makefile
     data/csboard
     data/csboard.spec
-    po/Makefile.in
-    config.cs
     help/Makefile
-    help/C/Makefile
+    po/Makefile.in
+    resource/Makefile
+    config.cs
     ])
 
 AC_OUTPUT

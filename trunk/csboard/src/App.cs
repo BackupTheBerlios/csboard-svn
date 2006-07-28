@@ -36,7 +36,7 @@ namespace CsBoard {
 				if (args.Length == 1 && System.IO.File.Exists (args[0])) {
 				   filename = args[0];
 				} 
-	                        ChessWindow win = new ChessWindow (filename);
+	                        new ChessWindow (filename);
 	                        Application.Run ();
 			} catch (ApplicationException) {
 				return 1;
@@ -48,7 +48,7 @@ namespace CsBoard {
 	    	                                              DialogFlags.DestroyWithParent,
 	                	                              MessageType.Error,
 	                    	                              ButtonsType.Close, 
-				    	   	              Catalog.GetString ("Unexpected exception occured\n") +
+				    	   	              Catalog.GetString ("<b>Unexpected exception occured</b>\n\n") +
 				    	   	              GLib.Markup.EscapeText (e.ToString()) +
 				    	   	              "\n" +
 							      Catalog.GetString ("Please send this bug report to\n") +

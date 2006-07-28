@@ -29,6 +29,7 @@ install-data-local:
 			GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $$p ; \
 		done ; \
 	fi
+	-killall -s HUP gconfd-2
 else
 install-data-local:
 endif
@@ -40,7 +41,11 @@ uninstall-local:
 			GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-uninstall-rule $$p ; \
 		done ; \
 	fi
+	-killall -s HUP gconfd-2
 else
 uninstall-local:
 endif
 
+DISTCLEANFILES = \
+	$(desktop_DATA)	\
+	$(schemas_DATA)

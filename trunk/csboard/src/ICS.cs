@@ -26,12 +26,30 @@ namespace CsBoard {
 
 	public class ICS:IControl {
 
-                public event ControlBusyHandler BusyEvent;
-                public event ControlWaitHandler WaitEvent;
-                public event ControlPositionChangedHandler PositionChangedEvent;
-                public event ControlGameOverHandler GameOverEvent;
-                public event ControlSwitchSideHandler SwitchSideEvent;
-		public event ControlHintHandler HintEvent;
+                public event ControlBusyHandler BusyEvent {
+            		add {}
+            		remove {}
+                }
+                public event ControlWaitHandler WaitEvent {
+            		add {}
+            		remove {}
+                }
+                public event ControlPositionChangedHandler PositionChangedEvent {
+            		add {}
+            		remove {}
+                }
+                public event ControlGameOverHandler GameOverEvent {
+            		add {}
+            		remove {}
+                }
+                public event ControlSwitchSideHandler SwitchSideEvent {
+            		add {}
+            		remove {}
+                }
+		public event ControlHintHandler HintEvent {
+            		add {}
+            		remove {}
+                }
 		
 		private ICSClient client;
 

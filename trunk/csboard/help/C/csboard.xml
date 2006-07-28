@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY legal SYSTEM "legal.xml">
 <!ENTITY appversion "0">
@@ -9,10 +9,10 @@
 <!ENTITY appname "CSBoard">
 ]>
 <!-- =============Document Header ============================= -->
-<article id="index" lang="en">
+<article id="index" lang="C">
 <!-- please do not change the id; for translations, change lang to -->
 <!-- appropriate code -->
-  <articleinfo><title>&appname; Manual V&manrevision;</title><copyright><year>2004</year><holder>Nickolay V. Shmyrev</holder></copyright><!-- translators: uncomment this:
+  <articleinfo><title>CSBoard Manual V0.4</title><copyright><year>2004</year><holder>Nickolay V. Shmyrev</holder></copyright><!-- translators: uncomment this:
 
   <copyright>
    <year>2003</year>
@@ -21,11 +21,19 @@
 
    --><!-- An address can be added to the publisher information.  If a role is 
      not specified, the publisher/author is the same for all versions of the 
-     document.  --><publisher><publishername> GNOME Documentation Project </publishername></publisher> 
+     document.  --><publisher><publishername>GNOME Documentation Project</publishername></publisher> 
 
-   &legal;<!-- This file  contains link to license for the documentation (GNU FDL), and 
+      <legalnotice id="legalnotice">
+         <para>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License (GFDL), Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. You can find a copy of the GFDL at this <ulink type="help" url="ghelp:fdl">link</ulink> or in the file COPYING-DOCS distributed with this manual.</para>
+          <para>This manual is part of a collection of GNOME manuals distributed under the GFDL. If you want to distribute this manual separately from the collection, you can do so by adding a copy of the license to the manual, as described in section 6 of the license.</para>
+ 
+         <para>Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and the members of the GNOME Documentation Project are made aware of those trademarks, then the names are in capital letters or initial capital letters.</para>
+ 
+         <para>DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT: <orderedlist><listitem><para>DOCUMENT IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS FREE OF DEFECTS MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL WRITER, AUTHOR OR ANY CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS DISCLAIMER; AND</para></listitem><listitem><para>UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL THE AUTHOR, INITIAL WRITER, ANY CONTRIBUTOR, OR ANY DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER DAMAGES OR LOSSES ARISING OUT OF OR RELATING TO USE OF THE DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT, EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.</para></listitem></orderedlist></para>
+   </legalnotice>
+ <!-- This file  contains link to license for the documentation (GNU FDL), and 
         other legal stuff such as "NO WARRANTY" statement. Please do not change 
-	any of this. --><authorgroup><author><firstname>Nickolay</firstname><surname>Shmyrev</surname><affiliation><orgname/><address>&authormail;</address></affiliation></author><!-- This is appropriate place for other contributors: translators,
+	any of this. --><authorgroup><author><firstname>Nickolay</firstname><surname>Shmyrev</surname><affiliation><orgname/><address><email>nshmyrev@yandex.ru</email></address></affiliation></author><!-- This is appropriate place for other contributors: translators,
       maintainers,  etc. Commented out by default.
        <othercredit role="translator">
 	<firstname>Latin</firstname> 
@@ -36,9 +44,7 @@
 	</affiliation>
 	<contrib>Latin translation</contrib>
       </othercredit>
---></authorgroup><revhistory><revision><revnumber>&appname; Manual V&manrevision;</revnumber><date>&date;</date><revdescription><para role="author">Nickolay V. Shmyrev</para><para role="publisher">GNOME Documentation Project</para></revdescription></revision></revhistory><releaseinfo>This manual describes version &appversion; of &appname;.
-    </releaseinfo><legalnotice><title>Feedback</title><para>To report a bug or make a suggestion regarding the &appname; application or this manual, please, send email to author. 
-      </para><!-- Translators may also add here feedback address for translations --></legalnotice></articleinfo>
+--></authorgroup><revhistory><revision><revnumber>CSBoard Manual V0.4</revnumber><date>June 2004</date><revdescription><para role="author">Nickolay V. Shmyrev</para><para role="publisher">GNOME Documentation Project</para></revdescription></revision></revhistory><releaseinfo>This manual describes version 0 of CSBoard.</releaseinfo><legalnotice><title>Feedback</title><para>To report a bug or make a suggestion regarding the CSBoard application or this manual, please, send email to author.</para><!-- Translators may also add here feedback address for translations --></legalnotice></articleinfo>
   <indexterm>
     <primary>CSBoard Chess Game</primary>
   </indexterm>
@@ -46,7 +52,7 @@
 <!-- ============= Introduction ============================== -->
   <sect1 id="csboard-introduction">
     <title>Introduction</title>
-    <para>The &app; application enables you to play chess with GNU Chess engine. &app; provides the following features:</para>
+    <para>The <application>CSBoard</application> application enables you to play chess with GNU Chess engine. <application>CSBoard</application> provides the following features:</para>
     <itemizedlist>
       <listitem>
         <para>Have following features:</para>
@@ -68,14 +74,13 @@
   <sect1 id="csboard-getting-started">
     <title>Getting Started</title>
     <sect2 id="csboard-tostartapp">
-      <title>To Start &appname;</title>
-      <para>You can start &app; in the following ways:</para>
+      <title>To Start CSBoard</title>
+      <para>You can start <application>CSBoard</application> in the following ways:</para>
       <variablelist>
         <varlistentry>
           <term><guimenu>Applications</guimenu> menu</term>
           <listitem>
-            <para>Choose 
-			<menuchoice><guisubmenu>Games</guisubmenu><guimenuitem>CSBoard</guimenuitem></menuchoice>. </para>
+            <para>Choose <menuchoice><guisubmenu>Games</guisubmenu><guimenuitem>CSBoard</guimenuitem></menuchoice>.</para>
           </listitem>
         </varlistentry>
         <varlistentry>
@@ -87,10 +92,10 @@
       </variablelist>
     </sect2>
     <sect2 id="csboard-when-you-start">
-      <title>When you start &appname;</title>
+      <title>When you start CSBoard</title>
 <!-- ==== Figure ==== -->
       <figure id="main_window">
-        <title>&appname; window</title>
+        <title>CSBoard window</title>
         <mediaobject>
           <imageobject>
             <imagedata fileref="figures/app.png" format="PNG"/>
@@ -100,14 +105,13 @@
           </textobject>
         </mediaobject>
       </figure>
-      <para>When you start &appname;, the following window is displayed.</para>
-      <para>The &app; window contains the following elements:
-        </para>
+      <para>When you start CSBoard, the following window is displayed.</para>
+      <para>The <application>CSBoard</application> window contains the following elements:</para>
       <variablelist>
         <varlistentry>
           <term>Menubar</term>
           <listitem>
-            <para>The menus on the menubar contain all of the commands available in &app;.</para>
+            <para>The menus on the menubar contain all of the commands available in <application>CSBoard</application>.</para>
           </listitem>
         </varlistentry>
         <varlistentry>
@@ -134,19 +138,27 @@
         <title>Make move</title>
         <para>To make move you can:</para>
         <itemizedlist>
-          <listitem>Click on the figure you want to move. It will be 
-		surrounded by rectangle, then click on the field you like to move to.
-		If the move is correct, it will be performed and your opponent will start think on his move.</listitem>
-          <listitem>Drag figure to destination field. To cancel drag just put figure back from where you take it. </listitem>
-          <listitem>By pressing on arrow keys move cursor to the field with figure. Press <keycap>Enter</keycap>. Then move cursor to the
-		target field and press <keycap>Enter</keycap> again.</listitem>
+          <listitem>
+            <para>
+             Click on the figure you want to move. It will be surrounded by rectangle, then click on the field you like to move to. If the move is correct, it will be performed and your opponent will start think on his move.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+             Drag figure to destination field. To cancel drag just put figure back from where you take it.
+            </para>
+          </listitem>
+          <listitem>
+           <para>
+             By pressing on arrow keys move cursor to the field with figure. Press <keycap>Enter</keycap>. Then move cursor to the target field and press <keycap>Enter</keycap> again.
+            </para> 
+          </listitem>
         </itemizedlist>
         <para>To castle you should just move king two fields right or left</para>
       </sect3>
       <sect3>
         <title>To start a new game</title>
-        <para>
-            Choose <menuchoice><guimenu>Game</guimenu><guimenuitem>New</guimenuitem></menuchoice>.  </para>
+        <para>Choose <menuchoice><guimenu>Game</guimenu><guimenuitem>New</guimenuitem></menuchoice>.</para>
         <para>By start a new game you will completely lose the previous one. So be careful.</para>
       </sect3>
       <sect3>
@@ -154,49 +166,33 @@
         <para>To open a Game, perform the following steps:</para>
         <orderedlist>
           <listitem>
-            <para>
-            Choose <menuchoice><guimenu>Game</guimenu><guimenuitem>Open</guimenuitem></menuchoice>.  </para>
+            <para>Choose <menuchoice><guimenu>Game</guimenu><guimenuitem>Open</guimenuitem></menuchoice>.</para>
           </listitem>
           <listitem>
-            <para>
-            In the <guilabel>Load Game</guilabel> dialog, select the file you want to open.
-          </para>
+            <para>In the <guilabel>Load Game</guilabel> dialog, select the file you want to open.</para>
           </listitem>
           <listitem>
-            <para>
-            Click <guibutton>Open</guibutton>. &appname; displays current game position and waiting for you to perform move.
-          </para>
+            <para>Click <guibutton>Open</guibutton>. CSBoard displays current game position and waiting for you to perform move.</para>
           </listitem>
         </orderedlist>
-        <para>
-	If you try to open a file format that &appname; does not recognize, probably, nothing will happen.
-      </para>
-        <para>
-	Also you can open Game passing name of it's file as argument in command line or clicking on it
-	in your File Manager. 
-      </para>
+        <para>If you try to open a file format that CSBoard does not recognize, probably, nothing will happen.</para>
+        <para>Also you can open Game passing name of it's file as argument in command line or clicking on it in your File Manager.</para>
       </sect3>
       <sect3>
         <title>To Save a Game</title>
         <para>You can save Games to file to open it later:</para>
-        <para>To save Game, choose <menuchoice><guimenu>Game</guimenu><guimenuitem>Save</guimenuitem></menuchoice>. </para>
+        <para>To save Game, choose <menuchoice><guimenu>Game</guimenu><guimenuitem>Save</guimenuitem></menuchoice>.</para>
         <para>Then type the name of file in <guilabel>Save Game</guilabel> dialog, or select existing file</para>
         <para>Note that if you'll try to save Game to an existing file, it's contents will be lost and replaced by new game.</para>
       </sect3>
-      <sect3><title>To switch side</title>
-	If you think that your opponent is going to win soon, you can quickly 
-	change side and win yourself. 
-	</sect3>
+      <sect3><title>To switch side</title><para> If you think that your opponent is going to win soon, you can quickly change side and win yourself.</para></sect3>
       <sect3>
         <title>To take hint</title>
-        <para>You can ask opponent engine about best hint he is seeing in you position.
-	To do it, choose  <menuchoice><guimenu>Action</guimenu><guimenuitem>Take Hint</guimenuitem></menuchoice>. </para>
+        <para>You can ask opponent engine about best hint he is seeing in you position. To do it, choose <menuchoice><guimenu>Action</guimenu><guimenuitem>Take Hint</guimenuitem></menuchoice>.</para>
       </sect3>
       <sect3>
         <title>To look in the book</title>
-        <para>There is large databases of games, played all over the world. This databases can help
-	you learn correct strategies and investigate current position. To open so named 'Book'
-	choose  <menuchoice><guimenu>Action</guimenu><guimenuitem>Book</guimenuitem></menuchoice>. </para>
+        <para>There is large databases of games, played all over the world. This databases can help you learn correct strategies and investigate current position. To open so named 'Book' choose <menuchoice><guimenu>Action</guimenu><guimenuitem>Book</guimenuitem></menuchoice>.</para>
 <!-- ==== Figure ==== -->
         <figure id="book_dialog">
           <title>Book dialog</title>
@@ -209,52 +205,22 @@
             </textobject>
           </mediaobject>
         </figure>
-        <para>You should see the dialog, where possible moves are listed and statistics about it. You can choose the
-      move you like and place <guibutton>Forward</guibutton> or double-click on the line
-      with move. If you can't find any move you like, just press <guibutton>Cancel</guibutton>.</para>
+        <para>You should see the dialog, where possible moves are listed and statistics about it. You can choose the move you like and place <guibutton>Forward</guibutton> or double-click on the line with move. If you can't find any move you like, just press <guibutton>Cancel</guibutton>.</para>
       </sect3>
       <sect3><title>To undo/redo move</title>
-	If you don't like the results of your move, you can choose <menuchoice><guimenu>Action</guimenu><guimenuitem>Undo</guimenuitem></menuchoice>.
-	This will take your opponent move and you move back and you'll be able to make another move. To revert to prevoius state, choose 
-	<menuchoice><guimenu>Action</guimenu><guimenuitem>Redo</guimenuitem></menuchoice>. 
-	<note><para>
-	Remember, that usually in real life it's impossible to take moves back. So don't use this
-	menu very often, since it could become habitual.
-	</para></note></sect3>
+       <para> If you don't like the results of your move, you can choose <menuchoice><guimenu>Action</guimenu><guimenuitem>Undo</guimenuitem></menuchoice>. This will take your opponent move and you move back and you'll be able to make another move. To revert to prevoius state, choose <menuchoice><guimenu>Action</guimenu><guimenuitem>Redo</guimenuitem></menuchoice>. <note><para>Remember, that usually in real life it's impossible to take moves back. So don't use this menu very often, since it could become habitual.</para></note></para></sect3>
     </sect2>
     <sect2>
-      <title>Customizing &appname;</title>
+      <title>Customizing CSBoard</title>
       <sect3>
         <title>To change playing level</title>
-        <para>If you feel yourself stronger that your opponent you can adjust
-	it's level with <menuchoice><guimenu>Game</guimenu><guimenuitem>Level</guimenuitem></menuchoice>.
-	Currently only four levels are possible &#x2014; Beginner, Intermediate, Advanced and Expert. But real strange
-	of playing depends on many factors like system performance and average load. So don't think that strange of playing is reproducable.</para>
+        <para>If you feel yourself stronger that your opponent you can adjust it's level with <menuchoice><guimenu>Game</guimenu><guimenuitem>Level</guimenuitem></menuchoice>. Currently only four levels are possible — Beginner, Intermediate, Advanced and Expert. But real strange of playing depends on many factors like system performance and average load. So don't think that strange of playing is reproducable.</para>
       </sect3>
-      <sect3><title>To show last move</title>
-	Very useful option allows you to easily find your opponent moves.
-	To activate it, use <menuchoice><guimenu>View</guimenu><guimenuitem>Last move</guimenuitem></menuchoice>.
-	</sect3>
-      <sect3><title>To show coordinates</title>
-	Coordinates are very useful for notation of chess game.
-	To see them, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Coords</guimenuitem></menuchoice>.
-	</sect3>
-      <sect3><title>To highlight possible moves</title>
-	Newbies are probably will find this option useful. By selecting 
-	<menuchoice><guimenu>View</guimenu><guimenuitem>Possible moves</guimenuitem></menuchoice> one can
-	take hints on moves that taken figure can do in this position.
-	</sect3>
-      <sect3><title>To animate moves</title>
-	To add nice visual animate effect choose
-	<menuchoice><guimenu>View</guimenu><guimenuitem>Animate</guimenuitem></menuchoice>.
-	</sect3>
-      <sect3><title>To play with another engine</title>
-	It is possible to play with other engines, like crafty and phalanx. To enable this capability, check GConf key 
-	/apps/csboard/engine. Also by using this key you can customize many things, like engine strange. 
-	Just pass appropriate options to engine in it's command line. If your engine is
-	not supported by &appname; it's easy to get it. Look at the sources and write to 
-	&authormail; if you have any questions.
-	</sect3>
+      <sect3><title>To show last move</title><para> Very useful option allows you to easily find your opponent moves. To activate it, use <menuchoice><guimenu>View</guimenu><guimenuitem>Last move</guimenuitem></menuchoice>.</para></sect3>
+      <sect3><title>To show coordinates</title><para> Coordinates are very useful for notation of chess game. To see them, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Coords</guimenuitem></menuchoice>.</para></sect3>
+      <sect3><title>To highlight possible moves</title> <para>Newbies are probably will find this option useful. By selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Possible moves</guimenuitem></menuchoice> one can take hints on moves that taken figure can do in this position.</para></sect3>
+      <sect3><title>To animate moves</title><para> To add nice visual animate effect choose <menuchoice><guimenu>View</guimenu><guimenuitem>Animate</guimenuitem></menuchoice>.</para></sect3>
+      <sect3><title>To play with another engine</title><para> It is possible to play with other engines, like crafty and phalanx. To enable this capability, check GConf key /apps/csboard/engine. Also by using this key you can customize many things, like engine strange. Just pass appropriate options to engine in it's command line. If your engine is not supported by CSBoard it's easy to get it. Look at the sources and write to <email>nshmyrev@yandex.ru</email> if you have any questions.</para></sect3>
     </sect2>
   </sect1>
 <!-- =========== Game rules ============================== -->
@@ -262,10 +228,7 @@
     <title>Chess Rules</title>
     <sect2>
       <title>Let's Play Chess</title>
-      <para>Chess is a game for two players, one with the "White" pieces and one
-	with the "Black" pieces. At the beginning of the game, the pieces are
-	set up as pictured at right. (See diagrams below to identify pieces.)
-	These hints will help you to remember the proper board setup:</para>
+      <para>Chess is a game for two players, one with the "White" pieces and one with the "Black" pieces. At the beginning of the game, the pieces are set up as pictured at right. (See diagrams below to identify pieces.) These hints will help you to remember the proper board setup:</para>
 <!-- ==== Figure ==== -->
       <figure id="start_position_figure">
         <title>Initial position</title>
@@ -274,29 +237,16 @@
             <imagedata fileref="figures/start_position.png" format="PNG"/>
           </imageobject>
           <textobject>
-            <phrase>Initial game position </phrase>
+            <phrase>Initial game position</phrase>
           </textobject>
         </mediaobject>
       </figure>
       <itemizedlist>
-        <listitem>Opposing Kings and Queens go directly opposite each other.
-
-	</listitem>
-        <listitem>The square in the lower right hand corner is a light one ("light on right").
-
-	</listitem>
-        <listitem>The White Queen goes on a light square, the Black Queen on a dark square ("Queen on color").
-
-	</listitem>
+        <listitem><para>Opposing Kings and Queens go directly opposite each other.</para></listitem>
+        <listitem><para>The square in the lower right hand corner is a light one ("light on right").</para></listitem>
+        <listitem><para>The White Queen goes on a light square, the Black Queen on a dark square ("Queen on color").</para></listitem>
       </itemizedlist>
-      <para>White always moves first, and then the players take turns moving.
-Only one piece may be moved at each turn (except for "castling," a
-special move that is explained later). The Knight is the only piece
-that can jump over other pieces. All other pieces move only along
-unblocked lines. You may not move a piece to a square already occupied
-by one of your own pieces. But you can capture an enemy piece that
-stands on a square where one of your pieces can move. Simply remove the
-enemy piece from the board and put your own piece in its place.</para>
+      <para>White always moves first, and then the players take turns moving. Only one piece may be moved at each turn (except for "castling," a special move that is explained later). The Knight is the only piece that can jump over other pieces. All other pieces move only along unblocked lines. You may not move a piece to a square already occupied by one of your own pieces. But you can capture an enemy piece that stands on a square where one of your pieces can move. Simply remove the enemy piece from the board and put your own piece in its place.</para>
     </sect2>
     <sect2>
       <title>The Pieces and How They Move</title>
@@ -314,10 +264,7 @@ enemy piece from the board and put your own piece in its place.</para>
             </textobject>
           </mediaobject>
         </figure>
-        <para>The Queen is the most powerful piece. She can move any number of
-squares in any direction &#x2014; horizontal, vertical, or diagonal &#x2014; if her
-path is not blocked. She can reach any of the squares with dots in this
-diagram.</para>
+        <para>The Queen is the most powerful piece. She can move any number of squares in any direction — horizontal, vertical, or diagonal — if her path is not blocked. She can reach any of the squares with dots in this diagram.</para>
       </sect3>
       <sect3>
         <title>The Rook</title>
@@ -333,8 +280,7 @@ diagram.</para>
             </textobject>
           </mediaobject>
         </figure>
-        <para>The Rook is the next most powerful piece. The Rook can move any
-number of squares vertically or horizontally if its path is not blocked.</para>
+        <para>The Rook is the next most powerful piece. The Rook can move any number of squares vertically or horizontally if its path is not blocked.</para>
       </sect3>
       <sect3>
         <title>The Bishop</title>
@@ -350,10 +296,8 @@ number of squares vertically or horizontally if its path is not blocked.</para>
             </textobject>
           </mediaobject>
         </figure>
-        <para>The Bishop can move any number of squares diagonally if its path is
-not blocked. Note that this Bishop starts on a light square and can
-reach only other light squares. At the beginning of the game, you have
-one "dark-square" Bishop and one "light-square" Bishop.</para>
+        <para>
+        The Bishop can move any number of squares diagonally if its path is not blocked. Note that this Bishop starts on a light square and can reach only other light squares. At the beginning of the game, you have one "dark-square" Bishop and one "light-square" Bishop.</para>
       </sect3>
       <sect3>
         <title>The Knight</title>
@@ -369,20 +313,11 @@ one "dark-square" Bishop and one "light-square" Bishop.</para>
             </textobject>
           </mediaobject>
         </figure>
-        <para>The Knight's move is special. It hops directly from its old square
-to its new square. The Knight can jump over other pieces between its
-old and new squares. Think of the Knight's move as an "L." It moves two
-squares horizontally or vertically and then makes a right-angle turn
-for one more square. The Knight always lands on a square opposite in
-color from its old square.</para>
+        <para>The Knight's move is special. It hops directly from its old square to its new square. The Knight can jump over other pieces between its old and new squares. Think of the Knight's move as an "L." It moves two squares horizontally or vertically and then makes a right-angle turn for one more square. The Knight always lands on a square opposite in color from its old square.</para>
       </sect3>
       <sect3>
         <title>The King</title>
-        <para>The King is the most important piece. When he is trapped, his whole
-army loses. The King can move one square in any direction &#x2014; for
-example, to any of the squares with dots in this diagram. (An exception
-is castling, which is explained later.) The King may never move into
-check &#x2014; that is, onto a square attacked by an opponent's piece.</para>
+        <para>The King is the most important piece. When he is trapped, his whole army loses. The King can move one square in any direction — for example, to any of the squares with dots in this diagram. (An exception is castling, which is explained later.) The King may never move into check — that is, onto a square attacked by an opponent's piece.</para>
       </sect3>
       <sect3>
         <title>The Pawn</title>
@@ -398,35 +333,15 @@ check &#x2014; that is, onto a square attacked by an opponent's piece.</para>
             </textobject>
           </mediaobject>
         </figure>
-        <para>The pawn moves straight ahead (never backward), but it captures
-diagonally. It moves one square at a time, but on its first move it has
-the option of moving forward one or two squares. In the diagram, the
-squares with dots indicate possible destinations for the pawns. The
-White pawn is on its original square, so it may move ahead either one
-or two squares. The Black pawn has already moved, so it may move ahead
-only one square at a time. The squares on which these pawns may capture
-are indicated by an X.</para>
-        <para>If a pawn advances all the way to the opposite end of the board, it
-is immediately "promoted" to another piece, usually a Queen. It may not
-remain a pawn or become a King. Therefore, it is possible for each
-player to have more than one Queen or more than two Rooks, Bishops, or
-Knights on the board at the same time.</para>
+        <para>The pawn moves straight ahead (never backward), but it captures diagonally. It moves one square at a time, but on its first move it has the option of moving forward one or two squares. In the diagram, the squares with dots indicate possible destinations for the pawns. The White pawn is on its original square, so it may move ahead either one or two squares. The Black pawn has already moved, so it may move ahead only one square at a time. The squares on which these pawns may capture are indicated by an X.</para>
+        <para>If a pawn advances all the way to the opposite end of the board, it is immediately "promoted" to another piece, usually a Queen. It may not remain a pawn or become a King. Therefore, it is possible for each player to have more than one Queen or more than two Rooks, Bishops, or Knights on the board at the same time.</para>
       </sect3>
     </sect2>
     <sect2>
       <title>Special moves</title>
       <sect3>
         <title>Castling</title>
-        <para>Each player may "castle" only once during a game and when conditions
-are met. Castling is a special move that lets a player move two pieces
-at once &#x2014; the King and one Rook. In castling, the player moves his King
-two squares to its left or right toward one of his Rooks. At the same
-time, the Rook involved goes to the square beside the King and toward
-the center of the board (see illustrations below). In order to castle,
-neither the King nor the Rook involved may have moved before. Also, the
-King may not castle out of check, into check, or through check.
-Further, there may not be pieces of either color between the King and
-the Rook involved in castling.</para>
+        <para>Each player may "castle" only once during a game and when conditions are met. Castling is a special move that lets a player move two pieces at once — the King and one Rook. In castling, the player moves his King two squares to its left or right toward one of his Rooks. At the same time, the Rook involved goes to the square beside the King and toward the center of the board (see illustrations below). In order to castle, neither the King nor the Rook involved may have moved before. Also, the King may not castle out of check, into check, or through check. Further, there may not be pieces of either color between the King and the Rook involved in castling.</para>
 <!-- ==== Figure ==== -->
         <figure id="castling_moves">
           <title>Castling</title>
@@ -447,12 +362,8 @@ the Rook involved in castling.</para>
             </textobject>
           </mediaobject>
         </figure>
-        <para>Castling is often a very important move because it allows you to
-place your King in a safe location and also allows the Rook to become
-more active.</para>
-        <para>When the move is legal, each player has the choice of castling
-Kingside or Queenside or not at all, no matter what the other player
-chooses to do.</para>
+        <para>Castling is often a very important move because it allows you to place your King in a safe location and also allows the Rook to become more active.</para>
+        <para>When the move is legal, each player has the choice of castling Kingside or Queenside or not at all, no matter what the other player chooses to do.</para>
       </sect3>
       <sect3>
         <title>En Passant</title>
@@ -468,51 +379,38 @@ chooses to do.</para>
             </textobject>
           </mediaobject>
         </figure>
-        <para>This French phrase is used for a special pawn capture. It means "in
-passing," and it occurs when one player moves a pawn two squares
-forward to try to avoid capture by the opponent's pawn. The capture is
-made exactly as if the player had moved the pawn only one square
-forward.</para>
-        <para>In the diagram, the Black pawn moves up two squares to the square
-with the dot. On its turn the White pawn may capture the Black one on
-the square marked with the X. If the White player does not exercise
-this option immediately &#x2014; before playing some other move &#x2014; the Black
-pawn is safe from "en passant" capture for the rest of the game. But
-new opportunities may arise for each pawn in similar circumstances.</para>
+        <para>This French phrase is used for a special pawn capture. It means "in passing," and it occurs when one player moves a pawn two squares forward to try to avoid capture by the opponent's pawn. The capture is made exactly as if the player had moved the pawn only one square forward.</para>
+        <para>In the diagram, the Black pawn moves up two squares to the square with the dot. On its turn the White pawn may capture the Black one on the square marked with the X. If the White player does not exercise this option immediately — before playing some other move — the Black pawn is safe from "en passant" capture for the rest of the game. But new opportunities may arise for each pawn in similar circumstances.</para>
       </sect3>
       <sect3>
         <title>Promotion</title>
-        <para>When pawn reaches the last line, it can't move anymore and immediately
-becomes any figure you choose. This is very useful in the game, since you can
-promote additional Queen and easily win.</para>
+        <para>When pawn reaches the last line, it can't move anymore and immediately becomes any figure you choose. This is very useful in the game, since you can promote additional Queen and easily win.</para>
       </sect3>
     </sect2>
     <sect2>
       <title>About Check and Checkmate</title>
-      <para>The main goal of chess is to checkmate your opponent's King. The
-King is not actually captured and removed from the board like other
-pieces. But if the King is attacked ("checked") and threatened with
-capture, it must get out of check immediately. If there is no way to
-get out of check, the position is a "checkmate," and the side that is
-checkmated loses.</para>
-      <para>You may not move into check. For example, moving into a direct line
-with your opponent's Rook, when if there are no other pieces between
-the Rook and your King, is not a legal move. Otherwise, the Rook could
-"capture" the King, which is not allowed.</para>
+      <para>The main goal of chess is to checkmate your opponent's King. The King is not actually captured and removed from the board like other pieces. But if the King is attacked ("checked") and threatened with capture, it must get out of check immediately. If there is no way to get out of check, the position is a "checkmate," and the side that is checkmated loses.</para>
+      <para>You may not move into check. For example, moving into a direct line with your opponent's Rook, when if there are no other pieces between the Rook and your King, is not a legal move. Otherwise, the Rook could "capture" the King, which is not allowed.</para>
       <para>If you are in check, there are three ways of getting out:</para>
       <itemizedlist>
-        <listitem>Capturing the attacking piece;</listitem>
-        <listitem>Placing one of your own pieces between the attacker and your King (unless the attacker is a Knight);
-
-</listitem>
-        <listitem>Moving the King away from the attack.
-
-</listitem>
+        <listitem>
+          <para>
+           Capturing the attacking piece;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+           Placing one of your own pieces between the attacker and your King (unless the attacker is a Knight);
+          </para>
+         </listitem>
+        <listitem>
+          <para>
+           Moving the King away from the attack.
+          </para>
+        </listitem>
       </itemizedlist>
       <para>If a checked player can do none of these, he is checkmated and loses the game.</para>
-      <para>If a King is not in check, but that player can make no legal move,
-the position is called a stalemate and the game is scored as a draw, or
-tie.</para>
+      <para>If a King is not in check, but that player can make no legal move, the position is called a stalemate and the game is scored as a draw, or tie.</para>
     </sect2>
   </sect1>
   <sect1 id="csboard-links">
@@ -521,25 +419,40 @@ tie.</para>
     <sect2>
       <title>Chess programs</title>
       <itemizedlist>
-        <listitem>CSBoard 
-        <ulink url="http://freshmeat.net/projects/csboard">http://freshmeat.net/projects/csboard</ulink>
-</listitem>
-        <listitem>XBoard <ulink url="http://www.tim-mann.org/xboard.html">http://www.tim-mann.org/xboard.html</ulink>
-</listitem>
-        <listitem>EBoard <ulink url="http://eboard.sourcefourge.net">http://eboard.sourcefourge.net</ulink>
-</listitem>
-        <listitem>ChessMaster <ulink url="http://chessmaster10.ubi.com/us/">http://chessmaster10.ubi.com/us/</ulink>
-    </listitem>
+        <listitem>
+          <para>
+            CSBoard <ulink url="http://freshmeat.net/projects/csboard">http://freshmeat.net/projects/csboard</ulink>
+          </para>
+	</listitem>
+        <listitem>
+          <para>
+            XBoard <ulink url="http://www.tim-mann.org/xboard.html">http://www.tim-mann.org/xboard.html</ulink>
+          </para>
+	</listitem>
+        <listitem>
+          <para>
+            EBoard <ulink url="http://eboard.sourcefourge.net">http://eboard.sourcefourge.net</ulink>
+          </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    ChessMaster <ulink url="http://chessmaster10.ubi.com/us/">http://chessmaster10.ubi.com/us/</ulink>
+	  </para>
+        </listitem>
       </itemizedlist>
     </sect2>
     <sect2>
       <title>Internet chess servers</title>
       <itemizedlist>
         <listitem>
+         <para>
           <ulink url="http://www.freechess.org">http://www.freechess.org</ulink>
+         </para>
         </listitem>
         <listitem>
+         <para>
           <ulink url="http://www.chessclub.org">http://www.chessclub.org</ulink>
+         </para>
         </listitem>
       </itemizedlist>
     </sect2>
@@ -547,7 +460,9 @@ tie.</para>
       <title>Links to chess WWW resources</title>
       <itemizedlist>
         <listitem>
+         <para>
           <ulink url="http://www.chess-links.com/">http://www.chess-links.com/</ulink>
+         </para> 
         </listitem>
       </itemizedlist>
     </sect2>

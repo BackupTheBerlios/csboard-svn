@@ -55,8 +55,9 @@ namespace CsBoard {
 
                 public ChessWindow (string filename) {
 
+			string engine = App.session.Engine;
+			
                         try {
-				string engine = App.session.Engine;
 				
 				if (engine.LastIndexOf ("crafty ") >= 0) {
                                     control = new Crafty (engine);
@@ -77,7 +78,7 @@ namespace CsBoard {
                                                            MessageType.Error,
                                                            ButtonsType.Close,
                                                            Catalog.GetString(
-							   "Unknown engine. Please check gconf keys of csboard"));
+							   "<b>Unknown engine</b>\n\nPlease check gconf keys of csboard"));
 
                                   md.Run ();
                                   md.Hide ();
@@ -87,21 +88,19 @@ namespace CsBoard {
 
 				}
 				
-                        } catch (ApplicationException e) {
+                        } catch (Exception e) {
 
                                 MessageDialog md =
-                                        new MessageDialog (csboardWindow,
-                                                           DialogFlags.
-                                                           DestroyWithParent,
-                                                           MessageType.Error,
+                                        new MessageDialog (null, 0, MessageType.Error,
                                                            ButtonsType.Close,
-                                                           e.Message);
+                                                           String.Format(Catalog.GetString (
+                                                           "<b>Failed to start engine</b>\n\nCheck that program '{0}' is available."),
+                                                           engine));
 
                                 md.Run ();
                                 md.Hide ();
-                                md.Dispose ();  
-				
-				throw e;
+                                md.Dispose ();
+                                return;
 			}		
 
                         Glade.XML gXML =
@@ -171,13 +170,13 @@ namespace CsBoard {
 
                 }
 
-                private void on_quit_activate (System.Object b, EventArgs e) {
+                public void on_quit_activate (System.Object b, EventArgs e) {
 		        App.session.SaveGeometry (csboardWindow);
                         control.Shutdown ();
                         Application.Quit ();
                 }
 
-                private void on_new_activate (System.Object b, EventArgs e) {
+                public void on_new_activate (System.Object b, EventArgs e) {
 
                         statusbar.Pop (gameStatusbarId);
 
@@ -185,7 +184,7 @@ namespace CsBoard {
                         control.SaveGame(App.session.Filename);
                 }
 
-                private void on_open_activate (System.Object b, EventArgs e) {
+                public void on_open_activate (System.Object b, EventArgs e) {
 
                         statusbar.Pop (gameStatusbarId);
 			
@@ -202,7 +201,7 @@ namespace CsBoard {
                         fd.Dispose ();
 
                 }
-                private void on_save_activate (System.Object b, EventArgs e) {
+                public void on_save_activate (System.Object b, EventArgs e) {
 
                         FileChooserDialog fd = new FileChooserDialog (Catalog.GetString("Save Game"), csboardWindow, FileChooserAction.Save);
 			
@@ -238,21 +237,21 @@ namespace CsBoard {
 
                 }
 
-                private void on_undo_activate (System.Object b, EventArgs e) {
+                public void on_undo_activate (System.Object b, EventArgs e) {
                         control.Undo ();
                 }
 
-                private void on_redo_activate (System.Object b, EventArgs e) {
+                public void on_redo_activate (System.Object b, EventArgs e) {
                         control.OpenGame (App.session.Filename);
                 }
 
-                private void on_switch_side_activate (System.Object b,
+                public void on_switch_side_activate (System.Object b,
                                                       EventArgs e) {
                         control.SwitchSide ();
                         return;
                 }
 
-                private void on_book_activate (System.Object b, EventArgs e) {
+                public void on_book_activate (System.Object b, EventArgs e) {
 
                         ArrayList result = control.Book ();
 
@@ -291,11 +290,11 @@ namespace CsBoard {
 
                 }
 
-                private void on_hint_activate (System.Object b, EventArgs e) {
+                public void on_hint_activate (System.Object b, EventArgs e) {
 			control.Hint ();
                 }
 
-		private void on_control_hint (string hint) {		
+		public void on_control_hint (string hint) {		
 		
 
                  MessageDialog md = new MessageDialog (csboardWindow,
@@ -318,7 +317,7 @@ namespace CsBoard {
     		                md.Dispose ();
 		}
 
-                private void on_level_activate (System.Object b, EventArgs e) {
+                public void on_level_activate (System.Object b, EventArgs e) {
 			Level level;
   		       
   		        level = Level.Expert;
@@ -335,30 +334,30 @@ namespace CsBoard {
 			control.SetLevel (level);
                 }
 
-                private void on_last_move_activate (System.Object b, EventArgs e) {
+                public void on_last_move_activate (System.Object b, EventArgs e) {
 		         App.session.HighLightMove = last_move.Active;
 			 boardWidget.highLightMove = last_move.Active;
 			 boardWidget.QueueDraw ();
 		}
 
-                private void on_possible_moves_activate (System.Object b, EventArgs e) {
+                public void on_possible_moves_activate (System.Object b, EventArgs e) {
 		         App.session.PossibleMoves = possible_moves.Active;
 			 boardWidget.showMoveHint = possible_moves.Active;
 			 boardWidget.QueueDraw ();
 		}
 
-                private void on_animate_activate (System.Object b, EventArgs e) {
+                public void on_animate_activate (System.Object b, EventArgs e) {
  			 boardWidget.showAnimations = animate.Active;
 		         App.session.showAnimations = animate.Active;
 		}
 
-                private void on_show_coords_activate (System.Object b, EventArgs e) {
+                public void on_show_coords_activate (System.Object b, EventArgs e) {
 		         App.session.ShowCoords = show_coords.Active;
 			 boardWidget.showCoords = show_coords.Active;
 			 boardWidget.QueueDraw ();
 		}
 
-                private void on_contents_activate (System.Object b, EventArgs e) {
+                public void on_contents_activate (System.Object b, EventArgs e) {
 		        System.Diagnostics.Process proc = new System.Diagnostics.Process ();
 
                         proc.StartInfo.FileName = "yelp";
@@ -371,25 +370,22 @@ namespace CsBoard {
 			}
 		}
 		
-                private void on_about_activate (System.Object b, EventArgs e) {
-                        MessageDialog md = new MessageDialog (csboardWindow,
-                                                              DialogFlags.
-                                                              DestroyWithParent,
-                                                              MessageType.
-                                                              Info,
-                                                              ButtonsType.
-                                                              Close,
-							      "CSBoard " + 
-							      Config.packageVersion +
-							      "\n\n" +
-                                                              Catalog.GetString("Frontend to gnuchess written in C#\n\n") +
-                                                              "Nickolay Shmyrev 2004");
-                        md.Run ();
-                        md.Hide ();
-                        md.Dispose ();
+                public void on_about_activate (System.Object b, EventArgs e) {
+                        AboutDialog ad = new AboutDialog ();
+                        
+                        ad.Name = "CsBoard";
+                        ad.Authors = new string [] {"Nickolay V. Shmyrev <nshmyrev@yandex.ru>"};
+                        ad.TranslatorCredits = Catalog.GetString("translator_credits");
+                        ad.Documenters = new string [] {"Nickolay V. Shmyrev <nshmyrev@yandex.ru>"};
+                        ad.Logo = new Gdk.Pixbuf(Config.prefix + "/share/pixmaps/csboard.png");
+                        ad.Website = "http://csboard.berlios.de";
+                        
+                        ad.Run ();
+                        ad.Hide ();
+                        ad.Dispose ();
                 }
 
-                private void on_control_wait (string move) {
+                public void on_control_wait (string move) {
 
                         statusbar.Pop (moveStatusbarId);
 
@@ -404,12 +400,12 @@ namespace CsBoard {
 			progressbar.Stop();
                 }
 
-                private void on_position_changed (ArrayList data) {
+                public void on_position_changed (ArrayList data) {
                         statusbar.Pop (moveStatusbarId);
                         boardWidget.SetPosition (data);
                 }
 
-                private void on_board_move (string move) {
+                public void on_board_move (string move) {
 
                         if (!control.MakeMove (move)) {
 
@@ -429,7 +425,7 @@ namespace CsBoard {
                         return;
                 }
 
-                private void on_board_start_move (string pos) {
+                public void on_board_start_move (string pos) {
 			if (possible_moves.Active) {
 				   string hint = control.PossibleMoves (pos);
 				   boardWidget.moveHint = hint;
@@ -437,7 +433,7 @@ namespace CsBoard {
 			}
 		}
 
-                private void on_control_game_over (string reason) {
+                public void on_control_game_over (string reason) {
 
 
                         statusbar.Push (gameStatusbarId, Catalog.GetString("Game Over"));
@@ -458,7 +454,7 @@ namespace CsBoard {
                         return;
                 }
 
-                private void on_control_busy () {
+                public void on_control_busy () {
 
                         statusbar.Pop (moveStatusbarId);
                         statusbar.Push (moveStatusbarId, Catalog.GetString("Thinking"));
@@ -467,7 +463,7 @@ namespace CsBoard {
 
                 }
 
-                private void on_control_side (bool side) {
+                public void on_control_side (bool side) {
                         boardWidget.side = side;
                         boardWidget.QueueDraw ();
                 }

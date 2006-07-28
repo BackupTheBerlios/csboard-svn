@@ -17,25 +17,14 @@
 
 namespace CsBoard {	
 
-	public class ProgressBar: Gtk.ProgressBar {
+	public class ProgressBar : Gtk.ProgressBar {
 	
-	    static GLib.GType gtype = GLib.GType.Invalid;
 	    private uint timeout_id = 0;
 
-	    public ProgressBar ():base (GType) {
+	    public ProgressBar () : base () {
 	    }
 	    
-	    public static new GLib.GType GType {
-            
-	                get {
-                                if (gtype == GLib.GType.Invalid)
-                                        gtype = RegisterGType
-                                                (typeof (ProgressBar));
-                                return gtype;
-	                    }
-	    }
-
-	    
+    
 	    public void Start () {
 	      timeout_id = GLib.Timeout.Add (300, new GLib.TimeoutHandler(timeout_cb)); 
 	      Show ();

@@ -1,24 +1,23 @@
-SUBDIRS=po data help
+SUBDIRS=po data help resource
 
 SOURCE = \
-	src/App.cs \
-	src/Window.cs \
-	src/IControl.cs \
-	src/Board.cs \
-	src/Figure.cs \
-	src/GnuChess.cs \
-	src/Book.cs \
-	src/Promotion.cs \
-	src/Position.cs \
-	src/FileChooser.cs \
-	src/Session.cs	\
-	src/Gettext.cs \
-	src/Crafty.cs \
-	src/Phalanx.cs \
-	src/ProgressBar.cs \
-	src/ICS.cs \
-	src/ICSClient.cs \
-	src/ICSSeek.cs
+	$(top_srcdir)/src/App.cs \
+	$(top_srcdir)/src/Window.cs \
+	$(top_srcdir)/src/IControl.cs \
+	$(top_srcdir)/src/Board.cs \
+	$(top_srcdir)/src/Figure.cs \
+	$(top_srcdir)/src/GnuChess.cs \
+	$(top_srcdir)/src/Book.cs \
+	$(top_srcdir)/src/Promotion.cs \
+	$(top_srcdir)/src/Position.cs \
+	$(top_srcdir)/src/Session.cs	\
+	$(top_srcdir)/src/Gettext.cs \
+	$(top_srcdir)/src/Crafty.cs \
+	$(top_srcdir)/src/Phalanx.cs \
+	$(top_srcdir)/src/ProgressBar.cs \
+	$(top_srcdir)/src/ICS.cs \
+	$(top_srcdir)/src/ICSClient.cs \
+	$(top_srcdir)/src/ICSSeek.cs
 
 TEST_GAMES = \
 	test/a.pgn \
@@ -57,16 +56,10 @@ EXTRA_DIST = \
 	intltool-update.in	\
 	intltool-extract.in	\
 	intltool-merge.in	\
+	gnome-doc-utils.make	\
 	$(TEST_GAMES)	\
 	$(SOURCE)	\
-	$(IMAGES)	\
-	$(RESOURCE)
-
-RESOURCE = \
-	resource/csboard.glade
-
-gladedir=$(prefix)/share/csboard/resource
-glade_DATA = $(RESOURCE)
+	$(IMAGES)
 
 imagesdir=$(prefix)/share/csboard/images
 images_DATA = $(IMAGES)
@@ -77,3 +70,15 @@ app_DATA=csboard.exe
 csboard.exe: $(SOURCE) config.cs 
 	mcs $(BASE_DEPENDENCIES_LIBS) -out:csboard.exe $(SOURCE) config.cs
 
+CLEANFILES = csboard.exe
+
+DISTCLEANFILES = 		\
+	gnome-doc-utils.make	\
+	intltool-extract 	\
+	intltool-merge 		\
+	intltool-update
+
+DISTCHECK_CONFIGURE_FLAGS = --disable-schemas-install --disable-scrollkeeper
+
+# Ignore scrollkeeper issues for now.  @#*$& scrollkeeper
+distuninstallcheck_listfiles = find . -type f -print | grep -v scrollkeeper | grep -v /share/gnome/help/ | grep -v \.omf

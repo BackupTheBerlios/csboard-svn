@@ -27,7 +27,7 @@ namespace CsBoard {
 	public delegate void StartMoveHintHandler (string position);
 
 
-        public class Board:Gtk.DrawingArea {
+        public class Board : Gtk.DrawingArea {
 
                 enum MoveStage {
                         Clear,
@@ -91,9 +91,7 @@ namespace CsBoard {
 		
 		private Pango.Layout layout;
 		
-                static GLib.GType gtype = GLib.GType.Invalid;
-
-                public Board (ArrayList pos):base (GType) {
+                public Board (ArrayList pos) : base () {
                         figure = new Figure ();
                         position = new Position (pos);
                         info = new MoveInfo ();
@@ -107,15 +105,6 @@ namespace CsBoard {
                         CanFocus = true;
                 }
 		
-		public static new GLib.GType GType {
-            
-	                get {
-                                if (gtype == GLib.GType.Invalid)
-                                        gtype = RegisterGType
-                                                (typeof (Board));
-                                return gtype;
-	                    }
-		}
 		///////////////////////////////////////////////////////////
 		//
 		//  Drawing methods

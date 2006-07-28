@@ -1,24 +1,3 @@
-4. Use GtkUIEngine. 
+See our bugs on
 
-5. Use of toolbar buttons with glade. 
-
-10. Think about make book open dialog always visible.
-
-14. Make position a subclass of IControl with interface IPosition, since
-    actually it is backend-dependant.
-
-18. Improve game end handling. For example, after game end, hing really do undo.
-so, it is possible to take a new hint.
-
-21. Improve session and file loading on start.
-
-22. Pgn games preview in open dialog.
-
-26. We need explore the ways to include something like ICS client, or support 
-other engines, like crafty or phalanx. Last task seems to be easy, but it's
-objectives are not clear. Why do we really need another engine?
-
-27. Add links to documentation.
-
-28. Implement animation moves.
-
+http://developer.berlios.de/bugs/?group_id=2468

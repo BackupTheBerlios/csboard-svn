@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csboard 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-04 11:24+0400\n"
+"POT-Creation-Date: 2006-07-28 03:20+0400\n"
 "PO-Revision-Date: 2004-10-20 18:07+0400\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -239,32 +239,47 @@ msgid "Window width"
 msgstr "Ширина окна"
 
 #: ../src/App.cs:51
-msgid "Unexpected exception occured\n"
-msgstr "Возникла непредвиденная ошибка\n"
+msgid ""
+"<b>Unexpected exception occured</b>\n"
+"\n"
+msgstr "<b>Возникла непредвиденная ошибка</b>\n"
 
 #: ../src/App.cs:54
 msgid "Please send this bug report to\n"
 msgstr "Пожалуйста, отправьте эту информацию\n"
 
-#: ../src/Window.cs:80
-msgid "Unknown engine. Please check gconf keys of csboard"
+#: ../src/Window.cs:81
+msgid ""
+"<b>Unknown engine</b>\n"
+"\n"
+"Please check gconf keys of csboard"
 msgstr ""
-"Неизвестная шахматная программа. Пожалуйста, проверьте значение настроек "
+"<b>Неизвестная шахматная программа</b>\n\nПожалуйста, проверьте значение настроек"
 "csboard в gconf"
 
-#: ../src/Window.cs:192
+#: ../src/Window.cs:97
+#, csharp-format
+msgid ""
+"<b>Failed to start engine</b>\n"
+"\n"
+"Check that program '{0}' is available."
+msgstr ""
+"<b>Во время запуска шахматной программы возникла ошибка</b>\n\nПроверьте, что "
+"возможно выполнить команду '{0}'."
+
+#: ../src/Window.cs:191
 msgid "Open Game"
 msgstr "Открыть файл игры"
 
-#: ../src/Window.cs:207
+#: ../src/Window.cs:206
 msgid "Save Game"
 msgstr "Сохранить игру"
 
-#: ../src/Window.cs:224
+#: ../src/Window.cs:223
 msgid "File "
 msgstr "Файл "
 
-#: ../src/Window.cs:225
+#: ../src/Window.cs:224
 msgid ""
 " already exists\n"
 "\n"
@@ -272,35 +287,31 @@ msgstr ""
 "уже существует\n"
 "\n"
 
-#: ../src/Window.cs:226
+#: ../src/Window.cs:225
 msgid "Do you wish to overwrite it?"
 msgstr "Вы хотите переписать его?"
 
-#: ../src/Window.cs:267
+#: ../src/Window.cs:266
 msgid "There is no book move in this position"
 msgstr "Для этой позиции в книге нет ходов"
 
-#: ../src/Window.cs:308
+#: ../src/Window.cs:307
 msgid "You can move "
 msgstr "Вы можете пойти "
 
-#: ../src/Window.cs:385
-msgid ""
-"Frontend to gnuchess written in C#\n"
-"\n"
-msgstr ""
-"Оболочка для GNU Chess написанная на языке C#\n"
-"\n"
+#: ../src/Window.cs:378
+msgid "translator_credits"
+msgstr "Nickolay V. Shmyrev <nshmyrev@yandex.ru>"
 
-#: ../src/Window.cs:423
+#: ../src/Window.cs:419
 msgid "Illegal move"
 msgstr "Некорректный ход"
 
-#: ../src/Window.cs:443 ../src/Window.cs:452
+#: ../src/Window.cs:439 ../src/Window.cs:448
 msgid "Game Over"
 msgstr "Игра закончена"
 
-#: ../src/Window.cs:464
+#: ../src/Window.cs:460
 msgid "Thinking"
 msgstr "Думаю"
 
@@ -368,7 +379,7 @@ msgstr "Промежуток"
 msgid "Flags"
 msgstr "Флаги"
 
-#: ../src/ICS.cs:60
+#: ../src/ICS.cs:78
 msgid "Can't parse command line"
 msgstr "Не могу разобрать командную строку"
 
@@ -377,5 +388,9 @@ msgstr "Не могу разобрать командную строку"
 msgid "Can't connect to {0} port {1}"
 msgstr "Не могу соединиться с сервером {0} порт {1}"
 
-#~ msgid "Please report about this exception to \n"
-#~ msgstr "Пожалуйста, сообщите об этой ошибке \n"
+#~ msgid ""
+#~ "Frontend to gnuchess written in C#\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Оболочка для GNU Chess написанная на языке C#\n"
+#~ "\n"

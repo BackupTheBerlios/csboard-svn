@@ -1,3 +1,10 @@
+Release 0.6 contains:
+
+* Update to gtk-sharp2 and mono 1.1
+* Fix for nasty bug with gconf when schema is not loaded
+* Port to gnome doc utils
+* Minor bugfixes
+
 Release 0.5 contains:
 
 * UI improvments, like progress bar on thinking, possible move highligh for

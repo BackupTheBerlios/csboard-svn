@@ -36,7 +36,10 @@ namespace CsBoard {
                 public event ControlPositionChangedHandler PositionChangedEvent;
                 public event ControlGameOverHandler GameOverEvent;
                 public event ControlSwitchSideHandler SwitchSideEvent;
-		public event ControlHintHandler HintEvent;
+		public event ControlHintHandler HintEvent {
+    			add {}
+			remove {}
+		}
 
 
                 public Crafty (string command) {

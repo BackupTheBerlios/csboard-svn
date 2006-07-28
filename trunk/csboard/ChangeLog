@@ -1,3 +1,33 @@
+2006-07-28  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
+
+	* src/Window.cs: 
+	
+	- Use Gtk.AboutDialog, fixes bug 005225.
+
+	* src/Crafty.cs, src/ICS.cs: 
+	
+	- Drop warnings, bug 005224.
+	
+	* src/FileChooser.cs:
+	
+	- removed, use standard one, fixes bug 008063.
+	
+	* help/*:
+	
+	- Updated to gtk doc utils.
+	
+	* po/ru.po:
+	
+	- Updated translation.
+	
+	* configure.ac:
+	
+	- Bump gtk requirements.
+	
+	* data/Makefile.am:
+	
+	- reload Gconf, fixes bug 005222.
+
 2006-07-04  Sergey E. Kvyato <kvantos@plotinka.ru>
 
 	* src/App.cs: 
