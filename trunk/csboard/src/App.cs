@@ -41,7 +41,6 @@ namespace CsBoard {
 			} catch (ApplicationException) {
 				return 1;
 			} catch (System.Exception e) {	
-
 				 try {
 					 MessageDialog md =
 		                    	   new MessageDialog (null,
@@ -57,10 +56,8 @@ namespace CsBoard {
 	        	                 md.Hide ();
 	    	        	         md.Dispose ();
     
-				 } catch (Exception ex) {
-
+				 } catch {
 					 throw e;
-
 		    		 }
 			}
 			

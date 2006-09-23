@@ -74,7 +74,7 @@ namespace CsBoard {
 					client.passwd = args [i+1];
 				 }
 			      }
-		      } catch (Exception e) {	
+		      } catch {	
 		    	      throw new ApplicationException (Catalog.GetString("Can't parse command line"));
 		      }
 		      

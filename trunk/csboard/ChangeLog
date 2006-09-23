@@ -1,3 +1,15 @@
+2006-09-23  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
+
+	* configure.in:
+	* resource/csboard.glade:
+	* src/App.cs:
+	* src/ICS.cs:
+	* src/ICSClient.cs:
+	* src/Window.cs:
+	
+	Update to work with mono 1.1.17 and bump requirements
+	due to API incompatibility. Fixes bug #8873.
+
 2006-07-28  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* src/Window.cs: 

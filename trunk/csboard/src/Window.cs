@@ -88,7 +88,7 @@ namespace CsBoard {
 
 				}
 				
-                        } catch (Exception e) {
+                        } catch {
 
                                 MessageDialog md =
                                         new MessageDialog (null, 0, MessageType.Error,
@@ -168,6 +168,10 @@ namespace CsBoard {
 			else 
 			    control.OpenGame (filename);
 
+                }
+
+                public void on_quit_window_activate (System.Object b, DeleteEventArgs e) {
+            		on_quit_activate(b, null);
                 }
 
                 public void on_quit_activate (System.Object b, EventArgs e) {
@@ -365,7 +369,7 @@ namespace CsBoard {
                         proc.StartInfo.UseShellExecute = true;
 			try {
 	                        proc.Start ();
-			} catch (Exception ex) {
+			} catch {
 			  // do nothing
 			}
 		}

@@ -55,7 +55,7 @@ namespace CsBoard {
 	 		    client = new TcpClient (server, int.Parse(port));
 			    stream = client.GetStream ();
 			    streamWriter = new StreamWriter (stream);
-			} catch (SocketException e) {
+			} catch {
 				throw new ApplicationException (String.Format(Catalog.GetString("Can't connect to {0} port {1}"), server, port));
 			}
 
