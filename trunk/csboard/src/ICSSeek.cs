@@ -65,6 +65,7 @@ namespace CsBoard {
   			seek_treeview.AppendColumn (Catalog.GetString("Player"), new CellRendererText (), "text", 2);
   			seek_treeview.AppendColumn (Catalog.GetString("Time"), new CellRendererText (), "text", 3);
   			seek_treeview.AppendColumn (Catalog.GetString("Increment"), new CellRendererText (), "text", 4);
+  			// Translators: This means that player seeks for Rated/Unrated game */
   			seek_treeview.AppendColumn (Catalog.GetString("R/U"), new CellRendererText (), "text", 5);
   			seek_treeview.AppendColumn (Catalog.GetString("Type"), new CellRendererText (), "text", 6);
   			seek_treeview.AppendColumn (Catalog.GetString("Color"), new CellRendererText (), "text", 7);

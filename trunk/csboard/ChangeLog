@@ -1,3 +1,9 @@
+2006-10-07  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
+
+	* src/ICSSeek.cs:
+	
+	Add comment about R/U translation.
+
 2006-09-23  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* configure.in:
