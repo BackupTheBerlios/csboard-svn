@@ -1,0 +1,393 @@
+# Turkish translataion.
+# Copyright (C) 2006 Free Software Foundation
+# This file is distributed under the same license as the csboard package.
+# Semih Gökalp <semgok@gmail.com>, 2006
+
+msgid ""
+msgstr ""
+"Project-Id-Version: csboard 0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-05 19:56+0400\n"
+"PO-Revision-Date: 2006-10-08 11:37+0400\n"
+"Last-Translator: Semih Gökalp <semgok@gmail.com>\n"
+"Language-Team: Turkish <tr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../resource/csboard.glade.h:1
+msgid "<b>Available games:</b>"
+msgstr "<b>Geçerli Oyunlar:</b>"
+
+#: ../resource/csboard.glade.h:2
+msgid "<b>For this position there are moves in a book</b>"
+msgstr "<b>Bu pozisyon kayıt ediliyor</b>"
+
+#: ../resource/csboard.glade.h:3
+msgid "Bishop"
+msgstr "Fil"
+
+#: ../resource/csboard.glade.h:4 ../src/Book.cs:38
+msgid "Book Opening"
+msgstr "Kayıt Açılıyor"
+
+#: ../resource/csboard.glade.h:5
+msgid "Knight"
+msgstr "At"
+
+#: ../resource/csboard.glade.h:6
+msgid "Queen"
+msgstr "Vezir"
+
+#: ../resource/csboard.glade.h:7
+msgid "Rook"
+msgstr "Kale"
+
+#: ../resource/csboard.glade.h:8
+msgid "Select figure to promote"
+msgstr "Hamle Seç"
+
+#: ../resource/csboard.glade.h:9 ../src/ICSSeek.cs:46
+msgid "Start new ICS game"
+msgstr "Yeni ICS oyununa başla"
+
+#: ../resource/csboard.glade.h:10
+msgid "Welcome to CS Board"
+msgstr "CS Board'a Hoşgeldiniz"
+
+#: ../resource/csboard.glade.h:11
+msgid "_About"
+msgstr "_Hakkında"
+
+#: ../resource/csboard.glade.h:12
+msgid "_Action"
+msgstr "_İşlemler"
+
+#: ../resource/csboard.glade.h:13
+msgid "_Advanced"
+msgstr "_İleri"
+
+#: ../resource/csboard.glade.h:14
+msgid "_Animate"
+msgstr "_Animasyon"
+
+#: ../resource/csboard.glade.h:15
+msgid "_Beginner"
+msgstr "_Başlangıç"
+
+#: ../resource/csboard.glade.h:16
+msgid "_Book"
+msgstr "_Kayıt"
+
+#: ../resource/csboard.glade.h:17
+msgid "_Contents"
+msgstr "_İçerik"
+
+#: ../resource/csboard.glade.h:18
+msgid "_Coords"
+msgstr "_Koordinatlar"
+
+#: ../resource/csboard.glade.h:19
+msgid "_Expert"
+msgstr "_Uzman"
+
+#: ../resource/csboard.glade.h:20
+msgid "_Game"
+msgstr "_Oyun"
+
+#: ../resource/csboard.glade.h:21
+msgid "_Help"
+msgstr "_Yardım"
+
+#: ../resource/csboard.glade.h:22
+msgid "_Hint"
+msgstr "_İpucu"
+
+#: ../resource/csboard.glade.h:23
+msgid "_Intermediate"
+msgstr "_Orta"
+
+#: ../resource/csboard.glade.h:24
+msgid "_Last Move"
+msgstr "_Son Taşıma"
+
+#: ../resource/csboard.glade.h:25
+msgid "_Level"
+msgstr "_Seviye"
+
+#: ../resource/csboard.glade.h:26
+msgid "_New"
+msgstr "_Yeni"
+
+#: ../resource/csboard.glade.h:27
+msgid "_Open"
+msgstr "_Aç"
+
+#: ../resource/csboard.glade.h:28
+msgid "_Possible Moves"
+msgstr "_Taşınabilir Alanlar"
+
+#: ../resource/csboard.glade.h:29
+msgid "_Quit"
+msgstr "_Çıkış"
+
+#: ../resource/csboard.glade.h:30
+msgid "_Redo"
+msgstr "_İleri Al"
+
+#: ../resource/csboard.glade.h:31
+msgid "_Save"
+msgstr "_Kaydet"
+
+#: ../resource/csboard.glade.h:32
+msgid "_Switch Side"
+msgstr "_Taraf Değiştir"
+
+#: ../resource/csboard.glade.h:33
+msgid "_Undo"
+msgstr "_Geri Al"
+
+#: ../resource/csboard.glade.h:34
+msgid "_View"
+msgstr "_Görünüm"
+
+#: ../data/csboard.desktop.in.h:1
+msgid "CSBoard chess "
+msgstr "CSBoard Satranç "
+
+#: ../data/csboard.desktop.in.h:2
+msgid "Play chess with gnuchess engine"
+msgstr "gnuckess motoru ile stranç oyna"
+
+#: ../data/csboard.schemas.in.h:1
+msgid "Add nice visual animate effect."
+msgstr "Görsel animasyon efeği ekle."
+
+#: ../data/csboard.schemas.in.h:2
+msgid "Animate moves"
+msgstr "Animasyon Filmi"
+
+#: ../data/csboard.schemas.in.h:3
+msgid "Command line to start engine"
+msgstr "İşlem için komut satırı"
+
+#: ../data/csboard.schemas.in.h:4
+msgid ""
+"Command line to start engine. Be careful, this key can break programm. "
+"Possible engines are 'gnuchess', 'crafty', 'ICS' and 'phalanx'. For crafty "
+"please give path to log, books and databases as arguments. For phalanx "
+"please disable learing with argument -l- or give the path to learning "
+"directory, also give path to Phalanx books. For details look at engine's "
+"help. For ICS this string should look like: \"ICS --server freechess.org --"
+"user jimmy --password bar\"."
+msgstr ""
+"İşlem için komut satırı.Dikkatli olun çünkü buraya yazılan komut,programı sonlandırabilir. "
+"Bilinen işlemler 'gnuchess', 'crafty', 'ICS' ve 'phalanx'.crafty için "
+"lütfen log,kayıt ve veritabanına yolu tanımlayın.phalanx için "
+"lütfen -l- argümanı ile bilgiyi kapalı konuma getirin veya bilgi klosurunun yolunu tanımlayın."
+"Aynı zamanda Phalanx yolunu tanımlayın.Detaylar için işlemler yardımına bakın."
+"ICS için bu karakter tanımı: \"ICS --server freechess.org --user jimmy --password bar\""
+"şeklinde olmalı."
+
+#: ../data/csboard.schemas.in.h:5
+msgid "Draw rectangle around last move"
+msgstr "Son taşınanı yuvarlak içine al"
+
+#: ../data/csboard.schemas.in.h:6
+msgid "Highligh last move"
+msgstr "Son taşınanı işaretle"
+
+#: ../data/csboard.schemas.in.h:7
+msgid "Highligh possible moves"
+msgstr "Taşınabilir alanlari işaretle"
+
+#: ../data/csboard.schemas.in.h:8
+msgid "Level of player"
+msgstr "Oyuncu seviyesi"
+
+#: ../data/csboard.schemas.in.h:9
+msgid "Saved board window height"
+msgstr "Pencere yüksekliği kayıt edildi"
+
+#: ../data/csboard.schemas.in.h:10
+msgid "Saved board window width"
+msgstr "Pencere genişliği kayıt edildi"
+
+#: ../data/csboard.schemas.in.h:11
+msgid "Should I highlight all possible moves for newbe."
+msgstr "Taşınabilir alanları işaretlendirmeli mıyım ?"
+
+#: ../data/csboard.schemas.in.h:12
+msgid "Show Coordinates on Chess Board"
+msgstr "Stranc tahtasının koordinatlarini göster"
+
+#: ../data/csboard.schemas.in.h:13
+msgid "Show Coords"
+msgstr "Koordinatları Göster"
+
+#: ../data/csboard.schemas.in.h:14
+msgid "This key adjusts engine strenght"
+msgstr "Bu anahtar işlem desteği ayarlar"
+
+#: ../data/csboard.schemas.in.h:15
+msgid "Window height"
+msgstr "Pencere Yüksekliği"
+
+#: ../data/csboard.schemas.in.h:16
+msgid "Window width"
+msgstr "Pencere Genişliği"
+
+#: ../src/App.cs:50
+msgid ""
+"<b>Unexpected exception occured</b>\n"
+"\n"
+msgstr ""
+"<b>Beklenmeyen istisna hata meydana geldi</b>\n"
+"\n"
+
+#: ../src/App.cs:53
+msgid "Please send this bug report to\n"
+msgstr "Lütfen bu hatayi gönderin\n"
+
+#: ../src/Window.cs:81
+msgid ""
+"<b>Unknown engine</b>\n"
+"\n"
+"Please check gconf keys of csboard"
+msgstr ""
+"<b>Bilinmeyen işlem</b>\n"
+"\n"
+"Lütfen gconf anahtarlarını kontrol edin"
+
+#: ../src/Window.cs:97
+#, csharp-format
+msgid ""
+"<b>Failed to start engine</b>\n"
+"\n"
+"Check that program '{0}' is available."
+msgstr ""
+"<b>İşlem başlatılamadı</b>"
+"\n"
+"Programı kontrol et.'{0}' geçerli"
+
+#: ../src/Window.cs:195
+msgid "Open Game"
+msgstr "Oyun Aç"
+
+#: ../src/Window.cs:210
+msgid "Save Game"
+msgstr "Kaydet"
+
+#: ../src/Window.cs:227
+msgid "File "
+msgstr "Dosya"
+
+#: ../src/Window.cs:228
+msgid ""
+" already exists\n"
+"\n"
+msgstr ""
+" zaten var\n"
+"\n"
+
+#: ../src/Window.cs:229
+msgid "Do you wish to overwrite it?"
+msgstr "Üstüne yazılsın mı ?"
+
+#: ../src/Window.cs:270
+msgid "There is no book move in this position"
+msgstr "Bu pozisyona ait kayıt yok"
+
+#: ../src/Window.cs:311
+msgid "You can move "
+msgstr "Taşıyabilirsin "
+
+#: ../src/Window.cs:382
+msgid "translator_credits"
+msgstr "Semih Gokalp <semgok@hotmail.com>"
+
+#: ../src/Window.cs:423
+msgid "Illegal move"
+msgstr "Kural dışı taşıma"
+
+#: ../src/Window.cs:443 ../src/Window.cs:452
+msgid "Game Over"
+msgstr "Oyun Bitti"
+
+#: ../src/Window.cs:464
+msgid "Thinking"
+msgstr "Düşünüyor"
+
+#: ../src/Promotion.cs:42
+msgid "Select a figure to promote"
+msgstr "Karakterini Seç"
+
+#: ../src/Book.cs:65
+msgid "Move"
+msgstr "Taşı"
+
+#: ../src/Book.cs:71
+msgid "Score"
+msgstr "Puan"
+
+#: ../src/Book.cs:77
+msgid "Wins"
+msgstr "Kazandın"
+
+#: ../src/Book.cs:83
+msgid "Loses"
+msgstr "Kaybettin"
+
+#: ../src/Book.cs:89
+msgid "Draws"
+msgstr "Berabere"
+
+#: ../src/ICSSeek.cs:63
+msgid "Index"
+msgstr "İçindekiler"
+
+#: ../src/ICSSeek.cs:64
+msgid "Rating"
+msgstr "Derece"
+
+#: ../src/ICSSeek.cs:65
+msgid "Player"
+msgstr "Oyuncu"
+
+#: ../src/ICSSeek.cs:66
+msgid "Time"
+msgstr "Zaman"
+
+#: ../src/ICSSeek.cs:67
+msgid "Increment"
+msgstr "Artış"
+
+#: ../src/ICSSeek.cs:68
+msgid "R/U"
+msgstr "Puanlı/Puansız"
+
+#: ../src/ICSSeek.cs:69
+msgid "Type"
+msgstr "Tip"
+
+#: ../src/ICSSeek.cs:70
+msgid "Color"
+msgstr "Renk"
+
+#: ../src/ICSSeek.cs:71
+msgid "Range"
+msgstr "Aralık"
+
+#: ../src/ICSSeek.cs:72
+msgid "Flags"
+msgstr "Bayraklar"
+
+#: ../src/ICS.cs:78
+msgid "Can't parse command line"
+msgstr "Yorum tanımlanamıyor"
+
+#: ../src/ICSClient.cs:59
+#, csharp-format
+msgid "Can't connect to {0} port {1}"
+msgstr "{0} bağlanılamıyor.Port no {1}"
+

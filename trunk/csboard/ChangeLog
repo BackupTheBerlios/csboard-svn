@@ -1,3 +1,10 @@
+2006-10-08  Semih Gokalp <semgok@hotmail.com>
+
+	* po/tr.po:
+	* configure.in:
+	
+	Add tr to ALL_LINGUAS.
+
 2006-10-07  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* src/ICSSeek.cs:
