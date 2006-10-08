@@ -384,6 +384,8 @@ namespace CsBoard {
                         ad.Logo = new Gdk.Pixbuf(Config.prefix + "/share/pixmaps/csboard.png");
                         ad.Website = "http://csboard.berlios.de";
                         
+                        ad.TransientFor = csboardWindow;
+                        
                         ad.Run ();
                         ad.Hide ();
                         ad.Dispose ();
