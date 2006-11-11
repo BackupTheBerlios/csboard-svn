@@ -1,3 +1,10 @@
+2006-11-11  Michal Turek <michal.turek@gmail.com>
+
+	* po/cs.po:
+	* configure.in:
+	
+	Add cs to ALL_LINGUAS.
+
 2006-10-08  Semih Gokalp <semgok@hotmail.com>
 
 	* po/tr.po:

@@ -1,0 +1,307 @@
+# Czech translation of csboard.
+# Copyright (C) 2004 Nickolay V. Shmyrev
+# This file is distributed under the same license as the csboard package.
+# Michal Turek <michal.turek@gmail.com>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-09 20:36+0100\n"
+"PO-Revision-Date: 2006-11-10 16:13+0100\n"
+"Last-Translator: Michal Turek <michal.turek@gmail.com>\n"
+"Language-Team: Czech <cs@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
+
+#: resource/csboard.glade:8
+msgid "Welcome to CS Board"
+msgstr "Vítejte v CS Board"
+
+#: resource/csboard.glade:34
+msgid "_Game"
+msgstr "_Hra"
+
+#: resource/csboard.glade:43
+msgid "_New"
+msgstr "_Nová"
+
+#: resource/csboard.glade:65
+msgid "_Open"
+msgstr "_Otevřít"
+
+#: resource/csboard.glade:87
+msgid "_Save"
+msgstr "_Uložit"
+
+#: resource/csboard.glade:115
+msgid "_Level"
+msgstr "_Úroveň"
+
+#: resource/csboard.glade:124
+msgid "_Beginner"
+msgstr "_Začátečník"
+
+#: resource/csboard.glade:134
+msgid "_Intermediate"
+msgstr "_Mírně pokročilý"
+
+#: resource/csboard.glade:145
+msgid "_Advanced"
+msgstr "_Pokročilý"
+
+#: resource/csboard.glade:156
+msgid "_Expert"
+msgstr "_Expert"
+
+#: resource/csboard.glade:177
+msgid "_Quit"
+msgstr "_Konec"
+
+#: resource/csboard.glade:203
+msgid "_Action"
+msgstr "_Akce"
+
+#: resource/csboard.glade:212
+msgid "_Undo"
+msgstr "_Zpět"
+
+#: resource/csboard.glade:234
+msgid "_Redo"
+msgstr "_Znova"
+
+#: resource/csboard.glade:262
+msgid "_Switch Side"
+msgstr "_Změň stranu"
+
+#: resource/csboard.glade:290
+msgid "_Hint"
+msgstr "_Rada"
+
+#: resource/csboard.glade:312
+msgid "_Book"
+msgstr "_Kniha"
+
+#: resource/csboard.glade:338
+msgid "_View"
+msgstr "_Pohled"
+
+#: resource/csboard.glade:347
+msgid "_Coords"
+msgstr "_Souřadnice"
+
+#: resource/csboard.glade:357
+msgid "_Possible Moves"
+msgstr "_Možné tahy"
+
+#: resource/csboard.glade:367
+msgid "_Last Move"
+msgstr "_Poslední tah"
+
+#: resource/csboard.glade:377
+msgid "_Animate"
+msgstr "_Animace"
+
+#: resource/csboard.glade:391
+msgid "_Help"
+msgstr "_Nápověda"
+
+#: resource/csboard.glade:400
+msgid "_About"
+msgstr "_O programu"
+
+#: resource/csboard.glade:421
+msgid "_Contents"
+msgstr "_Obsah"
+
+#: resource/csboard.glade:512
+msgid "Select figure to promote"
+msgstr "Zvolte figurku, kterou budete táhnout"
+
+#: resource/csboard.glade:592
+msgid "Queen"
+msgstr "Královna"
+
+#: resource/csboard.glade:611
+msgid "Knight"
+msgstr "Kůň"
+
+#: resource/csboard.glade:631
+msgid "Bishop"
+msgstr "Střelec"
+
+#: resource/csboard.glade:651
+msgid "Rook"
+msgstr "Věž"
+
+#: resource/csboard.glade:688 src/Book.cs:38
+msgid "Book Opening"
+msgstr "Kniha se otevírá"
+
+#: resource/csboard.glade:755
+msgid "<b>For this position there are moves in a book.</b>"
+msgstr "<b>Pro tuto pozici existuji tahy v knize.</b>"
+
+#: resource/csboard.glade:813 src/ICSSeek.cs:46
+msgid "Start new ICS game"
+msgstr "Začátek nové ICS hry"
+
+#: resource/csboard.glade:900
+msgid "<b>Available games:</b>"
+msgstr "<b>Dostupné hry:</b>"
+
+#: src/App.cs:50
+msgid ""
+"<b>Unexpected exception occured</b>\n"
+"\n"
+msgstr ""
+"<b>Nastala neočekavaná výjimka v programu</b>\n"
+"\n"
+
+#: src/App.cs:53
+msgid "Please send this bug report to\n"
+msgstr "Prosím oznamte tuto chybu na\n"
+
+#: src/Window.cs:81
+msgid ""
+"<b>Unknown engine</b>\n"
+"\n"
+"Please check gconf keys of csboard"
+msgstr ""
+"<b>Neznámý engine</b>\n"
+"\n"
+"Prosím zkontrolujte gconf csboard klavesy"
+
+#: src/Window.cs:97
+#, csharp-format
+msgid ""
+"<b>Failed to start engine</b>\n"
+"\n"
+"Check that program '{0}' is available."
+msgstr ""
+"<b>Nepodařilo se nastartovat engine</b>\n"
+"\n"
+"Zkontrolujte jestli program '{0}' je k dispozici."
+
+#: src/Window.cs:195
+msgid "Open Game"
+msgstr "Nahraj hru"
+
+#: src/Window.cs:210
+msgid "Save Game"
+msgstr "Ulož hru"
+
+#: src/Window.cs:227
+msgid "File "
+msgstr "Soubor "
+
+#: src/Window.cs:228
+msgid ""
+" already exists\n"
+"\n"
+msgstr ""
+" již existuje\n"
+"\n"
+
+#: src/Window.cs:229
+msgid "Do you wish to overwrite it?"
+msgstr "Opravdu to chcete přepsat?"
+
+#: src/Window.cs:270
+msgid "There is no book move in this position"
+msgstr "V knize nejsou žádné tahy pro tuto pozici"
+
+#: src/Window.cs:311
+msgid "You can move "
+msgstr "Mužete táhnout na "
+
+#: src/Window.cs:382
+msgid "translator_credits"
+msgstr "Michal Turek <michal.turek@gmail.com>"
+
+#: src/Window.cs:425
+msgid "Illegal move"
+msgstr "Nedovolený tah"
+
+#: src/Window.cs:445 src/Window.cs:454
+msgid "Game Over"
+msgstr "Konec hry"
+
+#: src/Window.cs:466
+msgid "Thinking"
+msgstr "Přemýšlím"
+
+#: src/Promotion.cs:42
+msgid "Select a figure to promote"
+msgstr "Zvolte figuru pro tah"
+
+#: src/Book.cs:65
+msgid "Move"
+msgstr "Pohyb"
+
+#: src/Book.cs:71
+msgid "Score"
+msgstr "Skóre"
+
+#: src/Book.cs:77
+msgid "Wins"
+msgstr "Vítězné"
+
+#: src/Book.cs:83
+msgid "Loses"
+msgstr "Prohrané"
+
+#: src/Book.cs:89
+msgid "Draws"
+msgstr "Rozehrané"
+
+#: src/ICSSeek.cs:63
+msgid "Index"
+msgstr "Index"
+
+#: src/ICSSeek.cs:64
+msgid "Rating"
+msgstr "Hodnocení"
+
+#: src/ICSSeek.cs:65
+msgid "Player"
+msgstr "Hráč"
+
+#: src/ICSSeek.cs:66
+msgid "Time"
+msgstr "Čas"
+
+#: src/ICSSeek.cs:67
+msgid "Increment"
+msgstr "Zisk"
+
+#: src/ICSSeek.cs:69
+msgid "R/U"
+msgstr "R/U"
+
+#: src/ICSSeek.cs:70
+msgid "Type"
+msgstr "Typ"
+
+#: src/ICSSeek.cs:71
+msgid "Color"
+msgstr "Barva"
+
+#: src/ICSSeek.cs:72
+msgid "Range"
+msgstr "Rozsah"
+
+#: src/ICSSeek.cs:73
+msgid "Flags"
+msgstr "Vlajky"
+
+#: src/ICS.cs:78
+msgid "Can't parse command line"
+msgstr "Nelze analyzovat přikazovou řádku"
+
+#: src/ICSClient.cs:59
+#, csharp-format
+msgid "Can't connect to {0} port {1}"
+msgstr "Nelze se připojit na {0} port {1}"
+
