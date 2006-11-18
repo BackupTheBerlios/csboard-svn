@@ -1,5 +1,31 @@
 SUBDIRS=po data help resource
 
+PARSER_SOURCES = \
+	$(top_srcdir)/src/parser/PGNParserException.cs \
+	$(top_srcdir)/src/parser/PGNTokenizer.cs \
+	$(top_srcdir)/src/parser/PGNChessGame.cs \
+	$(top_srcdir)/src/parser/PGNParser.cs
+
+GAME_PLAYER_SOURCES = \
+	$(top_srcdir)/src/game/ChessPiece.cs\
+	$(top_srcdir)/src/game/ChessSide.cs\
+	$(top_srcdir)/src/game/Rook.cs\
+	$(top_srcdir)/src/game/Bishop.cs\
+	$(top_srcdir)/src/game/Knight.cs\
+	$(top_srcdir)/src/game/Queen.cs\
+	$(top_srcdir)/src/game/King.cs\
+	$(top_srcdir)/src/game/Pawn.cs\
+	$(top_srcdir)/src/game/ChessBoardConstants.cs\
+	$(top_srcdir)/src/game/ChessGamePlayer.cs\
+	$(top_srcdir)/src/game/Utils.cs\
+	$(top_srcdir)/src/game/ChessException.cs\
+	$(top_srcdir)/src/game/InvalidMoveException.cs
+
+VIEWER_SOURCES = \
+	$(top_srcdir)/src/viewer/GameViewer.cs \
+	$(top_srcdir)/src/viewer/ChessGameWidget.cs \
+	$(top_srcdir)/src/viewer/GamesListWidget.cs
+
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
 	$(top_srcdir)/src/Window.cs \
@@ -17,6 +43,9 @@ SOURCE = \
 	$(top_srcdir)/src/ProgressBar.cs \
 	$(top_srcdir)/src/ICS.cs \
 	$(top_srcdir)/src/ICSClient.cs \
+	$(PARSER_SOURCES) \
+	$(GAME_PLAYER_SOURCES) \
+	$(VIEWER_SOURCES) \
 	$(top_srcdir)/src/ICSSeek.cs
 
 TEST_GAMES = \

@@ -19,12 +19,58 @@ namespace CsBoard {
 
         using System;
         using Gtk;
+        using CsBoard.Viewer;
 
         public class App {
 
 		public static Session session;	
 
+		static int StartViewer(string[] args) {
+
+                Application.Init ();
+
+		Catalog.Init (Config.packageName, Config.prefix + "/share/locale");
+
+			try {
+				session = new Session ();
+	                        new GameViewer (args.Length > 1 ? args[1] : null);
+	                        Application.Run ();
+			} catch (ApplicationException) {
+				return 1;
+			} catch (System.Exception e) {	
+
+				 try {
+					 MessageDialog md =
+		                    	   new MessageDialog (null,
+	    	                                              DialogFlags.DestroyWithParent,
+	                	                              MessageType.Error,
+	                    	                              ButtonsType.Close, 
+				    	   	              Catalog.GetString ("<b>Unexpected exception occured</b>\n\n") +
+				    	   	              GLib.Markup.EscapeText (e.ToString()) +
+				    	   	              "\n" +
+							      Catalog.GetString ("Please send this bug report to\n") +
+							      "Nickolay V. Shmyrev  &lt;nshmyrev@yandex.ru&gt;\n");
+					 md.Run ();
+	        	                 md.Hide ();
+	    	        	         md.Dispose ();
+    
+				 } catch (Exception ex) {
+
+					 throw e;
+
+		    		 }
+			}
+			
+			return 0;
+		}
+
                 public static int Main (string [] args) {
+		  if(args.Length > 0 && args[0].Equals("-viewer"))
+		    return StartViewer(args);
+		  return StartPlayer(args);
+		}
+
+                public static int StartPlayer (string [] args) {
 
                 Application.Init ();
 

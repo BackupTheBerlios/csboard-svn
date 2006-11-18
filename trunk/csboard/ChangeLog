@@ -1,3 +1,37 @@
+2006-11-18  Ravi Kiran UVS <uvsravikiran@gmail.com>
+
+	* configure.in:
+	* Makefile.am:
+	* src/App.cs
+	* src/Session.cs
+	* src/parser/PGNParserException.cs
+	* src/parser/PGNTokenizer.cs
+	* src/parser/PGNChessGame.cs
+	* src/parser/PGNParser.cs
+	* src/game/ChessPiece.cs
+	* src/game/ChessSide.cs
+	* src/game/Rook.cs
+	* src/game/Bishop.cs
+	* src/game/Knight.cs
+	* src/game/Queen.cs
+	* src/game/King.cs
+	* src/game/Pawn.cs
+	* src/game/ChessBoardConstants.cs
+	* src/game/ChessGamePlayer.cs
+	* src/game/Utils.cs
+	* src/game/ChessException.cs
+	* src/game/InvalidMoveException.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/ChessGameWidget.cs
+	* src/viewer/GamesListWidget.cs
+	
+	Add new code to view games from PGN files.
+	Viewer functionality under the 'viewer' directory.
+	PGN parser functionality under the 'parser' directory.
+	Chess game player functionality under the 'game' directory.
+	App.cs modified to start the viewer when '-viewer' 
+	is passed as the argument
+
 2006-11-11  Michal Turek <michal.turek@gmail.com>
 
 	* po/cs.po:

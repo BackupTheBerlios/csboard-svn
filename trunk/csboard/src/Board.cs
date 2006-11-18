@@ -676,8 +676,18 @@ namespace CsBoard {
                                 move = move + newFigure;
                         }
 
-                        MoveEvent (move);
+                        if(MoveEvent != null)
+                                MoveEvent (move);
                 }
+
+		public void Move (int src_rank, int src_file, int dest_rank, int dest_file, char promotion_type) {
+		        info.start.x = src_file; // file from left
+			info.start.y = 7 - src_rank;
+			info.end.x = dest_file;
+			info.end.y = 7 - dest_rank;
+			info.stage = MoveStage.Done;
+			Move(true);
+		}
 
                 public void SetPosition (ArrayList pos) {
                         info.cursorVisible = false;

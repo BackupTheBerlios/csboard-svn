@@ -65,7 +65,7 @@ namespace CsBoard {
 		      int width = (int) gconfClient.Get ("/apps/csboard/session/width");
 		      int height = (int) gconfClient.Get ("/apps/csboard/session/height");
 	      
-		      w.SetDefaultSize (width, height);
+		      w.Resize (width, height);
 	    }
 	    
 	    public void SaveGeometry (Gtk.Window w) {
