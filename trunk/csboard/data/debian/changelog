@@ -1,0 +1,16 @@
+csboard (0.6.cvs20061106-2) unstable; urgency=low
+
+  * Add debian/menu (add it to menu-xdg)
+  * Move csboard to /usr/share/gconf/schemas (before /etc/gconf/schemas)
+  * Improve packages depends
+  * Add manual page of csboard
+  * Better debian/control file
+
+ -- Michal Turek <michal.turek@gmail.com>  Thu, 23 Nov 2006 17:39:43 +0100
+
+csboard (0.6.cvs20061106-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Michal Turek <michal.turek@gmail.com>  Tue,  7 Nov 2006 17:30:15 +0100
+

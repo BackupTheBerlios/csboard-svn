@@ -1,3 +1,14 @@
+2006-11-29  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
+
+	* data/debian/changelog:
+	* data/debian/control:
+	* data/debian/copyright:
+	* data/debian/csboard.1:
+	* data/debian/menu:
+	* data/debian/rules:
+	
+	Add debian package files by Michal Turek.
+
 2006-11-18  Ravi Kiran UVS <uvsravikiran@gmail.com>
 
 	* configure.in:

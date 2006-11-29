@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+
+export MONO_SHARED_DIR=$(CURDIR)
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+include /usr/share/cdbs/1/class/gnome.mk
+
+DEB_INSTALL_MANPAGES_csboard := debian/csboard.1
+
+common-configure-indep::
+	mkdir -p $(MONO_SHARED_DIR)/.wapi
+
+binary-predeb/csboard::
+	dh_clideps
+#	dh_makeclilibs
+#	dh_netdeps -d -p$(cdbs_curpkg) $(DEB_DH_NETDEPS_ARGS)
+
+clean::
+	rm -rf $(MONO_SHARED_DIR)/.wapi
+
+# cdbs leaves junk around after patching
+	if test -r config.guess.cdbs-orig ; then \
+	  mv -f config.guess.cdbs-orig config.guess; \
+	fi
+	if test -r config.sub.cdbs-orig ; then \
+	  mv -f config.sub.cdbs-orig config.sub; \
+	fi
