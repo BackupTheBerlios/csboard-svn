@@ -184,9 +184,10 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.VBox chessGameDetailsBox;
 			[Glade.Widget] private Gtk.TextView gameNotesTextView;
 			[Glade.Widget] private Gtk.HPaned leftSplitPane;
-			[Glade.Widget] private Gtk.VPaned gamesSplitPane;
+			[Glade.Widget] private Gtk.HPaned gamesSplitPane;
 			[Glade.Widget] private Gtk.VBox gamesListBox;
 			[Glade.Widget] private Gtk.Statusbar statusBar;
+			private Gtk.Label whiteLabel, blackLabel;
 
 			private Board boardWidget;
 			GameSession gameSession;
@@ -228,7 +229,17 @@ namespace CsBoard
 						   GetDefaultPosition ());
 				boardWidget.WidthRequest = 450;
 				boardWidget.HeightRequest = 400;
+				whiteLabel = new Gtk.Label ("<b>White</b>");
+				blackLabel = new Gtk.Label ("<b>Black</b>");
+				whiteLabel.UseMarkup = true;
+				blackLabel.UseMarkup = true;
+				whiteLabel.Show ();
+				blackLabel.Show ();
+				chessBoardBox.PackStart (blackLabel, false,
+							 true, 2);
 				chessBoardBox.PackStart (boardWidget, true,
+							 true, 2);
+				chessBoardBox.PackStart (whiteLabel, false,
 							 true, 2);
 				boardWidget.Show ();
 
@@ -245,16 +256,22 @@ namespace CsBoard
 
 				gamesListWidget = new GamesListWidget ();
 
-				gamesListWidget.LinkClicked += OnLinkClicked;
+				gamesListWidget.RowActivated +=
+					OnRowActivated;
 				ScrolledWindow win = new ScrolledWindow ();
 				win.HscrollbarPolicy = PolicyType.Automatic;
 				win.VscrollbarPolicy = PolicyType.Automatic;
 				win.Child = gamesListWidget;
 				win.Show ();
+				Label label = new Label ("<b>Games</b>");
+				label.UseMarkup = true;
+				label.Show ();
+				gamesListBox.PackStart (label, false, false,
+							2);
 				gamesListBox.PackStart (win, true, true, 0);
 
 				leftSplitPane.Position = 300;
-				gamesSplitPane.Position = 150;
+				gamesSplitPane.Position = 400;
 				Gnome.Vfs.Vfs.Initialize ();
 				if (file != null)
 					LoadGames (file);
@@ -316,14 +333,8 @@ namespace CsBoard
 						  (stream);
 					  stream.Close ();
 				  }
-				PGNChessGame game = (PGNChessGame) games[0];
-				gameSession.Set (game);
-				gameWidget.SetGame (game);
 				gamesListWidget.SetGames (games);
-				gamesListWidget.HighlightGame (0);
-				boardWidget.SetPosition (gameSession.player.
-							 GetPosition ());
-				gameNotesTextView.Buffer.Text = "";
+				SelectGame (0);
 				statusBar.Pop (1);
 				statusBar.Push (1, "Showing " + loadUrl);
 				loadingInProgress = false;
@@ -335,9 +346,8 @@ namespace CsBoard
 			{
 				if (games == null || games.Count == 0)
 					return;
-				string file =
-					AskForFile ("Save the game as",
-						    false);
+				string file = AskForFile ("Save the game as",
+							  false);
 				if (file == null)
 					return;
 				TextWriter writer = new StreamWriter (file);
@@ -522,14 +532,15 @@ namespace CsBoard
 				boardWidget.QueueDraw ();
 			}
 
-			void OnLinkClicked (object obj, LinkClickedArgs args)
+			void OnRowActivated (object obj,
+					     RowActivatedArgs args)
 			{
-				if (games == null)
-					return;
-				int idx = Int32.Parse (args.Url);
-				if (idx >= games.Count)
-					return;
+				int idx = args.Path.Indices[0];
+				SelectGame (idx);
+			}
 
+			private void SelectGame (int idx)
+			{
 				PGNChessGame game = (PGNChessGame) games[idx];
 				gamesListWidget.HighlightGame (idx);
 				gameSession.Set (game);
@@ -537,6 +548,21 @@ namespace CsBoard
 				boardWidget.SetPosition (ChessGamePlayer.
 							 GetDefaultPosition
 							 ());
+				gameNotesTextView.Buffer.Text = "";
+				if (game.Tags == null
+				    || !game.Tags.Contains ("White"))
+					whiteLabel.Markup = "<b>White</b>";
+				else
+					whiteLabel.Markup =
+						"<b>" + game.Tags["White"] +
+						"</b>";
+				if (game.Tags == null
+				    || !game.Tags.Contains ("Black"))
+					blackLabel.Markup = "<b>Black</b>";
+				else
+					blackLabel.Markup =
+						"<b>" + game.Tags["Black"] +
+						"</b>";
 			}
 
 			string AskForFile (string title, bool open)

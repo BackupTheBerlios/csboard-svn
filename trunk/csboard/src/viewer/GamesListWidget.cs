@@ -25,14 +25,15 @@ namespace CsBoard
 	namespace Viewer
 	{
 
-		public class GamesListWidget:HTML
+		public class GamesListWidget:TreeView
 		{
 			ArrayList games;
 			int highlightGameIndex = -1;
+			ListStore gamesStore;
 
 			public GamesListWidget ():base ()
 			{
-				GenerateHTML ();
+				SetupTree ();
 				Show ();
 			}
 
@@ -40,74 +41,171 @@ namespace CsBoard
 			{
 				games = g;
 				highlightGameIndex = -1;
-				GenerateHTML ();
+				Update ();
 			}
 
-			void GenerateHTML ()
+			private void Update ()
 			{
-				HTMLStream stream = Begin ();
-				  stream.Write ("<HTML><HEAD></HEAD><BODY>");
-				if (games == null)
-				  {
-					  stream.Write ("</BODY></HTML>");
-					  End (stream, HTMLStreamStatus.Ok);
-					  return;
-				  }
-				stream.Write ("<H3>Available Games</H3>");
-
-				stream.Write
-					("<FONT SIZE=\"-1\"><TABLE BORDER=1 CELLSPACING=0><THEAD><TR><TH>No</TH><TH>White</TH><TH>Black</TH><TH>Moves</TH><TH>Result</TH></TR></THEAD><TBODY>");
-				int i = 0;
+				gamesStore.Clear ();
 				foreach (PGNChessGame game in games)
-				{
-					string white =
-						game.Tags.
-						Contains ("White") ? (string)
-						game.Tags["White"] : "White";
-					string black =
-						game.Tags.
-						Contains ("Black") ? (string)
-						game.Tags["Black"] : "Black";
-					string result =
-						game.Tags.
-						Contains ("Result") ? (string)
-						game.
-						Tags["Result"] : "Result";
+					gamesStore.AppendValues (game);
+			}
 
-					if (highlightGameIndex == i)
-					  {
-						  stream.Write (String.
-								Format
-								("<TR><TD><A NAME=\"{0}\" HREF=\"{0}\"><B>{1}</B></TD><TD><B>{2}</B></TD><TD><B>{3}</B></TD><TD><B>{4}</B></TD><TD><B>{5}</B></TD></TR>",
-								 i, i + 1,
-								 white, black,
-								 game.Moves.
-								 Count,
-								 result));
-					  }
-					else
-					  {
-						  stream.Write (String.
-								Format
-								("<TR><TD><A NAME=\"{0}\" HREF=\"{0}\">{1}</TD><TD>{2}</TD><TD>{3}</TD><TD>{4}</TD><TD>{5}</TD></TR>",
-								 i, i + 1,
-								 white, black,
-								 game.Moves.
-								 Count,
-								 result));
-					  }
-					i++;
-				}
-				stream.Write
-					("</TABLE></FONT></BODY></HTML>");
-				End (stream, HTMLStreamStatus.Ok);
+			private void SetupTree ()
+			{
+				gamesStore = new ListStore (typeof (object));
+				Model = gamesStore;
+
+				CellRendererText renderer;
+				TreeViewColumn col;
+
+				col = new TreeViewColumn ();
+				renderer = new CellRendererText ();
+				col.Title = "No";
+				col.PackStart (renderer, true);
+				col.SetCellDataFunc (renderer,
+						     new
+						     TreeCellDataFunc
+						     (GameNoCellDataFunc));
+				col.Resizable = false;
+				col.Expand = false;
+				AppendColumn (col);
+
+				col = new TreeViewColumn ();
+				renderer = new CellRendererText ();
+				col.Title = "White";
+				col.PackStart (renderer, true);
+				col.SetCellDataFunc (renderer,
+						     new
+						     TreeCellDataFunc
+						     (WhiteCellDataFunc));
+				col.Resizable = false;
+				col.Expand = false;
+				AppendColumn (col);
+
+				col = new TreeViewColumn ();
+				renderer = new CellRendererText ();
+				col.Title = "Black";
+				col.PackStart (renderer, true);
+				col.SetCellDataFunc (renderer,
+						     new
+						     TreeCellDataFunc
+						     (BlackCellDataFunc));
+				col.Resizable = false;
+				col.Expand = false;
+				AppendColumn (col);
+
+				col = new TreeViewColumn ();
+				renderer = new CellRendererText ();
+				col.Title = "Moves";
+				col.PackStart (renderer, true);
+				col.SetCellDataFunc (renderer,
+						     new
+						     TreeCellDataFunc
+						     (MovesCellDataFunc));
+				col.Resizable = false;
+				col.Expand = false;
+				AppendColumn (col);
+
+				col = new TreeViewColumn ();
+				renderer = new CellRendererText ();
+				col.Title = "Result";
+				col.PackStart (renderer, true);
+				col.SetCellDataFunc (renderer,
+						     new
+						     TreeCellDataFunc
+						     (ResultCellDataFunc));
+				col.Resizable = false;
+				col.Expand = false;
+				AppendColumn (col);
 			}
 
 			public void HighlightGame (int idx)
 			{
 				highlightGameIndex = idx;
-				GenerateHTML ();
-				JumpToAnchor ("" + idx);
+			}
+
+			protected void GameNoCellDataFunc (TreeViewColumn
+							   column,
+							   CellRenderer r,
+							   TreeModel model,
+							   TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				TreePath path = gamesStore.GetPath (iter);
+				renderer.Text = "" + (path.Indices[0] + 1);
+			}
+
+			protected void WhiteCellDataFunc (TreeViewColumn
+							  column,
+							  CellRenderer r,
+							  TreeModel model,
+							  TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				PGNChessGame game =
+					(PGNChessGame) model.GetValue (iter,
+								       0);
+				if (game.Tags == null
+				    || !game.Tags.Contains ("White"))
+					renderer.Text = "[White]";
+				else
+					renderer.Text =
+						(string) game.Tags["White"];
+			}
+
+			protected void BlackCellDataFunc (TreeViewColumn
+							  column,
+							  CellRenderer r,
+							  TreeModel model,
+							  TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				PGNChessGame game =
+					(PGNChessGame) model.GetValue (iter,
+								       0);
+				if (game.Tags == null
+				    || !game.Tags.Contains ("Black"))
+					renderer.Text = "[Black]";
+				else
+					renderer.Text =
+						(string) game.Tags["Black"];
+			}
+
+			protected void MovesCellDataFunc (TreeViewColumn
+							  column,
+							  CellRenderer r,
+							  TreeModel model,
+							  TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				PGNChessGame game =
+					(PGNChessGame) model.GetValue (iter,
+								       0);
+				renderer.Text = "" + game.Moves.Count;
+			}
+
+			protected void ResultCellDataFunc (TreeViewColumn
+							   column,
+							   CellRenderer r,
+							   TreeModel model,
+							   TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				PGNChessGame game =
+					(PGNChessGame) model.GetValue (iter,
+								       0);
+				if (game.Tags == null
+				    || !game.Tags.Contains ("Result"))
+					renderer.Text = "";
+				else
+					renderer.Text =
+						(string) game.Tags["Result"];
 			}
 		}
 	}

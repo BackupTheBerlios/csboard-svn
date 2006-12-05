@@ -203,7 +203,9 @@ namespace Chess
 							    Append (comment);
 						    continue;
 					    }
-					  else if (token.Equals ("{"))
+					  else if (token.Equals ("{")
+						   || token.Equals ("[")
+						   || token.Equals ("("))
 					    {
 						    string comment =
 							    readComment

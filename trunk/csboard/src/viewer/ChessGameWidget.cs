@@ -29,22 +29,27 @@ namespace CsBoard
 			PGNChessGame game;
 			int highlightMoveIndex;
 			bool highlightWhite;
-			HTML infoHTML;
-			HTML gameHTML;
+			ChessGameInfoWidget gameInfoWidget;
+			TreeView gameView;
+			ListStore moveStore;
+			TreeViewColumn whitecol, blackcol;
 
 			public ChessGameWidget ():base ()
 			{
 				highlightMoveIndex = -1;
 
-				infoHTML = new HTML ();
-				gameHTML = new HTML ();
-				infoHTML.Show ();
-				gameHTML.Show ();
+				gameInfoWidget = new ChessGameInfoWidget ();
+				gameView = new TreeView ();
+				moveStore = new ListStore (typeof (object));
+				gameView.Model = moveStore;
+				SetupMovesTree ();
+				gameInfoWidget.Show ();
+				gameView.Show ();
 				Show ();
 
-				PackStart (infoHTML, false, false, 0);
+				PackStart (gameInfoWidget, false, false, 0);
 				ScrolledWindow win = new ScrolledWindow ();
-				  win.Child = gameHTML;
+				  win.Child = gameView;
 				  win.HscrollbarPolicy = PolicyType.Never;
 				  win.VscrollbarPolicy = PolicyType.Automatic;
 				  win.Show ();
@@ -53,112 +58,145 @@ namespace CsBoard
 
 			public void SetGame (PGNChessGame g)
 			{
+				highlightMoveIndex = -1;
 				game = g;
-				GenerateHTML ();
+				gameInfoWidget.SetGame (game);
+				UpdateGameDetails ();
 			}
 
 			public void HighlightMove (int moveIdx, bool white)
 			{
 				highlightWhite = white;
 				highlightMoveIndex = moveIdx;
-				//      GenerateHTML();
-				gameHTML.JumpToAnchor ("" + moveIdx);
+				if (moveIdx < 0)
+				  {
+					  return;
+				  }
+				TreeIter iter;
+				if (!moveStore.
+				    IterNthChild (out iter, moveIdx))
+					return;
+				TreePath path = moveStore.GetPath (iter);
+				moveStore.EmitRowChanged (path, iter);
+				gameView.SetCursor (path,
+						    white ? whitecol :
+						    blackcol, false);
 			}
 
-			public void GenerateHTML ()
+			private void UpdateGameDetails ()
 			{
-				string white =
-					game.Tags.
-					Contains ("White") ? (string) game.
-					Tags["White"] : "[White]";
-				string black =
-					game.Tags.
-					Contains ("Black") ? (string) game.
-					Tags["Black"] : "[Black]";
-				string evnt =
-					game.Tags.
-					Contains ("Event") ? (string) game.
-					Tags["Event"] : "";
-				string site =
-					game.Tags.
-					Contains ("Site") ? (string) game.
-					Tags["Site"] : "";
-				string date =
-					game.Tags.
-					Contains ("Date") ? (string) game.
-					Tags["Date"] : "";
-				string result =
-					game.Tags.
-					Contains ("Result") ? (string) game.
-					Tags["Result"] : "";
-
-				HTMLStream stream = infoHTML.Begin ();
-				stream.Write
-					("<HTML><HEAD></HEAD><BODY><TABLE BORDER=0 WIDTH=100%>");
-				stream.Write (String.
-					      Format
-					      ("<TR><TD COLSPAN=2><FONT SIZE=\"+1\"><B>{0} vs {1}</B></FONT></TD></TR>",
-					       white, black));
-				stream.Write (String.
-					      Format
-					      ("<TR><TD VALIGN=TOP><B>Result</B></TD><TD VALIGN=TOP>{0}</TD></TR>",
-					       result));
-				stream.Write (String.
-					      Format
-					      ("<TR><TD VALIGN=TOP><B>Date</B></TD><TD VALIGN=TOP>{0}</TD></TR>",
-					       date));
-				stream.Write (String.
-					      Format
-					      ("<TR><TD VALIGN=TOP><B>Event</B></TD><TD VALIGN=TOP>{0}</TD></TR>",
-					       evnt));
-				stream.Write (String.
-					      Format
-					      ("<TR><TD VALIGN=TOP><B>Site</B></TD><TD VALIGN=TOP>{0}</TD></TR>",
-					       site));
-
-				stream.Write ("</TABLE>");
-				stream.Write ("</BODY></HTML>");
-				infoHTML.End (stream, HTMLStreamStatus.Ok);
-
-				stream = gameHTML.Begin ();
-				stream.Write ("<HTML><HEAD></HEAD><BODY>");
-				stream.Write
-					("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5 WIDTH=150>");
-				stream.Write
-					("<THEAD><TR BGCOLOR=\"#c0c0ff\"><TH>No</TH><TH>White</TH><TH>Black</TH></TR></THEAD><TBODY>");
-				int i = 1;
+				moveStore.Clear ();
 				foreach (ChessMove move in game.Moves)
 				{
-					string whitemove =
-						move.whitemove ==
-						null ? "" : move.whitemove;
-					string blackmove =
-						move.blackmove ==
-						null ? "" : move.blackmove;
-					if (i == highlightMoveIndex)
-					  {
-						  if (highlightWhite)
-							  whitemove =
-								  "<B>" +
-								  whitemove +
-								  "</B>";
-						  else
-							  blackmove =
-								  "<B>" +
-								  blackmove +
-								  "</B>";
-					  }
-					stream.Write (String.
-						      Format
-						      ("<TR><TD ALIGN=LEFT><A NAME=\"{0}\"/>{1}</TD><TD ALIGN=LEFT>{2}</TD><TD ALIGN=LEFT>{3}</TD></TR>\n",
-						       i - 1, i, whitemove,
-						       blackmove));
-					i++;
+					moveStore.AppendValues (move);
 				}
-				stream.Write ("</TABLE>");
-				stream.Write ("</BODY></HTML>");
-				gameHTML.End (stream, HTMLStreamStatus.Ok);
+			}
+
+			private void SetupMovesTree ()
+			{
+				TreeViewColumn col = new TreeViewColumn ();
+				CellRendererText moveno_renderer =
+					new CellRendererText ();
+				CellRendererText whitemove_renderer =
+					new CellRendererText ();
+				CellRendererText blackmove_renderer =
+					new CellRendererText ();
+				moveno_renderer.Xalign = 1;
+				col.PackStart (moveno_renderer, false);
+				col.SetCellDataFunc (moveno_renderer,
+						     new
+						     TreeCellDataFunc
+						     (MoveNumCellDataFunc));
+				col.Title = "No";
+				gameView.AppendColumn (col);
+
+				col = new TreeViewColumn ();
+				col.PackStart (whitemove_renderer, true);
+				col.SetCellDataFunc (whitemove_renderer,
+						     new
+						     TreeCellDataFunc
+						     (WhiteMoveCellDataFunc));
+				col.Title = "White";
+				col.Resizable = true;
+				col.Expand = true;
+				gameView.AppendColumn (col);
+				whitecol = col;
+				whitecol.Spacing = 5;
+
+				col = new TreeViewColumn ();
+				col.PackStart (blackmove_renderer, false);
+				col.SetCellDataFunc (blackmove_renderer,
+						     new
+						     TreeCellDataFunc
+						     (BlackMoveCellDataFunc));
+				col.Expand = true;
+				col.Title = "Black";
+				gameView.AppendColumn (col);
+				blackcol = col;
+
+				gameView.HeadersVisible = true;
+			}
+
+			protected void MoveNumCellDataFunc (TreeViewColumn
+							    column,
+							    CellRenderer r,
+							    TreeModel model,
+							    TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				ChessMove move =
+					(ChessMove) model.GetValue (iter, 0);
+				renderer.Text = "" + move.moveIdx;
+			}
+
+			protected void WhiteMoveCellDataFunc (TreeViewColumn
+							      column,
+							      CellRenderer r,
+							      TreeModel model,
+							      TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				ChessMove move =
+					(ChessMove) model.GetValue (iter, 0);
+				if (highlightWhite
+				    && (move.moveIdx - 1 ==
+					highlightMoveIndex))
+					renderer.Underline =
+						Pango.Underline.Single;
+				else
+					renderer.Underline =
+						Pango.Underline.None;
+
+				renderer.Text = move.whitemove ==
+					null ? "" : move.whitemove;
+			}
+
+			protected void BlackMoveCellDataFunc (TreeViewColumn
+							      column,
+							      CellRenderer r,
+							      TreeModel model,
+							      TreeIter iter)
+			{
+				CellRendererText renderer =
+					(CellRendererText) r;
+				ChessMove move =
+					(ChessMove) model.GetValue (iter, 0);
+				if (!highlightWhite
+				    && (move.moveIdx - 1 ==
+					highlightMoveIndex))
+					renderer.Underline =
+						Pango.Underline.Single;
+				else
+					renderer.Underline =
+						Pango.Underline.None;
+
+				renderer.Text = move.blackmove ==
+					null ? "" : move.blackmove;
 			}
 		}
+
+
 	}
 }

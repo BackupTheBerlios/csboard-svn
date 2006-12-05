@@ -24,6 +24,7 @@ GAME_PLAYER_SOURCES = \
 VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
 	$(top_srcdir)/src/viewer/ChessGameWidget.cs \
+	$(top_srcdir)/src/viewer/ChessGameInfoWidget.cs \
 	$(top_srcdir)/src/viewer/GamesListWidget.cs
 
 SOURCE = \
