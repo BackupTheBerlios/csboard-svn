@@ -1,3 +1,21 @@
+2006-12-05  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
+	* Makefile.am
+	* configure.in
+	* data/csboard.in
+	* resource/csboard.glade
+	* src/parser/PGNParser.cs
+	* src/viewer/ChessGameWidget.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+	* src/viewer/ChessGameInfoWidget.cs
+	
+	Replaced the HTML widgets with TreeView and Labels. Changed
+	the layout to have three columns one each for games list,
+	chess board and the game details.
+	Added a new file ChessGameInfoWidget.cs.
+	Removed the gtkhtml-sharp dependency.
+
 2006-11-29  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* data/debian/changelog:
