@@ -305,7 +305,13 @@ namespace CsBoard
 				  }
 				cury -= image.Height;
 				Print.Moveto (ctx, curx, cury);
-				Print.Pixbuf (ctx, image);
+
+				Print.Gsave(ctx);
+				Print.Translate(ctx, curx, cury);
+				Print.Scale(ctx, image.Width, image.Height);
+				Print.Pixbuf(ctx, image);
+				Print.Grestore(ctx);
+
 				LineBreak ();
 			}
 

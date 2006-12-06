@@ -1,3 +1,13 @@
+2006-12-06  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
+	* Makefile.am
+	* src/viewer/PositionSnapshot.cs
+	* src/viewer/PrintWrapper.cs
+	* src/viewer/PGNExporter.cs
+
+	Added the position snapshots to the print/export output.
+	Created the file PositionSnapshot.cs based on Board.cs
+
 2006-12-05  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
 	* Makefile.am

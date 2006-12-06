@@ -28,6 +28,7 @@ VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/ChessGameInfoWidget.cs \
 	$(top_srcdir)/src/viewer/PrintWrapper.cs \
 	$(top_srcdir)/src/viewer/PGNExporter.cs \
+	$(top_srcdir)/src/viewer/PositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/GamesListWidget.cs
 
 SOURCE = \

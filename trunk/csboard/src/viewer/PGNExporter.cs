@@ -18,8 +18,10 @@
 using System.Collections;
 using Chess.Parser;
 using Chess.Game;
+using Gtk;
 using Gnome;
 using System;
+using CsBoard;
 
 namespace CsBoard
 {
@@ -33,68 +35,71 @@ namespace CsBoard
 			public Font moveFont;
 		};
 
-		public class PGNExporter
-		{
-			public static void WriteToPrinter (IList games,
-							   PrintWrapper
-							   printer)
+	public class PGNExporter
+	{
+		public static void WriteToPrinter (IList games,
+						   PrintWrapper
+						   printer)
 			{
 				PGNFonts fonts;
 
-				  fonts.regularFont =
+				fonts.regularFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Regular,
 								    false, 8);
-				  fonts.titleFont =
+				fonts.titleFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Bold,
 								    false,
 								    12);
-				  fonts.commentFont =
+				fonts.commentFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Regular,
 								    true, 8);
-				  fonts.moveFont =
+				fonts.moveFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Bold,
 								    false, 9);
 
-				  printer.Start ();
-				  printer.LineSpaceRatio = 2;
+				printer.Start ();
+				printer.LineSpaceRatio = 2;
 				bool first = true;
-				  foreach (PGNChessGame game in games)
-				{
-					if (!first)
-						printer.PageBreak ();
-					WriteGameToPrinter (game, printer,
-							    fonts);
-					first = false;
-				}
+				foreach (PGNChessGame game in games)
+					{
+						if (!first)
+							printer.PageBreak ();
+						WriteGameToPrinter (game, printer,
+								    fonts);
+						first = false;
+					}
 				printer.End ();
 			}
 
-			private static void GetImageForPosition (out Gdk.
-								 Pixbuf image,
-								 ArrayList
-								 position)
+		private static void PrintImageForPosition (PrintWrapper printer,
+							   ArrayList
+							   position)
 			{
-				image = null;
+				int width = 200;
+				int height = 200;
+				PositionSnapshot ps = new PositionSnapshot(position, width, height);
+				Gdk.Pixbuf image = Gdk.Pixbuf.FromDrawable(ps.Pixmap, ps.Pixmap.Colormap, 0, 0, 0, 0, width, height);
+				printer.PrintImage(image);
 			}
 
-			private static void WriteGameToPrinter (PGNChessGame
-								game,
-								PrintWrapper
-								printer,
-								PGNFonts
-								fonts)
+		private static void WriteGameToPrinter (PGNChessGame
+							game,
+							PrintWrapper
+							printer,
+							PGNFonts
+							fonts)
 			{
 				GameSession session = new GameSession ();
 				session.Set (game);
@@ -121,59 +126,63 @@ namespace CsBoard
 				printer.Font = fonts.moveFont;
 				int moveno = 1;
 				foreach (ChessMove move in game.Moves)
-				{
-					// print move
-					if (move.whitemove == null)
-						break;
-					printer.PrintText (moveno + ". " +
-							   move.whitemove);
-					session.Next ();
-					if (move.whiteComment != null)
-					  {
-						  printer.LineBreak ();
-						  Gdk.Pixbuf snapshot;
-						  GetImageForPosition (out
-								       snapshot,
-								       session.
-								       player.
-								       GetPosition
-								       ());
-						  if (snapshot != null)
-							  printer.PrintImage
-								  (snapshot);
-						  printer.Font =
-							  fonts.commentFont;
-						  printer.PrintText (move.
-								     whiteComment);
-						  printer.Font =
-							  fonts.moveFont;
-						  if (move.blackmove == null)
-							  break;
-						  printer.PrintText ("\n" +
-								     moveno +
-								     "...");
-					  }
+					{
+						// print move
+						if (move.whitemove == null)
+							break;
+						printer.PrintText (moveno + ". " +
+								   move.whitemove);
+						if(session.HasNext()) {
+							session.Next ();
+							session.player.Move (session.CurrentMove);
+						}
+						if (move.whiteComment != null)
+							{
+								printer.LineBreak ();
+								PrintImageForPosition(printer, session.
+										      player.
+										      GetPosition
+										      ());
+								printer.Font =
+									fonts.commentFont;
+								printer.PrintText (move.
+										   whiteComment);
+								printer.Font =
+									fonts.moveFont;
+								if (move.blackmove == null)
+									break;
+								printer.PrintText ("\n" +
+										   moveno +
+										   "...");
+							}
 
-					if (move.blackmove == null)
-						break;
-					session.Next ();
-					printer.PrintText (" " +
-							   move.blackmove +
-							   " ");
-					if (move.blackComment != null)
-					  {
-						  printer.PrintText ("\n");
-						  printer.Font =
-							  fonts.commentFont;
-						  printer.PrintText (move.
-								     blackComment);
-						  printer.Font =
-							  fonts.moveFont;
-						  printer.PrintText ("\n");
-					  }
-					moveno++;
-				}
+						if (move.blackmove == null)
+							break;
+						if(session.HasNext()) {
+							session.Next ();
+							session.player.Move (session.CurrentMove);
+						}
+						printer.PrintText (" " +
+								   move.blackmove +
+								   " ");
+						if (move.blackComment != null)
+							{
+								printer.LineBreak();
+								PrintImageForPosition(printer, session.
+										      player.
+										      GetPosition
+										      ());
+								printer.Font =
+									fonts.commentFont;
+								printer.PrintText (move.
+										   blackComment);
+								printer.Font =
+									fonts.moveFont;
+								printer.PrintText ("\n");
+							}
+						moveno++;
+					}
 			}
-		}
+	}
 	}			// namespace Viewer
 }
