@@ -22,9 +22,12 @@ GAME_PLAYER_SOURCES = \
 	$(top_srcdir)/src/game/InvalidMoveException.cs
 
 VIEWER_SOURCES = \
+	$(top_srcdir)/src/viewer/GameSession.cs \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
 	$(top_srcdir)/src/viewer/ChessGameWidget.cs \
 	$(top_srcdir)/src/viewer/ChessGameInfoWidget.cs \
+	$(top_srcdir)/src/viewer/PrintWrapper.cs \
+	$(top_srcdir)/src/viewer/PGNExporter.cs \
 	$(top_srcdir)/src/viewer/GamesListWidget.cs
 
 SOURCE = \
