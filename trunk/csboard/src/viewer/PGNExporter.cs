@@ -52,26 +52,26 @@ namespace CsBoard
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Regular,
-								    false, 8);
+								    false, 10);
 				fonts.titleFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Bold,
 								    false,
-								    12);
+								    14);
 				fonts.commentFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Regular,
-								    true, 8);
+								    true, 10);
 				fonts.moveFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Bold,
-								    false, 9);
+								    false, 10);
 				printer = p;
 				games = g;
 			}
