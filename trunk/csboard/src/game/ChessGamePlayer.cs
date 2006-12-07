@@ -631,6 +631,8 @@ namespace Chess
 					  return false;
 				  }
 
+				if (castle == CastleType.LONG_CASTLE)
+					i1 = ChessBoardConstants.FILE_C;
 				for (int i = i1; i < i2; i++)
 				  {
 					  attackers.Clear ();

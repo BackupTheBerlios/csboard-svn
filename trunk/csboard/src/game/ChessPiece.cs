@@ -131,37 +131,45 @@ namespace Chess
 				if ((flags & ChessBoardConstants.
 				     MOVE_DONT_CHECK_KINGS_EXPOSURE) == 0)
 				  {
-					  // This will serve both the cases of King under check, or
-					  // king under pin
-					  IList attackers = new ArrayList ();
-					  int myking_rank, myking_file;
-
-					  myking_rank =
-						  this !=
-						  myside.King ? myside.King.
-						  Rank : i;
-					  myking_file =
-						  this !=
-						  myside.King ? myside.King.
-						  File : j;
-
 					  // keep myself at the destination and see if my king will be under attack
 					  ChessPiece dest_orig =
 						  positions[i, j];
 					  positions[rank, file] = null;
 					  positions[i, j] = this;
-					  getAttackers (myside, oppside, myking_rank, myking_file, positions, dest_orig,	/* this will be ignored */
-							attackers);
+
+					  bool king_under_attack = isMyKingUnderAttack(i, j, positions, dest_orig, flags);
+
 					  positions[rank, file] = this;	// restore
 					  positions[i, j] = dest_orig;
 
-					  if (attackers.Count > 0)
-					    {
-						    return false;
-					    }
+					  if(king_under_attack)
+						  return false;
 				  }
 
 				return true;
+			}
+
+			protected virtual bool isMyKingUnderAttack(int i, int j,
+							 ChessPiece[,]
+							 positions, ChessPiece ignore, int flags) {
+				// This will serve both the cases of King under check, or
+				// king under pin
+				IList attackers = new ArrayList ();
+				int myking_rank, myking_file;
+				
+				myking_rank =
+					this !=
+					myside.King ? myside.King.
+					Rank : i;
+				myking_file =
+					this !=
+					myside.King ? myside.King.
+					File : j;
+				
+				getAttackers (myside, oppside, myking_rank, myking_file, positions, ignore,	/* this will be ignored */
+					      attackers);
+				
+				return attackers.Count > 0;
 			}
 
 			/* This returns the attackers of (myking_rank,myking_file) square in the position

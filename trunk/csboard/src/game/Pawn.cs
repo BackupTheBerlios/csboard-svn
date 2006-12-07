@@ -93,10 +93,33 @@ namespace Chess
 							  positions,
 							  int flags)
 			{
-				if (!base.isValidMove (i, j, positions, flags
-						       | ChessBoardConstants.
-						       MOVE_EXCHANGE))
-					return false;
+				if((flags & ChessBoardConstants.MOVE_ENPASSANT) == 0) {
+					if (!base.isValidMove (i, j, positions, flags
+							       | ChessBoardConstants.
+							       MOVE_EXCHANGE))
+						return false;
+				}
+				else {
+					if (!base.isValidMove (i, j, positions, flags
+							       | ChessBoardConstants.
+							       MOVE_EXCHANGE | ChessBoardConstants.MOVE_DONT_CHECK_KINGS_EXPOSURE))
+						return false;
+					// Now check king exposure
+					  ChessPiece dest_orig;
+
+					  dest_orig = positions[rank, j];
+					  positions[rank, file] = null;
+					  positions[i, j] = this;
+
+					  bool king_under_attack = isMyKingUnderAttack(i, j, positions, dest_orig, flags);
+
+					  positions[i, j] = null;
+					  positions[rank, file] = this;	// restore
+					  positions[rank, j] = dest_orig;
+
+					  if(king_under_attack)
+						  return false;
+				}
 
 				int diff = i - rank;
 
