@@ -358,29 +358,19 @@ namespace Chess
 				  }
 
 				/* special case for enpass */
+				if (piece.Type == PieceType.PAWN && j1 != j2
+				    && positions[i2, j2] == null)
+					return move_enpass (i1, j1, i2, j2);
+
 				bool promotion_case =
 					ChessUtils.isPawnPromotion (piece,
 								    i2);
-				if (piece.Type == PieceType.PAWN)
-				  {
-					  if (promotion_case
-					      && promoted_piece_type ==
-					      PromotionType.NONE)
-					    {
-						    // promotion case but promotion type not specified
-						    return false;
-					    }
-
-					  if ((j1 != j2)
-					      && positions[i2, j2] == null)
-					    {
-						    // looks like an exchange but no pawn at the destination. trying enpassant
-						    return move_enpass (i1,
-									j1,
-									i2,
-									j2);
-					    }
-				  }
+				if (piece.Type == PieceType.PAWN
+				    && promotion_case
+				    && promoted_piece_type ==
+				    PromotionType.NONE)
+					// promotion case but promotion type not specified
+					return false;
 
 				/* Now change the position */
 				piece = removePiece (i1, j1);
@@ -444,10 +434,15 @@ namespace Chess
 						  str.Substring (index +
 								 1).
 						  ToUpper ();
+					  str = str.Substring (0, index);
+
 					  if (promotion_piece_str.
 					      Equals ("Q"))
-						  promotion_type =
-							  PromotionType.QUEEN;
+					    {
+						    promotion_type =
+							    PromotionType.
+							    QUEEN;
+					    }
 					  else if (promotion_piece_str.
 						   Equals ("R"))
 						  promotion_type =
