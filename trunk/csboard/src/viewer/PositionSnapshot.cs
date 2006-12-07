@@ -28,150 +28,178 @@ namespace CsBoard
 	namespace Viewer
 	{
 
-	public class PositionSnapshot {
-		// Geometry
-		private int start_x;
-		private int start_y;
-		private int size;
-		private const int space = 1;
-		
-		public bool side = false;
+		public class PositionSnapshot
+		{
+			// Geometry
+			private int start_x;
+			private int start_y;
+			private int size;
+			private int border_padding;
+			private const int space = 1;
+			private int width;
+			private int height;
 
-		// Figure Renderer
-		private Figure figure;
+			public bool side = false;
 
-		// Position
-		private Position position;
+			// Figure Renderer
+			private Figure figure;
 
-		Gdk.GC gc;
+			// Position
+			private Position position;
 
-		Gdk.Color border_color, blacksq_color, whitesq_color;
+			  Gdk.GC gc;
+
+			  Gdk.Color border_color, blacksq_color,
+				whitesq_color;
 
 
-		private Gdk.Pixmap map;
-		public Gdk.Pixmap Pixmap {
-			get { return map; }
-		}
-		
-		public PositionSnapshot(ArrayList pos, int width, int height) {
-			border_color = new Gdk.Color(255, 255, 255);
-			blacksq_color = new Gdk.Color(200, 200, 200);
-			whitesq_color = new Gdk.Color(240, 240, 240);
-
-//			blacksq_color = new Gdk.Color(210, 60, 0);
-//			whitesq_color = new Gdk.Color(236, 193, 130);
-
-			Gtk.Window win = new Gtk.Window(Gtk.WindowType.Toplevel);
-			win.Realize();
-			Gdk.Window gdkwin = win.GdkWindow;
-			
-			gc = new Gdk.GC(gdkwin);
-			map = new Gdk.Pixmap(gdkwin, width, height);
-
-			figure = new Figure ();
-			position = new Position (pos);
-			
-			int d = Math.Min (width, height) / 2;
-			size = (10 * (d - 3 * space)) / 42 - 1;
-			figure.SetSize (size);
-			
-			start_x = width / 2 - 4 * size - 3 * space;
-			start_y = height / 2 - 4 * size - 3 * space;
-			
-			DrawBackground ();
-			DrawPosition ();
-		}
-
-		private void DrawBackground () {
-
-			// Defining the color of the Checks
-			int i, j, xcount, ycount;
-
-			gc.RgbFgColor = border_color;
-			map.DrawRectangle (gc, false,
-					   start_x - space,
-					   start_y - space,
-					   (size + space) * 8 + space,
-					   (size + space) * 8 + space);
-			
-			// Start redrawing the Checkerboard                     
-			xcount = 0;
-			i = start_x;
-			while (xcount < 8) {
-				j = start_y;
-				ycount = xcount % 2;    //start with even/odd depending on row
-				while (ycount < 8 + xcount % 2) {
-					if (ycount % 2 != 0)
-						gc.RgbFgColor = whitesq_color;
-					else
-						gc.RgbFgColor = blacksq_color;
-					map.DrawRectangle (gc,
-							   true,
-							   i, j,
-							   size, size);
-					
-					j += size + space;
-					ycount++;
-				}
-				i += size + space;
-				xcount++;
-			}
-			
-			return;
-		}
-		
-		private void DrawPosition () {
-			for (int i = 0; i < 8; i++) {
-				for (int j = 0; j < 8; j += 1) {
-
-					FigureType fig =
-						position.GetFigureAt (i,
-								      j);
-
-					if (fig != FigureType.None) {
-						int x, y;
-
-						if (!side) {
-							//White
-							x = start_x +
-								i * space +
-								i * size;
-							y = start_y +
-								j * space +
-								j * size;
-						}
-						else {
-							//Black
-							x = start_x + (7 -
-								       i) *
-								(space +
-								 size);
-							y = start_y + (7 -
-								       j) *
-								(space +
-								 size);
-						}
-
-						gc.RgbFgColor = blacksq_color;
-						map.DrawPixbuf(gc,
-							       figure.
-							       GetPixbuf
-							       (fig),
-							       0, 0,
-							       x, y,
-							       size,
-							       size,
-							       Gdk.
-							       RgbDither.
-							       None, 0, 0);
-					}
+			private Gdk.Pixmap map;
+			public Gdk.Pixmap Pixmap
+			{
+				get
+				{
+					return map;
 				}
 			}
-			
-			
-			return;
+
+			public PositionSnapshot (ArrayList pos, int width,
+						 int height)
+			{
+				this.width = width;
+				this.height = height;
+				border_padding = 4;
+				border_color = new Gdk.Color (0, 0, 0);
+				blacksq_color = new Gdk.Color (200, 200, 200);
+				whitesq_color = new Gdk.Color (240, 240, 240);
+
+//                      blacksq_color = new Gdk.Color(210, 60, 0);
+//                      whitesq_color = new Gdk.Color(236, 193, 130);
+
+				map = new Gdk.Pixmap (null, width, height,
+						      24);
+				gc = new Gdk.GC (map);
+
+				figure = new Figure ();
+				position = new Position (pos);
+
+				int d = Math.Min (width, height);
+				  size = d - (border_padding * 2) -
+					(7 * space);
+				  size = size / 8;
+				  figure.SetSize (size);
+
+				  start_x =
+					(width -
+					 ((size * 8) + 7 * space)) / 2;
+				  start_y = start_x;
+
+				  DrawBackground ();
+				  DrawPosition ();
+			}
+
+			private void DrawBackground ()
+			{
+
+				// Defining the color of the Checks
+				int i, j, xcount, ycount;
+
+				  gc.RgbFgColor = border_color;
+				  map.DrawRectangle (gc, false,
+						     1,
+						     1,
+						     width - 2, height - 2);
+
+				  map.DrawRectangle (gc, false,
+						     start_x - 1,
+						     start_y - 1,
+						     width - 2 * start_x + 2,
+						     height - 2 * start_y +
+						     2);
+
+				// Start redrawing the Checkerboard                     
+				  xcount = 0;
+				  i = start_x;
+				while (xcount < 8)
+				  {
+					  j = start_y;
+					  ycount = xcount % 2;	//start with even/odd depending on row
+					  while (ycount < 8 + xcount % 2)
+					    {
+						    if (ycount % 2 != 0)
+							    gc.RgbFgColor =
+								    whitesq_color;
+						    else
+							    gc.RgbFgColor =
+								    blacksq_color;
+						    map.DrawRectangle (gc,
+								       true,
+								       i, j,
+								       size,
+								       size);
+
+						    j += size + space;
+						    ycount++;
+					    }
+					  i += size + space;
+					  xcount++;
+				  }
+
+				return;
+			}
+
+			private void DrawPosition ()
+			{
+				for (int i = 0; i < 8; i++)
+				  {
+					  for (int j = 0; j < 8; j += 1)
+					    {
+
+						    FigureType fig =
+							    position.
+							    GetFigureAt (i,
+									 j);
+
+						    if (fig !=
+							FigureType.None)
+						      {
+							      int x, y;
+
+							      if (!side)
+								{
+									//White
+									x = start_x + i * space + i * size;
+									y = start_y + j * space + j * size;
+								}
+							      else
+								{
+									//Black
+									x = start_x + (7 - i) * (space + size);
+									y = start_y + (7 - j) * (space + size);
+								}
+
+							      gc.RgbFgColor =
+								      blacksq_color;
+							      map.DrawPixbuf
+								      (gc,
+								       figure.
+								       GetPixbuf
+								       (fig),
+								       0, 0,
+								       x, y,
+								       size,
+								       size,
+								       Gdk.
+								       RgbDither.
+								       None,
+								       0, 0);
+						      }
+					    }
+				  }
+
+
+				return;
+			}
+
 		}
-		
-	}
 	}
 }

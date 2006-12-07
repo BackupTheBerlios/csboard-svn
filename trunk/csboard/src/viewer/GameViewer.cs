@@ -399,8 +399,14 @@ namespace CsBoard
 				if (file == null)
 					return;
 				PrintWrapper printer = new PrintWrapper ();
-				PGNExporter.WriteToPrinter (games, printer);
-				printer.Export (file);
+				ProgressDialog prog =
+					new ProgressDialog (gameViewerWindow);
+				ExportHandler exp =
+					new ExportHandler (prog, games,
+							   printer, file);
+				prog.Run ();
+				prog.Hide ();
+				prog.Dispose ();
 			}
 
 			private void on_print_activate (object obj,
@@ -418,25 +424,19 @@ namespace CsBoard
 					  dialog.Dispose ();
 					  return;
 				  }
-
-				PGNExporter.WriteToPrinter (games, printer);
-
-				switch (response)
-				  {
-				  case (int) PrintButtons.Print:
-					  printer.PrintJob.Print ();
-					  break;
-				  case (int) PrintButtons.Preview:
-					  new PrintJobPreview (printer.
-							       PrintJob,
-							       "Print Preview").
-						  Show ();
-					  break;
-				  }
+				ProgressDialog prog =
+					new ProgressDialog (dialog);
+				prog.ShowAll ();
+				new PrintHandler (prog, games, printer,
+						  response);
+				prog.Run ();	// The PrintHandler will bail us out!
+				prog.Hide ();
+				prog.Dispose ();
 
 				dialog.Hide ();
 				dialog.Dispose ();
 			}
+
 
 			void OnRowActivated (object obj,
 					     RowActivatedArgs args)
@@ -590,6 +590,124 @@ namespace CsBoard
 				{
 					return textView.Buffer.Text;
 				}
+			}
+		}
+
+		class ProgressDialog:Dialog
+		{
+			public ProgressBar bar;
+			public ProgressDialog (Gtk.
+					       Window
+					       parent):base ("Printing...",
+							     parent,
+							     DialogFlags.
+							     Modal)
+			{
+				bar = new ProgressBar ();
+				bar.Orientation =
+					ProgressBarOrientation.LeftToRight;
+				bar.Show ();
+				VBox.PackStart (bar, true, true, 4);
+			}
+		}
+
+		class PrintHandler
+		{
+			ProgressDialog dlg;
+			ArrayList games;
+			PrintWrapper printer;
+			int response;
+			int totalgames;
+			double ngames;	// so that a we can generate a fraction
+			public PrintHandler (ProgressDialog d,
+					     ArrayList games,
+					     PrintWrapper printer,
+					     int response)
+			{
+				dlg = d;
+				this.games = games;
+				this.printer = printer;
+				this.response = response;
+				GLib.Idle.
+					Add (new
+					     IdleHandler (PrintIdleHandler));
+				totalgames = games.Count;
+				ngames = 0;
+			}
+
+			private bool PrintIdleHandler ()
+			{
+				PGNPrinter pr =
+					new PGNPrinter (games, printer);
+				pr.GamePrinted += OnGamePrinted;
+				pr.Print ();
+				switch (response)
+				  {
+				  case (int) PrintButtons.Print:
+					  printer.PrintJob.Print ();
+					  break;
+				  case (int) PrintButtons.Preview:
+					  new PrintJobPreview (printer.
+							       PrintJob,
+							       "Print Preview").
+						  Show ();
+					  break;
+				  }
+
+				dlg.Respond (ResponseType.None);
+				return false;
+			}
+
+			private void OnGamePrinted (System.Object o,
+						    EventArgs args)
+			{
+				ngames++;
+				dlg.bar.Fraction = ngames / totalgames;
+			}
+		}
+
+
+		class ExportHandler
+		{
+			ProgressDialog dlg;
+			ArrayList games;
+			PrintWrapper printer;
+			int totalgames;
+			double ngames;	// so that a we can generate a fraction
+			string file;
+
+			public ExportHandler (ProgressDialog d,
+					      ArrayList games,
+					      PrintWrapper printer,
+					      string file)
+			{
+				dlg = d;
+				this.games = games;
+				this.printer = printer;
+				this.file = file;
+				GLib.Idle.
+					Add (new
+					     IdleHandler (ExportIdleHandler));
+				totalgames = games.Count;
+				ngames = 0;
+			}
+
+			private bool ExportIdleHandler ()
+			{
+				PGNPrinter pr =
+					new PGNPrinter (games, printer);
+				pr.GamePrinted += OnGamePrinted;
+				pr.Print ();
+				printer.Export (file);
+				dlg.Respond (ResponseType.None);
+				return false;
+			}
+
+			private void OnGamePrinted (System.Object o,
+						    EventArgs args)
+			{
+				ngames++;
+				dlg.bar.Fraction = ngames / totalgames;
 			}
 		}
 	}
