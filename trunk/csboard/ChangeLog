@@ -1,5 +1,25 @@
 2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
+	* configure.in
+	* data/Makefile.am
+	* src/parser/PGNTokenizer.cs
+
+	Created a script csviewer to start the viewer. Fixed another
+	bug in the parser.
+	
+2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
+	* src/viewer/PGNExporter.cs
+	* src/viewer/GameViewer.cs
+	* src/parser/PGNTokenizer.cs
+	* src/parser/PGNParser.cs
+	* src/game/ChessGamePlayer.cs
+
+	fixes some bugs in the parser and the player.
+	progress bar ui improvement.
+	
+2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
 	* src/parser/PGNParser.cs
 
 	bug fixes in the parser logic

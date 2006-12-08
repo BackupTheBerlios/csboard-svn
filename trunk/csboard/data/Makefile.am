@@ -1,4 +1,4 @@
-bin_SCRIPTS = csboard
+bin_SCRIPTS = csboard csviewer
 
 EXTRA_DIST =\
 	csboard.prjx	\

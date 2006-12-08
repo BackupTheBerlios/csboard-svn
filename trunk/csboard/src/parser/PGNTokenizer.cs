@@ -77,9 +77,12 @@ namespace Chess
 				return __nextToken ();
 			}
 
-			public void pushBackToken (string token)
+			public bool pushBackToken (string token)
 			{
+				if (lastToken != null)
+					return false;
 				lastToken = token;
+				return true;
 			}
 
 			private string __nextToken ()
@@ -216,7 +219,7 @@ namespace Chess
 			{
 				if (Char.IsLetterOrDigit (ch))
 					return true;
-				if ("_-+#=:/".IndexOf (ch) >= 0)
+				if ("!?_-+#=:/".IndexOf (ch) >= 0)
 					return true;
 
 				return false;
