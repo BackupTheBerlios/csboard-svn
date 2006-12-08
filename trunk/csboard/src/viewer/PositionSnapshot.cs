@@ -75,8 +75,9 @@ namespace CsBoard
 //                      blacksq_color = new Gdk.Color(210, 60, 0);
 //                      whitesq_color = new Gdk.Color(236, 193, 130);
 
-				map = new Gdk.Pixmap (null, width, height,
-						      24);
+				Gtk.Window win = new Gtk.Window(Gtk.WindowType.Toplevel);
+				win.Realize();
+				map = new Gdk.Pixmap (win.GdkWindow, width, height);
 				gc = new Gdk.GC (map);
 
 				figure = new Figure ();

@@ -608,6 +608,14 @@ namespace CsBoard
 					ProgressBarOrientation.LeftToRight;
 				bar.Show ();
 				VBox.PackStart (bar, true, true, 4);
+				Modal = true;
+			}
+
+			public void UpdateProgress(double fraction) {
+				bar.Fraction = fraction;
+				bar.Text = (int) Math.Round(fraction * 100) + " %";
+				while (Gtk.Application.EventsPending ())
+					Gtk.Application.RunIteration ();
 			}
 		}
 
@@ -662,7 +670,7 @@ namespace CsBoard
 						    EventArgs args)
 			{
 				ngames++;
-				dlg.bar.Fraction = ngames / totalgames;
+				dlg.UpdateProgress(ngames / totalgames);
 			}
 		}
 
@@ -707,7 +715,7 @@ namespace CsBoard
 						    EventArgs args)
 			{
 				ngames++;
-				dlg.bar.Fraction = ngames / totalgames;
+				dlg.UpdateProgress(ngames / totalgames);
 			}
 		}
 	}
