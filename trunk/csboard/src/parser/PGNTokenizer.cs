@@ -40,6 +40,19 @@ namespace Chess
 				linesRead = 0;
 			}
 
+			bool checkStringEscape = false;
+			public bool CheckStringEscape
+			{
+				get
+				{
+					return checkStringEscape;
+				}
+				set
+				{
+					checkStringEscape = value;
+				}
+			}
+
 			public bool ReturnDelimiterAsToken
 			{
 				set
@@ -91,13 +104,12 @@ namespace Chess
 
 				/* first character already read above */
 				if (ch < 0)
-				  {
-					  //                      System.err.println("EOF reached");
-					  return null;
-				  }
-				else if (ch == '"')
-					return readString (reader);
-				else if (ch == '$')
+					return null;
+				if (ch == '"')
+					return returnDelimiterAsToken ? Char.
+						ToString ((char) ch) :
+						readString (reader);
+				if (ch == '$')
 					return '$' + readNAG (reader);
 
 				/* self delimiting characters */
@@ -166,7 +178,8 @@ namespace Chess
 
 				while ((ch = reader.Read ()) >= 0)
 				  {
-					  if (escape_char)
+					  if (checkStringEscape
+					      && escape_char)
 					    {
 						    if (ch == '"')
 							    buffer.Append
@@ -178,7 +191,7 @@ namespace Chess
 						    escape_char = false;
 						    continue;
 					    }
-					  if (ch == '\\')
+					  if (checkStringEscape && ch == '\\')
 					    {
 						    escape_char = true;
 						    continue;

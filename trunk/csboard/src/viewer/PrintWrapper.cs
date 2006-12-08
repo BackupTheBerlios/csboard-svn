@@ -219,9 +219,8 @@ namespace CsBoard
 			}
 
 			// returns true if a new page is created
-			private bool FlushLine ()
+			private void FlushLine ()
 			{
-				bool newpage = false;
 				PrintContext ctx = job.Context;
 				double max_line_space = 0;
 				foreach (Tag tag in tags)
@@ -254,7 +253,6 @@ namespace CsBoard
 							   "Page " +
 							   pageno++);
 					  cury = marginy + height;
-					  newpage = true;
 				  }
 
 				foreach (Tag tag in tags)
@@ -267,8 +265,6 @@ namespace CsBoard
 
 				tags.Clear ();
 				curx = marginx;
-
-				return newpage;
 			}
 
 			public void LineBreak ()
@@ -276,10 +272,25 @@ namespace CsBoard
 				FlushLine ();
 			}
 
+			public void HorizontalLineBreak() {
+				if (tags.Count > 0)
+					FlushLine ();
+
+				LineBreak();
+
+				PrintContext ctx = job.Context;
+				curx = marginx;
+				Print.Moveto(ctx, curx, cury);
+				Print.Lineto(ctx, curx + width, cury);
+				Print.Stroke(ctx);
+
+				LineBreak();
+			}
+
 			public void PageBreak ()
 			{
-				if (tags.Count > 0 && FlushLine ())	// newpage already created. no need to create another
-					return;
+				if (tags.Count > 0)
+					FlushLine ();
 				PrintContext ctx = job.Context;
 				Print.Showpage (ctx);
 				curx = marginx;

@@ -424,56 +424,6 @@ namespace Chess
 							       str.Length -
 							       extra_chars);
 				  }
-				PromotionType promotion_type =
-					PromotionType.NONE;
-				int index;
-
-				if ((index = str.IndexOf ('=')) > 0)
-				  {	// promotion type
-					  String promotion_piece_str =
-						  str.Substring (index +
-								 1).
-						  ToUpper ();
-					  str = str.Substring (0, index);
-
-					  if (promotion_piece_str.
-					      Equals ("Q"))
-					    {
-						    promotion_type =
-							    PromotionType.
-							    QUEEN;
-					    }
-					  else if (promotion_piece_str.
-						   Equals ("R"))
-						  promotion_type =
-							  PromotionType.ROOK;
-					  else if (promotion_piece_str.
-						   Equals ("B"))
-						  promotion_type =
-							  PromotionType.
-							  BISHOP;
-					  else if (promotion_piece_str.
-						   Equals ("N"))
-						  promotion_type =
-							  PromotionType.
-							  KNIGHT;
-					  else
-						  throw new
-							  InvalidMoveException
-							  ("Invalid move: " +
-							   str +
-							   ". Invalid promotion type: "
-							   +
-							   promotion_piece_str);
-				  }
-
-				int strlen = str.Length;
-				if (strlen > 3 && str[strlen - 3] == 'x')
-				  {	// remove the 'x' denoting an exchange
-					  str = str.Substring (0,
-							       strlen - 3) +
-						  str.Substring (strlen - 2);
-				  }
 
 				bool result = false;
 				if (str.IndexOf ("-") > 0)
@@ -507,6 +457,18 @@ namespace Chess
 					  return result;
 				  }
 
+				PromotionType promotion_type;
+				GetPromotionInfo (ref str,
+						  out promotion_type);
+
+				int strlen = str.Length;
+				if (strlen > 3 && str[strlen - 3] == 'x')
+				  {	// remove the 'x' denoting an exchange
+					  str = str.Substring (0,
+							       strlen - 3) +
+						  str.Substring (strlen - 2);
+				  }
+
 				PieceType pieceType =
 					ChessUtils.getPiece (str);
 				int dest_rank, dest_file;
@@ -528,6 +490,54 @@ namespace Chess
 
 				return move (src_rank, src_file, dest_rank,
 					     dest_file, promotion_type);
+			}
+
+			private void GetPromotionInfo (ref string move,
+						       out PromotionType type)
+			{
+				type = PromotionType.NONE;
+
+				int len = move.Length;
+				if (Char.IsNumber (move[len - 1]))
+					return;
+
+				string str;
+				int index;
+				if ((index = move.IndexOf ('=')) > 0)
+				  {
+					  str = move.Substring (0,
+								index) +
+						  move.Substring (index + 1);
+					  len--;
+				  }
+				else
+					str = move;
+
+				char last_char = str[len - 1];
+				switch (last_char)
+				  {
+				  case 'Q':
+					  type = PromotionType.QUEEN;
+					  break;
+				  case 'R':
+					  type = PromotionType.ROOK;
+					  break;
+				  case 'B':
+					  type = PromotionType.BISHOP;
+					  break;
+				  case 'N':
+					  type = PromotionType.KNIGHT;
+					  break;
+				  default:
+					  throw new
+						  InvalidMoveException
+						  ("Invalid move: " +
+						   str +
+						   ". Invalid promotion type: "
+						   + last_char);
+				  }
+
+				move = str.Substring (0, len - 1);
 			}
 
 			public ColorType Turn

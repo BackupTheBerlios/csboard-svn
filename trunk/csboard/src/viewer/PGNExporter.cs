@@ -52,7 +52,8 @@ namespace CsBoard
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Regular,
-								    false, 10);
+								    false,
+								    10);
 				fonts.titleFont =
 					Font.
 					FindClosestFromWeightSlant ("Sans",
@@ -71,7 +72,8 @@ namespace CsBoard
 					FindClosestFromWeightSlant ("Sans",
 								    FontWeight.
 								    Bold,
-								    false, 10);
+								    false,
+								    10);
 				printer = p;
 				games = g;
 			}
@@ -84,7 +86,8 @@ namespace CsBoard
 				  foreach (PGNChessGame game in games)
 				{
 					if (!first)
-						printer.PageBreak ();
+						printer.HorizontalLineBreak
+							();
 					WriteGame (game);
 					if (GamePrinted != null)
 						GamePrinted (this,

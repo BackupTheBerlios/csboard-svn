@@ -611,44 +611,79 @@ namespace CsBoard
 				Modal = true;
 			}
 
-			public void UpdateProgress(double fraction) {
+			public void UpdateProgress (double fraction)
+			{
 				bar.Fraction = fraction;
-				bar.Text = (int) Math.Round(fraction * 100) + " %";
+				bar.Text =
+					(int) Math.Round (fraction * 100) +
+					" %";
 				while (Gtk.Application.EventsPending ())
 					Gtk.Application.RunIteration ();
 			}
 		}
 
-		class PrintHandler
+		abstract class PGNExportHandler
 		{
-			ProgressDialog dlg;
-			ArrayList games;
-			PrintWrapper printer;
-			int response;
-			int totalgames;
-			double ngames;	// so that a we can generate a fraction
-			public PrintHandler (ProgressDialog d,
-					     ArrayList games,
-					     PrintWrapper printer,
-					     int response)
+			protected ProgressDialog dlg;
+			protected ArrayList games;
+			protected PrintWrapper printer;
+			protected int totalgames;
+			protected double ngames;	// so that a we can generate a fraction
+
+			public PGNExportHandler (ProgressDialog d,
+						 ArrayList games,
+						 PrintWrapper printer)
 			{
 				dlg = d;
 				this.games = games;
 				this.printer = printer;
-				this.response = response;
-				GLib.Idle.
-					Add (new
-					     IdleHandler (PrintIdleHandler));
 				totalgames = games.Count;
 				ngames = 0;
+				GLib.Idle.
+					Add (new
+					     IdleHandler
+					     (PGNExportIdleHandler));
 			}
 
-			private bool PrintIdleHandler ()
+			protected void OnGamePrinted (System.Object o,
+						      EventArgs args)
+			{
+				ngames++;
+				dlg.UpdateProgress (ngames / totalgames);
+			}
+
+			private bool PGNExportIdleHandler ()
 			{
 				PGNPrinter pr =
 					new PGNPrinter (games, printer);
 				pr.GamePrinted += OnGamePrinted;
 				pr.Print ();
+				dlg.bar.Text = "Now printing...";
+				while (Gtk.Application.EventsPending ())
+					Gtk.Application.RunIteration ();
+				HandlePrinted ();
+				dlg.bar.Text = "Done.";
+				dlg.Respond (ResponseType.None);
+				return false;
+			}
+
+			protected abstract void HandlePrinted ();
+		}
+
+		class PrintHandler:PGNExportHandler
+		{
+			int response;
+			public PrintHandler (ProgressDialog d,
+					     ArrayList games,
+					     PrintWrapper printer,
+					     int response):base (d, games,
+								 printer)
+			{
+				this.response = response;
+			}
+
+			protected override void HandlePrinted ()
+			{
 				switch (response)
 				  {
 				  case (int) PrintButtons.Print:
@@ -661,61 +696,26 @@ namespace CsBoard
 						  Show ();
 					  break;
 				  }
-
-				dlg.Respond (ResponseType.None);
-				return false;
-			}
-
-			private void OnGamePrinted (System.Object o,
-						    EventArgs args)
-			{
-				ngames++;
-				dlg.UpdateProgress(ngames / totalgames);
 			}
 		}
 
 
-		class ExportHandler
+		class ExportHandler:PGNExportHandler
 		{
-			ProgressDialog dlg;
-			ArrayList games;
-			PrintWrapper printer;
-			int totalgames;
-			double ngames;	// so that a we can generate a fraction
 			string file;
 
 			public ExportHandler (ProgressDialog d,
 					      ArrayList games,
 					      PrintWrapper printer,
-					      string file)
+					      string file):base (d, games,
+								 printer)
 			{
-				dlg = d;
-				this.games = games;
-				this.printer = printer;
 				this.file = file;
-				GLib.Idle.
-					Add (new
-					     IdleHandler (ExportIdleHandler));
-				totalgames = games.Count;
-				ngames = 0;
 			}
 
-			private bool ExportIdleHandler ()
+			protected override void HandlePrinted ()
 			{
-				PGNPrinter pr =
-					new PGNPrinter (games, printer);
-				pr.GamePrinted += OnGamePrinted;
-				pr.Print ();
 				printer.Export (file);
-				dlg.Respond (ResponseType.None);
-				return false;
-			}
-
-			private void OnGamePrinted (System.Object o,
-						    EventArgs args)
-			{
-				ngames++;
-				dlg.UpdateProgress(ngames / totalgames);
 			}
 		}
 	}

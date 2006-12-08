@@ -469,7 +469,8 @@ namespace Chess
 								     nextToken);
 					    }
 					  //      if(token.Equals("{") || token.Equals("(") || token.Equals("[") || token.Equals("<")) {
-					  if (token.Equals ("{") || token.Equals(begintoken))
+					  if (token.Equals ("{")
+					      || token.Equals (begintoken))
 					    {
 						    stack.Push (token);
 						    expected_token =
@@ -511,9 +512,11 @@ namespace Chess
 
 				if (token == null)
 				  {
-					  StringBuilder stackinfo = new StringBuilder();
-					  foreach(string str in stack)
-						  stackinfo.Append(str + ", ");
+					  StringBuilder stackinfo =
+						  new StringBuilder ();
+					  foreach (string str in stack)
+						  stackinfo.Append (str +
+								    ", ");
 					  throw new
 						  PGNParserException
 						  ("Waiting for delimiter tokens for: "
@@ -544,33 +547,48 @@ namespace Chess
 			{
 				string name, value;
 				if ((name = tokenizer.nextToken ()) == null)
-					throw new PGNParserException ();
+					throw new
+						PGNParserException
+						("Reached the end after starting a token begin!");
 				if (name.Equals ("]"))	/* empty tag */
 					return;
 
-				bool orig = tokenizer.ReturnDelimiterAsToken;
-				tokenizer.ReturnDelimiterAsToken = true;
-				StringBuilder value_buf = new StringBuilder();
-				while(true) {
-					value = tokenizer.nextToken();
-					if(value == null)
-						throw new PGNParserException ();
-					if (value.Equals ("]")) {
-						tags[name] = extractTagValue(value_buf.ToString());
-						break;
-					}
-					value_buf.Append(value);
-				}
-				tokenizer.ReturnDelimiterAsToken = orig;
+				StringBuilder value_buf =
+					new StringBuilder ();
+				while (true)
+				  {
+					  value = tokenizer.nextToken ();
+					  if (value == null)
+					    {
+						    Console.WriteLine
+							    ("My buffer is " +
+							     value_buf);
+						    throw new
+							    PGNParserException
+							    ("No more tokens but i'm trying to read the tag value");
+					    }
+					  if (value.Equals ("]"))
+					    {
+						    tags[name] =
+							    extractTagValue
+							    (value_buf.
+							     ToString ());
+						    break;
+					    }
+					  value_buf.Append (value);
+				  }
 			}
 
-			private static string extractTagValue(string str) {
-				str = str.Trim();
-				if(str.Length == 0)
+			private static string extractTagValue (string str)
+			{
+				str = str.Trim ();
+				if (str.Length == 0)
 					return str;
 
-				if(str[0] == '"' && str[str.Length - 1] == '"')
-					str = str.Substring(1, str.Length - 2);
+				if (str[0] == '"'
+				    && str[str.Length - 1] == '"')
+					str = str.Substring (1,
+							     str.Length - 2);
 				return str;
 			}
 		}
