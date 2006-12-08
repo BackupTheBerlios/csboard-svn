@@ -1,5 +1,11 @@
 2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
+	* src/parser/PGNParser.cs
+
+	bug fixes in the parser logic
+
+2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
 	* src/viewer/PositionSnapshot.cs
 	* src/viewer/GameViewer.cs
 

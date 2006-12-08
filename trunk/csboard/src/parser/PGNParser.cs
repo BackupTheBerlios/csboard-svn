@@ -247,8 +247,8 @@ namespace Chess
 							  ("Line " +
 							   tokenizer.
 							   currentLine () +
-							   ": Expecting a number. Got this token: "
-							   + token);
+							   ": Expecting a number. Got this token: ["
+							   + token + "]");
 
 					  if (token_is_a_number)
 					    {
@@ -433,10 +433,11 @@ namespace Chess
 				return false;
 			}
 
-			private static string readComment (string token,
+			private static string readComment (string begintoken,
 							   PGNTokenizer
 							   tokenizer)
 			{
+				string token = begintoken;
 				StringBuilder commentBuffer =
 					new StringBuilder ();
 				Stack stack = new Stack ();
@@ -468,7 +469,7 @@ namespace Chess
 								     nextToken);
 					    }
 					  //      if(token.Equals("{") || token.Equals("(") || token.Equals("[") || token.Equals("<")) {
-					  if (token.Equals ("{"))
+					  if (token.Equals ("{") || token.Equals(begintoken))
 					    {
 						    stack.Push (token);
 						    expected_token =
@@ -510,10 +511,13 @@ namespace Chess
 
 				if (token == null)
 				  {
+					  StringBuilder stackinfo = new StringBuilder();
+					  foreach(string str in stack)
+						  stackinfo.Append(str + ", ");
 					  throw new
 						  PGNParserException
 						  ("Waiting for delimiter tokens for: "
-						   + stack);
+						   + stackinfo);
 				  }
 
 				tokenizer.ReturnDelimiterAsToken = false;
@@ -543,21 +547,31 @@ namespace Chess
 					throw new PGNParserException ();
 				if (name.Equals ("]"))	/* empty tag */
 					return;
-				if ((value = tokenizer.nextToken ()) == null)
-					throw new PGNParserException ();
-				if (value.Equals ("]"))
-				  {
-					  tags[name] = "";
-					  return;
-				  }
 
-				string endtag = tokenizer.nextToken ();
-				if (endtag == null || !endtag.Equals ("]"))
-					throw new
-						PGNParserException
-						("Invalid endtag: " + endtag);
-				tags[name] = value;
-				return;
+				bool orig = tokenizer.ReturnDelimiterAsToken;
+				tokenizer.ReturnDelimiterAsToken = true;
+				StringBuilder value_buf = new StringBuilder();
+				while(true) {
+					value = tokenizer.nextToken();
+					if(value == null)
+						throw new PGNParserException ();
+					if (value.Equals ("]")) {
+						tags[name] = extractTagValue(value_buf.ToString());
+						break;
+					}
+					value_buf.Append(value);
+				}
+				tokenizer.ReturnDelimiterAsToken = orig;
+			}
+
+			private static string extractTagValue(string str) {
+				str = str.Trim();
+				if(str.Length == 0)
+					return str;
+
+				if(str[0] == '"' && str[str.Length - 1] == '"')
+					str = str.Substring(1, str.Length - 2);
+				return str;
 			}
 		}
 	}
