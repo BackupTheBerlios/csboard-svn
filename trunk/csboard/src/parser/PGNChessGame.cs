@@ -24,17 +24,37 @@ namespace Chess
 {
 	namespace Parser
 	{
+	public class PGNTag {
+		string tagname;
+		string tagvalue;
+
+		public string Name {
+			get { return tagname; }
+		}
+		public string Value {
+			get { return tagvalue; }
+			set { tagvalue = value; }
+		}
+
+		public PGNTag(string n, string v) {
+			tagname = n;
+			tagvalue = v;
+		}
+
+		public override bool Equals(object o) {
+			PGNTag t = (PGNTag) o;
+			return Name.Equals(t.Name);
+		}
+
+		public override int GetHashCode() {
+			return Name.GetHashCode();
+		}
+	}
 		public class PGNChessGame
 		{
-			private IDictionary tags;
+			ArrayList tagList;
 
-			public IDictionary Tags
-			{
-				get
-				{
-					return tags;
-				}
-			}
+			public ArrayList TagList { get { return tagList; } }
 
 			private IList moves;
 			public IList Moves
@@ -54,22 +74,38 @@ namespace Chess
 				}
 			}
 
-			public PGNChessGame (string c, IDictionary t, IList m)
+			public string White { get { return GetTagValue("White", "[White]"); } }
+			public string Black { get { return GetTagValue("White", "[Black]"); } }
+			public string Result { get { return GetTagValue("White", "?"); } }
+			public string Site { get { return GetTagValue("White", ""); } }
+			public string Event { get { return GetTagValue("White", ""); } }
+			public string Date { get { return GetTagValue("Date", ""); } }
+
+			public PGNChessGame (string c, ArrayList t, IList m)
 			{
 				comment = c;
-				tags = t;
+				tagList = t;
 				moves = m;
+			}
+
+			public bool HasTag(string name) {
+				return tagList.Contains(new PGNTag(name, null));
+			}
+
+			// altvalue will be returned if the tag doesnt exist
+			public string GetTagValue(string name, string altvalue) {
+				PGNTag tag = new PGNTag(name, null);
+				if(!tagList.Contains(tag))
+					return altvalue;
+
+				int idx = tagList.IndexOf(tag);
+				tag = (PGNTag) tagList[idx];
+				return tag.Value;
 			}
 
 			public override string ToString ()
 			{
 				StringBuilder buffer = new StringBuilder ();
-				buffer.Append ("Tags:\n----\n");
-				foreach (DictionaryEntry entry in tags)
-				{
-					buffer.Append (entry.Key + "=" +
-						       entry.Value + "\n");
-				}
 
 				buffer.Append ("Moves:\n------\n");
 				foreach (object o in moves)
@@ -82,12 +118,12 @@ namespace Chess
 
 			public void WritePGN (TextWriter writer)
 			{
-				foreach (DictionaryEntry e in tags)
+				foreach (PGNTag tag in tagList)
 				{
 					writer.WriteLine (String.
 							  Format
 							  ("[{0} \"{1}\"]",
-							   e.Key, e.Value));
+							   tag.Name, tag.Value));
 				}
 
 				writer.WriteLine ();
@@ -125,9 +161,9 @@ namespace Chess
 					  }
 					i++;
 				}
-				if (tags.Contains ("Result"))
+				if (HasTag ("Result"))
 				  {
-					  writer.Write (tags["Result"]);
+					  writer.Write (GetTagValue("Result", null));
 				  }
 				writer.WriteLine ();
 			}

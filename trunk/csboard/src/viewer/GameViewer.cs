@@ -455,19 +455,11 @@ namespace CsBoard
 							 GetDefaultPosition
 							 ());
 				gameNotesTextView.Buffer.Text = "";
-				if (game.Tags == null
-				    || !game.Tags.Contains ("White"))
-					whiteLabel.Markup = "<b>White</b>";
-				else
-					whiteLabel.Markup =
-						"<b>" + game.Tags["White"] +
+				whiteLabel.Markup =
+						"<b>" + game.GetTagValue("White", "White") +
 						"</b>";
-				if (game.Tags == null
-				    || !game.Tags.Contains ("Black"))
-					blackLabel.Markup = "<b>Black</b>";
-				else
-					blackLabel.Markup =
-						"<b>" + game.Tags["Black"] +
+				blackLabel.Markup =
+						"<b>" + game.GetTagValue("Black", "Black") +
 						"</b>";
 			}
 

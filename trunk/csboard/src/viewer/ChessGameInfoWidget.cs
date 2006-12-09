@@ -120,30 +120,12 @@ namespace CsBoard
 
 			private void UpdateGameDetails ()
 			{
-				string white =
-					game.Tags.
-					Contains ("White") ? (string) game.
-					Tags["White"] : "[White]";
-				string black =
-					game.Tags.
-					Contains ("Black") ? (string) game.
-					Tags["Black"] : "[Black]";
-				string evnt =
-					game.Tags.
-					Contains ("Event") ? (string) game.
-					Tags["Event"] : "";
-				string site =
-					game.Tags.
-					Contains ("Site") ? (string) game.
-					Tags["Site"] : "";
-				string date =
-					game.Tags.
-					Contains ("Date") ? (string) game.
-					Tags["Date"] : "";
-				string result =
-					game.Tags.
-					Contains ("Result") ? (string) game.
-					Tags["Result"] : "";
+				string white = game.White;
+				string black = game.Black;
+				string evnt = game.Event;
+				string site = game.Site;
+				string date = game.Date;
+				string result = game.Result;
 
 				  titleLabel.Markup =
 					"<b>" + white + " vs " + black +
@@ -173,16 +155,16 @@ namespace CsBoard
 				valuesBox = new VBox ();
 				hbox = new HBox ();
 
-				foreach (DictionaryEntry de in game.Tags)
+				foreach (PGNTag tag in game.TagList)
 				{
-					if (ignoreTags.Contains (de.Key))
+					if (ignoreTags.Contains (tag.Name))
 						continue;
 
 					Label nameLabel =
-						new Label ("<b>" + de.Key +
+						new Label ("<b>" + tag.Name +
 							   "</b>");
 					Label valueLabel =
-						new Label ((string) de.Value);
+						new Label ((string) tag.Value);
 					nameLabel.UseMarkup = true;
 					nameLabel.Xalign = 0;
 					valueLabel.Xalign = 0;

@@ -148,12 +148,7 @@ namespace CsBoard
 				PGNChessGame game =
 					(PGNChessGame) model.GetValue (iter,
 								       0);
-				if (game.Tags == null
-				    || !game.Tags.Contains ("White"))
-					renderer.Text = "[White]";
-				else
-					renderer.Text =
-						(string) game.Tags["White"];
+				renderer.Text = game.White;
 			}
 
 			protected void BlackCellDataFunc (TreeViewColumn
@@ -167,12 +162,7 @@ namespace CsBoard
 				PGNChessGame game =
 					(PGNChessGame) model.GetValue (iter,
 								       0);
-				if (game.Tags == null
-				    || !game.Tags.Contains ("Black"))
-					renderer.Text = "[Black]";
-				else
-					renderer.Text =
-						(string) game.Tags["Black"];
+				renderer.Text = game.Black;
 			}
 
 			protected void MovesCellDataFunc (TreeViewColumn
@@ -200,12 +190,7 @@ namespace CsBoard
 				PGNChessGame game =
 					(PGNChessGame) model.GetValue (iter,
 								       0);
-				if (game.Tags == null
-				    || !game.Tags.Contains ("Result"))
-					renderer.Text = "";
-				else
-					renderer.Text =
-						(string) game.Tags["Result"];
+				renderer.Text = game.Result;
 			}
 		}
 	}

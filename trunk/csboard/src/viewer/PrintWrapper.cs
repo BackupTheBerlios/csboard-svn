@@ -170,7 +170,7 @@ namespace CsBoard
 				Tag tag;
 
 				// word fits in the line
-				if (curx + width_required < marginx + width)
+				if ((curx + width_required) < (marginx + width))
 				  {
 					  tag.word = word;
 					  tag.font = font;
@@ -189,8 +189,6 @@ namespace CsBoard
 					    }
 					  else
 					    {
-						    Console.WriteLine
-							    ("Hmmm... The word cannot be wrapped!");
 						    string part, extra;
 						    SplitWord (word, font,
 							       marginx +
@@ -215,6 +213,7 @@ namespace CsBoard
 				tag.word = word;
 				tag.font = font;
 				tag.width = width_required;
+				curx += width_required;
 				tags.Add (tag);
 			}
 

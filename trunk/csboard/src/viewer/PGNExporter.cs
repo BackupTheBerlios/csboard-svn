@@ -119,9 +119,9 @@ namespace CsBoard
 			{
 				GameSession session = new GameSession ();
 				session.Set (game);
-				string white = (string) game.Tags["White"];
-				string black = (string) game.Tags["Black"];
-				string result = (string) game.Tags["Result"];
+				string white = game.White;
+				string black = game.Black;
+				string result = game.Result;
 
 
 				if (white == null)

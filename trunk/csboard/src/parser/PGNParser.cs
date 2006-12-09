@@ -65,7 +65,7 @@ namespace Chess
 			private static PGNChessGame readGame (PGNTokenizer
 							      tokenizer)
 			{
-				IDictionary tags = new Hashtable ();
+				ArrayList tagList = new ArrayList();
 
 				string token;
 
@@ -79,7 +79,7 @@ namespace Chess
 				  {
 					  if (token.Equals ("["))
 					    {
-						    readTagValuePair (tags,
+						    readTagValuePair (tagList,
 								      tokenizer);
 					    }
 					  else
@@ -88,7 +88,7 @@ namespace Chess
 				  }
 
 				/* now parse the game */
-				return loadMoves (token, tags, tokenizer);
+				return loadMoves (token, tagList, tokenizer);
 			}
 
 			private static void ignoreLine (string token,
@@ -127,6 +127,7 @@ namespace Chess
 							  PGNTokenizer
 							  tokenizer)
 			{
+				bool orig = tokenizer.ReturnDelimiterAsToken;
 				tokenizer.ReturnDelimiterAsToken = true;
 				StringBuilder buffer = new StringBuilder ();
 				while ((token =
@@ -159,14 +160,14 @@ namespace Chess
 						  buffer.Append (token);
 				  }
 
-				tokenizer.ReturnDelimiterAsToken = false;
+				tokenizer.ReturnDelimiterAsToken = orig;
 				return buffer.ToString ();
 			}
 
 			private static PGNChessGame loadMoves (string
 							       initialtoken,
-							       IDictionary
-							       tags,
+							       ArrayList
+							       tagList,
 							       PGNTokenizer
 							       tokenizer)
 			{
@@ -379,7 +380,7 @@ namespace Chess
 				if (move != null)
 					moves.Add (move);
 
-				return new PGNChessGame (initialComment, tags,
+				return new PGNChessGame (initialComment, tagList,
 							 moves);
 			}
 
@@ -467,6 +468,8 @@ namespace Chess
 								    ("Invalid escape char: "
 								     +
 								     nextToken);
+						    commentBuffer.Append(nextToken);
+						    continue;
 					    }
 					  //      if(token.Equals("{") || token.Equals("(") || token.Equals("[") || token.Equals("<")) {
 					  if (token.Equals ("{")
@@ -500,10 +503,12 @@ namespace Chess
 					    }
 					  else if (token.Equals ("\""))
 					    {
+						    commentBuffer.Append(token);
 						    commentBuffer.
 							    Append (readString
 								    (token,
 								     tokenizer));
+						    commentBuffer.Append(token);
 					    }
 					  else
 						  commentBuffer.
@@ -540,8 +545,8 @@ namespace Chess
 			   }
 			 */
 
-			private static void readTagValuePair (IDictionary
-							      tags,
+			private static void readTagValuePair (IList
+							      tagList,
 							      PGNTokenizer
 							      tokenizer)
 			{
@@ -560,19 +565,16 @@ namespace Chess
 					  value = tokenizer.nextToken ();
 					  if (value == null)
 					    {
-						    Console.WriteLine
-							    ("My buffer is " +
-							     value_buf);
 						    throw new
 							    PGNParserException
 							    ("No more tokens but i'm trying to read the tag value");
 					    }
 					  if (value.Equals ("]"))
 					    {
-						    tags[name] =
-							    extractTagValue
-							    (value_buf.
-							     ToString ());
+						    PGNTag tag = new PGNTag(name, extractTagValue(value_buf.
+							     ToString ()));
+						    if(!tagList.Contains(tag))
+							    tagList.Add(tag);
 						    break;
 					    }
 					  value_buf.Append (value);
