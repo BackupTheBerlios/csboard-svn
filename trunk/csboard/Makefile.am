@@ -1,4 +1,4 @@
-SUBDIRS=po data help resource
+SUBDIRS= . src po data help resource
 
 PARSER_SOURCES = \
 	$(top_srcdir)/src/parser/PGNParserException.cs \
@@ -26,10 +26,14 @@ VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
 	$(top_srcdir)/src/viewer/ChessGameWidget.cs \
 	$(top_srcdir)/src/viewer/ChessGameInfoWidget.cs \
-	$(top_srcdir)/src/viewer/PrintWrapper.cs \
-	$(top_srcdir)/src/viewer/PGNExporter.cs \
 	$(top_srcdir)/src/viewer/PositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/GamesListWidget.cs
+
+PLUGIN_SOURCES = \
+	$(top_srcdir)/src/viewer/PGNBufferLoader.cs		\
+	$(top_srcdir)/src/viewer/PGNFileLoader.cs		\
+	$(top_srcdir)/src/viewer/PluginManager.cs		\
+	$(top_srcdir)/src/viewer/PluginManagerDialog.cs
 
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
@@ -51,6 +55,7 @@ SOURCE = \
 	$(PARSER_SOURCES) \
 	$(GAME_PLAYER_SOURCES) \
 	$(VIEWER_SOURCES) \
+	$(PLUGIN_SOURCES) \
 	$(top_srcdir)/src/ICSSeek.cs
 
 TEST_GAMES = \
@@ -101,8 +106,11 @@ images_DATA = $(IMAGES)
 appdir=$(prefix)/share/csboard
 app_DATA=csboard.exe
 
-csboard.exe: $(SOURCE) config.cs 
-	mcs $(BASE_DEPENDENCIES_LIBS) -out:csboard.exe $(SOURCE) config.cs
+RESOURCES =				\
+	-resource:$(srcdir)/resource/csboard.glade,csboard.glade
+
+csboard.exe: $(SOURCE) config.cs resource/csboard.glade
+	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) -out:csboard.exe $(SOURCE) config.cs
 
 CLEANFILES = csboard.exe
 

@@ -33,7 +33,8 @@ namespace CsBoard {
 
 			try {
 				session = new Session ();
-	                        new GameViewer (args.Length > 1 ? args[1] : null);
+	                        GameViewer.CreateInstance();
+				CsBoard.Plugin.PluginManager.Instance.StartPlugins();
 	                        Application.Run ();
 			} catch (ApplicationException) {
 				return 1;

@@ -31,6 +31,12 @@ gconf-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
 )
 AC_SUBST(BASE_DEPENDENCIES_LIBS)
 
+PKG_CHECK_MODULES(URL_LOADER_PLUGIN,
+gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+)
+AC_SUBST(URL_LOADER_PLUGIN_LIBS)
+
+
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
@@ -44,6 +50,9 @@ AC_CONFIG_FILES([
     data/csboard.spec
     help/Makefile
     po/Makefile.in
+    src/Makefile
+    src/viewer/Makefile
+    src/viewer/plugins/Makefile
     resource/Makefile
     config.cs
     ])

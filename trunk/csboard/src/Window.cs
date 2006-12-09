@@ -104,8 +104,7 @@ namespace CsBoard {
 			}		
 
                         Glade.XML gXML =
-                                new Glade.
-                                XML ("resource/csboard.glade",
+                                Glade.XML.FromAssembly ("csboard.glade",
                                      "csboardWindow", null);
                         gXML.Autoconnect (this);
                         

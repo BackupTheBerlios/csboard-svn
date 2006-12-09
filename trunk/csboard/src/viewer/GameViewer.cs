@@ -17,8 +17,6 @@
 
 using Chess.Parser;
 using Chess.Game;
-using Gnome.Vfs;
-using Gnome;
 using System.IO;
 using Gtk;
 using GLib;
@@ -43,6 +41,12 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.HPaned gamesSplitPane;
 			[Glade.Widget] private Gtk.VBox gamesListBox;
 			[Glade.Widget] private Gtk.Statusbar statusBar;
+			[Glade.Widget] private Gtk.MenuItem fileMenuItem;
+			[Glade.Widget] private Gtk.
+				SeparatorMenuItem fileOpenSeparator;
+			[Glade.Widget] private Gtk.
+				SeparatorMenuItem lastSeparator;
+			[Glade.Widget] private Gtk.MenuItem exportAsMenuItem;
 			private Gtk.Label whiteLabel, blackLabel;
 
 			private Board boardWidget;
@@ -50,9 +54,89 @@ namespace CsBoard
 			ChessGameWidget gameWidget;
 			GamesListWidget gamesListWidget;
 
-			string loadUrl;
-			string pgnBuffer;
-			bool loadingInProgress;
+
+			public Gtk.Window Window
+			{
+				get
+				{
+					return gameViewerWindow;
+				}
+			}
+
+			public Gtk.Statusbar StatusBar
+			{
+				get
+				{
+					return statusBar;
+				}
+			}
+
+			private bool AppendBeforeMenuItem (Gtk.
+							   MenuItem
+							   itemToBeAdded,
+							   Gtk.
+							   MenuItem
+							   beforeThis)
+			{
+				Gtk.Menu menu =
+					(Gtk.Menu) fileMenuItem.Submenu;
+				// find the index
+				int index = 0;
+				  foreach (Gtk.MenuItem item in menu.
+					   AllChildren)
+				{
+					if (beforeThis.Equals (item))
+					  {
+						  menu.Insert (itemToBeAdded,
+							       index);
+						  return true;
+					  }
+					index++;
+				}
+				return false;
+			}
+
+			public bool AppendToFileOpenMenu (Gtk.
+							  MenuItem menuitem)
+			{
+				return AppendBeforeMenuItem (menuitem,
+							     fileOpenSeparator);
+			}
+
+			public bool AppendBeforeLastSeparator (Gtk.
+							       MenuItem
+							       menuitem)
+			{
+				return AppendBeforeMenuItem (menuitem,
+							     lastSeparator);
+			}
+
+			public bool RemoveFromFileMenu (Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) fileMenuItem.Submenu;
+				menu.Remove (item);
+				return true;
+			}
+
+			public bool AddToExportMenu (Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) exportAsMenuItem.Submenu;
+				if (menu == null)
+				  {
+					  menu = new Menu ();
+					  menu.Show ();
+					  exportAsMenuItem.Submenu = menu;
+				  }
+				menu.Append (item);
+				return true;
+			}
+
+			public bool RemoveFromExportMenu (Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) exportAsMenuItem.Submenu;
+				menu.Remove (item);
+				return true;
+			}
 
 			public PGNChessGame Game
 			{
@@ -68,12 +152,36 @@ namespace CsBoard
 			}
 
 			ArrayList games;
-			public GameViewer (string file)
+			public ArrayList Games
+			{
+				get
+				{
+					return games;
+				}
+			}
+
+			static GameViewer viewer;
+
+			public static GameViewer Instance
+			{
+				get
+				{
+					return viewer;
+				}
+			}
+
+			public static void CreateInstance ()
+			{
+				viewer = new GameViewer ();
+			}
+
+			private GameViewer ()
 			{
 				Glade.XML gXML =
-					new Glade.
-					XML ("resource/csboard.glade",
-					     "gameViewerWindow", null);
+					Glade.XML.
+					FromAssembly ("csboard.glade",
+						      "gameViewerWindow",
+						      null);
 				gXML.Autoconnect (this);
 
 				// FIXME: Use libglade to create toolbar                  
@@ -115,87 +223,29 @@ namespace CsBoard
 				gamesListWidget.RowActivated +=
 					OnRowActivated;
 				ScrolledWindow win = new ScrolledWindow ();
-				  win.HscrollbarPolicy = PolicyType.Automatic;
-				  win.VscrollbarPolicy = PolicyType.Automatic;
-				  win.Child = gamesListWidget;
-				  win.Show ();
+				win.HscrollbarPolicy = PolicyType.Automatic;
+				win.VscrollbarPolicy = PolicyType.Automatic;
+				win.Child = gamesListWidget;
+				win.Show ();
 				Label label = new Label ("<b>Games</b>");
-				  label.UseMarkup = true;
-				  label.Show ();
-				  gamesListBox.PackStart (label, false, false,
-							  2);
-				  gamesListBox.PackStart (win, true, true, 0);
+				label.UseMarkup = true;
+				label.Show ();
+				gamesListBox.PackStart (label, false, false,
+							2);
+				gamesListBox.PackStart (win, true, true, 0);
 
-				  leftSplitPane.Position = 300;
-				  gamesSplitPane.Position = 400;
-				  Gnome.Vfs.Vfs.Initialize ();
-				if (file != null)
-					  LoadGames (file);
-				  gameViewerWindow.Show ();
-				  gameSession = new GameSession ();
+				leftSplitPane.Position = 300;
+				gamesSplitPane.Position = 400;
+				Gnome.Vfs.Vfs.Initialize ();
+				gameViewerWindow.Show ();
+				gameSession = new GameSession ();
 			}
 
-			public void LoadGames (string uri)
+			public void SetGames (ArrayList games)
 			{
-				if (loadingInProgress)
-					return;
-				loadUrl = uri;
-				pgnBuffer = null;
-				loadingInProgress = true;
-				statusBar.Push (1, "Loading: " + uri);
-				GLib.Idle.Add (new GLib.
-					       IdleHandler
-					       (LoadGamesIdleHandler));
-			}
-
-			private void LoadGamesFromBuffer (string buffer)
-			{
-				if (loadingInProgress)
-					return;
-				pgnBuffer = buffer;
-				loadingInProgress = true;
-				statusBar.Push (1, "Loading from buffer...");
-				GLib.Idle.Add (new GLib.
-					       IdleHandler
-					       (LoadGamesIdleHandler));
-			}
-
-			private bool LoadGamesIdleHandler ()
-			{
-				if (pgnBuffer != null)
-				  {
-					  games = PGNParser.
-						  loadGamesFromBuffer
-						  (pgnBuffer);
-					  statusBar.Pop (1);
-					  statusBar.Push (1,
-							  "Read successfully. Parsing it...");
-				  }
-				else
-				  {
-					  if (loadUrl == null
-					      || loadUrl.Length == 0)
-					    {
-						    loadingInProgress = false;
-						    statusBar.Pop (1);
-						    return false;
-					    }
-					  VfsStream stream = new VfsStream (loadUrl, FileMode.Open);	// url
-					  //    ArrayList games = PGNParser.loadGamesFromFile(file);
-					  statusBar.Pop (1);
-					  statusBar.Push (1,
-							  "Read successfully. Parsing it...");
-					  games = PGNParser.
-						  loadGamesFromStream
-						  (stream);
-					  stream.Close ();
-				  }
+				this.games = games;
 				gamesListWidget.SetGames (games);
 				SelectGame (0);
-				statusBar.Pop (1);
-				statusBar.Push (1, "Showing " + loadUrl);
-				loadingInProgress = false;
-				return false;
 			}
 
 			public void on_save_as_activate (System.Object b,
@@ -203,8 +253,10 @@ namespace CsBoard
 			{
 				if (games == null || games.Count == 0)
 					return;
-				string file = AskForFile ("Save the game as",
-							  false);
+				string file =
+					AskForFile (gameViewerWindow,
+						    "Save the game as",
+						    false);
 				if (file == null)
 					return;
 				TextWriter writer = new StreamWriter (file);
@@ -214,36 +266,6 @@ namespace CsBoard
 					writer.WriteLine ();
 				}
 				writer.Close ();
-			}
-
-			public void on_open_file_activate (System.Object b,
-							   EventArgs e)
-			{
-				string file = AskForFile ("Choose the file to open", true);	// true for open
-				if (file == null)
-					return;
-
-				LoadGames (file);
-			}
-
-			public void on_open_url_activate (System.Object b,
-							  EventArgs e)
-			{
-				string url = AskForUrl ();
-				if (url == null)
-					return;
-
-				LoadGames (url);
-			}
-
-			public void on_load_pgn_activate (System.Object b,
-							  EventArgs e)
-			{
-				string buffer = AskForPGNBuffer ();
-				if (buffer == null)
-					return;
-
-				LoadGamesFromBuffer (buffer);
 			}
 
 			private void Reset ()
@@ -282,6 +304,20 @@ namespace CsBoard
 						      EventArgs e)
 			{
 				Reset ();
+			}
+
+			public void on_plugins_activate (System.Object b,
+							 EventArgs e)
+			{
+				Dialog dlg =
+					new
+					PluginManagerDialog (gameViewerWindow,
+							     CsBoard.Plugin.
+							     PluginManager.
+							     Instance);
+				dlg.Run ();
+				dlg.Hide ();
+				dlg.Dispose ();
 			}
 
 			public void on_last_clicked (System.Object o,
@@ -389,55 +425,6 @@ namespace CsBoard
 				boardWidget.QueueDraw ();
 			}
 
-			private void on_export_ps_activate (object obj,
-							    EventArgs args)
-			{
-				string file =
-					AskForFile
-					("Export as a PostScript document to file",
-					 false);
-				if (file == null)
-					return;
-				PrintWrapper printer = new PrintWrapper ();
-				ProgressDialog prog =
-					new ProgressDialog (gameViewerWindow);
-				ExportHandler exp =
-					new ExportHandler (prog, games,
-							   printer, file);
-				prog.Run ();
-				prog.Hide ();
-				prog.Dispose ();
-			}
-
-			private void on_print_activate (object obj,
-							EventArgs args)
-			{
-				PrintWrapper printer = new PrintWrapper ();
-				PrintDialog dialog =
-					new PrintDialog (printer.PrintJob,
-							 "Print PGN File", 0);
-				int response = dialog.Run ();
-
-				if (response == (int) PrintButtons.Cancel)
-				  {
-					  dialog.Hide ();
-					  dialog.Dispose ();
-					  return;
-				  }
-				ProgressDialog prog =
-					new ProgressDialog (dialog);
-				prog.ShowAll ();
-				new PrintHandler (prog, games, printer,
-						  response);
-				prog.Run ();	// The PrintHandler will bail us out!
-				prog.Hide ();
-				prog.Dispose ();
-
-				dialog.Hide ();
-				dialog.Dispose ();
-			}
-
-
 			void OnRowActivated (object obj,
 					     RowActivatedArgs args)
 			{
@@ -456,19 +443,24 @@ namespace CsBoard
 							 ());
 				gameNotesTextView.Buffer.Text = "";
 				whiteLabel.Markup =
-						"<b>" + game.GetTagValue("White", "White") +
-						"</b>";
+					"<b>" + game.GetTagValue ("White",
+								  "White") +
+					"</b>";
 				blackLabel.Markup =
-						"<b>" + game.GetTagValue("Black", "Black") +
-						"</b>";
+					"<b>" + game.GetTagValue ("Black",
+								  "Black") +
+					"</b>";
 			}
 
-			string AskForFile (string title, bool open)
+			public static string AskForFile (Gtk.
+							 Window parentWindow,
+							 string title,
+							 bool open)
 			{
 				string file = null;
 				Gtk.FileChooserDialog fc =
 					new Gtk.FileChooserDialog (title,
-								   gameViewerWindow,
+								   parentWindow,
 								   FileChooserAction.
 								   Open,
 								   "Cancel",
@@ -487,227 +479,6 @@ namespace CsBoard
 				//Don't forget to call Destroy() or the FileChooserDialog window won't get closed.
 				fc.Destroy ();
 				return file;
-			}
-
-			string AskForUrl ()
-			{
-				string url = null;
-				UrlDialog dlg =
-					new UrlDialog (gameViewerWindow);
-				if (dlg.Run () == (int) ResponseType.Accept)
-				  {
-					  url = dlg.Url;
-				  }
-				dlg.Destroy ();
-				return url;
-			}
-
-			string AskForPGNBuffer ()
-			{
-				string buffer = null;
-				PGNBufferDialog dlg =
-					new
-					PGNBufferDialog (gameViewerWindow);
-				if (dlg.Run () == (int) ResponseType.Accept)
-				  {
-					  buffer = dlg.Buffer;
-				  }
-				dlg.Destroy ();
-				return buffer;
-			}
-		}
-
-		public class UrlDialog:Dialog
-		{
-			Entry urlEntry;
-
-			public UrlDialog (Gtk.Window par):base ("Open URL",
-								par,
-								DialogFlags.
-								Modal,
-								"Cancel",
-								ResponseType.
-								Cancel,
-								"Open",
-								ResponseType.
-								Accept)
-			{
-				urlEntry = new Entry ();
-				urlEntry.WidthChars = 80;
-				urlEntry.Show ();
-				VBox.PackStart (urlEntry, true, true, 4);
-			}
-
-			public string Url
-			{
-				get
-				{
-					return urlEntry.Text;
-				}
-			}
-		}
-
-		public class PGNBufferDialog:Dialog
-		{
-			TextView textView;
-
-			public PGNBufferDialog (Gtk.
-						Window par):base ("Enter PGN",
-								  par,
-								  DialogFlags.
-								  Modal,
-								  "Cancel",
-								  ResponseType.
-								  Cancel,
-								  "Open",
-								  ResponseType.
-								  Accept)
-			{
-				textView = new TextView ();
-				textView.WrapMode = WrapMode.WordChar;
-				textView.Editable = true;
-				textView.Show ();
-
-				ScrolledWindow win = new ScrolledWindow ();
-				  win.HscrollbarPolicy = PolicyType.Automatic;
-				  win.VscrollbarPolicy = PolicyType.Automatic;
-				  win.Child = textView;
-				  win.Show ();
-				  VBox.PackStart (win, true, true, 4);
-			}
-
-			public string Buffer
-			{
-				get
-				{
-					return textView.Buffer.Text;
-				}
-			}
-		}
-
-		class ProgressDialog:Dialog
-		{
-			public ProgressBar bar;
-			public ProgressDialog (Gtk.
-					       Window
-					       parent):base ("Printing...",
-							     parent,
-							     DialogFlags.
-							     Modal)
-			{
-				bar = new ProgressBar ();
-				bar.Orientation =
-					ProgressBarOrientation.LeftToRight;
-				bar.Show ();
-				VBox.PackStart (bar, true, true, 4);
-				Modal = true;
-			}
-
-			public void UpdateProgress (double fraction)
-			{
-				bar.Fraction = fraction;
-				bar.Text =
-					(int) Math.Round (fraction * 100) +
-					" %";
-				while (Gtk.Application.EventsPending ())
-					Gtk.Application.RunIteration ();
-			}
-		}
-
-		abstract class PGNExportHandler
-		{
-			protected ProgressDialog dlg;
-			protected ArrayList games;
-			protected PrintWrapper printer;
-			protected int totalgames;
-			protected double ngames;	// so that a we can generate a fraction
-
-			public PGNExportHandler (ProgressDialog d,
-						 ArrayList games,
-						 PrintWrapper printer)
-			{
-				dlg = d;
-				this.games = games;
-				this.printer = printer;
-				totalgames = games.Count;
-				ngames = 0;
-				GLib.Idle.
-					Add (new
-					     IdleHandler
-					     (PGNExportIdleHandler));
-			}
-
-			protected void OnGamePrinted (System.Object o,
-						      EventArgs args)
-			{
-				ngames++;
-				dlg.UpdateProgress (ngames / totalgames);
-			}
-
-			private bool PGNExportIdleHandler ()
-			{
-				PGNPrinter pr =
-					new PGNPrinter (games, printer);
-				pr.GamePrinted += OnGamePrinted;
-				pr.Print ();
-				dlg.bar.Text = "Now printing...";
-				while (Gtk.Application.EventsPending ())
-					Gtk.Application.RunIteration ();
-				HandlePrinted ();
-				dlg.bar.Text = "Done.";
-				dlg.Respond (ResponseType.None);
-				return false;
-			}
-
-			protected abstract void HandlePrinted ();
-		}
-
-		class PrintHandler:PGNExportHandler
-		{
-			int response;
-			public PrintHandler (ProgressDialog d,
-					     ArrayList games,
-					     PrintWrapper printer,
-					     int response):base (d, games,
-								 printer)
-			{
-				this.response = response;
-			}
-
-			protected override void HandlePrinted ()
-			{
-				switch (response)
-				  {
-				  case (int) PrintButtons.Print:
-					  printer.PrintJob.Print ();
-					  break;
-				  case (int) PrintButtons.Preview:
-					  new PrintJobPreview (printer.
-							       PrintJob,
-							       "Print Preview").
-						  Show ();
-					  break;
-				  }
-			}
-		}
-
-
-		class ExportHandler:PGNExportHandler
-		{
-			string file;
-
-			public ExportHandler (ProgressDialog d,
-					      ArrayList games,
-					      PrintWrapper printer,
-					      string file):base (d, games,
-								 printer)
-			{
-				this.file = file;
-			}
-
-			protected override void HandlePrinted ()
-			{
-				printer.Export (file);
 			}
 		}
 	}

@@ -170,7 +170,8 @@ namespace CsBoard
 				Tag tag;
 
 				// word fits in the line
-				if ((curx + width_required) < (marginx + width))
+				if ((curx + width_required) <
+				    (marginx + width))
 				  {
 					  tag.word = word;
 					  tag.font = font;
@@ -271,19 +272,20 @@ namespace CsBoard
 				FlushLine ();
 			}
 
-			public void HorizontalLineBreak() {
+			public void HorizontalLineBreak ()
+			{
 				if (tags.Count > 0)
 					FlushLine ();
 
-				LineBreak();
+				LineBreak ();
 
 				PrintContext ctx = job.Context;
 				curx = marginx;
-				Print.Moveto(ctx, curx, cury);
-				Print.Lineto(ctx, curx + width, cury);
-				Print.Stroke(ctx);
+				Print.Moveto (ctx, curx, cury);
+				Print.Lineto (ctx, curx + width, cury);
+				Print.Stroke (ctx);
 
-				LineBreak();
+				LineBreak ();
 			}
 
 			public void PageBreak ()
@@ -316,11 +318,11 @@ namespace CsBoard
 				cury -= image.Height;
 				Print.Moveto (ctx, curx, cury);
 
-				Print.Gsave(ctx);
-				Print.Translate(ctx, curx, cury);
-				Print.Scale(ctx, image.Width, image.Height);
-				Print.Pixbuf(ctx, image);
-				Print.Grestore(ctx);
+				Print.Gsave (ctx);
+				Print.Translate (ctx, curx, cury);
+				Print.Scale (ctx, image.Width, image.Height);
+				Print.Pixbuf (ctx, image);
+				Print.Grestore (ctx);
 
 				LineBreak ();
 			}

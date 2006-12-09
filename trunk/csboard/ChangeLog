@@ -1,3 +1,28 @@
+2006-12-09  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+	* Makefile.am
+	* configure.in
+	* resource/csboard.glade
+	* src/App.cs
+	* src/Book.cs
+	* src/ICSSeek.cs
+	* src/Promotion.cs
+	* src/Window.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/PluginManager.cs
+	* src/viewer/PluginManagerDialog.cs
+	* src/viewer/PGNFileLoader.cs
+	* src/viewer/PGNBufferLoader.cs
+	* src/viewer/plugins/PGNExporter.cs
+	* src/viewer/plugins/PrintWrapper.cs
+	* src/viewer/plugins/PGNUrlLoader.cs
+	* src/viewer/plugins/PGNPrinterPlugin.cs
+	* src/Makefile.am
+	* src/viewer/Makefile.am
+	* src/viewer/plugins/Makefile.am
+	* data/csviewer.in
+	
+	Added a plugin layer and organized some functions into plugins
+
 2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
 	* src/parser/PGNChessGame.cs

@@ -29,8 +29,7 @@ namespace CsBoard {
                 public BookDialog (ArrayList result) {
 
                         Glade.XML gXML =
-                                new Glade.
-                                XML ("resource/csboard.glade",
+                                Glade.XML.FromAssembly ("csboard.glade",
                                      "vbox_contents", null);
                         gXML.Autoconnect (this);
 

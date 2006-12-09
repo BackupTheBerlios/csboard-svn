@@ -34,7 +34,7 @@ namespace CsBoard {
 
                 public Promotion () {
 
-                        gXML = new Glade.XML ("resource/csboard.glade",
+                        gXML = Glade.XML.FromAssembly ("csboard.glade",
                                               "hbox_contents", null);
                         gXML.Autoconnect (this);
 

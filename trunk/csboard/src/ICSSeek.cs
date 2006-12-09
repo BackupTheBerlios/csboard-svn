@@ -37,8 +37,7 @@ namespace CsBoard {
 			client = c;	
 		
 			Glade.XML gXML =
-                                new Glade.
-                                XML ("resource/csboard.glade",
+                                Glade.XML.FromAssembly("csboard.glade",
                                      "seek_vbox", null);
                         gXML.Autoconnect (this);
 
