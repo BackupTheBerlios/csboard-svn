@@ -13,11 +13,10 @@ namespace CsBoard
 {
 	namespace Viewer
 	{
-		public class PGNPrinterPlugin:CsPlugin
+		public class PGNPrinterPlugin:CsPlugin, IExporter,
+			IPrintHandler
 		{
 			GameViewer viewer;
-			MenuItem printMenuItem;
-			MenuItem separator;
 			MenuItem exportPsMenuItem;
 			string file;
 			bool loadingInProgress;
@@ -28,38 +27,43 @@ namespace CsBoard
 			{
 			}
 
+			public EventHandler OnPrintActivated
+			{
+				get
+				{
+					return on_print_activate;
+				}
+			}
+
 			public override bool Initialize ()
 			{
 				viewer = GameViewer.Instance;
 				if (viewer == null)
 					return false;
 
-				separator = new SeparatorMenuItem ();
-				separator.Show ();
-				viewer.AppendBeforeLastSeparator (separator);
-
-				printMenuItem = new MenuItem ("Print");
-				printMenuItem.Activated += on_print_activate;
-				printMenuItem.Show ();
-				viewer.AppendBeforeLastSeparator
-					(printMenuItem);
+				viewer.RegisterPrintHandler (this);
 
 				exportPsMenuItem = new MenuItem ("PS File");
 				exportPsMenuItem.Activated +=
 					on_export_ps_activate;
 				exportPsMenuItem.Show ();
-				viewer.AddToExportMenu (exportPsMenuItem);
+				viewer.RegisterExporter (this,
+							 exportPsMenuItem);
 
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
-				viewer.RemoveFromFileMenu (separator);
-				viewer.RemoveFromFileMenu (printMenuItem);
-				viewer.RemoveFromExportMenu
-					(exportPsMenuItem);
+				viewer.UnregisterPrintHandler (this);
+				viewer.UnregisterExporter (this,
+							   exportPsMenuItem);
 				return true;
+			}
+
+			public bool Export (IList games)
+			{
+				return false;
 			}
 
 			private void on_export_ps_activate (object obj,
@@ -68,10 +72,9 @@ namespace CsBoard
 				if (viewer.Games == null)
 					return;
 				string file =
-					GameViewer.AskForFile
-					(viewer.Window,
-					 "Export as a PostScript document to file",
-					 false);
+					GameViewer.AskForFile (viewer.Window,
+							       "Export as a PostScript document to file",
+							       false);
 				if (file == null)
 					return;
 				PrintWrapper printer = new PrintWrapper ();

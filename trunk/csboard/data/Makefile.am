@@ -5,11 +5,12 @@ EXTRA_DIST =\
 	csboard.cmbx	\
 	csboard.png	\
 	csboard.desktop.in \
+	csviewer.desktop.in \
 	csboard.spec.in \
 	csboard.schemas.in
 
 desktopdir = $(prefix)/share/applications
-desktop_in_files = csboard.desktop.in
+desktop_in_files = csboard.desktop.in csviewer.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 

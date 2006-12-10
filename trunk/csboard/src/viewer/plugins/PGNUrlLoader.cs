@@ -13,7 +13,7 @@ namespace CsBoard
 {
 	namespace Viewer
 	{
-		public class PGNUrlLoader:CsPlugin
+		public class PGNUrlLoader:CsPlugin, IGameLoader
 		{
 			GameViewer viewer;
 			MenuItem menuItem;
@@ -35,14 +35,19 @@ namespace CsBoard
 				menuItem = new MenuItem ("Open Url");
 				menuItem.Activated += on_open_url_activate;
 				menuItem.Show ();
-				viewer.AppendToFileOpenMenu (menuItem);
+				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
-				viewer.RemoveFromFileMenu (menuItem);
+				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
+			}
+
+			public bool Load (string file)
+			{
+				return false;
 			}
 
 			public void on_open_url_activate (System.Object b,

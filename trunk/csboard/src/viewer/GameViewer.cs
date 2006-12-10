@@ -44,8 +44,7 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.MenuItem fileMenuItem;
 			[Glade.Widget] private Gtk.
 				SeparatorMenuItem fileOpenSeparator;
-			[Glade.Widget] private Gtk.
-				SeparatorMenuItem lastSeparator;
+			[Glade.Widget] private Gtk.MenuItem printMenuItem;
 			[Glade.Widget] private Gtk.MenuItem exportAsMenuItem;
 			private Gtk.Label whiteLabel, blackLabel;
 
@@ -71,21 +70,76 @@ namespace CsBoard
 				}
 			}
 
-			private bool AppendBeforeMenuItem (Gtk.
+			ArrayList gameLoaders;
+			ArrayList exporters;
+
+			public void RegisterGameLoader (IGameLoader
+							gameLoader,
+							Gtk.MenuItem item)
+			{
+				gameLoaders.Add (gameLoader);
+				AppendToFileOpenMenu (item);
+			}
+
+			public void UnregisterGameLoader (IGameLoader
+							  gameLoader,
+							  Gtk.MenuItem item)
+			{
+				gameLoaders.Remove (gameLoader);
+				RemoveFromFileMenu (item);
+			}
+
+			public bool RegisterExporter (IExporter exporter,
+						      Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) exportAsMenuItem.Submenu;
+				if (menu == null)
+				  {
+					  menu = new Menu ();
+					  menu.Show ();
+					  exportAsMenuItem.Submenu = menu;
+				  }
+				menu.Append (item);
+				exporters.Add (exporter);
+				return true;
+			}
+
+			public bool UnregisterExporter (IExporter exporter,
+							Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) exportAsMenuItem.Submenu;
+				menu.Remove (item);
+				exporters.Remove (exporter);
+				return true;
+			}
+
+			public bool RegisterPrintHandler (IPrintHandler
+							  handler)
+			{
+				printMenuItem.Activated +=
+					handler.OnPrintActivated;
+				return true;
+			}
+
+			public void UnregisterPrintHandler (IPrintHandler
+							    handler)
+			{
+				printMenuItem.Activated -=
+					handler.OnPrintActivated;
+			}
+
+			private bool AppendToFileOpenMenu (Gtk.
 							   MenuItem
-							   itemToBeAdded,
-							   Gtk.
-							   MenuItem
-							   beforeThis)
+							   itemToBeAdded)
 			{
 				Gtk.Menu menu =
 					(Gtk.Menu) fileMenuItem.Submenu;
 				// find the index
 				int index = 0;
-				  foreach (Gtk.MenuItem item in menu.
-					   AllChildren)
+				foreach (Gtk.MenuItem item in menu.
+					 AllChildren)
 				{
-					if (beforeThis.Equals (item))
+					if (fileOpenSeparator.Equals (item))
 					  {
 						  menu.Insert (itemToBeAdded,
 							       index);
@@ -96,44 +150,9 @@ namespace CsBoard
 				return false;
 			}
 
-			public bool AppendToFileOpenMenu (Gtk.
-							  MenuItem menuitem)
-			{
-				return AppendBeforeMenuItem (menuitem,
-							     fileOpenSeparator);
-			}
-
-			public bool AppendBeforeLastSeparator (Gtk.
-							       MenuItem
-							       menuitem)
-			{
-				return AppendBeforeMenuItem (menuitem,
-							     lastSeparator);
-			}
-
-			public bool RemoveFromFileMenu (Gtk.MenuItem item)
+			bool RemoveFromFileMenu (Gtk.MenuItem item)
 			{
 				Menu menu = (Menu) fileMenuItem.Submenu;
-				menu.Remove (item);
-				return true;
-			}
-
-			public bool AddToExportMenu (Gtk.MenuItem item)
-			{
-				Menu menu = (Menu) exportAsMenuItem.Submenu;
-				if (menu == null)
-				  {
-					  menu = new Menu ();
-					  menu.Show ();
-					  exportAsMenuItem.Submenu = menu;
-				  }
-				menu.Append (item);
-				return true;
-			}
-
-			public bool RemoveFromExportMenu (Gtk.MenuItem item)
-			{
-				Menu menu = (Menu) exportAsMenuItem.Submenu;
 				menu.Remove (item);
 				return true;
 			}
@@ -187,6 +206,9 @@ namespace CsBoard
 				// FIXME: Use libglade to create toolbar                  
 
 				App.session.SetupGeometry (gameViewerWindow);
+
+				gameLoaders = new ArrayList ();
+				exporters = new ArrayList ();
 
 				boardWidget =
 					new Board (ChessGamePlayer.
@@ -248,15 +270,25 @@ namespace CsBoard
 				SelectGame (0);
 			}
 
+			public void Load (string resource)
+			{
+				// just ask each IGameLoader
+				foreach (IGameLoader gameLoader in
+					 gameLoaders)
+				{
+					if (gameLoader.Load (resource))
+						break;
+				}
+			}
+
 			public void on_save_as_activate (System.Object b,
 							 EventArgs e)
 			{
 				if (games == null || games.Count == 0)
 					return;
-				string file =
-					AskForFile (gameViewerWindow,
-						    "Save the game as",
-						    false);
+				string file = AskForFile (gameViewerWindow,
+							  "Save the game as",
+							  false);
 				if (file == null)
 					return;
 				TextWriter writer = new StreamWriter (file);
@@ -479,6 +511,24 @@ namespace CsBoard
 				//Don't forget to call Destroy() or the FileChooserDialog window won't get closed.
 				fc.Destroy ();
 				return file;
+			}
+		}
+
+		public interface IGameLoader
+		{
+			bool Load (string url);
+		}
+
+		public interface IExporter
+		{
+			bool Export (IList games);
+		}
+
+		public interface IPrintHandler
+		{
+			EventHandler OnPrintActivated
+			{
+				get;
 			}
 		}
 	}

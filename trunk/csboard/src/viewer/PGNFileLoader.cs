@@ -12,7 +12,7 @@ namespace CsBoard
 {
 	namespace Viewer
 	{
-		public class PGNFileLoader:CsPlugin
+		public class PGNFileLoader:CsPlugin, IGameLoader
 		{
 			GameViewer viewer;
 			MenuItem menuItem;
@@ -34,14 +34,34 @@ namespace CsBoard
 				menuItem = new MenuItem ("Open File");
 				menuItem.Activated += on_open_file_activate;
 				menuItem.Show ();
-				viewer.AppendToFileOpenMenu (menuItem);
+				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
-				viewer.RemoveFromFileMenu (menuItem);
+				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
+			}
+
+			public bool Load (string file)
+			{
+				if (File.Exists (file)
+				    && File.GetAttributes (file) ==
+				    FileAttributes.Normal)
+				  {
+					  try
+					  {
+						  LoadGames (file);
+					  }
+					  catch (Exception e)
+					  {
+						  Console.WriteLine
+							  ("Exception : \n" +
+							   e);
+					  }
+				  }
+				return false;
 			}
 
 			public void on_open_file_activate (System.Object b,

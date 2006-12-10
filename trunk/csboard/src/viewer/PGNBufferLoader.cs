@@ -10,7 +10,7 @@ namespace CsBoard
 {
 	namespace Viewer
 	{
-		public class PGNBufferLoader:CsPlugin
+		public class PGNBufferLoader:CsPlugin, IGameLoader
 		{
 			GameViewer viewer;
 			string pgnBuffer;
@@ -32,14 +32,19 @@ namespace CsBoard
 				menuItem = new MenuItem ("Open buffer");
 				menuItem.Activated += on_load_pgn_activate;
 				menuItem.Show ();
-				viewer.AppendToFileOpenMenu (menuItem);
+				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
-				viewer.RemoveFromFileMenu (menuItem);
+				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
+			}
+
+			public bool Load (string file)
+			{
+				return false;
 			}
 
 			private void LoadGamesFromBuffer (string buffer)
