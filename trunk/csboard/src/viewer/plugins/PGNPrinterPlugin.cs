@@ -79,7 +79,8 @@ namespace CsBoard
 					return;
 				PrintWrapper printer = new PrintWrapper ();
 				ProgressDialog prog =
-					new ProgressDialog (viewer.Window);
+					new ProgressDialog (viewer.Window,
+							    "Exporting...");
 				ExportHandler exp =
 					new ExportHandler (prog, viewer.Games,
 							   printer, file);
@@ -106,7 +107,8 @@ namespace CsBoard
 					  return;
 				  }
 				ProgressDialog prog =
-					new ProgressDialog (dialog);
+					new ProgressDialog (dialog,
+							    "Printing...");
 				prog.ShowAll ();
 				new PrintHandler (prog, viewer.Games, printer,
 						  response);
@@ -116,35 +118,6 @@ namespace CsBoard
 
 				dialog.Hide ();
 				dialog.Dispose ();
-			}
-		}
-
-		class ProgressDialog:Dialog
-		{
-			public ProgressBar bar;
-			public ProgressDialog (Gtk.
-					       Window
-					       parent):base ("Printing...",
-							     parent,
-							     DialogFlags.
-							     Modal)
-			{
-				bar = new ProgressBar ();
-				bar.Orientation =
-					ProgressBarOrientation.LeftToRight;
-				bar.Show ();
-				VBox.PackStart (bar, true, true, 4);
-				Modal = true;
-			}
-
-			public void UpdateProgress (double fraction)
-			{
-				bar.Fraction = fraction;
-				bar.Text =
-					(int) Math.Round (fraction * 100) +
-					" %";
-				while (Gtk.Application.EventsPending ())
-					Gtk.Application.RunIteration ();
 			}
 		}
 

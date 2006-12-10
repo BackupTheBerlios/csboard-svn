@@ -157,6 +157,17 @@ namespace CsBoard
 				return true;
 			}
 
+			public void LoadGames (TextReader reader)
+			{
+				GameLoader loader =
+					new GameLoader (this, reader);
+				if (loader.Games == null)
+					return;
+				this.games = loader.Games;
+				gamesListWidget.SetGames (games);
+				SelectGame (0);
+			}
+
 			public PGNChessGame Game
 			{
 				get
@@ -261,13 +272,6 @@ namespace CsBoard
 				Gnome.Vfs.Vfs.Initialize ();
 				gameViewerWindow.Show ();
 				gameSession = new GameSession ();
-			}
-
-			public void SetGames (ArrayList games)
-			{
-				this.games = games;
-				gamesListWidget.SetGames (games);
-				SelectGame (0);
 			}
 
 			public void Load (string resource)
@@ -529,6 +533,104 @@ namespace CsBoard
 			EventHandler OnPrintActivated
 			{
 				get;
+			}
+		}
+
+		public class ProgressDialog:Dialog
+		{
+			public ProgressBar bar;
+			public ProgressBar ProgressBar
+			{
+				get
+				{
+					return bar;
+				}
+			}
+
+			public ProgressDialog (Gtk.
+					       Window
+					       parent,
+					       string title):base (title,
+								   parent,
+								   DialogFlags.
+								   Modal)
+			{
+				bar = new ProgressBar ();
+				bar.Orientation =
+					ProgressBarOrientation.LeftToRight;
+				bar.Show ();
+				VBox.PackStart (bar, true, true, 4);
+				Modal = true;
+			}
+
+			public void UpdateProgress (double fraction)
+			{
+				bar.Fraction = fraction;
+				bar.Text =
+					(int) Math.Round (fraction * 100) +
+					" %";
+				while (Gtk.Application.EventsPending ())
+					Gtk.Application.RunIteration ();
+			}
+
+			public void Pulse ()
+			{
+				bar.Pulse ();
+				while (Gtk.Application.EventsPending ())
+					Gtk.Application.RunIteration ();
+			}
+		}
+
+		class GameLoader
+		{
+			ArrayList games;
+
+			public ArrayList Games
+			{
+				get
+				{
+					return games.Count > 0 ? games : null;
+				}
+			}
+
+			GameViewer viewer;
+			ProgressDialog dlg;
+
+			public GameLoader (GameViewer viewer,
+					   TextReader reader)
+			{
+				games = new ArrayList ();
+				dlg = new ProgressDialog (viewer.Window,
+							  "Loading...");
+				dlg.ProgressBar.PulseStep = 0.01;
+				PGNParser parser = new PGNParser (reader);
+				parser.GameLoaded += OnGameLoaded;
+				viewer.StatusBar.Pop (1);
+				viewer.StatusBar.Push (1,
+						       "Parsing the file...");
+				GLib.Idle.Add (new GLib.IdleHandler (delegate
+								     {
+								     parser.
+								     Parse ();
+								     dlg.
+								     Respond
+								     (ResponseType.
+								      None);
+								     return
+								     false;}
+					       ));
+				dlg.Run ();
+				dlg.Hide ();
+				dlg.Dispose ();
+			}
+
+			private void OnGameLoaded (System.Object o,
+						   GameLoadedEventArgs args)
+			{
+				games.Add (args.Game);
+				dlg.ProgressBar.Text =
+					"Loaded " + games.Count + " games";
+				dlg.Pulse ();
 			}
 		}
 	}

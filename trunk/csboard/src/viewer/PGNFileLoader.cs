@@ -96,18 +96,16 @@ namespace CsBoard
 					  return false;
 				  }
 
-				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1,
-						       "Read successfully. Parsing it...");
-				Stream stream =
-					new FileStream (file, FileMode.Open,
-							FileAccess.Read);
-				ArrayList games =
-					PGNParser.
-					loadGamesFromStream (stream);
-				stream.Close ();
+				TextReader reader =
+					new StreamReader (new
+							  FileStream (file,
+								      FileMode.
+								      Open,
+								      FileAccess.
+								      Read));
+				viewer.LoadGames (reader);
+				reader.Close ();
 
-				viewer.SetGames (games);
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1, "File: " + file);
 				loadingInProgress = false;

@@ -221,17 +221,10 @@ namespace CsBoard
 					if (type.BaseType ==
 					    typeof (CsPlugin))
 					  {
-						  Console.Write ("{0}. ",
-								 type.
-								 FullName);
 						  asm_plugins.Add (type);
 						  found_one = true;
 					  }
 				}
-
-				Console.WriteLine ("{0}",
-						   found_one ? "Done." :
-						   "Skipping.");
 
 				return asm_plugins;
 			}

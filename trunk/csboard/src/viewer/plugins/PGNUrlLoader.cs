@@ -80,17 +80,11 @@ namespace CsBoard
 					  viewer.StatusBar.Pop (1);
 					  return false;
 				  }
-				VfsStream stream = new VfsStream (loadUrl, FileMode.Open);	// url
-				//    ArrayList games = PGNParser.loadGamesFromFile(file);
+				TextReader reader = new StreamReader (new VfsStream (loadUrl, FileMode.Open));	// url
+				viewer.LoadGames (reader);
+				reader.Close ();
 				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1,
-						       "Read successfully. Parsing it...");
-				ArrayList games = PGNParser.
-					loadGamesFromStream (stream);
-				stream.Close ();
-				viewer.SetGames (games);
-				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1, "File: " + loadUrl);
+				viewer.StatusBar.Push (1, "URL: " + loadUrl);
 				loadingInProgress = false;
 				return false;
 			}

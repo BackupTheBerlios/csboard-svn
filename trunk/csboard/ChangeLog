@@ -1,6 +1,18 @@
 2006-12-09  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
 	* data/csviewer.desktop.in
+	* src/parser/PGNParser.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/PGNBufferLoader.cs
+	* src/viewer/PGNFileLoader.cs
+	* src/viewer/plugins/PGNPrinterPlugin.cs
+	* src/viewer/plugins/PGNUrlLoader.cs
+
+	ui improvement in during pgn file loading.
+
+2006-12-09  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
+	* data/csviewer.desktop.in
 	* data/Makefile.am
 	* resource/csboard.glade
 	* src/App.cs

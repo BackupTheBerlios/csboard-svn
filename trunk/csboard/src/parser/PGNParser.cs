@@ -24,8 +24,41 @@ namespace Chess
 {
 	namespace Parser
 	{
+		public class GameLoadedEventArgs:EventArgs
+		{
+			PGNChessGame game;
+			public PGNChessGame Game
+			{
+				get
+				{
+					return game;
+				}
+			}
+
+			public GameLoadedEventArgs (PGNChessGame game):base ()
+			{
+				this.game = game;
+			}
+		}
+
+		public delegate void GameLoadedEvent (System.Object o,
+						      GameLoadedEventArgs
+						      args);
+
 		public class PGNParser
 		{
+			public event GameLoadedEvent GameLoaded;
+
+			TextReader reader;
+			PGNTokenizer tokenizer;
+
+			public PGNParser (TextReader reader)
+			{
+				this.reader = reader;
+				tokenizer = new PGNTokenizer (reader, false);
+			}
+
+/*
 			public static ArrayList loadGamesFromFile (string
 								   file)
 			{
@@ -37,15 +70,13 @@ namespace Chess
 								     stream)
 			{
 				TextReader reader = new StreamReader (stream);
-				  return loadGames (reader);
+				return loadGames (reader);
 			}
 
 			public static ArrayList loadGames (TextReader reader)
 			{
 				ArrayList games = new ArrayList ();
 
-				PGNTokenizer tokenizer =
-					new PGNTokenizer (reader, false);
 				PGNChessGame game;
 				while ((game = readGame (tokenizer)) != null)
 				  {
@@ -61,18 +92,24 @@ namespace Chess
 				TextReader reader = new StringReader (buffer);
 				return loadGames (reader);
 			}
+*/
 
-			private static PGNChessGame readGame (PGNTokenizer
-							      tokenizer)
+			public void Parse ()
 			{
-				ArrayList tagList = new ArrayList();
+				while (ReadGame ())
+					;
+			}
+
+			private bool ReadGame ()
+			{
+				ArrayList tagList = new ArrayList ();
 
 				string token;
 
 				token = tokenizer.nextToken ();
 
 				if (token == null)
-					return null;
+					return false;
 
 				/* read tag-value pairs */
 				while (token != null)
@@ -88,7 +125,7 @@ namespace Chess
 				  }
 
 				/* now parse the game */
-				return loadMoves (token, tagList, tokenizer);
+				return loadMoves (token, tagList);
 			}
 
 			private static void ignoreLine (string token,
@@ -164,12 +201,9 @@ namespace Chess
 				return buffer.ToString ();
 			}
 
-			private static PGNChessGame loadMoves (string
-							       initialtoken,
-							       ArrayList
-							       tagList,
-							       PGNTokenizer
-							       tokenizer)
+			private bool loadMoves (string
+						initialtoken,
+						ArrayList tagList)
 			{
 				string token;
 				StringBuilder commentBuffer =
@@ -380,8 +414,17 @@ namespace Chess
 				if (move != null)
 					moves.Add (move);
 
-				return new PGNChessGame (initialComment, tagList,
-							 moves);
+				PGNChessGame game =
+					new PGNChessGame (initialComment,
+							  tagList, moves);
+				if (GameLoaded != null)
+				  {
+					  GameLoaded (this,
+						      new
+						      GameLoadedEventArgs
+						      (game));
+				  }
+				return true;
 			}
 
 			// Read the Numerical Annotated Glyph
@@ -468,7 +511,9 @@ namespace Chess
 								    ("Invalid escape char: "
 								     +
 								     nextToken);
-						    commentBuffer.Append(nextToken);
+						    commentBuffer.
+							    Append
+							    (nextToken);
 						    continue;
 					    }
 					  //      if(token.Equals("{") || token.Equals("(") || token.Equals("[") || token.Equals("<")) {
@@ -503,12 +548,14 @@ namespace Chess
 					    }
 					  else if (token.Equals ("\""))
 					    {
-						    commentBuffer.Append(token);
+						    commentBuffer.
+							    Append (token);
 						    commentBuffer.
 							    Append (readString
 								    (token,
 								     tokenizer));
-						    commentBuffer.Append(token);
+						    commentBuffer.
+							    Append (token);
 					    }
 					  else
 						  commentBuffer.
@@ -571,10 +618,15 @@ namespace Chess
 					    }
 					  if (value.Equals ("]"))
 					    {
-						    PGNTag tag = new PGNTag(name, extractTagValue(value_buf.
-							     ToString ()));
-						    if(!tagList.Contains(tag))
-							    tagList.Add(tag);
+						    PGNTag tag =
+							    new PGNTag (name,
+									extractTagValue
+									(value_buf.
+									 ToString
+									 ()));
+						    if (!tagList.
+							Contains (tag))
+							    tagList.Add (tag);
 						    break;
 					    }
 					  value_buf.Append (value);

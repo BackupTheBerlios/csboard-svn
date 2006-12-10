@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Gtk;
+using System.IO;
 
 using Chess.Parser;
 using Chess.Game;
@@ -91,14 +92,9 @@ namespace CsBoard
 					  return false;
 				  }
 
-				ArrayList games =
-					PGNParser.
-					loadGamesFromBuffer (pgnBuffer);
-				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1,
-						       "Read successfully. Parsing it...");
+				viewer.LoadGames (new
+						  StringReader (pgnBuffer));
 
-				viewer.SetGames (games);
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,
 						       "Showing games from buffer.");
