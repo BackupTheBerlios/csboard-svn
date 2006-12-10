@@ -75,10 +75,10 @@ namespace Chess
 			}
 
 			public string White { get { return GetTagValue("White", "[White]"); } }
-			public string Black { get { return GetTagValue("White", "[Black]"); } }
-			public string Result { get { return GetTagValue("White", "?"); } }
-			public string Site { get { return GetTagValue("White", ""); } }
-			public string Event { get { return GetTagValue("White", ""); } }
+			public string Black { get { return GetTagValue("Black", "[Black]"); } }
+			public string Result { get { return GetTagValue("Result", "?"); } }
+			public string Site { get { return GetTagValue("Site", ""); } }
+			public string Event { get { return GetTagValue("Event", ""); } }
 			public string Date { get { return GetTagValue("Date", ""); } }
 
 			public PGNChessGame (string c, ArrayList t, IList m)
