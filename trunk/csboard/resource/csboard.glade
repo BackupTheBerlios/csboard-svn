@@ -1031,7 +1031,7 @@
       <property name="spacing">0</property>
 
       <child>
-	<widget class="GtkMenuBar" id="menubar1">
+	<widget class="GtkMenuBar" id="gameViewerMenuBar">
 	  <property name="visible">True</property>
 	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
 	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
@@ -1098,28 +1098,6 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Export As</property>
 	      <property name="use_underline">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="tools1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Tools</property>
-	      <property name="use_underline">True</property>
-
-	      <child>
-		<widget class="GtkMenu" id="tools1_menu">
-
-		  <child>
-		    <widget class="GtkMenuItem" id="plugins1">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Plugins</property>
-		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_plugins_activate" last_modification_time="Sat, 09 Dec 2006 14:28:57 GMT"/>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
 	    </widget>
 	  </child>
 

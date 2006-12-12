@@ -1,5 +1,12 @@
 2006-12-12  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
+	* src/viewer/GameViewer.cs
+	* src/viewer/PluginManagerDialog.cs
+
+	Hide the plugin viewer by making it into a plugin! and dont load it!
+	
+2006-12-12  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
 	* src/Board.cs
 	* src/Window.cs
 	* src/PlayerBoard.cs

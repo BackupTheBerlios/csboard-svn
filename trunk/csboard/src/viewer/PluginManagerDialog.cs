@@ -107,5 +107,56 @@ namespace CsBoard
 				r.Active = info.Loaded;
 			}
 		}
+
+		public class PluginViewerPlugin:CsPlugin
+		{
+			GameViewer viewer;
+			MenuItem toolsItem;
+
+			public PluginViewerPlugin ():base ("plugin-viewer",
+							   "Plugin Viewer",
+							   "A plugin to show the status of other plugins!")
+			{
+			}
+
+			public override bool Initialize ()
+			{
+				if ((viewer = GameViewer.Instance) == null)
+					return false;
+				Menu menu = new Menu ();
+				toolsItem = new MenuItem ("Tools");
+				toolsItem.Submenu = menu;
+				MenuItem pluginsItem =
+					new MenuItem ("Plugins");
+				menu.Add (pluginsItem);
+
+				pluginsItem.Activated += on_plugins_activate;
+
+				int idx = viewer.MenuBar.Children.Length - 1;
+				viewer.MenuBar.Insert (toolsItem, idx);
+				toolsItem.ShowAll ();
+				return true;
+			}
+
+			public override bool Shutdown ()
+			{
+				viewer.MenuBar.Remove (toolsItem);
+				return true;
+			}
+
+			public void on_plugins_activate (System.Object b,
+							 EventArgs e)
+			{
+				Dialog dlg =
+					new
+					PluginManagerDialog (viewer.Window,
+							     CsBoard.Plugin.
+							     PluginManager.
+							     Instance);
+				dlg.Run ();
+				dlg.Hide ();
+				dlg.Dispose ();
+			}
+		}
 	}
 }

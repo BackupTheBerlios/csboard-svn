@@ -46,6 +46,7 @@ namespace CsBoard
 				SeparatorMenuItem fileOpenSeparator;
 			[Glade.Widget] private Gtk.MenuItem printMenuItem;
 			[Glade.Widget] private Gtk.MenuItem exportAsMenuItem;
+			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
 			private Gtk.Label whiteLabel, blackLabel;
 
 			private Board boardWidget;
@@ -67,6 +68,12 @@ namespace CsBoard
 				get
 				{
 					return statusBar;
+				}
+			}
+
+			public Gtk.MenuBar MenuBar {
+				get {
+					return gameViewerMenuBar;
 				}
 			}
 
@@ -333,20 +340,6 @@ namespace CsBoard
 						      EventArgs e)
 			{
 				Reset ();
-			}
-
-			public void on_plugins_activate (System.Object b,
-							 EventArgs e)
-			{
-				Dialog dlg =
-					new
-					PluginManagerDialog (gameViewerWindow,
-							     CsBoard.Plugin.
-							     PluginManager.
-							     Instance);
-				dlg.Run ();
-				dlg.Hide ();
-				dlg.Dispose ();
 			}
 
 			public void on_last_clicked (System.Object o,
