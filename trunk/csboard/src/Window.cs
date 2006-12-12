@@ -49,7 +49,7 @@ namespace CsBoard {
                 private uint gameStatusbarId;
                 private uint moveStatusbarId;
 
-                private Board boardWidget;
+                private PlayerBoard boardWidget;
 		private ProgressBar progressbar;
                 private IControl control;
 
@@ -140,7 +140,7 @@ namespace CsBoard {
 			progressbar = new ProgressBar ();
 			status_frame.Add (progressbar);
 			
-                        boardWidget = new Board (control.GetPosition ());
+                        boardWidget = new PlayerBoard (control.GetPosition ());
                         frame.Add (boardWidget);
                         boardWidget.Show ();
 			    

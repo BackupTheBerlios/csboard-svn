@@ -24,12 +24,10 @@ namespace CsBoard {
 
         // Signal about move done
         public delegate void BoardMoveHandler (string move);
-	public delegate void StartMoveHintHandler (string position);
-
 
         public class Board : Gtk.DrawingArea {
 
-                enum MoveStage {
+                protected enum MoveStage {
                         Clear,
                         Start,
                         Drag,
@@ -38,7 +36,7 @@ namespace CsBoard {
 			SetPosition
                 };
 
-                class MoveInfo {
+                protected class MoveInfo {
 
                         public MoveStage stage;
 
@@ -62,22 +60,21 @@ namespace CsBoard {
 		};
 
                 // Geometry
-                private int start_x;
-                private int start_y;
-                private int size;
-                private const int space = 2;
+                protected int start_x;
+                protected int start_y;
+                protected int size;
+                protected const int space = 2;
 		
 
                 // Figure Renderer
                 private Figure figure;
-                private MoveInfo info;
+                protected MoveInfo info;
 
                 // Position
-                private Position position;
+                protected Position position;
 
                 //Event about move 
                 public event BoardMoveHandler MoveEvent;
-                public event StartMoveHintHandler StartMoveHintEvent;
                 
                 public bool side = false;
 
@@ -96,13 +93,6 @@ namespace CsBoard {
                         position = new Position (pos);
                         info = new MoveInfo ();
 			layout = new Pango.Layout (PangoContext);
-
-                        Events = EventMask.ButtonPressMask 
-                                | EventMask.ButtonReleaseMask 
-                                | EventMask.PointerMotionHintMask 
-                                | EventMask.ButtonMotionMask
-                                | Gdk.EventMask.KeyPressMask;
-                        CanFocus = true;
                 }
 		
 		///////////////////////////////////////////////////////////
@@ -446,207 +436,13 @@ namespace CsBoard {
                         return;
                 }
 
-                ///////////////////////////////////////////////////////
-                ///
-                /// User input handling
-                ///
-                //////////////////////////////////////////////////////
-
-                
-                protected override bool OnKeyPressEvent (Gdk.EventKey k) {
-
-                   info.cursorVisible = true;
-                   
-                   switch (k.Key) {
-                  
-                   case Gdk.Key.Escape: info.cursorVisible = false;  break;
-
-                   case Gdk.Key.Left: 
-                                  if (info.cursor.x == 0) {
-                                      info.cursor.x = 7;
-                                  } else {
-                                      info.cursor.x = info.cursor.x - 1;
-                                  }
-                                  break;
-                   case Gdk.Key.Right: 
-                                  if (info.cursor.x == 7) {
-                                      info.cursor.x = 0;
-                                  } else {
-                                      info.cursor.x = info.cursor.x + 1;
-                                  }
-                                  break;
-                   case Gdk.Key.Up: 
-                                  if (info.cursor.y == 0) {
-                                      info.cursor.y = 7;
-                                  } else {
-                                      info.cursor.y = info.cursor.y - 1;
-                                  }
-                                  break;
-                   case Gdk.Key.Down: 
-                                  if (info.cursor.y == 7) {
-                                      info.cursor.y = 0;
-                                  } else {
-                                      info.cursor.y = info.cursor.y + 1;
-                                  }
-                                  break;
-                   case Gdk.Key.space:
-                   case Gdk.Key.Return: 
-                                  if (info.stage == MoveStage.Clear) {
-                                            int real_x = info.cursor.x;
-				            int real_y = info.cursor.y;
-									
-				            if (side) {
-						 real_x = 7 - real_x;
-						 real_y = 7 - real_y;
-                		            }
-									
-					    if (position.GetFigureAt(real_x, real_y) 
-                                                                 != FigureType.None)  {
-                                    	    
-                        				            info.start.Set (info.cursor); 
-	                                                            info.stage = MoveStage.Start;
-								    EmitStartHint (info.cursor);
-                                                                    break;
-                                            }
-                                  }  
-                                  if (info.stage == MoveStage.Start) {
-
-                                        info.end.Set (info.cursor);
-
-                                        if (info.end.x ==
-                                            info.start.x
-                                            && info.end.y == info.start.y) {
-                                                info.stage = MoveStage.Clear;
-                                        } else {
-                                                info.stage = MoveStage.Done;
-                                                Move (false);
-                                        }
-                                  }
-                                  break;
-                                  
-                   default: break;
-
-                  }
-                  
-                  QueueDraw ();
-                  return true;
-                }
-
-                protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt) {
-
-                        int x = (int) evnt.X;
-                        int y = (int) evnt.Y;
-
-                        if (info.stage == MoveStage.Drag) {
-                                position.Put ();
-                            
-			        if (GetPoint (x, y, ref info.end)) {
-
-                                        if (info.end.x ==
-                                            info.start.x
-                                            && info.end.y == info.start.y) {
-                                                info.stage = MoveStage.Clear;
-                                        } else {
-                                                info.stage = MoveStage.Done;
-
-                                                Move (true);
-						
-                                        }
-                                }
-				
-                                QueueDraw ();
-                        }
-
-
-                        return true;
-                }
-
-                protected override bool OnMotionNotifyEvent (Gdk.
-                                                             EventMotion evnt)
-                {
-
-                        int x, y;
-                        Gdk.ModifierType s;
-
-
-                        evnt.Window.GetPointer (out x, out y, out s);
-
-                        info.drag.x = x;
-                        info.drag.y = y;
-
-                        if (info.stage == MoveStage.Start) {
-					        	if (side) {
-					  				Point p = new Point (7 - info.start.x, 
-						       						7 - info.start.y);
-				  					position.Take (p);
-								} else {
-				        	                       	position.Take (info.start);
-								}
-                                info.stage = MoveStage.Drag;
-                        }
-
-                        QueueDraw ();
-
-                        return true;
-
-                }
-
-                protected override bool OnButtonPressEvent (Gdk.
-                                                            EventButton evnt)
-                {
-                        int x = (int) evnt.X;
-                        int y = (int) evnt.Y;
-
-                        if (info.stage == MoveStage.Clear) {
-
-                                if (GetPoint (x, y, ref info.start)) {
-                                            int real_x = info.start.x;
-				            int real_y = info.start.y;
-				            
-									
-				            if (side) {
-						 real_x = 7 - real_x;
-						 real_y = 7 - real_y;
-                		            }
-									
-					    if (position.GetFigureAt(real_x, 											
-								real_y) != FigureType.None) {
-                                    	    
-				            info.cursor.Set (info.start);
-	                                    info.stage = MoveStage.Start;
-					    EmitStartHint (info.start);
-                                            QueueDraw ();
-	                                    return true;
-									}
-                                }
-                        }
-
-                        if (info.stage == MoveStage.Start) {
-                                if (GetPoint (x, y, ref info.end)) {
-
-                                        if (info.end.x ==
-                                            info.start.x
-                                            && info.end.y == info.start.y) {
-                                                info.stage = MoveStage.Clear;
-                                                QueueDraw ();
-                                        }
-                                        else {
-                                                info.stage = MoveStage.Done;
-                                                Move (false);
-                                        }
-                                }
-                        }
-
-                        return true;
-                }
-
                 /////////////////////////////////////////////////////
                 ///
                 /// Actual moving methods
                 ///
                 ////////////////////////////////////////////////////
 
-                private void Move (bool explicitly) {
+                protected void Move (bool explicitly) {
 
                         if (info.stage != MoveStage.Done) {
                                 return;
@@ -706,30 +502,6 @@ namespace CsBoard {
                             QueueDraw ();
 			}
                 }
-		
-                /////////////////////////////////////////////////////
-                ///
-                /// Utilities
-                ///
-                ////////////////////////////////////////////////////
-
-		private void EmitStartHint (Point where) {
-			int i, j;	
-		
-                        if (side) {
-				i = 7 - where.x;
-				j = 7 - where.y;
-			} else {
-				i = where.x;
-				j = where.y;
-			}
-			
-                        string letter = "abcdefgh";
-                        string pos = string.Format ("{0}{1}",
-                                                     letter[i],
-                                                     8 - j);
-		        StartMoveHintEvent (pos);
-		}
 		
                 private bool GetPoint (int x, int y, ref Point p) {
 

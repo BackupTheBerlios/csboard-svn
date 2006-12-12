@@ -1,3 +1,13 @@
+2006-12-12  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
+	* src/Board.cs
+	* src/Window.cs
+	* src/PlayerBoard.cs
+	* src/viewer/GameViewer.cs
+
+	Splits the board widget so that the base class can be used
+	in the viewer.
+	
 2006-12-09  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
 	* data/csviewer.desktop.in

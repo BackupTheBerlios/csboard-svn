@@ -240,13 +240,6 @@ namespace CsBoard
 							 true, 2);
 				boardWidget.Show ();
 
-				boardWidget.showCoords =
-					App.session.ShowCoords;
-				boardWidget.highLightMove =
-					App.session.HighLightMove;
-				boardWidget.showAnimations =
-					App.session.showAnimations;
-
 				gameWidget = new ChessGameWidget ();
 				chessGameDetailsBox.PackStart (gameWidget,
 							       true, true, 4);

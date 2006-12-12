@@ -40,6 +40,7 @@ SOURCE = \
 	$(top_srcdir)/src/Window.cs \
 	$(top_srcdir)/src/IControl.cs \
 	$(top_srcdir)/src/Board.cs \
+	$(top_srcdir)/src/PlayerBoard.cs \
 	$(top_srcdir)/src/Figure.cs \
 	$(top_srcdir)/src/GnuChess.cs \
 	$(top_srcdir)/src/Book.cs \
