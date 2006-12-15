@@ -283,12 +283,12 @@ namespace CsBoard {
                                         if (ycount % 2 != 0) {
                                                 gc = Style.
                                                         BackgroundGC
-                                                        (StateType.Normal);
+                                                        (StateType.Active);
                                         }
                                         else {
                                                 gc = Style.
                                                         BackgroundGC
-                                                        (StateType.Active);
+                                                        (StateType.Normal);
                                         }
                                         window.DrawRectangle (gc,
                                                               true,

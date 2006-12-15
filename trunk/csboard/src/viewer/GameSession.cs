@@ -72,23 +72,27 @@ namespace CsBoard
 					  hasNext = true;
 			}
 
-			public void PlayNMoves (int n)
+			public bool PlayNMoves (int n)
 			{
 				Reset ();	// reset session
 				for (int i = 0; i < n; i++)
 				  {
 					  Next ();
-					  player.Move (CurrentMove);
+					  if(!player.Move (CurrentMove))
+						  return false;
 				  }
+				return true;
 			}
 
-			public void PlayTillTheEnd ()
+			public bool PlayTillTheEnd ()
 			{
 				while (HasNext ())
 				  {
 					  Next ();
-					  player.Move (CurrentMove);
+					  if(!player.Move (CurrentMove))
+						  return false;
 				  }
+				return true;
 			}
 
 			public void Reset ()

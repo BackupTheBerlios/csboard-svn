@@ -345,7 +345,8 @@ namespace CsBoard
 			public void on_last_clicked (System.Object o,
 						     EventArgs e)
 			{
-				gameSession.PlayTillTheEnd ();
+				if(!gameSession.PlayTillTheEnd ())
+					Console.WriteLine("Operation failed");
 
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
@@ -367,7 +368,11 @@ namespace CsBoard
 			{
 				int currentMoveIdx =
 					gameSession.CurrentMoveIdx;
-				gameSession.PlayNMoves (currentMoveIdx);
+				if(!gameSession.PlayNMoves (currentMoveIdx)) {
+					Console.WriteLine("Failed to play to go back");
+					// dont return now. let the position be set so that we can see
+					// where it stopped
+				}
 
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
@@ -397,8 +402,11 @@ namespace CsBoard
 					  return;
 				  }
 				gameSession.Next ();
-				gameSession.player.Move (gameSession.
-							 CurrentMove);
+				if(!gameSession.player.Move (gameSession.
+							     CurrentMove)) {
+					Console.WriteLine("Failed to play the move: " + gameSession.CurrentMove);
+					return;
+				}
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
 					null ? "" : gameSession.
