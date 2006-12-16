@@ -67,7 +67,7 @@ namespace CsBoard
 			public void on_open_file_activate (System.Object b,
 							   EventArgs e)
 			{
-				file = GameViewer.AskForFile (viewer.Window, "Choose the file to open", true);	// true for open
+				file = viewer.AskForFile (viewer.Window, "Choose the file to open", true);	// true for open
 				if (file == null)
 					return;
 

@@ -60,7 +60,8 @@ namespace CsBoard
 			  Gdk.GC gc;
 
 			  Gdk.Color border_color, blacksq_color,
-				whitesq_color, background_color, foreground_color;
+				whitesq_color, background_color,
+				foreground_color, arrow_color;
 
 
 			private Gdk.Pixmap map;
@@ -77,192 +78,269 @@ namespace CsBoard
 			public PositionSnapshot (ArrayList pos, int width,
 						 int height)
 			{
-				Gtk.Window win = new Gtk.Window(Gtk.WindowType.Toplevel);
-				win.Realize();
-				map = new Gdk.Pixmap (win.GdkWindow, width, height);
+				Gtk.Window win =
+					new Gtk.Window (Gtk.WindowType.
+							Toplevel);
+				win.Realize ();
+				map = new Gdk.Pixmap (win.GdkWindow, width,
+						      height);
 				gc = new Gdk.GC (map);
 
-				FontDescription fontdesc = GetFontDesc(width, height);
-				GetCoordLayoutDetails(win.PangoContext, fontdesc);
+				FontDescription fontdesc =
+					GetFontDesc (width, height);
+				  GetCoordLayoutDetails (win.PangoContext,
+							 fontdesc);
 
-				border_color = new Gdk.Color (0, 0, 0);
-//				blacksq_color = new Gdk.Color (200, 200, 200);
-//				whitesq_color = new Gdk.Color (240, 240, 240);
-				blacksq_color = new Gdk.Color (250, 120, 32);
-				whitesq_color = new Gdk.Color (255, 250, 170);
-				background_color = new Gdk.Color(255, 255, 255);
-				foreground_color = new Gdk.Color(0, 0, 0);
+				  border_color = new Gdk.Color (0, 0, 0);
+//                              blacksq_color = new Gdk.Color (200, 200, 200);
+//                              whitesq_color = new Gdk.Color (240, 240, 240);
+				  blacksq_color =
+					new Gdk.Color (250, 120, 32);
+				  whitesq_color =
+					new Gdk.Color (255, 250, 170);
+				  background_color =
+					new Gdk.Color (255, 255, 255);
+				  foreground_color = new Gdk.Color (0, 0, 0);
+//                                arrow_color = new Gdk.Color (159, 148, 249);
+				  arrow_color = new Gdk.Color (117, 6, 6);
 
 //                      blacksq_color = new Gdk.Color(210, 60, 0);
 //                      whitesq_color = new Gdk.Color(236, 193, 130);
 				// outer box, coord, inner box
-				ComputeSizes(width, height);
+				  ComputeSizes (width, height);
 
-				figure = new Figure ();
-				position = new Position (pos);
+				  figure = new Figure ();
+				  position = new Position (pos);
 
-				figure.SetSize (size);
+				  figure.SetSize (size);
 
 				  DrawBackground ();
 				  DrawPosition ();
 			}
 
-			private FontDescription GetFontDesc(int width, int height) {
+			private FontDescription GetFontDesc (int width,
+							     int height)
+			{
 				int d = Math.Min (width, height);
-				int size = d - (border_padding * 2) - (7 * space);
-				size = size / 8;
+				int size =
+					d - (border_padding * 2) -
+					(7 * space);
+				  size = size / 8;
 
-				return Pango.FontDescription.FromString ("monospace " + (size / 6).ToString());
+				  return Pango.FontDescription.
+					FromString ("monospace " +
+						    (size / 6).ToString ());
 			}
 
-			private void ComputeSizes(int width, int height) {
+			private void ComputeSizes (int width, int height)
+			{
 				full_width = width;
 				full_height = height;
 
-				int x_between_border_and_board = border_line_thickness + padding + fontwidth + padding + board_line_thickness;
-				int y_between_border_and_board = border_line_thickness + padding + fontheight + padding + board_line_thickness;
-				int tmpwidth = width - 2 * x_between_border_and_board;
-				int tmpheight = height - 2 * y_between_border_and_board;
+				int x_between_border_and_board =
+					border_line_thickness + padding +
+					fontwidth + padding +
+					board_line_thickness;
+				int y_between_border_and_board =
+					border_line_thickness + padding +
+					fontheight + padding +
+					board_line_thickness;
+				int tmpwidth =
+					width -
+					2 * x_between_border_and_board;
+				int tmpheight =
+					height -
+					2 * y_between_border_and_board;
 				int d = Math.Min (tmpwidth, tmpheight);
 				size = d - (border_padding * 2) - (7 * space);
 				size = size / 8;
 
-				board_width = board_height = size * 8 + 7 * space;
+				board_width = board_height =
+					size * 8 + 7 * space;
 
 				start_x = (full_width - board_width) / 2;
 				start_y = (full_height - board_height) / 2;
 			}
 
-			private void GetCoordLayoutDetails(Pango.Context context, FontDescription font) {
-				if(!showCoords) {
-					fontwidth = 0;
-					fontheight = 0;
-					return;
-				}
+			private void GetCoordLayoutDetails (Pango.
+							    Context context,
+							    FontDescription
+							    font)
+			{
+				if (!showCoords)
+				  {
+					  fontwidth = 0;
+					  fontheight = 0;
+					  return;
+				  }
 				layoutx = new Pango.Layout[8];
 				layouty = new Pango.Layout[8];
 				char chx = 'a';
 				char chy = '1';
 				fontwidth = 0;
 				fontheight = 0;
-				for(int i = 0; i < layoutx.Length; i++, chx++, chy++) {
-					Pango.Layout layout;
-					layoutx[i] = layout = new Pango.Layout(context);
-					layout.FontDescription = font;
-					layout.SetText(chx.ToString());
-					int w, h;
-					layout.GetSize(out w, out h);
-					h = (int) Math.Round(h / Pango.Scale.PangoScale);
-					if(h > fontheight)
-						fontheight = h;
+				for (int i = 0; i < layoutx.Length;
+				     i++, chx++, chy++)
+				  {
+					  Pango.Layout layout;
+					  layoutx[i] = layout =
+						  new Pango.Layout (context);
+					  layout.FontDescription = font;
+					  layout.SetText (chx.ToString ());
+					  int w, h;
+					  layout.GetSize (out w, out h);
+					  h = (int) Math.Round (h /
+								Pango.Scale.
+								PangoScale);
+					  if (h > fontheight)
+						  fontheight = h;
 
-					layouty[i] = layout = new Pango.Layout(context);
-					layout.FontDescription = font;
-					layout.SetText(chy.ToString());
-					layout.GetSize(out w, out h);
-					w = (int) Math.Round(w / Pango.Scale.PangoScale);
-					if(w > fontwidth)
-						fontwidth = w;
-				}
+					  layouty[i] = layout =
+						  new Pango.Layout (context);
+					  layout.FontDescription = font;
+					  layout.SetText (chy.ToString ());
+					  layout.GetSize (out w, out h);
+					  w = (int) Math.Round (w /
+								Pango.Scale.
+								PangoScale);
+					  if (w > fontwidth)
+						  fontwidth = w;
+				  }
 			}
 
-			private void DrawCoords() {
-				if(!showCoords)
+			private void DrawCoords ()
+			{
+				if (!showCoords)
 					return;
-				DrawRanks();
-				DrawFiles();
+				DrawRanks ();
+				DrawFiles ();
 			}
 
-			private void DrawFiles() {
+			private void DrawFiles ()
+			{
 				int x, y1, y2;
-				y1 = start_y - board_line_thickness - padding - fontheight;
-				y2 = start_y + board_height + board_line_thickness + padding;
+				y1 = start_y - board_line_thickness -
+					padding - fontheight;
+				y2 = start_y + board_height +
+					board_line_thickness + padding;
 				gc.RgbFgColor = foreground_color;
-				for(int i = 0; i < layoutx.Length; i++) {
-					int cellx = i * size;
-					if(i > 0)
-						cellx += (i - 1) * space;
-					
-					x = start_x + cellx;
-					x += ((size - fontwidth) / 2);
-					int w, h;
-					layoutx[i].GetSize(out w, out h);
-					h = (int)Math.Round(h / Pango.Scale.PangoScale);
-					map.DrawLayout( gc, x, y1 + fontheight - h, layoutx[i]);
-					map.DrawLayout( gc, x, y2 + fontheight - h, layoutx[i]);
-				}
+				for (int i = 0; i < layoutx.Length; i++)
+				  {
+					  int cellx = i * size;
+					  if (i > 0)
+						  cellx += (i - 1) * space;
+
+					  x = start_x + cellx;
+					  x += ((size - fontwidth) / 2);
+					  int w, h;
+					  layoutx[i].GetSize (out w, out h);
+					  h = (int) Math.Round (h /
+								Pango.Scale.
+								PangoScale);
+					  map.DrawLayout (gc, x,
+							  y1 + fontheight - h,
+							  layoutx[i]);
+					  map.DrawLayout (gc, x,
+							  y2 + fontheight - h,
+							  layoutx[i]);
+				  }
 			}
 
-			private void DrawRanks() {
+			private void DrawRanks ()
+			{
 				int y, x1, x2;
-				x1 = start_x - board_line_thickness - padding - fontwidth;
-				x2 = start_x + board_width + board_line_thickness + padding;
+				x1 = start_x - board_line_thickness -
+					padding - fontwidth;
+				x2 = start_x + board_width +
+					board_line_thickness + padding;
 				gc.RgbFgColor = foreground_color;
-				for(int i = 0; i < layouty.Length; i++) {
-					int celly = i * size;
-					if(i > 0)
-						celly += (i - 1) * space;
-					
-					y = start_y + celly;
-					y += ((size - fontheight) / 2);
-					map.DrawLayout( gc, x1, y, layouty[i]);
-					map.DrawLayout( gc, x2, y, layouty[i]);
-				}
+				for (int i = 0; i < layouty.Length; i++)
+				  {
+					  int celly = i * size;
+					  if (i > 0)
+						  celly += (i - 1) * space;
+
+					  y = start_y + celly;
+					  y += ((size - fontheight) / 2);
+					  map.DrawLayout (gc, x1, y,
+							  layouty[i]);
+					  map.DrawLayout (gc, x2, y,
+							  layouty[i]);
+				  }
 			}
 
 			// draw
-			private static void DrawRect(Gdk.GC gc, Gdk.Pixmap map, int x, int y, int width, int height, int line_thickness) {
-				if(line_thickness == 1) {
-					map.DrawRectangle(gc, false, x, y, width, height);
-					return;
-				}
+			private static void DrawRect (Gdk.GC gc,
+						      Gdk.Pixmap map, int x,
+						      int y, int width,
+						      int height,
+						      int line_thickness)
+			{
+				if (line_thickness == 1)
+				  {
+					  map.DrawRectangle (gc, false, x, y,
+							     width, height);
+					  return;
+				  }
 				// horizontal lines
 				map.DrawRectangle (gc, true,
 						   x,
-						   y,
-						   width, line_thickness);
+						   y, width, line_thickness);
 				map.DrawRectangle (gc, true,
 						   x,
-						   y + height - line_thickness,
-						   width, line_thickness);
+						   y + height -
+						   line_thickness, width,
+						   line_thickness);
 
 				// vertical lines
-				map.DrawRectangle(gc, true,
-						  x,
-						  y,
-						  line_thickness,
-						  height);
-				map.DrawRectangle(gc, true,
-						  x + width - line_thickness,
-						  y,
-						  line_thickness,
-						  height);
+				map.DrawRectangle (gc, true,
+						   x,
+						   y, line_thickness, height);
+				map.DrawRectangle (gc, true,
+						   x + width - line_thickness,
+						   y, line_thickness, height);
 			}
 
 			private void DrawBackground ()
 			{
-
+				gc.RgbFgColor = new Gdk.Color (255, 255, 255);
+				map.DrawRectangle (gc, true, 0, 0, full_width,
+						   full_height);
 				// Defining the color of the Checks
 				int i, j, xcount, ycount;
 
-				int x_between_border_and_board = board_line_thickness + padding + fontwidth + padding + border_line_thickness;
-				int y_between_border_and_board = board_line_thickness + padding + fontheight + padding + border_line_thickness;
+				int x_between_border_and_board =
+					board_line_thickness + padding +
+					fontwidth + padding +
+					border_line_thickness;
+				int y_between_border_and_board =
+					board_line_thickness + padding +
+					fontheight + padding +
+					border_line_thickness;
 				int x = start_x - x_between_border_and_board;
 				int y = start_y - y_between_border_and_board;
-				int w = board_width + 2 * (x_between_border_and_board); // 1 for the board border
-				int h = board_height + 2 * (y_between_border_and_board);
+				int w = board_width + 2 * (x_between_border_and_board);	// 1 for the board border
+				int h = board_height +
+					2 * (y_between_border_and_board);
 
 				gc.RgbFgColor = background_color;
-				map.DrawRectangle(gc, true,
-						  x, y, w, h);
+				map.DrawRectangle (gc, true, x, y, w, h);
 
 				gc.RgbFgColor = border_color;
-				DrawRect(gc, map, x, y, w, h, border_line_thickness);
-				DrawRect(gc, map, start_x - board_line_thickness, start_y - board_line_thickness, board_width + 2 * board_line_thickness, board_height + 2 * board_line_thickness, board_line_thickness);
+				DrawRect (gc, map, x, y, w, h,
+					  border_line_thickness);
+				DrawRect (gc, map,
+					  start_x - board_line_thickness,
+					  start_y - board_line_thickness,
+					  board_width +
+					  2 * board_line_thickness,
+					  board_height +
+					  2 * board_line_thickness,
+					  board_line_thickness);
 
 				// Start redrawing the Checkerboard                     
-				  xcount = 0;
-				  i = start_x;
+				xcount = 0;
+				i = start_x;
 				while (xcount < 8)
 				  {
 					  j = start_y;
@@ -288,7 +366,7 @@ namespace CsBoard
 					  xcount++;
 				  }
 
-				DrawCoords();
+				DrawCoords ();
 
 				return;
 			}
@@ -346,6 +424,28 @@ namespace CsBoard
 				return;
 			}
 
+			public void DrawMove (int rank1, int file1, int rank2,
+					      int file2)
+			{
+				int x1, y1, x2, y2;
+				GetCoords (rank1, file1, out x1, out y1);
+				GetCoords (rank2, file2, out x2, out y2);
+
+				gc.RgbFgColor = arrow_color;
+				ViewerBoard.DrawArrow (map, gc,
+						       x1 + (size / 2),
+						       y1 + (size / 2),
+						       x2 + (size / 2),
+						       y2 + (size / 2),
+						       size, false);
+			}
+
+			private void GetCoords (int rank, int file, out int x,
+						out int y)
+			{
+				x = start_x + file * (size + space);
+				y = start_y + (7 - rank) * (size + space);
+			}
 		}
 	}
 }

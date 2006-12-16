@@ -118,6 +118,15 @@ namespace CsBoard {
 		   }
 	    }
 	    
+	    public string CurrentFolder {
+		    get {
+			    return (string) gconfClient.Get ("/apps/csboard/session/current_folder");
+		    }
+		    set {
+			    gconfClient.Set("/apps/csboard/session/current_folder", value);
+		    }
+	    }
+
 	    private void SessionChanged (object obj, GConf.NotifyEventArgs args) {
 		      return;
 	    }

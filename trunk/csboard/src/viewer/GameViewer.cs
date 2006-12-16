@@ -47,12 +47,16 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.MenuItem printMenuItem;
 			[Glade.Widget] private Gtk.MenuItem exportAsMenuItem;
 			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
+			[Glade.Widget] private Gtk.
+				CheckMenuItem highlightMoveMenuItem;
 			private Gtk.Label whiteLabel, blackLabel;
 
-			private Board boardWidget;
+			private ViewerBoard boardWidget;
 			GameSession gameSession;
 			ChessGameWidget gameWidget;
 			GamesListWidget gamesListWidget;
+
+			string initialDirForFileChooser = null;
 
 
 			public Gtk.Window Window
@@ -71,8 +75,10 @@ namespace CsBoard
 				}
 			}
 
-			public Gtk.MenuBar MenuBar {
-				get {
+			public Gtk.MenuBar MenuBar
+			{
+				get
+				{
 					return gameViewerMenuBar;
 				}
 			}
@@ -224,13 +230,16 @@ namespace CsBoard
 				// FIXME: Use libglade to create toolbar                  
 
 				App.session.SetupGeometry (gameViewerWindow);
+				initialDirForFileChooser =
+					App.session.CurrentFolder;
 
 				gameLoaders = new ArrayList ();
 				exporters = new ArrayList ();
 
 				boardWidget =
-					new Board (ChessGamePlayer.
-						   GetDefaultPosition ());
+					new ViewerBoard (ChessGamePlayer.
+							 GetDefaultPosition
+							 ());
 				boardWidget.WidthRequest = 450;
 				boardWidget.HeightRequest = 400;
 				whiteLabel = new Gtk.Label ("<b>White</b>");
@@ -255,6 +264,10 @@ namespace CsBoard
 
 				gamesListWidget.RowActivated +=
 					OnRowActivated;
+				boardWidget.ShowMove =
+					App.session.HighLightMove;
+				highlightMoveMenuItem.Active =
+					App.session.HighLightMove;
 				ScrolledWindow win = new ScrolledWindow ();
 				win.HscrollbarPolicy = PolicyType.Automatic;
 				win.VscrollbarPolicy = PolicyType.Automatic;
@@ -306,6 +319,7 @@ namespace CsBoard
 
 			private void Reset ()
 			{
+				boardWidget.Reset ();
 				gameSession.Reset ();	// reset session
 
 				gameNotesTextView.Buffer.Text =
@@ -333,6 +347,8 @@ namespace CsBoard
 						      EventArgs e)
 			{
 				App.session.SaveGeometry (gameViewerWindow);
+				App.session.CurrentFolder =
+					initialDirForFileChooser;
 				Gtk.Application.Quit ();
 			}
 
@@ -345,8 +361,9 @@ namespace CsBoard
 			public void on_last_clicked (System.Object o,
 						     EventArgs e)
 			{
-				if(!gameSession.PlayTillTheEnd ())
-					Console.WriteLine("Operation failed");
+				if (!gameSession.PlayTillTheEnd ())
+					Console.WriteLine
+						("Operation failed");
 
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
@@ -358,6 +375,15 @@ namespace CsBoard
 							  IsWhitesTurn);
 				boardWidget.lastMove =
 					gameSession.CurrentMove;
+
+				int r1, f1, r2, f2;
+				r1 = gameSession.player.LastMoveInfo.src_rank;
+				f1 = gameSession.player.LastMoveInfo.src_file;
+				r2 = gameSession.player.LastMoveInfo.
+					dest_rank;
+				f2 = gameSession.player.LastMoveInfo.
+					dest_file;
+				boardWidget.Move (r1, f1, r2, f2, ' ');
 
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
@@ -368,11 +394,13 @@ namespace CsBoard
 			{
 				int currentMoveIdx =
 					gameSession.CurrentMoveIdx;
-				if(!gameSession.PlayNMoves (currentMoveIdx)) {
-					Console.WriteLine("Failed to play to go back");
-					// dont return now. let the position be set so that we can see
-					// where it stopped
-				}
+				if (!gameSession.PlayNMoves (currentMoveIdx))
+				  {
+					  Console.WriteLine
+						  ("Failed to play to go back");
+					  // dont return now. let the position be set so that we can see
+					  // where it stopped
+				  }
 
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
@@ -389,6 +417,15 @@ namespace CsBoard
 							  IsWhitesTurn);
 				boardWidget.lastMove =
 					gameSession.CurrentMove;
+
+				int r1, f1, r2, f2;
+				r1 = gameSession.player.LastMoveInfo.src_rank;
+				f1 = gameSession.player.LastMoveInfo.src_file;
+				r2 = gameSession.player.LastMoveInfo.
+					dest_rank;
+				f2 = gameSession.player.LastMoveInfo.
+					dest_file;
+				boardWidget.Move (r1, f1, r2, f2, ' ');
 
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
@@ -402,11 +439,14 @@ namespace CsBoard
 					  return;
 				  }
 				gameSession.Next ();
-				if(!gameSession.player.Move (gameSession.
-							     CurrentMove)) {
-					Console.WriteLine("Failed to play the move: " + gameSession.CurrentMove);
-					return;
-				}
+				if (!gameSession.player.Move (gameSession.
+							      CurrentMove))
+				  {
+					  Console.WriteLine
+						  ("Failed to play the move: "
+						   + gameSession.CurrentMove);
+					  return;
+				  }
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
 					null ? "" : gameSession.
@@ -418,15 +458,14 @@ namespace CsBoard
 
 				boardWidget.lastMove =
 					gameSession.CurrentMove;
-				boardWidget.Move (gameSession.player.
-						  LastMoveInfo.src_rank,
-						  gameSession.player.
-						  LastMoveInfo.src_file,
-						  gameSession.player.
-						  LastMoveInfo.dest_rank,
-						  gameSession.player.
-						  LastMoveInfo.dest_file,
-						  ' ');
+				int r1, f1, r2, f2;
+				r1 = gameSession.player.LastMoveInfo.src_rank;
+				f1 = gameSession.player.LastMoveInfo.src_file;
+				r2 = gameSession.player.LastMoveInfo.
+					dest_rank;
+				f2 = gameSession.player.LastMoveInfo.
+					dest_file;
+				boardWidget.Move (r1, f1, r2, f2, ' ');
 				if (gameSession.player.LastMoveInfo.
 				    special_move)
 				  {
@@ -436,21 +475,6 @@ namespace CsBoard
 							       player.
 							       GetPosition
 							       ());
-					  /*
-					     // move the rook also
-					     ChessPiece king = gameSession.player.LastMoveInfo.movedPiece;
-					     int file1, file2; // the src and dest files of the rook
-
-					     if(king.File == ChessBoardConstants.FILE_G) { // short castle
-					     file1 = ChessBoardConstants.FILE_H;
-					     file2 = ChessBoardConstants.FILE_F;
-					     }
-					     else {
-					     file1 = ChessBoardConstants.FILE_A;
-					     file2 = ChessBoardConstants.FILE_D;
-					     }
-					     boardWidget.Move(king.Rank, file1, king.Rank, file2, ' ');
-					   */
 				  }
 				boardWidget.QueueDraw ();
 			}
@@ -462,12 +486,23 @@ namespace CsBoard
 				SelectGame (idx);
 			}
 
+			void OnHighlightMoveMenuItemActivated (object o,
+							       EventArgs args)
+			{
+				App.session.HighLightMove =
+					highlightMoveMenuItem.Active;
+				boardWidget.ShowMove =
+					highlightMoveMenuItem.Active;
+				boardWidget.QueueDraw ();
+			}
+
 			private void SelectGame (int idx)
 			{
 				PGNChessGame game = (PGNChessGame) games[idx];
 				gamesListWidget.HighlightGame (idx);
 				gameSession.Set (game);
 				gameWidget.SetGame (game);
+				boardWidget.Reset ();
 				boardWidget.SetPosition (ChessGamePlayer.
 							 GetDefaultPosition
 							 ());
@@ -482,10 +517,9 @@ namespace CsBoard
 					"</b>";
 			}
 
-			public static string AskForFile (Gtk.
-							 Window parentWindow,
-							 string title,
-							 bool open)
+			public string AskForFile (Gtk.
+						  Window parentWindow,
+						  string title, bool open)
 			{
 				string file = null;
 				Gtk.FileChooserDialog fc =
@@ -501,11 +535,16 @@ namespace CsBoard
 								   "Save",
 								   ResponseType.
 								   Accept);
-
+				Console.WriteLine ("INITIALDIR: " +
+						   initialDirForFileChooser);
+				if (initialDirForFileChooser != null)
+					fc.SetCurrentFolder
+						(initialDirForFileChooser);
 				if (fc.Run () == (int) ResponseType.Accept)
 				  {
 					  file = fc.Filename;
 				  }
+				initialDirForFileChooser = fc.CurrentFolder;
 				//Don't forget to call Destroy() or the FileChooserDialog window won't get closed.
 				fc.Destroy ();
 				return file;
@@ -611,7 +650,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

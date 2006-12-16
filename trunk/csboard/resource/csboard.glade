@@ -1102,6 +1102,29 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkMenuItem" id="view1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">View</property>
+	      <property name="use_underline">True</property>
+
+	      <child>
+		<widget class="GtkMenu" id="view1_menu">
+
+		  <child>
+		    <widget class="GtkCheckMenuItem" id="highlightMoveMenuItem">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Highlight Move</property>
+		      <property name="use_underline">True</property>
+		      <property name="active">False</property>
+		      <signal name="activate" handler="OnHighlightMoveMenuItemActivated" last_modification_time="Sat, 16 Dec 2006 02:44:37 GMT"/>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="menuitem2">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Help</property>

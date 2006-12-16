@@ -72,7 +72,7 @@ namespace CsBoard
 				if (viewer.Games == null)
 					return;
 				string file =
-					GameViewer.AskForFile (viewer.Window,
+					viewer.AskForFile (viewer.Window,
 							       "Export as a PostScript document to file",
 							       false);
 				if (file == null)

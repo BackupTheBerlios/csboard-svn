@@ -80,6 +80,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/csboard/session/current_folder</key>
+      <applyto>/apps/csboard/session/current_folder</applyto>
+      <owner>csboard</owner>
+      <type>string</type>
+      <default></default>
+      <locale name="C">
+	<short>Current folder</short>
+	<long>Current folder selected by the file chooser dialog</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/csboard/session/possible_moves</key>
       <applyto>/apps/csboard/session/possible_moves</applyto>
       <owner>csboard</owner>

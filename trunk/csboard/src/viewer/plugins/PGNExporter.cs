@@ -97,14 +97,21 @@ namespace CsBoard
 				printer.End ();
 			}
 
-			private void PrintImageForPosition (ArrayList
-							    position)
+			private void PrintImageForPosition (ChessGamePlayer
+							    player)
 			{
 				int width = 200;
 				int height = 200;
 				PositionSnapshot ps =
-					new PositionSnapshot (position, width,
+					new PositionSnapshot (player.
+							      GetPosition (),
+							      width,
 							      height);
+
+				ps.DrawMove (player.LastMoveInfo.src_rank,
+					     player.LastMoveInfo.src_file,
+					     player.LastMoveInfo.dest_rank,
+					     player.LastMoveInfo.dest_file);
 				Gdk.Pixbuf image =
 					Gdk.Pixbuf.FromDrawable (ps.Pixmap,
 								 ps.Pixmap.
@@ -158,8 +165,7 @@ namespace CsBoard
 					  {
 						  printer.LineBreak ();
 						  PrintImageForPosition
-							  (session.player.
-							   GetPosition ());
+							  (session.player);
 						  printer.Font =
 							  fonts.commentFont;
 						  printer.PrintText (move.
@@ -189,8 +195,7 @@ namespace CsBoard
 					  {
 						  printer.LineBreak ();
 						  PrintImageForPosition
-							  (session.player.
-							   GetPosition ());
+							  (session.player);
 						  printer.Font =
 							  fonts.commentFont;
 						  printer.PrintText (move.
