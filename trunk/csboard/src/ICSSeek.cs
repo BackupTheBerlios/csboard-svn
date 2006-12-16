@@ -22,6 +22,7 @@ namespace CsBoard {
         using System.Collections;
         using Gtk;
         using Gdk;
+	using Mono.Unix;
 
 	
 	public class SeekDialog : Dialog {

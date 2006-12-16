@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections;
+using Mono.Unix;
 
 namespace Chess
 {
@@ -150,7 +151,7 @@ namespace Chess
 					    {
 						    debug (flags,
 							   this +
-							   " cannot advance "
+							   Catalog.GetString(" cannot advance ")
 							   + positions[i, j]);
 						    return false;
 					    }

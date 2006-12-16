@@ -6,6 +6,7 @@ CSFLAGS = 		\
 ASSEMBLIES = 					\
 	$(BASE_DEPENDENCIES_LIBS) 		\
 	$(URL_LOADER_PLUGIN_LIBS) 		\
+	-r:Mono.Posix				\
 	-r:$(top_builddir)/csboard.exe
 
 

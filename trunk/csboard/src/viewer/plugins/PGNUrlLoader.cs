@@ -8,6 +8,7 @@ using Gnome.Vfs;
 using Chess.Parser;
 using Chess.Game;
 using CsBoard.Plugin;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -21,8 +22,8 @@ namespace CsBoard
 			bool loadingInProgress;
 
 			public PGNUrlLoader ():base ("url-loader",
-						     "PGN URL Loader",
-						     "Loads games from a PGN file from a url")
+						     Catalog.GetString("PGN URL Loader"),
+						     Catalog.GetString("Loads games from a PGN file from a url"))
 			{
 			}
 
@@ -32,7 +33,7 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				menuItem = new MenuItem ("Open Url");
+				menuItem = new MenuItem (Catalog.GetString("Open URL"));
 				menuItem.Activated += on_open_url_activate;
 				menuItem.Show ();
 				viewer.RegisterGameLoader (this, menuItem);
@@ -84,7 +85,7 @@ namespace CsBoard
 				viewer.LoadGames (reader);
 				reader.Close ();
 				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1, "URL: " + loadUrl);
+				viewer.StatusBar.Push (1, Catalog.GetString("URL: ") + loadUrl);
 				loadingInProgress = false;
 				return false;
 			}
@@ -106,11 +107,11 @@ namespace CsBoard
 
 				public UrlDialog (Gtk.
 						  Window
-						  par):base ("Open URL", par,
+						  par):base (Catalog.GetString("Open URL"), par,
 							     DialogFlags.
-							     Modal, "Cancel",
+							     Modal, Catalog.GetString("Cancel"),
 							     ResponseType.
-							     Cancel, "Open",
+							     Cancel, Catalog.GetString("Open"),
 							     ResponseType.
 							     Accept)
 				{

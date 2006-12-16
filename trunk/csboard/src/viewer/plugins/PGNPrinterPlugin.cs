@@ -8,6 +8,7 @@ using Gnome;
 using Chess.Parser;
 using Chess.Game;
 using CsBoard.Plugin;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -22,8 +23,8 @@ namespace CsBoard
 			bool loadingInProgress;
 
 			public PGNPrinterPlugin ():base ("pgn-printer",
-							 "PGN Printer",
-							 "Prints PGN games and exports.")
+							 Catalog.GetString("PGN Printer"),
+							 Catalog.GetString("Prints PGN games and exports."))
 			{
 			}
 
@@ -43,7 +44,7 @@ namespace CsBoard
 
 				viewer.RegisterPrintHandler (this);
 
-				exportPsMenuItem = new MenuItem ("PS File");
+				exportPsMenuItem = new MenuItem (Catalog.GetString("PS File"));
 				exportPsMenuItem.Activated +=
 					on_export_ps_activate;
 				exportPsMenuItem.Show ();
@@ -73,14 +74,14 @@ namespace CsBoard
 					return;
 				string file =
 					viewer.AskForFile (viewer.Window,
-							       "Export as a PostScript document to file",
+							       Catalog.GetString("Export as a PostScript document to file"),
 							       false);
 				if (file == null)
 					return;
 				PrintWrapper printer = new PrintWrapper ();
 				ProgressDialog prog =
 					new ProgressDialog (viewer.Window,
-							    "Exporting...");
+							    Catalog.GetString("Exporting..."));
 				ExportHandler exp =
 					new ExportHandler (prog, viewer.Games,
 							   printer, file);
@@ -97,7 +98,7 @@ namespace CsBoard
 				PrintWrapper printer = new PrintWrapper ();
 				PrintDialog dialog =
 					new PrintDialog (printer.PrintJob,
-							 "Print PGN File", 0);
+							 Catalog.GetString("Print PGN File"), 0);
 				int response = dialog.Run ();
 
 				if (response == (int) PrintButtons.Cancel)
@@ -108,7 +109,7 @@ namespace CsBoard
 				  }
 				ProgressDialog prog =
 					new ProgressDialog (dialog,
-							    "Printing...");
+							    Catalog.GetString("Printing..."));
 				prog.ShowAll ();
 				new PrintHandler (prog, viewer.Games, printer,
 						  response);
@@ -157,11 +158,11 @@ namespace CsBoard
 					new PGNPrinter (games, printer);
 				pr.GamePrinted += OnGamePrinted;
 				pr.Print ();
-				dlg.bar.Text = "Now printing...";
+				dlg.bar.Text = Catalog.GetString("Now printing...");
 				while (Gtk.Application.EventsPending ())
 					Gtk.Application.RunIteration ();
 				HandlePrinted ();
-				dlg.bar.Text = "Done.";
+				dlg.bar.Text = Catalog.GetString("Done.");
 				dlg.Respond (ResponseType.None);
 				return false;
 			}
@@ -191,7 +192,7 @@ namespace CsBoard
 				  case (int) PrintButtons.Preview:
 					  new PrintJobPreview (printer.
 							       PrintJob,
-							       "Print Preview").
+							       Catalog.GetString("Print Preview")).
 						  Show ();
 					  break;
 				  }

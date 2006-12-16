@@ -18,6 +18,7 @@
 using System;
 using System.Text;
 using System.Collections;
+using Mono.Unix;
 
 namespace Chess
 {
@@ -202,8 +203,8 @@ namespace Chess
 						  (GetPositionsString ());
 					  throw new
 						  InvalidMoveException
-						  ("Invalid move " + move +
-						   ". Couldn't find any candidate for this.");
+						  (Catalog.GetString("Invalid move ") + move +
+						   Catalog.GetString(". Couldn't find any candidate for this."));
 				  }
 
 				if (cands.Count == 1)
@@ -224,7 +225,7 @@ namespace Chess
 					  if (movelen < 3)
 						  throw new
 							  InvalidMoveException
-							  ("Insufficient chars in move "
+							  (Catalog.GetString("Insufficient chars in move ")
 							   + move);
 					  ch = move[move.Length - 3];
 					  if (ch >= 'a' && ch <= 'h')
@@ -262,7 +263,7 @@ namespace Chess
 					    {
 						    throw new
 							    InvalidMoveException
-							    ("Invalid move " +
+							    (Catalog.GetString("Invalid move ") +
 							     move);
 					    }
 				  }
@@ -271,7 +272,7 @@ namespace Chess
 					  if (movelen < 4)
 						  throw new
 							  InvalidMoveException
-							  ("Invalid move " +
+							  (Catalog.GetString("Invalid move ") +
 							   move);
 					  char file_ch =
 						  move[move.Length - 3];
@@ -531,9 +532,9 @@ namespace Chess
 				  default:
 					  throw new
 						  InvalidMoveException
-						  ("Invalid move: " +
+						  (Catalog.GetString("Invalid move ") +
 						   str +
-						   ". Invalid promotion type: "
+						   Catalog.GetString(". Invalid promotion type: ")
 						   + last_char);
 				  }
 
@@ -567,14 +568,14 @@ namespace Chess
 			{
 				if (!side.King.CanCastle)
 				  {
-					  debug ("Cant castle (" + side.King);
+					  debug (Catalog.GetString("Cant castle (") + side.King);
 					  return false;
 				  }
 
 				if (side.King.File !=
 				    ChessBoardConstants.FILE_E)
 				  {
-					  debug ("King not available " +
+					  debug (Catalog.GetString("King not available ") +
 						 side.King);
 					  return false;
 				  }
@@ -597,7 +598,7 @@ namespace Chess
 
 				if (positions[rank, file] == null)
 				  {
-					  debug ("Rook not available");
+					  debug (Catalog.GetString("Rook not available"));
 					  return false;
 				  }
 
@@ -724,7 +725,7 @@ namespace Chess
 
 			public void debug (Object obj)
 			{
-				Console.WriteLine ("[ChessGamePlayer] " +
+				Console.WriteLine (Catalog.GetString("[ChessGamePlayer] ") +
 						   obj);
 			}
 
@@ -808,15 +809,15 @@ namespace Chess
 
 			public void PrintPositions ()
 			{
-				Console.WriteLine ("Turn: " +
+				Console.WriteLine (Catalog.GetString("Turn: ") +
 						   (turn ==
 						    ColorType.
-						    WHITE ? "WHITE" :
-						    "BLACK"));
+						    WHITE ? Catalog.GetString("WHITE") :
+						    Catalog.GetString("BLACK")));
 				Console.WriteLine (GetPositionsString ());
 				Console.WriteLine ("================\n");
-				Console.WriteLine ("Whites:\n" + whites);
-				Console.WriteLine ("Blacks:\n" + blacks);
+				Console.WriteLine (Catalog.GetString("Whites:\n") + whites);
+				Console.WriteLine (Catalog.GetString("Blacks:\n") + blacks);
 			}
 
 			public string GetPositionsString ()
@@ -962,7 +963,7 @@ namespace Chess
 				if (lines.Length != 8)
 					throw new
 						ChessException
-						("Invalid number tokens in the FEN position");
+						(Catalog.GetString("Invalid number tokens in the FEN position"));
 				ChessSide whites =
 					new ChessSide (ColorType.WHITE);
 				ChessSide blacks =
@@ -1063,7 +1064,7 @@ namespace Chess
 				  default:
 					  throw new
 						  ChessException
-						  ("Invalid piece type " +
+						  (Catalog.GetString("Invalid piece type ") +
 						   ch);
 				  }
 
@@ -1102,7 +1103,6 @@ namespace Chess
 				public PositionInfo (string fen)
 				{
 					string[]lines = fen.Split (' ');
-					string str;
 					  position_str = lines[0];
 					  active_str = lines[1];
 					if (active_str.ToLower ().

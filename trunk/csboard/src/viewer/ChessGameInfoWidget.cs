@@ -19,6 +19,7 @@ using Gtk;
 using Chess.Parser;
 using System;
 using System.Collections;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -45,13 +46,13 @@ namespace CsBoard
 				titleLabel = new Label ();
 				titleLabel.UseMarkup = true;
 
-				resultLabel = new Label ("<b>Result</b>");
+				resultLabel = new Label (Catalog.GetString("<b>Result</b>"));
 				resultLabel.UseMarkup = true;
-				dateLabel = new Label ("<b>Date</b>");
+				dateLabel = new Label (Catalog.GetString("<b>Date</b>"));
 				dateLabel.UseMarkup = true;
-				eventLabel = new Label ("<b>Event</b>");
+				eventLabel = new Label (Catalog.GetString("<b>Event</b>"));
 				eventLabel.UseMarkup = true;
-				siteLabel = new Label ("<b>Site</b>");
+				siteLabel = new Label (Catalog.GetString("<b>Site</b>"));
 				siteLabel.UseMarkup = true;
 
 				resultValueLabel = new Label ();
@@ -104,7 +105,7 @@ namespace CsBoard
 				  box.PackStart (hbox, true, false, 2);
 
 				  otherTagsWidget =
-					new Expander ("Other details");
+					new Expander (Catalog.GetString("Other details"));
 				  box.PackStart (otherTagsWidget, true, false,
 						 2);
 

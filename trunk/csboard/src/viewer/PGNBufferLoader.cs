@@ -6,6 +6,7 @@ using System.IO;
 using Chess.Parser;
 using Chess.Game;
 using CsBoard.Plugin;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -19,8 +20,8 @@ namespace CsBoard
 			bool loadingInProgress;
 
 			public PGNBufferLoader ():base ("buffer-loader",
-							"PGN Buffer Loader",
-							"Loads games from a PGN buffer")
+							Catalog.GetString("PGN Buffer Loader"),
+							Catalog.GetString("Loads games from a PGN buffer"))
 			{
 			}
 
@@ -30,7 +31,7 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				menuItem = new MenuItem ("Open buffer");
+				menuItem = new MenuItem (Catalog.GetString("Open buffer"));
 				menuItem.Activated += on_load_pgn_activate;
 				menuItem.Show ();
 				viewer.RegisterGameLoader (this, menuItem);
@@ -55,7 +56,7 @@ namespace CsBoard
 				pgnBuffer = buffer;
 				loadingInProgress = true;
 				viewer.StatusBar.Push (1,
-						       "Loading from buffer...");
+						       Catalog.GetString("Loading from buffer..."));
 				GLib.Idle.Add (new GLib.
 					       IdleHandler
 					       (LoadGamesIdleHandler));
@@ -97,7 +98,7 @@ namespace CsBoard
 
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,
-						       "Showing games from buffer.");
+						       Catalog.GetString("Showing games from buffer."));
 				loadingInProgress = false;
 				return false;
 			}
@@ -109,9 +110,9 @@ namespace CsBoard
 				public PGNBufferDialog (Gtk.
 							Window
 							par):base
-					("Enter PGN", par, DialogFlags.Modal,
-					 "Cancel", ResponseType.Cancel,
-					 "Open", ResponseType.Accept)
+					(Catalog.GetString("Enter PGN"), par, DialogFlags.Modal,
+					 Catalog.GetString("Cancel"), ResponseType.Cancel,
+					 Catalog.GetString("Open"), ResponseType.Accept)
 				{
 					textView = new TextView ();
 					textView.WrapMode = WrapMode.WordChar;

@@ -21,6 +21,7 @@ namespace CsBoard {
         using System.Collections;
         using Gtk;
         using Gdk;
+        using Mono.Unix;
 
         public class ChessWindow {
 
@@ -84,7 +85,7 @@ namespace CsBoard {
                                   md.Hide ();
                                   md.Dispose ();
 
-				  control = new GnuChess ("gnuchess -x -e");
+				  control = new GnuChess ("/usr/bin/gnuchess -x -e");
 
 				}
 				

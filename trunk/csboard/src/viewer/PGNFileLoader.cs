@@ -8,6 +8,8 @@ using Chess.Parser;
 using Chess.Game;
 using CsBoard.Plugin;
 
+using Mono.Unix;
+
 namespace CsBoard
 {
 	namespace Viewer
@@ -20,8 +22,8 @@ namespace CsBoard
 			bool loadingInProgress;
 
 			public PGNFileLoader ():base ("file-loader",
-						      "PGN File Loader",
-						      "Loads games from a PGN file")
+						      Catalog.GetString("PGN File Loader"),
+						      Catalog.GetString("Loads games from a PGN file"))
 			{
 			}
 
@@ -31,7 +33,7 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				menuItem = new MenuItem ("Open File");
+				menuItem = new MenuItem (Catalog.GetString("Open File"));
 				menuItem.Activated += on_open_file_activate;
 				menuItem.Show ();
 				viewer.RegisterGameLoader (this, menuItem);
@@ -56,7 +58,7 @@ namespace CsBoard
 					  catch (Exception e)
 					  {
 						  Console.WriteLine
-							  ("Exception : \n" +
+							  (Catalog.GetString("Exception: \n") +
 							   e);
 					  }
 				  }
@@ -66,7 +68,7 @@ namespace CsBoard
 			public void on_open_file_activate (System.Object b,
 							   EventArgs e)
 			{
-				file = viewer.AskForFile (viewer.Window, "Choose the file to open", true);	// true for open
+				file = viewer.AskForFile (viewer.Window, Catalog.GetString("Choose the file to open"), true);	// true for open
 				if (file == null)
 					return;
 
@@ -80,7 +82,7 @@ namespace CsBoard
 				loadingInProgress = true;
 
 				this.file = file;
-				viewer.StatusBar.Push (1, "Loading: " + file);
+				viewer.StatusBar.Push (1, Catalog.GetString("Loading: ") + file);
 				GLib.Idle.Add (new GLib.
 					       IdleHandler
 					       (LoadGamesIdleHandler));
@@ -106,7 +108,7 @@ namespace CsBoard
 				reader.Close ();
 
 				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1, "File: " + file);
+				viewer.StatusBar.Push (1, Catalog.GetString("File: ") + file);
 				loadingInProgress = false;
 				return false;
 			}

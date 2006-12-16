@@ -21,7 +21,7 @@ namespace CsBoard
 	using System;
 	using Gtk;
 	using CsBoard.Viewer;
-
+	using Mono.Unix;
 	public class App
 	{
 
@@ -83,7 +83,7 @@ namespace CsBoard
 					md.Dispose ();
 
 				}
-				catch (Exception ex)
+				catch
 				{
 
 					throw e;

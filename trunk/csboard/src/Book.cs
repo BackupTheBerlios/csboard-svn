@@ -20,6 +20,7 @@ namespace CsBoard {
         using Gtk;
         using System;
         using System.Collections;
+	using Mono.Unix;
 
         public class BookDialog:Dialog {
 

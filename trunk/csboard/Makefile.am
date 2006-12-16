@@ -48,7 +48,6 @@ SOURCE = \
 	$(top_srcdir)/src/Promotion.cs \
 	$(top_srcdir)/src/Position.cs \
 	$(top_srcdir)/src/Session.cs	\
-	$(top_srcdir)/src/Gettext.cs \
 	$(top_srcdir)/src/Crafty.cs \
 	$(top_srcdir)/src/Phalanx.cs \
 	$(top_srcdir)/src/ProgressBar.cs \
@@ -112,7 +111,9 @@ RESOURCES =				\
 	-resource:$(srcdir)/resource/csboard.glade,csboard.glade
 
 csboard.exe: $(SOURCE) config.cs resource/csboard.glade
-	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) -out:csboard.exe $(SOURCE) config.cs
+	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
+	-out:csboard.exe $(SOURCE) config.cs \
+	-r:Mono.Posix
 
 CLEANFILES = csboard.exe
 

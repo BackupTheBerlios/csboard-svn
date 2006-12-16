@@ -3,6 +3,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.IO;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -168,7 +169,7 @@ namespace CsBoard
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine ("Exception: \n" +
+					Console.WriteLine (Catalog.GetString("Exception: \n") +
 							   e);
 					return all_plugin_types;
 				}
@@ -192,7 +193,7 @@ namespace CsBoard
 					catch (Exception e)
 					{
 						Console.WriteLine
-							("Failed to load plugin {0}: {1}",
+							(Catalog.GetString("Failed to load plugin {0}: {1}"),
 							 Path.
 							 GetFileName (file),
 							 e);

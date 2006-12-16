@@ -20,6 +20,7 @@ namespace CsBoard {
 	using System;
 	using System.IO;
 	using System.Collections;
+	using Mono.Unix;
 
 	using System.Text;
 	using System.Text.RegularExpressions;

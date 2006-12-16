@@ -75,12 +75,11 @@ namespace CsBoard {
 
 			// Start a new thread to monitor available output
 			
-						Thread t = new Thread (new ThreadStart (MonitorThread));
-						t.IsBackground = true;
-						t.Start ();
+			Thread t = new Thread (new ThreadStart (MonitorThread));
+			t.IsBackground = true;
+			t.Start ();
 
                         Get ();
-
                 }
 
                 public void Shutdown () {

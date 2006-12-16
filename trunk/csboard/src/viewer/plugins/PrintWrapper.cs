@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using Gnome;
 using System.Collections;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -105,7 +106,7 @@ namespace CsBoard
 				cury = marginy + height;
 				pageno = 1;
 				Print.Beginpage (job.Context,
-						 "Page " + pageno++);
+						 Catalog.GetString("Page ") + pageno++);
 				Print.Moveto (job.Context, curx, cury);
 			}
 
@@ -250,7 +251,7 @@ namespace CsBoard
 				  {
 					  Print.Showpage (ctx);
 					  Print.Beginpage (ctx,
-							   "Page " +
+							   Catalog.GetString("Page ") +
 							   pageno++);
 					  cury = marginy + height;
 				  }
@@ -296,7 +297,7 @@ namespace CsBoard
 				Print.Showpage (ctx);
 				curx = marginx;
 				cury = marginy + height;
-				Print.Beginpage (ctx, "Page " + pageno++);
+				Print.Beginpage (ctx, Catalog.GetString("Page ") + pageno++);
 			}
 
 			public void PrintImage (Gdk.Pixbuf image)
@@ -310,7 +311,7 @@ namespace CsBoard
 				  {
 					  Print.Showpage (ctx);
 					  Print.Beginpage (ctx,
-							   "Page " +
+							   Catalog.GetString("Page ") +
 							   pageno++);
 					  curx = marginx;
 					  cury = marginy + height;

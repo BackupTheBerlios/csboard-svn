@@ -19,7 +19,8 @@ namespace CsBoard {
 
         using Gtk;
         using System;
-
+	using Mono.Unix;
+	
         public class Promotion:Dialog {
 
                 Glade.XML gXML;

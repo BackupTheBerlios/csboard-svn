@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using Mono.Unix;
 
 namespace Chess
 {
@@ -123,7 +124,7 @@ namespace Chess
 				    && positions[i, j].Color == color)
 				  {
 					  debug (flags,
-						 "\t\tAnother piece of the same color present at the destination ("
+						 Catalog.GetString("\t\tAnother piece of the same color present at the destination (")
 						 + i + ", " + j + ")");
 					  return false;
 				  }

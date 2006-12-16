@@ -18,6 +18,7 @@
 using System;
 using Gtk;
 using Chess.Parser;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -107,7 +108,7 @@ namespace CsBoard
 						     new
 						     TreeCellDataFunc
 						     (MoveNumCellDataFunc));
-				col.Title = "No";
+				col.Title = Catalog.GetString("No");
 				gameView.AppendColumn (col);
 
 				col = new TreeViewColumn ();
@@ -116,7 +117,7 @@ namespace CsBoard
 						     new
 						     TreeCellDataFunc
 						     (WhiteMoveCellDataFunc));
-				col.Title = "White";
+				col.Title = Catalog.GetString("White");
 				col.Resizable = true;
 				col.Expand = true;
 				gameView.AppendColumn (col);
@@ -130,7 +131,7 @@ namespace CsBoard
 						     TreeCellDataFunc
 						     (BlackMoveCellDataFunc));
 				col.Expand = true;
-				col.Title = "Black";
+				col.Title = Catalog.GetString("Black");
 				gameView.AppendColumn (col);
 				blackcol = col;
 

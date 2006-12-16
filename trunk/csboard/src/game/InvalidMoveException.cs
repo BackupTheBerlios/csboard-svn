@@ -15,6 +15,8 @@
 //
 // Copyright (C) 2006 Ravi Kiran UVS
 
+using Mono.Unix;
+
 namespace Chess
 {
 	namespace Game
@@ -23,7 +25,7 @@ namespace Chess
 		{
 			public InvalidMoveException (string
 						     move):base
-				("Invalid move :" + move)
+				(Catalog.GetString("Invalid move ") + move)
 			{
 			}
 		}

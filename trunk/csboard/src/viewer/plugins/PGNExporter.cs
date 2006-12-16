@@ -22,6 +22,7 @@ using Gtk;
 using Gnome;
 using System;
 using CsBoard;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -132,17 +133,17 @@ namespace CsBoard
 
 
 				if (white == null)
-					white = "[White]";
+					white = Catalog.GetString("[White]");
 				if (black == null)
-					black = "[Black]";
+					black = Catalog.GetString("[Black]");
 				if (result == null)
-					result = "Unknown";
+					result = Catalog.GetString("Unknown");
 
 				printer.Font = fonts.titleFont;
-				printer.PrintText (white + " vs " + black +
+				printer.PrintText (white + Catalog.GetString(" vs ") + black +
 						   "\n\n");
 				printer.Font = fonts.regularFont;
-				printer.PrintText ("Result: " + result +
+				printer.PrintText (Catalog.GetString("Result: ") + result +
 						   "\n\n");
 
 				printer.Font = fonts.moveFont;
