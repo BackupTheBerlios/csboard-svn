@@ -84,7 +84,7 @@
       <applyto>/apps/csboard/session/current_folder</applyto>
       <owner>csboard</owner>
       <type>string</type>
-      <default></default>
+      <default> </default>
       <locale name="C">
 	<short>Current folder</short>
 	<long>Current folder selected by the file chooser dialog</long>
