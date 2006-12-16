@@ -535,8 +535,6 @@ namespace CsBoard
 								   "Save",
 								   ResponseType.
 								   Accept);
-				Console.WriteLine ("INITIALDIR: " +
-						   initialDirForFileChooser);
 				if (initialDirForFileChooser != null)
 					fc.SetCurrentFolder
 						(initialDirForFileChooser);
