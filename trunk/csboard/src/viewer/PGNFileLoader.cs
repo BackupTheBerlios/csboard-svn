@@ -51,6 +51,7 @@ namespace CsBoard
 					  try
 					  {
 						  LoadGames (file);
+						  return true;
 					  }
 					  catch (Exception e)
 					  {

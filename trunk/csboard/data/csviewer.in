@@ -4,4 +4,4 @@ CSBOARD_DATA_PATH=@prefix@/share/csboard
 
 cd $CSBOARD_DATA_PATH
 
-mono ./csboard.exe -viewer $1 $2
+mono ./csboard.exe -viewer "$@"
