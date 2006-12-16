@@ -46,9 +46,7 @@ namespace CsBoard
 
 			public bool Load (string file)
 			{
-				if (File.Exists (file)
-				    && File.GetAttributes (file) ==
-				    FileAttributes.Normal)
+				if (File.Exists (file))
 				  {
 					  try
 					  {
