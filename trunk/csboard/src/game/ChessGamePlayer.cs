@@ -919,7 +919,7 @@ namespace Chess
 				return list;
 			}
 
-
+/*
 			public static ChessGamePlayer CreatePlayer ()
 			{
 				ChessSide white, black;
@@ -929,6 +929,14 @@ namespace Chess
 				game.StartGame (white, black);
 				return game;
 			}
+*/
+			public static ChessGamePlayer CreatePlayer ()
+			{
+				string fen_str =
+					"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+				return CreateFromFEN (fen_str);
+			}
+
 			public static ArrayList GetDefaultPosition ()
 			{
 				ArrayList list = new ArrayList ();
@@ -944,6 +952,196 @@ namespace Chess
 				list.Add ("R N B Q K B N R ");
 				list.Add ("");
 				return list;
+			}
+
+			public static ChessGamePlayer CreateFromFEN (string
+								     fen)
+			{
+				PositionInfo info = new PositionInfo (fen);
+				string[]lines = info.position_str.Split ('/');
+				if (lines.Length != 8)
+					throw new
+						ChessException
+						("Invalid number tokens in the FEN position");
+				ChessSide whites =
+					new ChessSide (ColorType.WHITE);
+				ChessSide blacks =
+					new ChessSide (ColorType.BLACK);
+				for (int i = 0; i < lines.Length; i++)
+				  {
+					  string line = lines[i];
+					  for (int j = 0; j < line.Length;
+					       j++)
+					    {
+						    char ch = line[j];
+						    if (Char.IsNumber (ch))
+						      {
+							      j += ch - '1';	// starting from 1 since j++ will increment 1
+							      continue;
+						      }
+						    int rank = 7 - i;
+						    int file = j;
+						    ChessPiece piece;
+						    GetPieceForFENChar (ch,
+									whites,
+									blacks,
+									rank,
+									file,
+									out
+									piece);
+						    piece.addToSide ();
+					    }
+				  }
+				whites.King.CanCastle = info.WhiteCanCastle;
+				blacks.King.CanCastle = info.BlackCanCastle;
+				ChessGamePlayer game = new ChessGamePlayer ();
+				game.turn = info.Turn;
+				game.StartGame (whites, blacks);
+				return game;
+			}
+
+			private static void GetPieceForFENChar (char fench,
+								ChessSide
+								whites,
+								ChessSide
+								blacks,
+								int rank,
+								int file,
+								out ChessPiece
+								piece)
+			{
+				ColorType color;
+				ChessSide myside, oppside;
+				if (Char.IsUpper (fench))
+				  {
+					  color = ColorType.WHITE;
+					  myside = whites;
+					  oppside = blacks;
+				  }
+				else
+				  {
+					  color = ColorType.BLACK;
+					  myside = blacks;
+					  oppside = whites;
+				  }
+
+				char ch = Char.ToLower (fench);
+				switch (ch)
+				  {
+				  case 'p':
+					  piece = new Pawn (color, rank, file,
+							    myside, oppside);
+					  break;
+				  case 'k':
+					  piece = new King (color, rank, file,
+							    myside, oppside);
+					  break;
+				  case 'q':
+					  piece = new Queen (color, rank,
+							     file, myside,
+							     oppside);
+					  break;
+				  case 'b':
+					  piece = new Bishop (color, rank,
+							      file, myside,
+							      oppside);
+					  break;
+				  case 's':
+					  piece = new Knight (color, rank,
+							      file, myside,
+							      oppside);
+					  break;
+				  case 'n':
+					  piece = new Knight (color, rank,
+							      file, myside,
+							      oppside);
+					  break;
+				  case 'r':
+					  piece = new Rook (color, rank, file,
+							    myside, oppside);
+					  break;
+				  default:
+					  throw new
+						  ChessException
+						  ("Invalid piece type " +
+						   ch);
+				  }
+
+			}
+
+			struct PositionInfo
+			{
+				// each rank is described starting from rank 8 and ending with rank 1.
+				// for each rank, the contents of each square are described from file 'a' through
+				// file 'h'.
+				public string position_str;
+				// active color - "w" means white moves next. "b" means black moves next.
+				public string active_str;
+				// if neither side can castle, this is "-". Otherwise this has one or more letters:
+				//   K - white can castle on king side
+				//   Q - white can castle on queen side
+				//   k - black can castle on king side
+				//   q - black can castle on queen side
+				public string castling_available_str;
+				// if there is no enpassant target square, this is "-". If a pawn has just made a
+				// 2-square move, this is the position "behind" the pawn.
+				public string enpassant_target_str;
+				// number of half moves since the last pawn advance or capture. this is used
+				// to determine if a draw can be claimed under the fifty move rule
+				public string halfmove_clock_str;
+				// full move number - the number of full moves. this starts at 1 and is incremented
+				// after blacks move.
+				public string fullmove_number_str;
+
+
+				public bool WhiteCanCastle;
+				public bool BlackCanCastle;
+
+				public ColorType Turn;
+
+				public PositionInfo (string fen)
+				{
+					string[]lines = fen.Split (' ');
+					string str;
+					  position_str = lines[0];
+					  active_str = lines[1];
+					if (active_str.ToLower ().
+					    Equals ("b"))
+						  Turn = ColorType.BLACK;
+					else
+						  Turn = ColorType.WHITE;
+
+					  castling_available_str = lines[2];
+					  WhiteCanCastle = false;
+					  BlackCanCastle = false;
+					if (!castling_available_str.
+					    Equals ("-"))
+					  {
+						  for (int i = 0;
+						       i <
+						       castling_available_str.
+						       Length; i++)
+						    {
+							    char ch =
+								    castling_available_str
+								    [i];
+							    if (ch == 'K'
+								|| ch == 'Q')
+								    WhiteCanCastle
+									    =
+									    true;
+							    if (ch == 'k'
+								|| ch == 'q')
+								    BlackCanCastle
+									    =
+									    true;
+						    }
+					  }
+					enpassant_target_str =
+						lines[3].ToLower ();
+					halfmove_clock_str = lines[4];
+					fullmove_number_str = lines[5];
+				}
 			}
 		}
 	}

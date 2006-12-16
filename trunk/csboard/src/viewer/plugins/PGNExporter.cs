@@ -147,6 +147,10 @@ namespace CsBoard
 
 				printer.Font = fonts.moveFont;
 				int moveno = 1;
+				if (game.HasTag ("FEN"))
+					PrintImageForPosition
+						(session.player);
+
 				foreach (ChessMove move in game.Moves)
 				{
 					// print move

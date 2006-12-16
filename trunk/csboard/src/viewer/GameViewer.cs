@@ -178,7 +178,8 @@ namespace CsBoard
 					return;
 				this.games = loader.Games;
 				gamesListWidget.SetGames (games);
-				SelectGame (0);
+				if (games.Count > 0)
+					SelectGame ((PGNChessGame) games[0]);
 			}
 
 			public PGNChessGame Game
@@ -262,23 +263,19 @@ namespace CsBoard
 
 				gamesListWidget = new GamesListWidget ();
 
-				gamesListWidget.RowActivated +=
+				gamesListWidget.Tree.RowActivated +=
 					OnRowActivated;
 				boardWidget.ShowMove =
 					App.session.HighLightMove;
 				highlightMoveMenuItem.Active =
 					App.session.HighLightMove;
-				ScrolledWindow win = new ScrolledWindow ();
-				win.HscrollbarPolicy = PolicyType.Automatic;
-				win.VscrollbarPolicy = PolicyType.Automatic;
-				win.Child = gamesListWidget;
-				win.Show ();
 				Label label = new Label ("<b>Games</b>");
 				label.UseMarkup = true;
 				label.Show ();
 				gamesListBox.PackStart (label, false, false,
 							2);
-				gamesListBox.PackStart (win, true, true, 0);
+				gamesListBox.PackStart (gamesListWidget, true,
+							true, 0);
 
 				leftSplitPane.Position = 300;
 				gamesSplitPane.Position = 400;
@@ -482,8 +479,14 @@ namespace CsBoard
 			void OnRowActivated (object obj,
 					     RowActivatedArgs args)
 			{
-				int idx = args.Path.Indices[0];
-				SelectGame (idx);
+				TreeIter iter;
+				gamesListWidget.Tree.Model.GetIter (out iter,
+								    args.
+								    Path);
+				PGNChessGame game =
+					(PGNChessGame) gamesListWidget.Tree.
+					Model.GetValue (iter, 0);
+				SelectGame (game);
 			}
 
 			void OnHighlightMoveMenuItemActivated (object o,
@@ -496,16 +499,13 @@ namespace CsBoard
 				boardWidget.QueueDraw ();
 			}
 
-			private void SelectGame (int idx)
+			private void SelectGame (PGNChessGame game)
 			{
-				PGNChessGame game = (PGNChessGame) games[idx];
-				gamesListWidget.HighlightGame (idx);
 				gameSession.Set (game);
 				gameWidget.SetGame (game);
 				boardWidget.Reset ();
-				boardWidget.SetPosition (ChessGamePlayer.
-							 GetDefaultPosition
-							 ());
+				boardWidget.SetPosition (gameSession.player.
+							 GetPosition ());
 				gameNotesTextView.Buffer.Text = "";
 				whiteLabel.Markup =
 					"<b>" + game.GetTagValue ("White",
@@ -648,8 +648,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

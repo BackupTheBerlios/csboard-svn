@@ -1,4 +1,18 @@
 2006-12-16  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
+	* src/game/ChessGamePlayer.cs
+	* src/parser/PGNParser.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+	* src/viewer/plugins/PGNExporter.cs
+
+	Adds the functionality to read PGN games with initial positions with
+	FEN notation. Adds search functionality to filter games in the games list.
+	Games list ui modified.
+
+2006-12-16  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
 	* Makefile.am
 	* data/csboard.schemas.in
 	* src/Board.cs

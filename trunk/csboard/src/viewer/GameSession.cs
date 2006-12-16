@@ -48,7 +48,11 @@ namespace CsBoard
 				move = null;
 				total_moves = 0;
 
-				player = ChessGamePlayer.CreatePlayer ();
+				player = g.HasTag ("FEN") ? ChessGamePlayer.
+					CreateFromFEN (g.
+						       GetTagValue ("FEN",
+								    null)) :
+					ChessGamePlayer.CreatePlayer ();
 
 				game = g;
 
@@ -78,7 +82,7 @@ namespace CsBoard
 				for (int i = 0; i < n; i++)
 				  {
 					  Next ();
-					  if(!player.Move (CurrentMove))
+					  if (!player.Move (CurrentMove))
 						  return false;
 				  }
 				return true;
@@ -89,7 +93,7 @@ namespace CsBoard
 				while (HasNext ())
 				  {
 					  Next ();
-					  if(!player.Move (CurrentMove))
+					  if (!player.Move (CurrentMove))
 						  return false;
 				  }
 				return true;

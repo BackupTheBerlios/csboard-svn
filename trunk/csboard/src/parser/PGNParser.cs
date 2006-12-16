@@ -58,55 +58,26 @@ namespace Chess
 				tokenizer = new PGNTokenizer (reader, false);
 			}
 
-/*
-			public static ArrayList loadGamesFromFile (string
-								   file)
-			{
-				TextReader reader = new StreamReader (file);
-				  return loadGames (reader);
-			}
-
-			public static ArrayList loadGamesFromStream (Stream
-								     stream)
-			{
-				TextReader reader = new StreamReader (stream);
-				return loadGames (reader);
-			}
-
-			public static ArrayList loadGames (TextReader reader)
-			{
-				ArrayList games = new ArrayList ();
-
-				PGNChessGame game;
-				while ((game = readGame (tokenizer)) != null)
-				  {
-					  games.Add (game);
-				  }
-
-				return games;
-			}
-
-			public static ArrayList loadGamesFromBuffer (string
-								     buffer)
-			{
-				TextReader reader = new StringReader (buffer);
-				return loadGames (reader);
-			}
-*/
-
 			public void Parse ()
 			{
-				while (ReadGame ())
+				bool tagFound = false;
+				while (ReadGame (ref tagFound))
 					;
 			}
 
-			private bool ReadGame ()
+			private bool ReadGame (ref bool tagFound)
 			{
 				ArrayList tagList = new ArrayList ();
 
 				string token;
 
-				token = tokenizer.nextToken ();
+				if (tagFound)
+				  {
+					  token = "[";
+					  tagFound = false;	// clear it now
+				  }
+				else
+					token = tokenizer.nextToken ();
 
 				if (token == null)
 					return false;
@@ -125,7 +96,8 @@ namespace Chess
 				  }
 
 				/* now parse the game */
-				return loadMoves (token, tagList);
+				return loadMoves (token, tagList,
+						  ref tagFound);
 			}
 
 			private static void ignoreLine (string token,
@@ -203,7 +175,8 @@ namespace Chess
 
 			private bool loadMoves (string
 						initialtoken,
-						ArrayList tagList)
+						ArrayList tagList,
+						ref bool tagFound)
 			{
 				string token;
 				StringBuilder commentBuffer =
@@ -239,7 +212,6 @@ namespace Chess
 						    continue;
 					    }
 					  else if (token.Equals ("{")
-						   || token.Equals ("[")
 						   || token.Equals ("("))
 					    {
 						    string comment =
@@ -259,12 +231,17 @@ namespace Chess
 								    " ");
 						    continue;
 					    }
-					  else if (token.Equals ("1-0")
-						   || token.Equals ("0-1")
-						   || token.Equals ("1/2-1/2")
-						   || token.Equals ("*"))
+					  else if (tokenIsATermination
+						   (token))
 					    {
 						    /* end of game */
+						    break;
+					    }
+					  else if (token.Equals ("["))
+					    {
+						    Console.WriteLine
+							    ("Abrupt end of the game. Didnt find the termination");
+						    tagFound = true;
 						    break;
 					    }
 
@@ -644,6 +621,16 @@ namespace Chess
 					str = str.Substring (1,
 							     str.Length - 2);
 				return str;
+			}
+
+			private static bool tokenIsATermination (string token)
+			{
+				if (token.Equals ("1-0")
+				    || token.Equals ("0-1")
+				    || token.Equals ("1/2-1/2")
+				    || token.Equals ("*"))
+					return true;
+				return false;
 			}
 		}
 	}
