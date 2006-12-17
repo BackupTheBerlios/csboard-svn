@@ -1,3 +1,10 @@
+2006-12-17 Ravi Kiran UVS <uvaravikiran@gmail.com>
+
+	* po/te.po
+	* src/viewer/ChessGameInfoWidget.cs
+
+	Changed to use the table to layout the labels
+	
 2006-12-17  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* configure.in:

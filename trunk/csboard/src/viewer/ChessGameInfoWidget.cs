@@ -46,13 +46,23 @@ namespace CsBoard
 				titleLabel = new Label ();
 				titleLabel.UseMarkup = true;
 
-				resultLabel = new Label (Catalog.GetString("<b>Result</b>"));
+				resultLabel =
+					new Label (Catalog.
+						   GetString
+						   ("<b>Result</b>"));
 				resultLabel.UseMarkup = true;
-				dateLabel = new Label (Catalog.GetString("<b>Date</b>"));
+				dateLabel =
+					new Label (Catalog.
+						   GetString ("<b>Date</b>"));
 				dateLabel.UseMarkup = true;
-				eventLabel = new Label (Catalog.GetString("<b>Event</b>"));
+				eventLabel =
+					new Label (Catalog.
+						   GetString
+						   ("<b>Event</b>"));
 				eventLabel.UseMarkup = true;
-				siteLabel = new Label (Catalog.GetString("<b>Site</b>"));
+				siteLabel =
+					new Label (Catalog.
+						   GetString ("<b>Site</b>"));
 				siteLabel.UseMarkup = true;
 
 				resultValueLabel = new Label ();
@@ -63,51 +73,58 @@ namespace CsBoard
 				titleLabel = new Label ();
 				titleLabel.UseMarkup = true;
 
-				VBox namesBox, valuesBox;
-				  namesBox = new VBox ();
-				  valuesBox = new VBox ();
+				Table table = new Table (5, 2, false);
 
-				  box.PackStart (titleLabel, true, false, 2);
+				uint row = 0;
+				  table.Attach (titleLabel, 0, 2, row,
+						row + 1);
 				  titleLabel.Xalign = 0;
 
-				  namesBox.PackStart (resultLabel, true, true,
-						      2);
+				  row++;
+				  table.Attach (resultLabel, 0, 1, row,
+						row + 1);
 				  resultLabel.Xalign = 0;
-				  valuesBox.PackStart (resultValueLabel, true,
-						       true, 2);
+				  table.Attach (resultValueLabel, 1, 2, row,
+						row + 1);
 				  resultValueLabel.Xalign = 0;
 
-				  namesBox.PackStart (dateLabel, true, true,
-						      2);
+				  row++;
+				  table.Attach (dateLabel, 0, 1, row,
+						row + 1);
 				  dateLabel.Xalign = 0;
-				  valuesBox.PackStart (dateValueLabel, true,
-						       true, 2);
+				  table.Attach (dateValueLabel, 1, 2, row,
+						row + 1);
 				  dateValueLabel.Xalign = 0;
 
-				  namesBox.PackStart (eventLabel, true, true,
-						      2);
+				  row++;
+				  table.Attach (eventLabel, 0, 1, row,
+						row + 1);
 				  eventLabel.Xalign = 0;
-				  valuesBox.PackStart (eventValueLabel, true,
-						       true, 2);
+				  table.Attach (eventValueLabel, 1, 2, row,
+						row + 1);
 				  eventValueLabel.Xalign = 0;
 
-				  namesBox.PackStart (siteLabel, true, true,
-						      2);
+				  row++;
+				  table.Attach (siteLabel, 0, 1, row,
+						row + 1);
 				  siteLabel.Xalign = 0;
-				  valuesBox.PackStart (siteValueLabel, true,
-						       true, 2);
+				  table.Attach (siteValueLabel, 1, 2, row,
+						row + 1);
 				  siteValueLabel.Xalign = 0;
 
-				HBox hbox = new HBox ();
-				  hbox.PackStart (namesBox, false, false, 10);
-				  hbox.PackStart (valuesBox, true, true, 20);
+				ScrolledWindow win = new ScrolledWindow ();
+				  win.HscrollbarPolicy = PolicyType.Automatic;
+				  win.VscrollbarPolicy = PolicyType.Never;
+				  win.AddWithViewport (table);
 
-				  box.PackStart (hbox, true, false, 2);
+				  box.PackStart (win, false, false, 2);
 
 				  otherTagsWidget =
-					new Expander (Catalog.GetString("Other details"));
-				  box.PackStart (otherTagsWidget, true, false,
-						 2);
+					new Expander (Catalog.
+						      GetString
+						      ("Other details"));
+				  box.PackStart (otherTagsWidget, false,
+						 false, 2);
 
 				  box.ShowAll ();
 				  Child = box;
@@ -129,7 +146,8 @@ namespace CsBoard
 				string result = game.Result;
 
 				  titleLabel.Markup =
-					"<b>" + white + Catalog.GetString(" vs ") + black +
+					"<b>" + white +
+					Catalog.GetString (" vs ") + black +
 					"</b>";
 				  eventValueLabel.Text = evnt;
 				  siteValueLabel.Text = site;
@@ -149,13 +167,11 @@ namespace CsBoard
 
 			private void UpdateOtherTags (IList ignoreTags)
 			{
-				VBox namesBox, valuesBox;
-				HBox hbox;
+				Table table =
+					new Table ((uint) game.TagList.Count,
+						   2, false);
 
-				namesBox = new VBox ();
-				valuesBox = new VBox ();
-				hbox = new HBox ();
-
+				uint i = 0;
 				foreach (PGNTag tag in game.TagList)
 				{
 					if (ignoreTags.Contains (tag.Name))
@@ -165,27 +181,30 @@ namespace CsBoard
 						new Label ("<b>" + tag.Name +
 							   "</b>");
 					Label valueLabel =
-						new Label ((string) tag.Value);
+						new Label ((string) tag.
+							   Value);
 					nameLabel.UseMarkup = true;
 					nameLabel.Xalign = 0;
 					valueLabel.Xalign = 0;
-					namesBox.PackStart (nameLabel, false,
-							    false, 2);
-					valuesBox.PackStart (valueLabel, true,
-							     false, 2);
+					table.Attach (nameLabel, 0, 1, i,
+						      i + 1);
+					table.Attach (valueLabel, 1, 2, i,
+						      i + 1);
+					i++;
 				}
 
-				hbox.PackStart (namesBox, false, false, 2);
-				hbox.PackStart (valuesBox, false, false, 20);
-
-				hbox.ShowAll ();
+				ScrolledWindow win = new ScrolledWindow ();
+				win.HscrollbarPolicy = PolicyType.Automatic;
+				win.VscrollbarPolicy = PolicyType.Automatic;
+				win.AddWithViewport (table);
+				win.ShowAll ();
 				if (otherTagsWidget.Child != null)
 				  {
 					  otherTagsWidget.
 						  Remove (otherTagsWidget.
 							  Child);
 				  }
-				otherTagsWidget.Add (hbox);
+				otherTagsWidget.Add (win);
 			}
 		}
 	}

@@ -32,7 +32,7 @@ msgid "Book Opening"
 msgstr "తెలిసిన మొదలు"
 
 #: ../resource/csboard.glade.h:5
-msgid "Export As"
+msgid "_Export As"
 msgstr "దీనిలా మార్చు"
 
 #: ../resource/csboard.glade.h:6
@@ -654,7 +654,7 @@ msgid ""
 "<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"
 msgstr ""
 "\n"
-"<small><i>సఓదర్భం</i>: {0}, <i>తేదీ</i>: {1}</small>"
+"<small><i>సందర్భం</i>: {0}, <i>తేదీ</i>: {1}</small>"
 
 #: ../src/viewer/PGNFileLoader.cs:23
 msgid "PGN File Loader"
