@@ -44,7 +44,9 @@ namespace CsBoard
 
 				viewer.RegisterPrintHandler (this);
 
-				exportPsMenuItem = new MenuItem (Catalog.GetString("PS File"));
+				ImageMenuItem item = new ImageMenuItem (Catalog.GetString("_PS File"));
+				item.Image = new Image(Gtk.Stock.SaveAs, IconSize.Menu);
+				exportPsMenuItem = item;
 				exportPsMenuItem.Activated +=
 					on_export_ps_activate;
 				exportPsMenuItem.Show ();

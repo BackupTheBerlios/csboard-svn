@@ -33,7 +33,9 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				menuItem = new MenuItem (Catalog.GetString("Open File"));
+				ImageMenuItem item = new ImageMenuItem (Catalog.GetString("_Open File"));
+				item.Image = new Image(Stock.Open, IconSize.Menu);
+				menuItem = item;
 				menuItem.Activated += on_open_file_activate;
 				menuItem.Show ();
 				viewer.RegisterGameLoader (this, menuItem);

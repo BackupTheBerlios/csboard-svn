@@ -129,7 +129,7 @@ namespace CsBoard
 				string result = game.Result;
 
 				  titleLabel.Markup =
-					"<b>" + white + " vs " + black +
+					"<b>" + white + Catalog.GetString(" vs ") + black +
 					"</b>";
 				  eventValueLabel.Text = evnt;
 				  siteValueLabel.Text = site;
