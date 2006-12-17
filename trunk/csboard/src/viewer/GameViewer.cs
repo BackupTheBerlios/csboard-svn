@@ -507,7 +507,7 @@ namespace CsBoard
 				SelectGame (game);
 			}
 
-			void OnHighlightMoveMenuItemActivated (object o,
+			public void OnHighlightMoveMenuItemActivated (object o,
 							       EventArgs args)
 			{
 				boardWidget.ShowMove =
