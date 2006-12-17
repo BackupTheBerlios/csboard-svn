@@ -1,0 +1,6 @@
+?package(cdcollect):\
+  needs="X11"\
+  section="Games/Board"\
+  title="CSBoard chess"\
+  command="/usr/bin/csboard"
+  

@@ -1,0 +1,17 @@
+Source: csboard
+Section: gnome
+Priority: optional
+Maintainer: Michal Turek <michal.turek@gmail.com>
+Build-Depends: debhelper (>= 5), cdbs, cli-common (>= 0.4.3), mono-mcs (>= 1.1), libmono-dev (>= 1.1), cli-common-dev (>= 0.4.4)
+Standards-Version: 3.7.2
+
+Package: csboard
+Architecture: any
+Depends: ${cli:Depends},${misc:Depends}, mono-jit (>= 1.1), gnuchess (>= 5.07), librsvg2-2
+Maintainer: Michal Turek <michal.turek@gmail.com>
+Description: CSBoard is a small GUI for gnuchess.  
+  It is written in C# and uses gtk-sharp and mono. It is simple, but allows you just play chess with SVG graphics and native look and desktop theme usage. CSBoard has very detailed user documentation and fully integrated with GNOME desktop environment for many things, like support of mime-types.
+  .
+  CSBoard use gnuchess as playing engine, but you can also play with crafty of phalanx.
+  .
+  Homepage: http://csboard.berlios.de/

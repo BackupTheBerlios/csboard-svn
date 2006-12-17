@@ -1,0 +1,61 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT([csboard], [0.7], [nshmyrev@yandex.ru])
+AM_INIT_AUTOMAKE
+
+#This is a requirement for gettext and future use
+AC_PROG_CC
+
+#Internationalization
+
+AC_PROG_INTLTOOL([0.30])
+GETTEXT_PACKAGE=AC_PACKAGE_NAME
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
+ALL_LINGUAS="cs ru tr te"
+AM_GLIB_GNU_GETTEXT
+
+# Dependencies
+
+MONO_REQUIRED_VERSION=1.1.17
+GTKSHARP_REQUIRED_VERSION=2.8.0
+
+PKG_CHECK_MODULES(MONO,
+mono >= $MONO_REQUIRED_VERSION
+)
+
+PKG_CHECK_MODULES(BASE_DEPENDENCIES,
+gtk-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+glade-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+rsvg-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+gconf-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+)
+AC_SUBST(BASE_DEPENDENCIES_LIBS)
+
+PKG_CHECK_MODULES(URL_LOADER_PLUGIN,
+gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION
+)
+AC_SUBST(URL_LOADER_PLUGIN_LIBS)
+
+
+AC_PATH_PROG(GCONFTOOL, gconftool-2)
+AM_GCONF_SOURCE_2
+
+GNOME_DOC_INIT
+
+AC_CONFIG_FILES([
+    Makefile
+    data/Makefile
+    data/csboard
+    data/csviewer
+    data/csboard.spec
+    help/Makefile
+    po/Makefile.in
+    src/Makefile
+    src/viewer/Makefile
+    src/viewer/plugins/Makefile
+    resource/Makefile
+    config.cs
+    ])
+
+AC_OUTPUT
+

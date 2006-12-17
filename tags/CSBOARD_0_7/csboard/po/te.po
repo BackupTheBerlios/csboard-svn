@@ -1,0 +1,789 @@
+# Telugu translator
+# Copyright (C) 2004 Ravi Kiran UVS
+# This file is distributed under the same license as the csboard package.
+# Ravi Kiran UVS
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csboard 0.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-12-17 01:32+0300\n"
+"PO-Revision-Date: 2004-10-20 18:07+0400\n"
+"Last-Translator: Ravi Kiran UVS <uvsravikiran at gmail dot com>\n"
+"Language-Team: Telugu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../resource/csboard.glade.h:1
+msgid "<b>Available games:</b>"
+msgstr "<b>అందుబాటులో ఉన్న ఆటలు:</b>"
+
+#: ../resource/csboard.glade.h:2
+msgid "<b>For this position there are moves in a book</b>"
+msgstr "<b>ఈ పరిస్థితిలో తెలిసిన ఎత్తులు ఉన్నాయి:</b>"
+
+#: ../resource/csboard.glade.h:3
+msgid "Bishop"
+msgstr "శగటు"
+
+#: ../resource/csboard.glade.h:4 ../src/Book.cs:37
+msgid "Book Opening"
+msgstr "తెలిసిన మొదలు"
+
+#: ../resource/csboard.glade.h:5
+msgid "_Export As"
+msgstr "దీనిలా మార్చు"
+
+#: ../resource/csboard.glade.h:6
+msgid "Game Viewer"
+msgstr "చదరంగ దర్శిని"
+
+#: ../resource/csboard.glade.h:7
+msgid "Highlight Move"
+msgstr "ఎత్తును చూపించు"
+
+#: ../resource/csboard.glade.h:8
+msgid "Knight"
+msgstr "గుర్రం"
+
+#: ../resource/csboard.glade.h:9
+msgid "Queen"
+msgstr "మంత్రి"
+
+#: ../resource/csboard.glade.h:10
+msgid "Rook"
+msgstr "యేనుగు"
+
+#: ../resource/csboard.glade.h:11
+msgid "Select figure to promote"
+msgstr "ఈ క్రిందివానిలో ఒక దానిని ఎంచుము"
+
+#: ../resource/csboard.glade.h:12 ../src/ICSSeek.cs:45
+msgid "Start new ICS game"
+msgstr "క్రొత్త ICS ఆటను మొదలుపెట్టు"
+
+#: ../resource/csboard.glade.h:13
+msgid "View"
+msgstr "చూడు"
+
+#: ../resource/csboard.glade.h:14
+msgid "Welcome to CS Board"
+msgstr "CS Board కి స్వాగతం"
+
+#: ../resource/csboard.glade.h:15
+msgid "_About"
+msgstr "_దీని గురించి"
+
+#: ../resource/csboard.glade.h:16
+msgid "_Action"
+msgstr "_చర్య"
+
+#: ../resource/csboard.glade.h:17
+msgid "_Advanced"
+msgstr "_నిపుణుడు"
+
+#: ../resource/csboard.glade.h:18
+msgid "_Animate"
+msgstr "_ఆడించి చూపు"
+
+#: ../resource/csboard.glade.h:19
+msgid "_Beginner"
+msgstr "_ఆటకి కొత్త"
+
+#: ../resource/csboard.glade.h:20
+msgid "_Book"
+msgstr "_పుస్తకం"
+
+#: ../resource/csboard.glade.h:21
+msgid "_Contents"
+msgstr "_లోపల ఉన్నవి"
+
+#: ../resource/csboard.glade.h:22
+msgid "_Coords"
+msgstr "_గళ్ళ పేర్లు"
+
+#: ../resource/csboard.glade.h:23
+msgid "_Expert"
+msgstr "_నిష్ణాతుడు"
+
+#: ../resource/csboard.glade.h:24
+msgid "_File"
+msgstr "_ఫైలు"
+
+#: ../resource/csboard.glade.h:25
+msgid "_Game"
+msgstr "_ఆట"
+
+#: ../resource/csboard.glade.h:26
+msgid "_Help"
+msgstr "_సహాయం"
+
+#: ../resource/csboard.glade.h:27
+msgid "_Hint"
+msgstr "_ఉప్పందించు"
+
+#: ../resource/csboard.glade.h:28
+msgid "_Intermediate"
+msgstr "_కొంచం తెలుసు"
+
+#: ../resource/csboard.glade.h:29
+msgid "_Last Move"
+msgstr "_ఇప్పుడు వేసిన ఎత్తు"
+
+#: ../resource/csboard.glade.h:30
+msgid "_Level"
+msgstr "_స్థాయి"
+
+#: ../resource/csboard.glade.h:31
+msgid "_New"
+msgstr "_క్రొత్త"
+
+#: ../resource/csboard.glade.h:32
+msgid "_Open"
+msgstr "_తెరువు"
+
+#: ../resource/csboard.glade.h:33
+msgid "_Possible Moves"
+msgstr "_వేయదగిన ఎత్తులు"
+
+#: ../resource/csboard.glade.h:34
+msgid "_Quit"
+msgstr "_ఇంక చాలు"
+
+#: ../resource/csboard.glade.h:35
+msgid "_Redo"
+msgstr "_మళ్ళీ చేయి"
+
+#: ../resource/csboard.glade.h:36
+msgid "_Save"
+msgstr "_దాచు"
+
+#: ../resource/csboard.glade.h:37
+msgid "_Switch Side"
+msgstr "_అటునుంచి చూడు"
+
+#: ../resource/csboard.glade.h:38
+msgid "_Undo"
+msgstr "_తూచ్ తూచ్"
+
+#: ../resource/csboard.glade.h:39
+msgid "_View"
+msgstr "_చూడు"
+
+#: ../data/csboard.desktop.in.h:1
+msgid "CSBoard chess "
+msgstr "చదరంగం CSBoard"
+
+#: ../data/csboard.desktop.in.h:2
+msgid "Play chess with gnuchess engine"
+msgstr "gnuchess యంత్రము తో ఆడు"
+
+#: ../data/csviewer.desktop.in.h:1
+msgid "Chess Game Viewer"
+msgstr "చదరంగ దర్శిని"
+
+#: ../data/csviewer.desktop.in.h:2
+msgid "View chess games in PGN format"
+msgstr "PGN లో ఉన్న ఆటలను చూడు"
+
+#: ../data/csboard.schemas.in.h:1
+msgid "Add nice visual animate effect."
+msgstr "వేసిన యెత్తులను చక్కగా చూపించు"
+
+#: ../data/csboard.schemas.in.h:2
+msgid "Animate moves"
+msgstr "ఎత్తులను చూపించు"
+
+#: ../data/csboard.schemas.in.h:3
+msgid "Command line to start engine"
+msgstr "ఆట యంత్రము మొదలుపెట్టడానికి కావలసిన కమాండ్"
+
+#: ../data/csboard.schemas.in.h:4
+msgid ""
+"Command line to start engine. Be careful, this key can break programm. "
+"Possible engines are 'gnuchess', 'crafty', 'ICS' and 'phalanx'. For crafty "
+"please give path to log, books and databases as arguments. For phalanx "
+"please disable learing with argument -l- or give the path to learning "
+"directory, also give path to Phalanx books. For details look at engine's "
+"help. For ICS this string should look like: \"ICS --server freechess.org --"
+"user jimmy --password bar\"."
+msgstr ""
+"ఆట యంత్రము మొదలెట్టడానికి కావలసిన కమాండ్. కొంచం జాగ్రత్త, తేడాగా ఇస్తే ఇది కూలిపోయే ప్రమాదం ఉంది."
+"తెలిసిన కంప్యూటర్ ఆటగాళ్ళు 'gnuchess', 'crafty', ICS' మరియు 'phalanx'."
+"crafy తో ఆడాలనుకుంటే చిట్టా,పుస్తకాలు, ఆటలనిధి యొక్క వివరాలు కూడ ఇవ్వు."
+"phalanx తొ ఆడునపుడు అది నేర్చుకున్న విషయాలు ఎక్కడ దాచాలో (ఏ ఫోల్డరులో) చెప్పుము. "
+"అసలు దానికి -l ఇస్తే ఆ ఊసే ఎత్తదు. అలాకానిచో దానికి కావలసిన పుస్తకములు ఎక్కడ ఉన్నవో చెప్పుము."
+"మరిన్ని విషయములకొరకు దాని సహాయ వివరములను పరిశీలించుము."
+"ICS కొరకైతే ఈ విధముగా వాడవలెను: "
+"\"ICS --server freechess.org -- user jummy --password bar\"."
+
+#: ../data/csboard.schemas.in.h:5
+msgid "Current folder"
+msgstr "ప్రస్తుత ఫోల్డర్"
+
+#: ../data/csboard.schemas.in.h:6
+msgid "Current folder selected by the file chooser dialog"
+msgstr "ఫైలు యెంపికకర్త యెంపిక చేసిన ప్రస్తుత ఫోల్డర్ "
+
+#: ../data/csboard.schemas.in.h:7
+msgid "Draw rectangle around last move"
+msgstr "ఇప్పుడు ఎత్తు వేసిన గడిచుట్టూ డబ్బా గీయి"
+
+#: ../data/csboard.schemas.in.h:8
+msgid "Highligh last move"
+msgstr "ఇప్పుడు వేసిన ఎత్తును చూపించు"
+
+#: ../data/csboard.schemas.in.h:9
+msgid "Highligh possible moves"
+msgstr "వేయదగిన ఎత్తులను చూపించు"
+
+#: ../data/csboard.schemas.in.h:10
+msgid "Level of player"
+msgstr "నా స్థాయి"
+
+#: ../data/csboard.schemas.in.h:11
+msgid "Saved board window height"
+msgstr "బోర్డు ఎత్తు"
+
+#: ../data/csboard.schemas.in.h:12
+msgid "Saved board window width"
+msgstr "బోర్డు వెడల్పు"
+
+#: ../data/csboard.schemas.in.h:13
+msgid "Should I highlight all possible moves for newbe."
+msgstr "వేయదగిన అన్ని ఎత్తులను చూపించనా"
+
+#: ../data/csboard.schemas.in.h:14
+msgid "Show Coordinates on Chess Board"
+msgstr "చదరంగ బల్లపై గళ్ళను చూపించు"
+
+#: ../data/csboard.schemas.in.h:15
+msgid "Show Coords"
+msgstr "గళ్ళను చూపించు"
+
+#: ../data/csboard.schemas.in.h:16
+msgid "This key adjusts engine strenght"
+msgstr "యంత్ర శక్తిని ఈ మీట మార్చుతుంది"
+
+#: ../data/csboard.schemas.in.h:17
+msgid "Window height"
+msgstr "కిటికీ ఎత్తు"
+
+#: ../data/csboard.schemas.in.h:18
+msgid "Window width"
+msgstr "కిటికీ వెడల్పు"
+
+#: ../src/App.cs:67 ../src/App.cs:142
+msgid ""
+"<b>Unexpected exception occured</b>\n"
+"\n"
+msgstr "<b>ఊహించని విపరీతము జరిగినది</b>\n"
+
+#: ../src/App.cs:78 ../src/App.cs:153
+msgid "Please send this bug report to\n"
+msgstr "దయచేసి ఈ లోపముపై నివేదికను ఇక్కడికి పంపుము\n"
+
+#: ../src/Window.cs:81
+msgid ""
+"<b>Unknown engine</b>\n"
+"\n"
+"Please check gconf keys of csboard"
+msgstr ""
+"<b>తెలియని యంత్రము</b>\n"
+"\n"
+"దయచేసి gconf లో csboard యొక్క తాళములను సరిచూడుము"
+
+#: ../src/Window.cs:97
+#, csharp-format
+msgid ""
+"<b>Failed to start engine</b>\n"
+"\n"
+"Check that program '{0}' is available."
+msgstr ""
+"<b>యంత్రము మొదలుపెట్టుట కుదరలేదు</b>\n"
+"\n"
+"ఇది '{0}' సరియైనదోకాదో సరిచూడుము."
+
+#: ../src/Window.cs:194
+msgid "Open Game"
+msgstr "ఆట తెరువు"
+
+#: ../src/Window.cs:209
+msgid "Save Game"
+msgstr "ఆటను దాచు"
+
+#: ../src/Window.cs:226
+msgid "File "
+msgstr "ఫైలు "
+
+#: ../src/Window.cs:227
+msgid ""
+" already exists\n"
+"\n"
+msgstr ""
+" ఇంతకుముందే ఉన్నది\n"
+"\n"
+
+#: ../src/Window.cs:228
+msgid "Do you wish to overwrite it?"
+msgstr "ఉన్నదానిని చెరిపిరాయమందువా?"
+
+#: ../src/Window.cs:269
+msgid "There is no book move in this position"
+msgstr "ఈ పరిస్థితిలో ఏ ఎత్తు వేయాలో పుస్తకంలో లేదు"
+
+#: ../src/Window.cs:310
+msgid "You can move "
+msgstr "నీవు ఈ ఎత్తు వేయొచ్చు "
+
+#: ../src/Window.cs:381
+msgid "translator_credits"
+msgstr "U.V.S. రవికిరణ్ <uvsravikiran at gmail dot com>"
+
+#: ../src/Window.cs:424
+msgid "Illegal move"
+msgstr "నేనొప్పుకోను"
+
+#: ../src/Window.cs:444 ../src/Window.cs:453
+msgid "Game Over"
+msgstr "ఖేల్ ఖతమ్"
+
+#: ../src/Window.cs:465
+msgid "Thinking"
+msgstr "ఆలొచిస్తున్నా"
+
+#: ../src/Promotion.cs:42
+msgid "Select a figure to promote"
+msgstr "ఈ క్రిందివానిలో ఒక దానిని ఎంచుము"
+
+#: ../src/Book.cs:64
+msgid "Move"
+msgstr "ఎత్తు"
+
+#: ../src/Book.cs:70
+msgid "Score"
+msgstr "స్కోరు"
+
+#: ../src/Book.cs:76
+msgid "Wins"
+msgstr "గెలుపులు"
+
+#: ../src/Book.cs:82
+msgid "Loses"
+msgstr "ఓటములు"
+
+#: ../src/Book.cs:88
+msgid "Draws"
+msgstr "సమములు"
+
+#: ../src/ICSSeek.cs:62
+msgid "Index"
+msgstr "క్రమ సంఖ్య"
+
+#: ../src/ICSSeek.cs:63
+msgid "Rating"
+msgstr "ఖరీదు"
+
+#: ../src/ICSSeek.cs:64
+msgid "Player"
+msgstr "ఆడువ్యక్తి"
+
+#: ../src/ICSSeek.cs:65
+msgid "Time"
+msgstr "కాలము"
+
+#: ../src/ICSSeek.cs:66
+msgid "Increment"
+msgstr "కొసరు"
+
+#. Translators: This means that player seeks for Rated/Unrated game
+#: ../src/ICSSeek.cs:68
+msgid "R/U"
+msgstr "ఖరీదు/ఉచితం"
+
+#: ../src/ICSSeek.cs:69
+msgid "Type"
+msgstr "వంటి"
+
+#: ../src/ICSSeek.cs:70
+msgid "Color"
+msgstr "రంగు"
+
+#: ../src/ICSSeek.cs:71
+msgid "Range"
+msgstr "పరిధి"
+
+#: ../src/ICSSeek.cs:72
+msgid "Flags"
+msgstr "జెండాలు"
+
+#: ../src/ICS.cs:78
+msgid "Can't parse command line"
+msgstr "ఇదేంటో నాకు అర్ధంకాలేదు"
+
+#: ../src/ICSClient.cs:59
+#, csharp-format
+msgid "Can't connect to {0} port {1}"
+msgstr "{0}:{1} తో సంవాదము వీలుకావట్లేదు"
+
+#: ../src/game/Pawn.cs:153
+msgid " cannot advance "
+msgstr " ముందుకు వెళ్ళలేను "
+
+#: ../src/game/CannotMoveException.cs:26
+msgid "Cannot move: "
+msgstr "ఎత్తు వేయలేను: "
+
+#: ../src/game/ChessGamePlayer.cs:205 ../src/game/ChessGamePlayer.cs:265
+#: ../src/game/ChessGamePlayer.cs:274 ../src/game/ChessGamePlayer.cs:534
+#: ../src/game/InvalidMoveException.cs:26
+msgid "Invalid move "
+msgstr "ఈ ఎత్తు వేయకూడదు "
+
+#: ../src/game/ChessGamePlayer.cs:206
+msgid ". Couldn't find any candidate for this."
+msgstr ". దీనికి సరియైనదేదో కనుక్కోలేకున్నాను."
+
+#: ../src/game/ChessGamePlayer.cs:227
+msgid "Insufficient chars in move "
+msgstr "ఈ ఎత్తుకు సరిపడినన్ని అక్షరములు లేవు  "
+
+#: ../src/game/ChessGamePlayer.cs:536
+msgid ". Invalid promotion type: "
+msgstr ". భటుడిని దీనిలా మార్చలేము: "
+
+#: ../src/game/ChessGamePlayer.cs:570
+msgid "Cant castle ("
+msgstr "కోట కట్టకూడదు ("
+
+#: ../src/game/ChessGamePlayer.cs:577
+msgid "King not available "
+msgstr "రాజు ఎక్కడున్నాడో తెలియదు"
+
+#: ../src/game/ChessGamePlayer.cs:600
+msgid "Rook not available"
+msgstr "ఏనుగు ఎక్కడుందో తెలియదు"
+
+#: ../src/game/ChessGamePlayer.cs:727
+msgid "[ChessGamePlayer] "
+msgstr "[చదరంగదర్శిని] "
+
+#: ../src/game/ChessGamePlayer.cs:811
+msgid "Turn: "
+msgstr "యెత్తు వేయవలసినది: "
+
+#: ../src/game/ChessGamePlayer.cs:814
+msgid "WHITE"
+msgstr "తెలుపు"
+
+#: ../src/game/ChessGamePlayer.cs:815
+msgid "BLACK"
+msgstr "నలుపు"
+
+#: ../src/game/ChessGamePlayer.cs:818
+msgid "Whites:\n"
+msgstr "తెలుపు:\n"
+
+#: ../src/game/ChessGamePlayer.cs:819
+msgid "Blacks:\n"
+msgstr "నలుపు:\n"
+
+#: ../src/game/ChessGamePlayer.cs:965
+msgid "Invalid number tokens in the FEN position"
+msgstr "FEN పధ్ధతిలో ఉండవలసినన్ని శాల్తీలు లేవు"
+
+#: ../src/game/ChessGamePlayer.cs:1066
+msgid "Invalid piece type "
+msgstr "ఈ పావు తప్పు"
+
+#: ../src/game/ChessPiece.cs:126
+msgid "\t\tAnother piece of the same color present at the destination ("
+msgstr "\t\tఇదే రంగు పావు ఏదో అక్కడ ఉంది ("
+
+#: ../src/viewer/ChessGameWidget.cs:110
+msgid "No"
+msgstr "సంఖ్య"
+
+#: ../src/viewer/ChessGameWidget.cs:119
+msgid "White"
+msgstr "తెలుపు"
+
+#: ../src/viewer/ChessGameWidget.cs:133
+msgid "Black"
+msgstr "నలుపు"
+
+#: ../src/viewer/PGNBufferLoader.cs:22
+msgid "PGN Buffer Loader"
+msgstr "PGN బఫరునుంచి ఎక్కించునది"
+
+#: ../src/viewer/PGNBufferLoader.cs:23
+msgid "Loads games from a PGN buffer"
+msgstr "PGN బఫరు నుంచి ఆటలను ఎక్కించునది"
+
+#: ../src/viewer/PGNBufferLoader.cs:33
+msgid "Open _buffer"
+msgstr "బఫరు తెరువు"
+
+#: ../src/viewer/PGNBufferLoader.cs:58
+msgid "Loading from buffer..."
+msgstr "బఫరు నుంచి ఎక్కించుచున్నాను..."
+
+#: ../src/viewer/PGNBufferLoader.cs:100
+msgid "Showing games from buffer."
+msgstr "ఆటలను బఫరు నుంచి చూపించుచున్నాను."
+
+#: ../src/viewer/PGNBufferLoader.cs:112
+msgid "Enter PGN"
+msgstr "PGN ప్రవేశపెట్టు"
+
+#: ../src/viewer/PGNBufferLoader.cs:113 ../src/viewer/GameViewer.cs:530
+#: ../src/viewer/plugins/PGNUrlLoader.cs:111
+msgid "Cancel"
+msgstr "వద్దు"
+
+#: ../src/viewer/PGNBufferLoader.cs:114 ../src/viewer/GameViewer.cs:534
+#: ../src/viewer/plugins/PGNUrlLoader.cs:113
+msgid "Open"
+msgstr "తెరువు"
+
+#: ../src/viewer/PluginManagerDialog.cs:17
+#: ../src/viewer/PluginManagerDialog.cs:130
+msgid "Plugins"
+msgstr "గుచ్చినవి"
+
+#: ../src/viewer/PluginManagerDialog.cs:21
+msgid "Close"
+msgstr "మూసేయ్"
+
+#: ../src/viewer/PluginManagerDialog.cs:73
+msgid "Plugins Details"
+msgstr "గుచ్చినవాటి వివరములు"
+
+#: ../src/viewer/PluginManagerDialog.cs:117
+msgid "Plugin Viewer"
+msgstr "గుచ్చినవాటిని చూపించునది"
+
+#: ../src/viewer/PluginManagerDialog.cs:118
+msgid "A plugin to show the status of other plugins!"
+msgstr "గుచ్చినవాటిని వివరములను చూపించడానికై గుచ్చినది!"
+
+#: ../src/viewer/PluginManagerDialog.cs:127
+msgid "Tools"
+msgstr "పరికరాలు"
+
+#: ../src/viewer/GameViewer.cs:246
+msgid "<b>White</b>"
+msgstr "<b>తెలుపు</b>"
+
+#: ../src/viewer/GameViewer.cs:247
+msgid "<b>Black</b>"
+msgstr "<b>నలుపు</b>"
+
+#: ../src/viewer/GameViewer.cs:272
+msgid "<b>Games</b>"
+msgstr "<b>ఆటలు</b>"
+
+#: ../src/viewer/GameViewer.cs:304
+msgid "Save the game as"
+msgstr "ఆటను దీనిలో దాచు"
+
+#: ../src/viewer/GameViewer.cs:363
+msgid "Operation failed"
+msgstr "పని జరగలేదు"
+
+#: ../src/viewer/GameViewer.cs:397
+msgid "Failed to play to go back"
+msgstr "వెనక్కు వెళ్ళలేకపోయాను"
+
+#: ../src/viewer/GameViewer.cs:443
+msgid "Failed to play the move: "
+msgstr "ఈ ఎత్తు వేయలేకపోయా: "
+
+#: ../src/viewer/GameViewer.cs:535
+msgid "Save"
+msgstr "దాచు"
+
+#: ../src/viewer/GameViewer.cs:635
+msgid "Loading..."
+msgstr "ఎక్కిస్తున్నా..."
+
+#: ../src/viewer/GameViewer.cs:641
+msgid "Parsing the file..."
+msgstr "ఫైలును చదువుతున్నా..."
+
+#: ../src/viewer/GameViewer.cs:663
+msgid "Loaded "
+msgstr "ఎక్కించా "
+
+#: ../src/viewer/GameViewer.cs:663
+msgid " games"
+msgstr " ఆటలు"
+
+#: ../src/viewer/PluginManager.cs:171 ../src/viewer/PGNFileLoader.cs:59
+msgid "Exception: \n"
+msgstr "అసంకల్పితం: \n"
+
+#: ../src/viewer/PluginManager.cs:195
+#, csharp-format
+msgid "Failed to load plugin {0}: {1}"
+msgstr "{0} ను గుచ్చుట వీలుకాలేదు : {1}"
+
+#: ../src/viewer/GamesListWidget.cs:47
+msgid "Filter"
+msgstr "వడపోయి"
+
+#: ../src/viewer/GamesListWidget.cs:100
+msgid "Games"
+msgstr "ఆటలు"
+
+#: ../src/viewer/GamesListWidget.cs:141
+#, csharp-format
+msgid "<b>{0} vs {1}</b>\n"
+msgstr "<b>{0} తో {1}</b>\n"
+
+#: ../src/viewer/GamesListWidget.cs:142
+#, csharp-format
+msgid "<small><i>Result</i>: <b>{2}</b> ({3} moves)</small>"
+msgstr "<small><i>ఫలితం</i>: <b>{2}</b> ({3} ఎత్తులు)</small>"
+
+#: ../src/viewer/GamesListWidget.cs:154
+#, csharp-format
+msgid ""
+"\n"
+"<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"
+msgstr ""
+"\n"
+"<small><i>సందర్భం</i>: {0}, <i>తేదీ</i>: {1}</small>"
+
+#: ../src/viewer/PGNFileLoader.cs:23
+msgid "PGN File Loader"
+msgstr "ఫైలు నుంచి PGN ఎత్తులను ఎక్కించునది"
+
+#: ../src/viewer/PGNFileLoader.cs:24
+msgid "Loads games from a PGN file"
+msgstr "ఇది PGN ఫైలు నుంచి ఆటలను ఎక్కింస్తుంది"
+
+#: ../src/viewer/PGNFileLoader.cs:34
+msgid "_Open File"
+msgstr "_ఫైలు తెరువు"
+
+#: ../src/viewer/PGNFileLoader.cs:69
+msgid "Choose the file to open"
+msgstr "ఈ ఫైలును తెరువుము"
+
+#: ../src/viewer/PGNFileLoader.cs:83
+msgid "Loading: "
+msgstr "ఎక్కిస్తున్నాను: "
+
+#: ../src/viewer/PGNFileLoader.cs:109
+msgid "File: "
+msgstr "ఫైలు: "
+
+#: ../src/viewer/ChessGameInfoWidget.cs:48
+msgid "<b>Result</b>"
+msgstr "<b>ఫలితం</b>"
+
+#: ../src/viewer/ChessGameInfoWidget.cs:50
+msgid "<b>Date</b>"
+msgstr "<b>తేదీ</b>"
+
+#: ../src/viewer/ChessGameInfoWidget.cs:52
+msgid "<b>Event</b>"
+msgstr "<b>సందర్భం</b>"
+
+#: ../src/viewer/ChessGameInfoWidget.cs:54
+msgid "<b>Site</b>"
+msgstr "<b>స్థలము</b>"
+
+#: ../src/viewer/ChessGameInfoWidget.cs:107
+msgid "Other details"
+msgstr "ఇతర వివరాలు"
+
+#: ../src/viewer/plugins/PrintWrapper.cs:108
+#: ../src/viewer/plugins/PrintWrapper.cs:253
+#: ../src/viewer/plugins/PrintWrapper.cs:299
+#: ../src/viewer/plugins/PrintWrapper.cs:313
+msgid "Page "
+msgstr "కాగితము "
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:25
+msgid "PGN Printer"
+msgstr "PGN ముద్రకర్త"
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:26
+msgid "Prints PGN games and exports."
+msgstr "ఇది PGN లో ఉన్న ఆటలను ముద్రిస్తుంది మరియు ఇంకోకరకంగా మారుస్తుంది."
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:46
+msgid "_PS File"
+msgstr "_PS ఫైలు"
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:76
+msgid "Export as a PostScript document to file"
+msgstr "PostScript పత్రంగా మారుస్తుంది"
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:83
+msgid "Exporting..."
+msgstr "మారుస్తున్నా..."
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:100
+msgid "Print PGN File"
+msgstr "PGN ఫైలును ముద్రించుము"
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:111
+msgid "Printing..."
+msgstr "ముద్రిస్తున్నా..."
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:160
+msgid "Now printing..."
+msgstr "ఇప్పుడు ముద్రిస్తున్నా..."
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:164
+msgid "Done."
+msgstr "అయిపోయింది."
+
+#: ../src/viewer/plugins/PGNPrinterPlugin.cs:194
+msgid "Print Preview"
+msgstr "ముద్రిస్తే ఇలావుంటుంది"
+
+#: ../src/viewer/plugins/PGNUrlLoader.cs:24
+msgid "PGN URL Loader"
+msgstr "URL తో PGN ఎక్కించునది"
+
+#: ../src/viewer/plugins/PGNUrlLoader.cs:25
+msgid "Loads games from a PGN file from a url"
+msgstr "URL నుంచి PGN ఆటలను ఎక్కించునది."
+
+#: ../src/viewer/plugins/PGNUrlLoader.cs:35
+#: ../src/viewer/plugins/PGNUrlLoader.cs:109
+msgid "Open _URL"
+msgstr "_URL తెరువు"
+
+#: ../src/viewer/plugins/PGNUrlLoader.cs:87
+msgid "URL: "
+msgstr "URL: "
+
+#: ../src/viewer/plugins/PGNExporter.cs:135
+msgid "[White]"
+msgstr "[తెలుపు]"
+
+#: ../src/viewer/plugins/PGNExporter.cs:137
+msgid "[Black]"
+msgstr "[నలుపు]"
+
+#: ../src/viewer/plugins/PGNExporter.cs:139
+msgid "Unknown"
+msgstr "తెలుయదు"
+
+#: ../src/viewer/plugins/PGNExporter.cs:142
+msgid " vs "
+msgstr " తో "
+
+#: ../src/viewer/plugins/PGNExporter.cs:145
+msgid "Result: "
+msgstr "ఫలితం: "
+
+#, fuzzy
+#~ msgid "Invalid move: "
+#~ msgstr "Некорректный ход"

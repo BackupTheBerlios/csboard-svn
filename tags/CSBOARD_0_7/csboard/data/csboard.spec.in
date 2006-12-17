@@ -1,0 +1,76 @@
+Summary: CSBoard - play with gnuchess
+Name: csboard
+Version: @VERSION@
+Release: 0
+Copyright: GPL
+Group: Amusements/Games
+Source: %{name}-%{version}.tar.gz
+Packager: Nickolay V. Shmyrev <nshmyrev@yandex.ru>
+URL: http://freshmeat.net/projects/csboard/
+BuildRoot: %{_tmppath}/%{name}-root
+
+%description
+
+This is small GUI to gnuchess written in C#. It allows you
+just play chess.
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%install
+
+export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
+%makeinstall
+unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
+
+rm -rf $RPM_BUILD_ROOT
+%makeinstall
+rm -r $RPM_BUILD_ROOT/var/scrollkeeper
+
+%find_lang %{name}
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+
+scrollkeeper-update
+
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+SCHEMAS="csboard.schemas"
+for S in $SCHEMAS; do
+  gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/$S > /dev/null
+done
+
+%preun
+
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+SCHEMAS="csboard.schemas"
+for S in $SCHEMAS; do
+  gconftool-2 --makefile-uninstall-rule %{_sysconfdir}/gconf/schemas/$S > /dev/null
+done
+
+%postun
+
+scrollkeeper-update
+
+%files -f %{name}.lang
+%defattr(-, root, root)
+%doc 
+%{_bindir}/*
+%{_datadir}/applications
+%{_datadir}/gnome/help
+%{_datadir}/omf
+%{_datadir}/pixmaps/*
+%{_datadir}/csboard
+%{_sysconfdir}/gconf/schemas/*.schemas
+
+
+%changelog
+* Thu Aug 19 2004 Nickolay V. Shmyrev <nshmyrev@yandex.ru>
+- start
+

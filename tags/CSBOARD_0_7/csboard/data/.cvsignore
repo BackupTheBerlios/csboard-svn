@@ -1,0 +1,8 @@
+csboard
+csviewer
+csboard.desktop
+csviewer.desktop
+csboard.schemas
+csboard.spec
+Makefile
+Makefile.in
