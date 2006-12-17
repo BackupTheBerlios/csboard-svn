@@ -20,6 +20,7 @@ namespace CsBoard
 			MenuItem menuItem;
 			string file;
 			bool loadingInProgress;
+			AccelGroup accel;
 
 			public PGNFileLoader ():base ("file-loader",
 						      Catalog.
@@ -29,14 +30,7 @@ namespace CsBoard
 						      GetString
 						      ("Loads games from a PGN file"))
 			{
-			}
-
-			public override bool Initialize ()
-			{
-				viewer = GameViewer.Instance;
-				if (viewer == null)
-					return false;
-
+				accel = new AccelGroup ();
 				ImageMenuItem item =
 					new ImageMenuItem (Catalog.
 							   GetString
@@ -46,12 +40,30 @@ namespace CsBoard
 				  menuItem = item;
 				  menuItem.Activated += on_open_file_activate;
 				  menuItem.Show ();
-				  viewer.RegisterGameLoader (this, menuItem);
-				  return true;
+				  menuItem.AddAccelerator ("activate", accel,
+							   new AccelKey (Gdk.
+									 Key.
+									 o,
+									 Gdk.
+									 ModifierType.
+									 ControlMask,
+									 AccelFlags.
+									 Visible));
+			}
+
+			public override bool Initialize ()
+			{
+				viewer = GameViewer.Instance;
+				if (viewer == null)
+					return false;
+				viewer.Window.AddAccelGroup (accel);
+				viewer.RegisterGameLoader (this, menuItem);
+				return true;
 			}
 
 			public override bool Shutdown ()
 			{
+				viewer.Window.RemoveAccelGroup (accel);
 				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
 			}
@@ -81,7 +93,8 @@ namespace CsBoard
 							   EventArgs e)
 			{
 				FileFilter pgn_filter = new FileFilter ();
-				pgn_filter.Name = Catalog.GetString("PGN Files");
+				pgn_filter.Name =
+					Catalog.GetString ("PGN Files");
 				pgn_filter.AddCustom (FileFilterFlags.
 						      Filename,
 						      new

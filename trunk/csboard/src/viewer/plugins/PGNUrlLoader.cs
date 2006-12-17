@@ -20,11 +20,35 @@ namespace CsBoard
 			MenuItem menuItem;
 			string loadUrl;
 			bool loadingInProgress;
+			AccelGroup accel;
 
 			public PGNUrlLoader ():base ("url-loader",
-						     Catalog.GetString("PGN URL Loader"),
-						     Catalog.GetString("Loads games from a PGN file from a url"))
+						     Catalog.
+						     GetString
+						     ("PGN URL Loader"),
+						     Catalog.
+						     GetString
+						     ("Loads games from a PGN file from a url"))
 			{
+				accel = new AccelGroup ();
+				ImageMenuItem item =
+					new ImageMenuItem (Catalog.
+							   GetString
+							   ("Open _URL"));
+				  item.Image =
+					new Image (Stock.Open, IconSize.Menu);
+				  menuItem = item;
+				  menuItem.Activated += on_open_url_activate;
+				  menuItem.Show ();
+				  menuItem.AddAccelerator ("activate", accel,
+							   new AccelKey (Gdk.
+									 Key.
+									 u,
+									 Gdk.
+									 ModifierType.
+									 ControlMask,
+									 AccelFlags.
+									 Visible));
 			}
 
 			public override bool Initialize ()
@@ -33,17 +57,14 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				ImageMenuItem item = new ImageMenuItem (Catalog.GetString("Open _URL"));
-				item.Image = new Image(Stock.Open, IconSize.Menu);
-				menuItem = item;
-				menuItem.Activated += on_open_url_activate;
-				menuItem.Show ();
+				viewer.Window.AddAccelGroup (accel);
 				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
+				viewer.Window.RemoveAccelGroup (accel);
 				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
 			}
@@ -87,7 +108,10 @@ namespace CsBoard
 				viewer.LoadGames (reader);
 				reader.Close ();
 				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1, Catalog.GetString("URL: ") + loadUrl);
+				viewer.StatusBar.Push (1,
+						       Catalog.
+						       GetString ("URL: ") +
+						       loadUrl);
 				loadingInProgress = false;
 				return false;
 			}
@@ -109,11 +133,20 @@ namespace CsBoard
 
 				public UrlDialog (Gtk.
 						  Window
-						  par):base (Catalog.GetString("Open URL"), par,
+						  par):base (Catalog.
+							     GetString
+							     ("Open URL"),
+							     par,
 							     DialogFlags.
-							     Modal, Catalog.GetString("Cancel"),
+							     Modal,
+							     Catalog.
+							     GetString
+							     ("Cancel"),
 							     ResponseType.
-							     Cancel, Catalog.GetString("Open"),
+							     Cancel,
+							     Catalog.
+							     GetString
+							     ("Open"),
 							     ResponseType.
 							     Accept)
 				{

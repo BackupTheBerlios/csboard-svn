@@ -552,8 +552,11 @@ namespace CsBoard
 				Gtk.FileChooserDialog fc =
 					new Gtk.FileChooserDialog (title,
 								   parentWindow,
+								   open ?
 								   FileChooserAction.
-								   Open,
+								   Open :
+								   FileChooserAction.
+								   Save,
 								   Catalog.
 								   GetString
 								   ("Cancel"),
@@ -693,7 +696,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

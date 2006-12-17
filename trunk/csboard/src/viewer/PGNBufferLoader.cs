@@ -18,11 +18,35 @@ namespace CsBoard
 			string pgnBuffer;
 			MenuItem menuItem;
 			bool loadingInProgress;
+			AccelGroup accel;
 
 			public PGNBufferLoader ():base ("buffer-loader",
-							Catalog.GetString("PGN Buffer Loader"),
-							Catalog.GetString("Loads games from a PGN buffer"))
+							Catalog.
+							GetString
+							("PGN Buffer Loader"),
+							Catalog.
+							GetString
+							("Loads games from a PGN buffer"))
 			{
+				accel = new AccelGroup ();
+				ImageMenuItem item =
+					new ImageMenuItem (Catalog.
+							   GetString
+							   ("Open _buffer"));
+				  item.Image =
+					new Image (Stock.Open, IconSize.Menu);
+				  menuItem = item;
+				  menuItem.Activated += on_load_pgn_activate;
+				  menuItem.Show ();
+				  menuItem.AddAccelerator ("activate", accel,
+							   new AccelKey (Gdk.
+									 Key.
+									 b,
+									 Gdk.
+									 ModifierType.
+									 ControlMask,
+									 AccelFlags.
+									 Visible));
 			}
 
 			public override bool Initialize ()
@@ -31,17 +55,14 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				ImageMenuItem item = new ImageMenuItem (Catalog.GetString("Open _buffer"));
-				item.Image = new Image(Stock.Open, IconSize.Menu);
-				menuItem = item;
-				menuItem.Activated += on_load_pgn_activate;
-				menuItem.Show ();
+				viewer.Window.AddAccelGroup (accel);
 				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
+				viewer.Window.RemoveAccelGroup (accel);
 				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
 			}
@@ -58,7 +79,9 @@ namespace CsBoard
 				pgnBuffer = buffer;
 				loadingInProgress = true;
 				viewer.StatusBar.Push (1,
-						       Catalog.GetString("Loading from buffer..."));
+						       Catalog.
+						       GetString
+						       ("Loading from buffer..."));
 				GLib.Idle.Add (new GLib.
 					       IdleHandler
 					       (LoadGamesIdleHandler));
@@ -100,7 +123,9 @@ namespace CsBoard
 
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,
-						       Catalog.GetString("Showing games from buffer."));
+						       Catalog.
+						       GetString
+						       ("Showing games from buffer."));
 				loadingInProgress = false;
 				return false;
 			}
@@ -112,9 +137,12 @@ namespace CsBoard
 				public PGNBufferDialog (Gtk.
 							Window
 							par):base
-					(Catalog.GetString("Enter PGN"), par, DialogFlags.Modal,
-					 Catalog.GetString("Cancel"), ResponseType.Cancel,
-					 Catalog.GetString("Open"), ResponseType.Accept)
+					(Catalog.GetString ("Enter PGN"), par,
+					 DialogFlags.Modal,
+					 Catalog.GetString ("Cancel"),
+					 ResponseType.Cancel,
+					 Catalog.GetString ("Open"),
+					 ResponseType.Accept)
 				{
 					textView = new TextView ();
 					textView.WrapMode = WrapMode.WordChar;

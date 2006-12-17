@@ -1096,7 +1096,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="exportAsMenuItem">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Export As</property>
+	      <property name="label" translatable="yes">_Export As</property>
 	      <property name="use_underline">True</property>
 	    </widget>
 	  </child>
@@ -1104,7 +1104,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="view1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">View</property>
+	      <property name="label" translatable="yes">_View</property>
 	      <property name="use_underline">True</property>
 
 	      <child>
