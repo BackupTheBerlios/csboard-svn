@@ -1,5 +1,11 @@
 2006-12-17 Ravi Kiran UVS <uvaravikiran@gmail.com>
 
+	* src/viewer/GameViewer.cs
+
+	Added a handler that somehow got deleted
+	
+2006-12-17 Ravi Kiran UVS <uvaravikiran@gmail.com>
+
 	* po/te.po
 	* src/viewer/ChessGameInfoWidget.cs
 

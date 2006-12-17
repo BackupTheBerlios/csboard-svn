@@ -507,6 +507,16 @@ namespace CsBoard
 				SelectGame (game);
 			}
 
+			void OnHighlightMoveMenuItemActivated (object o,
+							       EventArgs args)
+			{
+				boardWidget.ShowMove =
+					highlightMoveMenuItem.Active;
+				App.session.HighLightMove =
+					highlightMoveMenuItem.Active;
+				boardWidget.QueueDraw ();
+			}
+
 			private void SelectGame (PGNChessGame game)
 			{
 				gameSession.Set (game);
