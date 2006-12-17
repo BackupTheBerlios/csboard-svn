@@ -1,5 +1,13 @@
 2006-12-17  Ravi Kiran UVS  <uvsravikiran@gmail.com>
 
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+	* src/viewer/PGNFileLoader.cs
+
+	Added file filter to filter pgn files.
+
+2006-12-17  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+
 	* src/viewer/ChessGameInfoWidget.cs
 	* src/viewer/PGNBufferLoader.cs
 	* src/viewer/PGNFileLoader.cs

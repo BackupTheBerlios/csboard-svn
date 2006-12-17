@@ -22,8 +22,12 @@ namespace CsBoard
 			bool loadingInProgress;
 
 			public PGNFileLoader ():base ("file-loader",
-						      Catalog.GetString("PGN File Loader"),
-						      Catalog.GetString("Loads games from a PGN file"))
+						      Catalog.
+						      GetString
+						      ("PGN File Loader"),
+						      Catalog.
+						      GetString
+						      ("Loads games from a PGN file"))
 			{
 			}
 
@@ -33,13 +37,17 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				ImageMenuItem item = new ImageMenuItem (Catalog.GetString("_Open File"));
-				item.Image = new Image(Stock.Open, IconSize.Menu);
-				menuItem = item;
-				menuItem.Activated += on_open_file_activate;
-				menuItem.Show ();
-				viewer.RegisterGameLoader (this, menuItem);
-				return true;
+				ImageMenuItem item =
+					new ImageMenuItem (Catalog.
+							   GetString
+							   ("_Open File"));
+				  item.Image =
+					new Image (Stock.Open, IconSize.Menu);
+				  menuItem = item;
+				  menuItem.Activated += on_open_file_activate;
+				  menuItem.Show ();
+				  viewer.RegisterGameLoader (this, menuItem);
+				  return true;
 			}
 
 			public override bool Shutdown ()
@@ -60,7 +68,9 @@ namespace CsBoard
 					  catch (Exception e)
 					  {
 						  Console.WriteLine
-							  (Catalog.GetString("Exception: \n") +
+							  (Catalog.
+							   GetString
+							   ("Exception: \n") +
 							   e);
 					  }
 				  }
@@ -70,11 +80,40 @@ namespace CsBoard
 			public void on_open_file_activate (System.Object b,
 							   EventArgs e)
 			{
-				file = viewer.AskForFile (viewer.Window, Catalog.GetString("Choose the file to open"), true);	// true for open
+				FileFilter pgn_filter = new FileFilter ();
+				pgn_filter.Name = Catalog.GetString("PGN Files");
+				pgn_filter.AddCustom (FileFilterFlags.
+						      Filename,
+						      new
+						      FileFilterFunc
+						      (PGNFileFilterFunc));
+				FileFilter all_filter = new FileFilter ();
+				all_filter.Name =
+					Catalog.GetString ("All Files");
+				all_filter.AddCustom (FileFilterFlags.
+						      Filename,
+						      new
+						      FileFilterFunc
+						      (PGNFileFilterFunc));
+				FileFilter[]filters = new FileFilter[]
+				{
+				pgn_filter, all_filter};
+				file = viewer.AskForFile (viewer.Window, Catalog.GetString ("Choose the file to open"), true, filters);	// true for open
 				if (file == null)
 					return;
 
 				LoadGames (file);
+			}
+
+			private bool PGNFileFilterFunc (FileFilterInfo info)
+			{
+				return info.Filename.ToLower ().
+					EndsWith (".pgn");
+			}
+
+			private bool AllFileFilterFunc (FileFilterInfo info)
+			{
+				return true;
 			}
 
 			private void LoadGames (string file)
@@ -84,7 +123,10 @@ namespace CsBoard
 				loadingInProgress = true;
 
 				this.file = file;
-				viewer.StatusBar.Push (1, Catalog.GetString("Loading: ") + file);
+				viewer.StatusBar.Push (1,
+						       Catalog.
+						       GetString ("Loading: ")
+						       + file);
 				GLib.Idle.Add (new GLib.
 					       IdleHandler
 					       (LoadGamesIdleHandler));
@@ -110,7 +152,10 @@ namespace CsBoard
 				reader.Close ();
 
 				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1, Catalog.GetString("File: ") + file);
+				viewer.StatusBar.Push (1,
+						       Catalog.
+						       GetString ("File: ") +
+						       file);
 				loadingInProgress = false;
 				return false;
 			}

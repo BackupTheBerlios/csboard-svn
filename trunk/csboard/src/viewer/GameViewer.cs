@@ -244,8 +244,14 @@ namespace CsBoard
 							 ());
 				boardWidget.WidthRequest = 450;
 				boardWidget.HeightRequest = 400;
-				whiteLabel = new Gtk.Label (Catalog.GetString("<b>White</b>"));
-				blackLabel = new Gtk.Label (Catalog.GetString("<b>Black</b>"));
+				whiteLabel =
+					new Gtk.Label (Catalog.
+						       GetString
+						       ("<b>White</b>"));
+				blackLabel =
+					new Gtk.Label (Catalog.
+						       GetString
+						       ("<b>Black</b>"));
 				whiteLabel.UseMarkup = true;
 				blackLabel.UseMarkup = true;
 				whiteLabel.Show ();
@@ -270,7 +276,10 @@ namespace CsBoard
 					App.session.HighLightMove;
 				highlightMoveMenuItem.Active =
 					App.session.HighLightMove;
-				Label label = new Label (Catalog.GetString("<b>Games</b>"));
+				Label label =
+					new Label (Catalog.
+						   GetString
+						   ("<b>Games</b>"));
 				label.UseMarkup = true;
 				label.Show ();
 				gamesListBox.PackStart (label, false, false,
@@ -302,7 +311,9 @@ namespace CsBoard
 				if (games == null || games.Count == 0)
 					return;
 				string file = AskForFile (gameViewerWindow,
-							  Catalog.GetString("Save the game as"),
+							  Catalog.
+							  GetString
+							  ("Save the game as"),
 							  false);
 				if (file == null)
 					return;
@@ -361,7 +372,9 @@ namespace CsBoard
 			{
 				if (!gameSession.PlayTillTheEnd ())
 					Console.WriteLine
-						(Catalog.GetString("Operation failed"));
+						(Catalog.
+						 GetString
+						 ("Operation failed"));
 
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
@@ -395,7 +408,9 @@ namespace CsBoard
 				if (!gameSession.PlayNMoves (currentMoveIdx))
 				  {
 					  Console.WriteLine
-						  (Catalog.GetString("Failed to play to go back"));
+						  (Catalog.
+						   GetString
+						   ("Failed to play to go back"));
 					  // dont return now. let the position be set so that we can see
 					  // where it stopped
 				  }
@@ -441,7 +456,9 @@ namespace CsBoard
 							      CurrentMove))
 				  {
 					  Console.WriteLine
-						  (Catalog.GetString("Failed to play the move: ")
+						  (Catalog.
+						   GetString
+						   ("Failed to play the move: ")
 						   + gameSession.CurrentMove);
 					  return;
 				  }
@@ -522,20 +539,43 @@ namespace CsBoard
 						  Window parentWindow,
 						  string title, bool open)
 			{
+				return AskForFile (parentWindow, title, open,
+						   null);
+			}
+
+			public string AskForFile (Gtk.
+						  Window parentWindow,
+						  string title, bool open,
+						  FileFilter[]filters)
+			{
 				string file = null;
 				Gtk.FileChooserDialog fc =
 					new Gtk.FileChooserDialog (title,
 								   parentWindow,
 								   FileChooserAction.
 								   Open,
-								   Catalog.GetString("Cancel"),
+								   Catalog.
+								   GetString
+								   ("Cancel"),
 								   ResponseType.
 								   Cancel,
 								   open ?
-								   Catalog.GetString("Open") :
-								   Catalog.GetString("Save"),
+								   Catalog.
+								   GetString
+								   ("Open") :
+								   Catalog.
+								   GetString
+								   ("Save"),
 								   ResponseType.
 								   Accept);
+				if (!open)
+					fc.DoOverwriteConfirmation = true;
+				if (filters != null)
+				  {
+					  foreach (FileFilter filter in
+						   filters) fc.
+						  AddFilter (filter);
+				  }
 				if (initialDirForFileChooser != null)
 					fc.SetCurrentFolder
 						(initialDirForFileChooser);
@@ -633,13 +673,17 @@ namespace CsBoard
 			{
 				games = new ArrayList ();
 				dlg = new ProgressDialog (viewer.Window,
-							  Catalog.GetString("Loading..."));
+							  Catalog.
+							  GetString
+							  ("Loading..."));
 				dlg.ProgressBar.PulseStep = 0.01;
 				PGNParser parser = new PGNParser (reader);
 				parser.GameLoaded += OnGameLoaded;
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,
-						       Catalog.GetString("Parsing the file..."));
+						       Catalog.
+						       GetString
+						       ("Parsing the file..."));
 				GLib.Idle.Add (new GLib.IdleHandler (delegate
 								     {
 								     parser.
@@ -661,7 +705,9 @@ namespace CsBoard
 			{
 				games.Add (args.Game);
 				dlg.ProgressBar.Text =
-					Catalog.GetString("Loaded ") + games.Count + Catalog.GetString(" games");
+					Catalog.GetString ("Loaded ") +
+					games.Count +
+					Catalog.GetString (" games");
 				dlg.Pulse ();
 			}
 		}

@@ -45,7 +45,10 @@ namespace CsBoard
 			public GamesListWidget ():base ()
 			{
 				HBox hbox = new HBox ();
-				  hbox.PackStart (new Label (Catalog.GetString("Filter")), false,
+				  hbox.PackStart (new
+						  Label (Catalog.
+							 GetString
+							 ("Filter")), false,
 						  false, 4);
 				  searchEntry = new Entry ();
 				  hbox.PackStart (searchEntry, true, true, 4);
@@ -98,7 +101,7 @@ namespace CsBoard
 				idx_renderer = new CellRendererText ();
 				idx_renderer.Yalign = 0;
 				info_renderer = new CellRendererText ();
-				col.Title = Catalog.GetString("Games");
+				col.Title = Catalog.GetString ("Games");
 				col.PackStart (idx_renderer, false);
 				col.SetCellDataFunc (idx_renderer,
 						     new
@@ -139,8 +142,13 @@ namespace CsBoard
 					(PGNChessGame) model.GetValue (iter,
 								       0);
 				string markup =
-					String.Format (Catalog.GetString("<b>{0} vs {1}</b>\n") +
-						       Catalog.GetString("<small><i>Result</i>: <b>{2}</b> ({3} moves)</small>"),
+					String.Format (Catalog.
+						       GetString
+						       ("<b>{0} vs {1}</b>\n")
+						       +
+						       Catalog.
+						       GetString
+						       ("<small><i>Result</i>: <b>{2}</b> ({3} moves)</small>"),
 						       game.White,
 						       game.Black,
 						       game.Result,
@@ -152,7 +160,9 @@ namespace CsBoard
 					  markup +=
 						  String.
 						  Format
-						  (Catalog.GetString("\n<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"),
+						  (Catalog.
+						   GetString
+						   ("\n<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"),
 						   eventvalue,
 						   game.GetTagValue ("Date",
 								     "?"));
@@ -183,6 +193,11 @@ namespace CsBoard
 				if ((str =
 				     game.GetTagValue ("Event", null)) != null
 				    && str.ToLower ().IndexOf (search) >= 0)
+					return true;
+				if ((str =
+				     game.GetTagValue ("Result",
+						       null)) != null
+				    && str.ToLower ().Equals (search))
 					return true;
 				return false;
 			}
