@@ -648,28 +648,6 @@ namespace CsBoard
 			  }
 		}
 
-		private bool GetPoint (int x, int y, ref Point p)
-		{
-
-			int i;
-			int j;
-
-			if (x <= start_x || y <= start_y)
-				return false;
-
-			if (x >= start_x + 8 * (space + size)
-			    || y >= start_y + 8 * (space + size))
-				return false;
-
-			i = (x - start_x) / (space + size);
-			j = (y - start_y) / (space + size);
-
-			p.x = i;
-			p.y = j;
-
-			return true;
-		}
-
 		private bool on_animate_timeout ()
 		{
 

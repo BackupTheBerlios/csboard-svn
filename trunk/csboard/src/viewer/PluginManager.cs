@@ -215,7 +215,6 @@ namespace CsBoard
 			{
 				Type[]types = asm.GetTypes ();
 				ArrayList asm_plugins = new ArrayList ();
-				bool found_one = false;
 
 				foreach (Type type in types)
 				{
@@ -223,7 +222,6 @@ namespace CsBoard
 					    typeof (CsPlugin))
 					  {
 						  asm_plugins.Add (type);
-						  found_one = true;
 					  }
 				}
 

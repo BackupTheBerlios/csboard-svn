@@ -58,7 +58,7 @@ namespace CsBoard {
 
 			string engine = App.session.Engine;
 			
-                        try {
+                        /* try { */
 				
 				if (engine.LastIndexOf ("crafty ") >= 0) {
                                     control = new Crafty (engine);
@@ -89,7 +89,7 @@ namespace CsBoard {
 
 				}
 				
-                        } catch {
+                        /*} catch {
 
                                 MessageDialog md =
                                         new MessageDialog (null, 0, MessageType.Error,
@@ -102,7 +102,7 @@ namespace CsBoard {
                                 md.Hide ();
                                 md.Dispose ();
                                 return;
-			}		
+			}*/		
 
                         Glade.XML gXML =
                                 Glade.XML.FromAssembly ("csboard.glade",
@@ -378,7 +378,7 @@ namespace CsBoard {
                         AboutDialog ad = new AboutDialog ();
                         
                         ad.Name = "CsBoard";
-                        ad.Authors = new string [] {"Nickolay V. Shmyrev <nshmyrev@yandex.ru>"};
+                        ad.Authors = new string [] {"Nickolay V. Shmyrev <nshmyrev@yandex.ru>","Ravi Kiran U V S <uvsravikiran@gmail.com>"};
                         ad.TranslatorCredits = Catalog.GetString("translator_credits");
                         ad.Documenters = new string [] {"Nickolay V. Shmyrev <nshmyrev@yandex.ru>"};
                         ad.Logo = new Gdk.Pixbuf(Config.prefix + "/share/pixmaps/csboard.png");

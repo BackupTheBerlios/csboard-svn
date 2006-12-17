@@ -19,8 +19,6 @@ namespace CsBoard
 		{
 			GameViewer viewer;
 			MenuItem exportPsMenuItem;
-			string file;
-			bool loadingInProgress;
 
 			public PGNPrinterPlugin ():base ("pgn-printer",
 							 Catalog.GetString("PGN Printer"),
@@ -80,13 +78,10 @@ namespace CsBoard
 							       false);
 				if (file == null)
 					return;
-				PrintWrapper printer = new PrintWrapper ();
 				ProgressDialog prog =
 					new ProgressDialog (viewer.Window,
 							    Catalog.GetString("Exporting..."));
-				ExportHandler exp =
-					new ExportHandler (prog, viewer.Games,
-							   printer, file);
+
 				prog.Run ();
 				prog.Hide ();
 				prog.Dispose ();

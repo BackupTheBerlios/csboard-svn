@@ -49,12 +49,10 @@ namespace Chess
 		{
 			public event GameLoadedEvent GameLoaded;
 
-			TextReader reader;
 			PGNTokenizer tokenizer;
 
 			public PGNParser (TextReader reader)
 			{
-				this.reader = reader;
 				tokenizer = new PGNTokenizer (reader, false);
 			}
 

@@ -9,7 +9,6 @@ namespace CsBoard
 	{
 		public class PluginManagerDialog:Dialog
 		{
-			PluginManager manager;
 			TreeView tree;
 			ListStore store;
 
@@ -23,7 +22,6 @@ namespace CsBoard
 								   ResponseType.
 								   None)
 			{
-				this.manager = manager;
 				SetupTree ();
 				foreach (PluginInfo info in manager.Plugins)
 				{

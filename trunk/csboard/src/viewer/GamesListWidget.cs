@@ -31,7 +31,6 @@ namespace CsBoard
 			TreeView tree;
 			Entry searchEntry;
 			ArrayList games;
-			int highlightGameIndex = -1;
 			ListStore gamesStore;
 			TreeModelFilter filter;
 
@@ -69,7 +68,6 @@ namespace CsBoard
 			public void SetGames (ArrayList g)
 			{
 				games = g;
-				highlightGameIndex = -1;
 				Update ();
 			}
 
@@ -78,11 +76,6 @@ namespace CsBoard
 				gamesStore.Clear ();
 				foreach (PGNChessGame game in games)
 					gamesStore.AppendValues (game);
-			}
-
-			public void HighlightGame (int idx)
-			{
-				highlightGameIndex = idx;
 			}
 
 			CellRendererText info_renderer, idx_renderer;
@@ -137,7 +130,6 @@ namespace CsBoard
 			{
 				CellRendererText renderer =
 					(CellRendererText) r;
-				TreePath path = model.GetPath (iter);
 				PGNChessGame game =
 					(PGNChessGame) model.GetValue (iter,
 								       0);

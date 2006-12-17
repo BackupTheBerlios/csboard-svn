@@ -44,7 +44,6 @@ namespace CsBoard
 			int pageno;
 			ArrayList tags;
 			string tab_string;
-			int tab_chars;
 			Font font;
 			double line_space_ratio;
 
@@ -91,7 +90,6 @@ namespace CsBoard
 				width = page_width - marginx - marginx;
 				height = page_height - marginy - marginy;
 				tags = new ArrayList ();
-				tab_chars = 8;
 				tab_string = "        ";
 				font = Font.
 					FindClosestFromWeightSlant

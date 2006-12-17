@@ -121,10 +121,6 @@ namespace CsBoard
 				new ChessWindow (filename);
 				Application.Run ();
 			}
-			catch (ApplicationException)
-			{
-				return 1;
-			}
 			catch (System.Exception e)
 			{
 				try

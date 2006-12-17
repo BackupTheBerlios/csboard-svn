@@ -507,16 +507,6 @@ namespace CsBoard
 				SelectGame (game);
 			}
 
-			void OnHighlightMoveMenuItemActivated (object o,
-							       EventArgs args)
-			{
-				App.session.HighLightMove =
-					highlightMoveMenuItem.Active;
-				boardWidget.ShowMove =
-					highlightMoveMenuItem.Active;
-				boardWidget.QueueDraw ();
-			}
-
 			private void SelectGame (PGNChessGame game)
 			{
 				gameSession.Set (game);
@@ -668,7 +658,6 @@ namespace CsBoard
 				}
 			}
 
-			GameViewer viewer;
 			ProgressDialog dlg;
 
 			public GameLoader (GameViewer viewer,

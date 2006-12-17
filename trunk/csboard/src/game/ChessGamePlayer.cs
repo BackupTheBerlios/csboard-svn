@@ -51,7 +51,6 @@ namespace Chess
 		public class ChessGamePlayer
 		{
 			int gameStatus;
-			bool validateMoves = false;
 
 			public const int GAME_STATUS_NONE = 0;
 			public const int GAME_STATUS_PLAYING = 1;

@@ -53,7 +53,7 @@ namespace CsBoard {
                         proc.WaitForExit ();
                         string str = proc.StandardOutput.ReadLine ();
 
-                        if (!str.StartsWith ("GNU Chess 5.07")) {
+                        if (!(str.StartsWith ("GNU Chess 5.07") || str.StartsWith("GNU Chess 2.17"))) {
                                 throw new ApplicationException
                                         ("This program only tested with gnuchess 5.07\n"
                                          +

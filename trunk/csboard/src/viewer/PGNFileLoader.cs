@@ -107,7 +107,7 @@ namespace CsBoard
 						      Filename,
 						      new
 						      FileFilterFunc
-						      (PGNFileFilterFunc));
+						      (AllFileFilterFunc));
 				FileFilter[]filters = new FileFilter[]
 				{
 				pgn_filter, all_filter};
