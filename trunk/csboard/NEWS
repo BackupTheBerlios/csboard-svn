@@ -1,6 +1,10 @@
 Release 0.7 contains:
 
-* Turkish translation (Thanks a lot to Semih Gokalp).
+* New viewer for PGN files (Ravi Kiran U V S), printing, playing
+  and exporting is supported. Try it with csviewer command.
+* Build fixes for recent mono.
+* Turkish translation (Semih Gokalp), 
+  Czhech translation (Michal Turek), Telugu translation (Ravi Kiran).
 
 Release 0.6 contains:
 
