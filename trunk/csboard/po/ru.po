@@ -522,7 +522,7 @@ msgid "Loads games from a PGN buffer"
 msgstr "Загрузка игр из буфера PGN"
 
 #: ../src/viewer/PGNBufferLoader.cs:33
-msgid "Open buffer"
+msgid "Open _buffer"
 msgstr "Открыть буфер"
 
 #: ../src/viewer/PGNBufferLoader.cs:58
@@ -665,7 +665,7 @@ msgid "Loads games from a PGN file"
 msgstr "Загрузить игры из файла PGN"
 
 #: ../src/viewer/PGNFileLoader.cs:34
-msgid "Open File"
+msgid "_Open File"
 msgstr "Открыть файл"
 
 #: ../src/viewer/PGNFileLoader.cs:69
@@ -716,7 +716,7 @@ msgid "Prints PGN games and exports."
 msgstr "Печатает игры из PGN и экспортирует их."
 
 #: ../src/viewer/plugins/PGNPrinterPlugin.cs:46
-msgid "PS File"
+msgid "_PS File"
 msgstr "Файл PS"
 
 #: ../src/viewer/plugins/PGNPrinterPlugin.cs:76
@@ -757,7 +757,7 @@ msgstr "Загружает файлы из файла PGN по ресурсу"
 
 #: ../src/viewer/plugins/PGNUrlLoader.cs:35
 #: ../src/viewer/plugins/PGNUrlLoader.cs:109
-msgid "Open URL"
+msgid "Open _URL"
 msgstr "Открыть URL"
 
 #: ../src/viewer/plugins/PGNUrlLoader.cs:87
