@@ -21,8 +21,12 @@ namespace CsBoard
 			MenuItem exportPsMenuItem;
 
 			public PGNPrinterPlugin ():base ("pgn-printer",
-							 Catalog.GetString("PGN Printer"),
-							 Catalog.GetString("Prints PGN games and exports."))
+							 Catalog.
+							 GetString
+							 ("PGN Printer"),
+							 Catalog.
+							 GetString
+							 ("Prints PGN games and exports."))
 			{
 			}
 
@@ -42,16 +46,21 @@ namespace CsBoard
 
 				viewer.RegisterPrintHandler (this);
 
-				ImageMenuItem item = new ImageMenuItem (Catalog.GetString("_PS File"));
-				item.Image = new Image(Gtk.Stock.SaveAs, IconSize.Menu);
-				exportPsMenuItem = item;
-				exportPsMenuItem.Activated +=
+				ImageMenuItem item =
+					new ImageMenuItem (Catalog.
+							   GetString
+							   ("_PS File"));
+				  item.Image =
+					new Image (Gtk.Stock.SaveAs,
+						   IconSize.Menu);
+				  exportPsMenuItem = item;
+				  exportPsMenuItem.Activated +=
 					on_export_ps_activate;
-				exportPsMenuItem.Show ();
-				viewer.RegisterExporter (this,
-							 exportPsMenuItem);
+				  exportPsMenuItem.Show ();
+				  viewer.RegisterExporter (this,
+							   exportPsMenuItem);
 
-				return true;
+				  return true;
 			}
 
 			public override bool Shutdown ()
@@ -74,14 +83,20 @@ namespace CsBoard
 					return;
 				string file =
 					viewer.AskForFile (viewer.Window,
-							       Catalog.GetString("Export as a PostScript document to file"),
-							       false);
+							   Catalog.
+							   GetString
+							   ("Export as a PostScript document to file"),
+							   false);
 				if (file == null)
 					return;
+				PrintWrapper printer = new PrintWrapper ();
 				ProgressDialog prog =
 					new ProgressDialog (viewer.Window,
-							    Catalog.GetString("Exporting..."));
-
+							    Catalog.
+							    GetString
+							    ("Exporting..."));
+				new ExportHandler (prog, viewer.Games,
+						   printer, file);
 				prog.Run ();
 				prog.Hide ();
 				prog.Dispose ();
@@ -95,7 +110,10 @@ namespace CsBoard
 				PrintWrapper printer = new PrintWrapper ();
 				PrintDialog dialog =
 					new PrintDialog (printer.PrintJob,
-							 Catalog.GetString("Print PGN File"), 0);
+							 Catalog.
+							 GetString
+							 ("Print PGN File"),
+							 0);
 				int response = dialog.Run ();
 
 				if (response == (int) PrintButtons.Cancel)
@@ -106,7 +124,9 @@ namespace CsBoard
 				  }
 				ProgressDialog prog =
 					new ProgressDialog (dialog,
-							    Catalog.GetString("Printing..."));
+							    Catalog.
+							    GetString
+							    ("Printing..."));
 				prog.ShowAll ();
 				new PrintHandler (prog, viewer.Games, printer,
 						  response);
@@ -155,11 +175,12 @@ namespace CsBoard
 					new PGNPrinter (games, printer);
 				pr.GamePrinted += OnGamePrinted;
 				pr.Print ();
-				dlg.bar.Text = Catalog.GetString("Now printing...");
+				dlg.bar.Text =
+					Catalog.GetString ("Now printing...");
 				while (Gtk.Application.EventsPending ())
 					Gtk.Application.RunIteration ();
 				HandlePrinted ();
-				dlg.bar.Text = Catalog.GetString("Done.");
+				dlg.bar.Text = Catalog.GetString ("Done.");
 				dlg.Respond (ResponseType.None);
 				return false;
 			}
@@ -189,7 +210,9 @@ namespace CsBoard
 				  case (int) PrintButtons.Preview:
 					  new PrintJobPreview (printer.
 							       PrintJob,
-							       Catalog.GetString("Print Preview")).
+							       Catalog.
+							       GetString
+							       ("Print Preview")).
 						  Show ();
 					  break;
 				  }

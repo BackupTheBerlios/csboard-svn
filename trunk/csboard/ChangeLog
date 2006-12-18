@@ -1,3 +1,9 @@
+2006-12-18 Ravi Kiran UVS <uvsravikiran@gmail.com>
+
+	* src/viewer/plugins/PGNPrinterPlugin.cs
+
+	The actual export function was removed by mistake. adding it again.
+
 2006-12-17 Ravi Kiran UVS <uvaravikiran@gmail.com>
 
 	* src/viewer/GameViewer.cs
