@@ -41,7 +41,7 @@ namespace CsBoard
 
 				gameInfoWidget = new ChessGameInfoWidget ();
 				gameView = new TreeView ();
-				moveStore = new ListStore (typeof (object));
+				moveStore = new ListStore (typeof (object), typeof (object));
 				gameView.Model = moveStore;
 				SetupMovesTree ();
 				gameInfoWidget.Show ();
@@ -87,10 +87,17 @@ namespace CsBoard
 			private void UpdateGameDetails ()
 			{
 				moveStore.Clear ();
-				foreach (ChessMove move in game.Moves)
+				PGNChessMove white = null;
+				foreach (PGNChessMove move in game.Moves)
 				{
-					moveStore.AppendValues (move);
+					if(white == null) {
+						white = move;
+						continue;
+					}
+					moveStore.AppendValues (white, move);
 				}
+				if(white != null) // no black move
+					moveStore.AppendValues(white, null);
 			}
 
 			private void SetupMovesTree ()
@@ -146,9 +153,7 @@ namespace CsBoard
 			{
 				CellRendererText renderer =
 					(CellRendererText) r;
-				ChessMove move =
-					(ChessMove) model.GetValue (iter, 0);
-				renderer.Text = "" + move.moveIdx;
+				renderer.Text = "" + (model.GetPath(iter).Indices[0] + 1);
 			}
 
 			protected void WhiteMoveCellDataFunc (TreeViewColumn
@@ -159,19 +164,18 @@ namespace CsBoard
 			{
 				CellRendererText renderer =
 					(CellRendererText) r;
-				ChessMove move =
-					(ChessMove) model.GetValue (iter, 0);
+				PGNChessMove move =
+					(PGNChessMove) model.GetValue (iter, 0);
+				int idx = model.GetPath(iter).Indices[0];
 				if (highlightWhite
-				    && (move.moveIdx - 1 ==
-					highlightMoveIndex))
+				    && (idx == highlightMoveIndex))
 					renderer.Underline =
 						Pango.Underline.Single;
 				else
 					renderer.Underline =
 						Pango.Underline.None;
 
-				renderer.Text = move.whitemove ==
-					null ? "" : move.whitemove;
+				renderer.Text = move.move == null ? "" : move.move;
 			}
 
 			protected void BlackMoveCellDataFunc (TreeViewColumn
@@ -182,10 +186,15 @@ namespace CsBoard
 			{
 				CellRendererText renderer =
 					(CellRendererText) r;
-				ChessMove move =
-					(ChessMove) model.GetValue (iter, 0);
+				PGNChessMove move =
+					(PGNChessMove) model.GetValue (iter, 1);
+				if(move == null) {
+					renderer.Text = "";
+					return;
+				}
+				int idx = model.GetPath(iter).Indices[0];
 				if (!highlightWhite
-				    && (move.moveIdx - 1 ==
+				    && (idx ==
 					highlightMoveIndex))
 					renderer.Underline =
 						Pango.Underline.Single;
@@ -193,8 +202,8 @@ namespace CsBoard
 					renderer.Underline =
 						Pango.Underline.None;
 
-				renderer.Text = move.blackmove ==
-					null ? "" : move.blackmove;
+				renderer.Text = move.move ==
+					null ? "" : move.move;
 			}
 		}
 

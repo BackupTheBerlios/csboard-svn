@@ -31,7 +31,7 @@ namespace CsBoard
 			int idx;
 			int total_moves;	// including whites and blacks
 
-			ChessMove move;
+			PGNChessMove move;
 			bool hasNext;
 
 			public int CurrentMoveIdx
@@ -57,18 +57,9 @@ namespace CsBoard
 				game = g;
 
 				int n = game.Moves.Count;
-				if (n > 0)
-				  {
-					  total_moves = (n - 1) * 2;
-					  // now see the last move
-					  ChessMove lastmove =
-						  (ChessMove) game.Moves[n -
-									 1];
-					  if (lastmove.blackmove == null)
-						  total_moves += 1;
-					  else
-						    total_moves += 2;
-				  }
+				if (n > 0) {
+					total_moves = n;
+				}
 
 				if (total_moves == 0)
 					hasNext = false;
@@ -112,7 +103,7 @@ namespace CsBoard
 			public void Next ()
 			{
 				idx++;
-				move = (ChessMove) game.Moves[idx / 2];
+				move = (PGNChessMove) game.Moves[idx];
 				if (idx == total_moves - 1)	// we have reached the last move. no more moves
 					hasNext = false;
 			}
@@ -152,11 +143,7 @@ namespace CsBoard
 					if (idx < 0)
 						return null;
 
-					int j = idx % 2;
-					if (j == 0)
-						return move.whitemove;
-
-					  return move.blackmove;
+					return move.move;
 				}
 			}
 
@@ -167,11 +154,7 @@ namespace CsBoard
 					if (idx < 0)
 						return null;
 
-					int j = idx % 2;
-					if (j == 0)
-						return move.whiteComment;
-
-					  return move.blackComment;
+					return move.comment;
 				}
 			}
 		}

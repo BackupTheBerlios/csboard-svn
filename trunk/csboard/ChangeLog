@@ -1,16 +1,30 @@
-2006-12-18 Ravi Kiran UVS <uvsravikiran@gmail.com>
+2006-12-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* src/parser/PGNChessGame.cs
+	* src/parser/PGNParser.cs
+	* src/viewer/ChessGameWidget.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/plugins/PGNExporter.cs
+	* Makefile.am
+	* src/parser/PGNNAG.cs
+	* src/parser/PGNChessMove.cs
+	* src/parser/PGNTag.cs
+
+	cleaned up the parser code. needs more cleanup.
+
+2006-12-18 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* src/viewer/plugins/PGNPrinterPlugin.cs
 
 	The actual export function was removed by mistake. adding it again.
 
-2006-12-17 Ravi Kiran UVS <uvaravikiran@gmail.com>
+2006-12-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* src/viewer/GameViewer.cs
 
 	Added a handler that somehow got deleted
 
-2006-12-17 Ravi Kiran UVS <uvaravikiran@gmail.com>
+2006-12-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* po/te.po
 	* src/viewer/ChessGameInfoWidget.cs
@@ -46,13 +60,13 @@
 	
 	Fixes build warnings
 
-2006-12-17  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-17  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* configure.in:
 
 	Adds the telugu translations.
 
-2006-12-17  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-17  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* resource/csboard.glade:
 	* src/viewer/GameViewer.cs:
@@ -61,7 +75,7 @@
 
 	Added accel keys.
 
-2006-12-17  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-17  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/viewer/GameViewer.cs:
 	* src/viewer/GamesListWidget.cs:
@@ -69,7 +83,7 @@
 
 	Added file filter to filter pgn files.
 
-2006-12-17  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-17  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/viewer/ChessGameInfoWidget.cs:
 	* src/viewer/PGNBufferLoader.cs:
@@ -114,7 +128,7 @@
 	
 	Update I18N framework
 
-2006-12-16  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-16  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/game/ChessGamePlayer.cs:
 	* src/parser/PGNParser.cs:
@@ -127,7 +141,7 @@
 	FEN notation. Adds search functionality to filter games in the games list.
 	Games list ui modified.
 
-2006-12-16  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-16  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* Makefile.am:
 	* data/csboard.schemas.in:
@@ -143,7 +157,7 @@
 	Added a new file src/viewer/ViewerBoard.cs to override the board
 	functionality to highlight the move.
 
-2006-12-12  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-12  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/Board.cs:
 	* src/viewer/GameViewer.cs:
@@ -153,14 +167,14 @@
 	The a1 square should be black and so on. This fixes the bug.
 	Also, added some colors to the generated output from the pgn file.
 
-2006-12-12  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-12  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/viewer/GameViewer.cs:
 	* src/viewer/PluginManagerDialog.cs:
 
 	Hide the plugin viewer by making it into a plugin! and dont load it!
 
-2006-12-12  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-12  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/Board.cs:
 	* src/Window.cs:
@@ -170,7 +184,7 @@
 	Splits the board widget so that the base class can be used
 	in the viewer.
 
-2006-12-09  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-09  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* data/csviewer.desktop.in:
 	* src/parser/PGNParser.cs:
@@ -182,7 +196,7 @@
 
 	ui improvement in during pgn file loading.
 
-2006-12-09  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-09  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* data/csviewer.desktop.in:
 	* data/Makefile.am:
@@ -196,7 +210,7 @@
 
 	added entry for csviewer.desktop. cleaned up the code.
 
-2006-12-09  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-09  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* Makefile.am:
 	* configure.in:
@@ -222,7 +236,7 @@
 	
 	Added a plugin layer and organized some functions into plugins
 
-2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-08  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/parser/PGNChessGame.cs:
 	* src/parser/PGNParser.cs:
@@ -234,7 +248,7 @@
 
 	cleaned up some code. pgn tags are collected as a list.
 
-2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-08  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* configure.in:
 	* data/Makefile.am:
@@ -243,7 +257,7 @@
 	Created a script csviewer to start the viewer. Fixed another
 	bug in the parser.
 
-2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-08  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/viewer/PGNExporter.cs:
 	* src/viewer/GameViewer.cs:
@@ -254,20 +268,20 @@
 	fixes some bugs in the parser and the player.
 	progress bar ui improvement.
 
-2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-08  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/parser/PGNParser.cs:
 
 	bug fixes in the parser logic
 
-2006-12-08  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-08  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/viewer/PositionSnapshot.cs:
 	* src/viewer/GameViewer.cs:
 
 	Minor fix to update the progress bar ui
 
-2006-12-07  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-07  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/game/ChessGamePlayer.cs:
 	* src/game/ChessPiece.cs:
@@ -275,13 +289,13 @@
 
 	Bug fixes in the game player code
 
-2006-12-07  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-07  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/game/ChessGamePlayer.cs:
 
 	Fixed a bug that happens during pawn promotion
 
-2006-12-07  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-07  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* src/viewer/PGNExporter.cs:
 	* src/viewer/PositionSnapshot.cs:
@@ -290,7 +304,7 @@
 	Added idle handlers to handle the print/export.
 	Also, added progressbars to show the status.
 
-2006-12-06  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-06  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* Makefile.am:
 	* src/viewer/PositionSnapshot.cs:
@@ -300,7 +314,7 @@
 	Added the position snapshots to the print/export output.
 	Created the file PositionSnapshot.cs based on Board.cs
 
-2006-12-05  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-05  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* Makefile.am:
 	* src/viewer/GameSession.cs:
@@ -314,7 +328,7 @@
 	GameViewer.cs file. Created a wrapper class PrintWrapper which
 	provides a simplified printing api.
 
-2006-12-05  Ravi Kiran UVS  <uvsravikiran@gmail.com>
+2006-12-05  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
 
 	* Makefile.am:
 	* configure.in:
@@ -343,7 +357,7 @@
 	
 	Add debian package files by Michal Turek.
 
-2006-11-18  Ravi Kiran UVS <uvsravikiran@gmail.com>
+2006-11-18  Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* configure.in:
 	* Makefile.am:

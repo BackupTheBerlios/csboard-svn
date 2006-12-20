@@ -181,7 +181,6 @@ namespace Chess
 					new StringBuilder ();
 				int moveidx = -1;
 				ArrayList moves = new ArrayList ();
-				ChessMove move = null;
 				string initialComment = null;
 
 				if (initialtoken == null)
@@ -189,217 +188,109 @@ namespace Chess
 				else
 					token = initialtoken;
 
+				bool whitesTurn = true;
 				for (; token != null;
 				     token = tokenizer.nextToken ())
 				  {
 					  //      if(token.Equals("{") || token.Equals("(") || token.Equals("<")) {
-					  if (token.Equals ("%"))
-					    {
-						    ignoreLine (token,
-								tokenizer);
+					  if (token.Equals ("%")) {
+						    ignoreLine (token, tokenizer);
 						    continue;
 					    }
-					  else if (token.Equals (";"))
-					    {
-						    string comment =
-							    readLineComment
-							    (token,
-							     tokenizer);
-						    commentBuffer.
-							    Append (comment);
+					  else if (token.Equals (";")) {
+						    string comment = readLineComment(token, tokenizer);
+						    commentBuffer.Append (comment);
 						    continue;
 					    }
-					  else if (token.Equals ("{")
-						   || token.Equals ("("))
-					    {
-						    string comment =
-							    readComment
-							    (token,
-							     tokenizer);
-						    commentBuffer.
-							    Append (comment);
+					  else if (token.Equals ("{") || token.Equals ("(")) {
+						    string comment = readComment(token, tokenizer);
+						    commentBuffer.Append (comment);
 						    continue;
 					    }
-					  else if (isNAG (token))
-					    {
-						    /* TODO: convert comment into a nag */
-						    commentBuffer.
-							    Append (" " +
-								    token +
-								    " ");
-						    continue;
-					    }
-					  else if (tokenIsATermination
-						   (token))
-					    {
-						    /* end of game */
-						    break;
-					    }
-					  else if (token.Equals ("["))
-					    {
-						    Console.WriteLine
-							    ("Abrupt end of the game. Didnt find the termination");
-						    tagFound = true;
-						    break;
-					    }
+					  else if (isNAG (token)) {
+						  /* TODO: convert comment into a nag */
+						  commentBuffer.Append (" " + token + " ");
+						  continue;
+					  }
+					  else if (tokenIsATermination(token)) {
+						  /* end of game */
+						  break;
+					  }
+					  else if (token.Equals ("[")) {
+						  Console.WriteLine("Abrupt end of the game. Didnt find the termination");
+						  tagFound = true;
+						  break;
+					  }
 
 					  if (moveidx > 0
 					      && token.Equals ("."))
 						  continue;
 
 					  /* process moves */
-					  bool token_is_a_number =
-						  isNumber (token);
-					  if (!token_is_a_number
-					      && moveidx < 0)
-						  throw new
-							  PGNParserException
-							  ("Line " +
-							   tokenizer.
-							   currentLine () +
-							   ": Expecting a number. Got this token: ["
-							   + token + "]");
+					  bool token_is_a_number = isNumber (token);
+					  if (!token_is_a_number && moveidx < 0)
+						  throw new PGNParserException ("Line " +
+										tokenizer.currentLine () +
+										": Expecting a number. Got this token: ["
+										+ token + "]");
 
-					  if (token_is_a_number)
-					    {
-						    int val =
-							    Int32.
-							    Parse (token);
-						    if (moveidx < 0)
-						      {	// first time
-							      moveidx = val;
-							      move = new
-								      ChessMove
-								      (moveidx);
-							      /* if there is a comment here.. add it to the previous move
-							       * If there is no previous move.. then the comment is at the
-							       * beginning of the game. So, create a dummy chess move.
-							       */
-							      if (commentBuffer.Length > 0)
-								{
-									if (moves.Count == 0)
-									  {
-										  initialComment
-											  =
-											  commentBuffer.
-											  ToString
-											  ();
-										  commentBuffer.
-											  Remove
-											  (0,
-											   commentBuffer.
-											   Length);
-									  }
-									else
-									  {
-										  ChessMove
-											  previousmove
-											  =
-											  (ChessMove)
-											  moves
-											  [moves.
-											   Count
-											   -
-											   1];
-										  previousmove.
-											  blackComment
-											  =
-											  commentBuffer.
-											  ToString
-											  ();
-										  commentBuffer.
-											  Remove
-											  (0,
-											   commentBuffer.
-											   Length);
-									  }
-								}
-						      }
-						    else if (moveidx != val)
-							    throw new
-								    PGNParserException
-								    ("Line: "
-								     +
-								     tokenizer.
-								     currentLine
-								     ());
-					    }
-					  else if (move.whitemove == null)
-					    {
-						    /* first token after move number */
-						    move.whitemove = token;
-					    }
-					  else if (move.blackmove == null)
-					    {
-						    move.blackmove = token;
-						    if (commentBuffer.Length >
-							0)
-						      {
-							      move.whiteComment = commentBuffer.ToString ();
-							      commentBuffer.
-								      Remove
-								      (0,
-								       commentBuffer.
-								       Length);
-						      }
-						    /* at this point we have the moveidx, whitemove and blackmove
-						     * Now create a chessmove. If there is any comment after this
-						     * it will be added later.
-						     */
-						    moves.Add (move);
-						    moveidx = -1;
-						    move = null;
-					    }
+					  if (token_is_a_number) {
+						  HandleMoveNumber(token, ref moveidx, ref initialComment, commentBuffer, moves);
+						  continue;
+					  }
+
+					  if (commentBuffer.Length > 0) {
+						  FlushCommentToPreviousMove(moves, commentBuffer);
+					  }
+					  PGNChessMove move = new PGNChessMove();
+					  move.move = token;
+					  moves.Add (move);
+					  if(!whitesTurn) // this is a black move. so set moveidx to -1
+						  moveidx = -1;
+
+					  whitesTurn = !whitesTurn; // flip turn
 				  }
 
-				if (commentBuffer.Length > 0)
-				  {
-					  if (move == null)
-					    {
-						    ChessMove previousmove =
-							    (ChessMove)
-							    moves[moves.
-								  Count - 1];
-						    previousmove.
-							    blackComment =
-							    commentBuffer.
-							    ToString ();
-						    commentBuffer.Remove (0,
-									  commentBuffer.
-									  Length);
-					    }
-					  else
-					    {
-						    if (move.blackmove ==
-							null)
-							    move.whiteComment
-								    =
-								    commentBuffer.
-								    ToString
-								    ();
-						    else
-							    move.blackComment
-								    =
-								    commentBuffer.
-								    ToString
-								    ();
-					    }
-				  }
-
-				if (move != null)
-					moves.Add (move);
+				if (commentBuffer.Length > 0) {
+					FlushCommentToPreviousMove(moves, commentBuffer);
+				}
 
 				PGNChessGame game =
 					new PGNChessGame (initialComment,
 							  tagList, moves);
-				if (GameLoaded != null)
-				  {
+				if (GameLoaded != null) {
 					  GameLoaded (this,
 						      new
 						      GameLoadedEventArgs
 						      (game));
 				  }
 				return true;
+			}
+
+			private void FlushCommentToPreviousMove(ArrayList moves, StringBuilder buffer) {
+				PGNChessMove previousmove = (PGNChessMove) moves[moves.Count - 1];
+				previousmove.comment = buffer.ToString();
+				buffer.Remove(0, buffer.Length);
+			}
+
+			private void HandleMoveNumber(string token, ref int moveidx, ref string initialComment, StringBuilder commentBuffer, ArrayList moves) {
+				int val = Int32.Parse (token);
+				if (moveidx >= 0 && moveidx != val)
+					throw new PGNParserException("Line: " + tokenizer.currentLine());
+				if(moveidx < 0) // first time
+					moveidx = val;
+				/* if there is a comment here.. add it to the previous move
+				 * If there is no previous move.. then the comment is at the
+				 * beginning of the game. So, create a dummy chess move.
+				 */
+				if (commentBuffer.Length == 0)
+					return;
+				if (moves.Count == 0) {
+					initialComment = commentBuffer.ToString();
+					commentBuffer.Remove(0, commentBuffer.Length);
+				}
+				else
+					FlushCommentToPreviousMove(moves, commentBuffer);
 			}
 
 			// Read the Numerical Annotated Glyph

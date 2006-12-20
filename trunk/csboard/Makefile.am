@@ -4,6 +4,9 @@ PARSER_SOURCES = \
 	$(top_srcdir)/src/parser/PGNParserException.cs \
 	$(top_srcdir)/src/parser/PGNTokenizer.cs \
 	$(top_srcdir)/src/parser/PGNChessGame.cs \
+	$(top_srcdir)/src/parser/PGNChessMove.cs \
+	$(top_srcdir)/src/parser/PGNTag.cs \
+	$(top_srcdir)/src/parser/PGNNAG.cs \
 	$(top_srcdir)/src/parser/PGNParser.cs
 
 GAME_PLAYER_SOURCES = \
