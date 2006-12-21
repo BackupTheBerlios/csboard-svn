@@ -1,6 +1,15 @@
 2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* resource/csboard.glade
+	* src/viewer/ChessGameWidget.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+
+	ui changes
+
+2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* resource/csboard.glade
 	* data/csboard.schemas.in
 	* src/Board.cs
 	* src/Session.cs

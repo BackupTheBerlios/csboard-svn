@@ -144,21 +144,20 @@ namespace CsBoard
 						       game.White,
 						       game.Black,
 						       game.Result,
-						       game.Moves.Count);
+						       (game.Moves.Count + 1) / 2);	// adding +1 will round it properly
 				string eventvalue =
 					game.GetTagValue ("Event", null);
-				if (eventvalue != null)
-				  {
-					  markup +=
-						  String.
-						  Format
-						  (Catalog.
-						   GetString
-						   ("\n<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"),
-						   eventvalue,
-						   game.GetTagValue ("Date",
-								     "?"));
-				  }
+				if (eventvalue != null) {
+					markup +=
+						String.
+						Format
+						(Catalog.
+						 GetString
+						 ("\n<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"),
+						 eventvalue,
+						 game.GetTagValue ("Date",
+								   "?"));
+				}
 				renderer.Markup = markup;
 			}
 
@@ -197,11 +196,10 @@ namespace CsBoard
 			protected void OnSearch (object o, EventArgs args)
 			{
 				string search = searchEntry.Text.Trim ();
-				if (search.Length == 0)
-				  {
-					  tree.Model = gamesStore;
-					  return;
-				  }
+				if (search.Length == 0) {
+					tree.Model = gamesStore;
+					return;
+				}
 				tree.Model = filter;
 				filter.Refilter ();
 			}

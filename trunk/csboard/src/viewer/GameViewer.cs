@@ -265,6 +265,14 @@ namespace CsBoard
 				boardWidget.Show ();
 
 				gameWidget = new ChessGameWidget ();
+				gameWidget.browserButtons.firstButton.
+					Clicked += on_first_clicked;
+				gameWidget.browserButtons.prevButton.
+					Clicked += on_prev_clicked;
+				gameWidget.browserButtons.nextButton.
+					Clicked += on_next_clicked;
+				gameWidget.browserButtons.lastButton.
+					Clicked += on_last_clicked;
 				chessGameDetailsBox.PackStart (gameWidget,
 							       true, true, 4);
 
@@ -279,7 +287,8 @@ namespace CsBoard
 				gamesListBox.PackStart (gamesListWidget, true,
 							true, 0);
 
-				gamesSplitPane.Position = App.session.ViewerSplitPanePosition;
+				gamesSplitPane.Position =
+					App.session.ViewerSplitPanePosition;
 				gameViewerWindow.Show ();
 				gameSession = new GameSession ();
 			}
@@ -346,7 +355,8 @@ namespace CsBoard
 				App.session.SaveGeometry (gameViewerWindow);
 				App.session.CurrentFolder =
 					initialDirForFileChooser;
-				App.session.ViewerSplitPanePosition = gamesSplitPane.Position;
+				App.session.ViewerSplitPanePosition =
+					gamesSplitPane.Position;
 				Gtk.Application.Quit ();
 			}
 
@@ -368,8 +378,8 @@ namespace CsBoard
 				UpdateMoveDetails (false);
 			}
 
-			public void on_previous_clicked (System.Object o,
-							 EventArgs e)
+			public void on_prev_clicked (System.Object o,
+						     EventArgs e)
 			{
 				int currentMoveIdx =
 					gameSession.CurrentMoveIdx;
@@ -647,7 +657,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

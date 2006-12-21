@@ -35,6 +35,8 @@ namespace CsBoard
 			ListStore moveStore;
 			TreeViewColumn whitecol, blackcol;
 
+			public GameBrowserButtonsWidget browserButtons;
+
 			public ChessGameWidget ():base ()
 			{
 				highlightMoveIndex = -1;
@@ -48,7 +50,6 @@ namespace CsBoard
 				SetupMovesTree ();
 				gameInfoWidget.Show ();
 				gameView.Show ();
-				Show ();
 
 				PackStart (gameInfoWidget, false, false, 0);
 				ScrolledWindow win = new ScrolledWindow ();
@@ -57,6 +58,15 @@ namespace CsBoard
 				  win.VscrollbarPolicy = PolicyType.Automatic;
 				  win.Show ();
 				  PackStart (win, true, true, 0);
+
+				  browserButtons =
+					new GameBrowserButtonsWidget ();
+				Alignment alignment =
+					new Alignment (0.5f, 1, 0, 0);
+				  alignment.Add (browserButtons);
+				  alignment.Show ();
+				  PackStart (alignment, false, false, 2);
+				  ShowAll ();
 			}
 
 			public void SetGame (PGNChessGame g)
@@ -213,6 +223,35 @@ namespace CsBoard
 			}
 		}
 
+		public class GameBrowserButtonsWidget:HBox
+		{
+			public Button firstButton, prevButton, nextButton,
+				lastButton;
+			public GameBrowserButtonsWidget ():base ()
+			{
+				firstButton = new Button ();
+				firstButton.Image =
+					new Image (Stock.GotoFirst,
+						   IconSize.Button);
+				prevButton = new Button ();
+				prevButton.Image =
+					new Image (Stock.GoBack,
+						   IconSize.Button);
+				nextButton = new Button ();
+				nextButton.Image =
+					new Image (Stock.GoForward,
+						   IconSize.Button);
+				lastButton = new Button ();
+				lastButton.Image =
+					new Image (Stock.GotoLast,
+						   IconSize.Button);
+
+				PackStart (firstButton, false, false, 1);
+				PackStart (prevButton, false, false, 1);
+				PackStart (nextButton, false, false, 1);
+				PackStart (lastButton, false, false, 1);
+			}
+		}
 
 	}
 }
