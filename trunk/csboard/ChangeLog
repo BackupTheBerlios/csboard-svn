@@ -1,3 +1,20 @@
+2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* resource/csboard.glade
+	* src/Position.cs
+	* src/parser/PGNChessMove.cs
+	* src/parser/PGNNAG.cs
+	* src/parser/PGNParser.cs
+	* src/viewer/ChessGameWidget.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/ViewerBoard.cs
+	* src/viewer/plugins/PGNUrlLoader.cs
+
+	Added support for showing 'numerical annotated glyphs'. Changing the
+	ui layout. will need some more changes but committing the initial changes.
+	Also fixes a minor bug (it shows the pawn promotion dialog in the viewer)
+	
 2006-12-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* src/parser/PGNChessGame.cs

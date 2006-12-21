@@ -50,7 +50,10 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
 			[Glade.Widget] private Gtk.
 				CheckMenuItem highlightMoveMenuItem;
+			[Glade.Widget] private Gtk.
+				CheckMenuItem showGamesListMenuItem;
 			private Gtk.Label whiteLabel, blackLabel;
+			[Glade.Widget] private Gtk.Label nagCommentLabel;
 
 			private ViewerBoard boardWidget;
 			GameSession gameSession;
@@ -107,12 +110,11 @@ namespace CsBoard
 						      Gtk.MenuItem item)
 			{
 				Menu menu = (Menu) exportAsMenuItem.Submenu;
-				if (menu == null)
-				  {
-					  menu = new Menu ();
-					  menu.Show ();
-					  exportAsMenuItem.Submenu = menu;
-				  }
+				if (menu == null) {
+					menu = new Menu ();
+					menu.Show ();
+					exportAsMenuItem.Submenu = menu;
+				}
 				menu.Append (item);
 				exporters.Add (exporter);
 				return true;
@@ -151,14 +153,12 @@ namespace CsBoard
 				// find the index
 				int index = 0;
 				foreach (Gtk.MenuItem item in menu.
-					 AllChildren)
-				{
-					if (fileOpenSeparator.Equals (item))
-					  {
-						  menu.Insert (itemToBeAdded,
-							       index);
-						  return true;
-					  }
+					 AllChildren) {
+					if (fileOpenSeparator.Equals (item)) {
+						menu.Insert (itemToBeAdded,
+							     index);
+						return true;
+					}
 					index++;
 				}
 				return false;
@@ -242,8 +242,8 @@ namespace CsBoard
 					new ViewerBoard (ChessGamePlayer.
 							 GetDefaultPosition
 							 ());
-				boardWidget.WidthRequest = 450;
-				boardWidget.HeightRequest = 400;
+				//boardWidget.WidthRequest = 400;
+				//boardWidget.HeightRequest = 400;
 				whiteLabel =
 					new Gtk.Label (Catalog.
 						       GetString
@@ -256,12 +256,14 @@ namespace CsBoard
 				blackLabel.UseMarkup = true;
 				whiteLabel.Show ();
 				blackLabel.Show ();
+				blackLabel.Yalign = 1;	// bottom
+				whiteLabel.Yalign = 0;	// top
 				chessBoardBox.PackStart (blackLabel, false,
-							 true, 2);
+							 false, 2);
 				chessBoardBox.PackStart (boardWidget, true,
 							 true, 2);
 				chessBoardBox.PackStart (whiteLabel, false,
-							 true, 2);
+							 false, 2);
 				boardWidget.Show ();
 
 				gameWidget = new ChessGameWidget ();
@@ -289,7 +291,6 @@ namespace CsBoard
 
 				leftSplitPane.Position = 300;
 				gamesSplitPane.Position = 400;
-				Gnome.Vfs.Vfs.Initialize ();
 				gameViewerWindow.Show ();
 				gameSession = new GameSession ();
 			}
@@ -298,8 +299,7 @@ namespace CsBoard
 			{
 				// just ask each IGameLoader
 				foreach (IGameLoader gameLoader in
-					 gameLoaders)
-				{
+					 gameLoaders) {
 					if (gameLoader.Load (resource))
 						break;
 				}
@@ -318,8 +318,7 @@ namespace CsBoard
 				if (file == null)
 					return;
 				TextWriter writer = new StreamWriter (file);
-				foreach (PGNChessGame game in games)
-				{
+				foreach (PGNChessGame game in games) {
 					game.WritePGN (writer);
 					writer.WriteLine ();
 				}
@@ -376,28 +375,7 @@ namespace CsBoard
 						 GetString
 						 ("Operation failed"));
 
-				gameNotesTextView.Buffer.Text =
-					gameSession.CurrentComment ==
-					null ? "" : gameSession.
-					CurrentComment;
-				gameWidget.HighlightMove (gameSession.
-							  CurrentMoveIndex,
-							  gameSession.
-							  IsWhitesTurn);
-				boardWidget.lastMove =
-					gameSession.CurrentMove;
-
-				int r1, f1, r2, f2;
-				r1 = gameSession.player.LastMoveInfo.src_rank;
-				f1 = gameSession.player.LastMoveInfo.src_file;
-				r2 = gameSession.player.LastMoveInfo.
-					dest_rank;
-				f2 = gameSession.player.LastMoveInfo.
-					dest_file;
-				boardWidget.Move (r1, f1, r2, f2, ' ');
-
-				boardWidget.SetPosition (gameSession.player.
-							 GetPosition ());
+				UpdateMoveDetails (false);
 			}
 
 			public void on_previous_clicked (System.Object o,
@@ -405,63 +383,46 @@ namespace CsBoard
 			{
 				int currentMoveIdx =
 					gameSession.CurrentMoveIdx;
-				if (!gameSession.PlayNMoves (currentMoveIdx))
-				  {
-					  Console.WriteLine
-						  (Catalog.
-						   GetString
-						   ("Failed to play to go back"));
-					  // dont return now. let the position be set so that we can see
-					  // where it stopped
-				  }
+				if (currentMoveIdx < 0)
+					return;
+				if (!gameSession.PlayNMoves (currentMoveIdx)) {
+					Console.WriteLine
+						(Catalog.
+						 GetString
+						 ("Failed to play to go back"));
+					// dont return now. let the position be set so that we can see
+					// where it stopped
+				}
 
-				gameNotesTextView.Buffer.Text =
-					gameSession.CurrentComment ==
-					null ? "" : gameSession.
-					CurrentComment;
-
-				gameNotesTextView.Buffer.Text =
-					gameSession.CurrentComment ==
-					null ? "" : gameSession.
-					CurrentComment;
-				gameWidget.HighlightMove (gameSession.
-							  CurrentMoveIndex,
-							  gameSession.
-							  IsWhitesTurn);
-				boardWidget.lastMove =
-					gameSession.CurrentMove;
-
-				int r1, f1, r2, f2;
-				r1 = gameSession.player.LastMoveInfo.src_rank;
-				f1 = gameSession.player.LastMoveInfo.src_file;
-				r2 = gameSession.player.LastMoveInfo.
-					dest_rank;
-				f2 = gameSession.player.LastMoveInfo.
-					dest_file;
-				boardWidget.Move (r1, f1, r2, f2, ' ');
-
-				boardWidget.SetPosition (gameSession.player.
-							 GetPosition ());
+				UpdateMoveDetails (false);
 			}
 
 			public void on_next_clicked (System.Object o,
 						     EventArgs e)
 			{
-				if (!gameSession.HasNext ())
-				  {
-					  return;
-				  }
+				if (!gameSession.HasNext ()) {
+					return;
+				}
 				gameSession.Next ();
 				if (!gameSession.player.Move (gameSession.
-							      CurrentMove))
-				  {
-					  Console.WriteLine
-						  (Catalog.
-						   GetString
-						   ("Failed to play the move: ")
-						   + gameSession.CurrentMove);
-					  return;
-				  }
+							      CurrentMove)) {
+					Console.WriteLine
+						(Catalog.
+						 GetString
+						 ("Failed to play the move: ")
+						 + gameSession.CurrentMove);
+					return;
+				}
+				UpdateMoveDetails (true);
+			}
+
+			public void OnShowGamesListActivated (object o,
+							      EventArgs args)
+			{
+			}
+
+			private void UpdateMoveDetails (bool next)
+			{
 				gameNotesTextView.Buffer.Text =
 					gameSession.CurrentComment ==
 					null ? "" : gameSession.
@@ -470,7 +431,11 @@ namespace CsBoard
 							  CurrentMoveIndex,
 							  gameSession.
 							  IsWhitesTurn);
-
+				string str =
+					gameSession.CurrentPGNMove.Nags ==
+					null ? "" : gameSession.
+					CurrentPGNMove.Nags[0].Markup ();
+				nagCommentLabel.Markup = str;
 				boardWidget.lastMove =
 					gameSession.CurrentMove;
 				int r1, f1, r2, f2;
@@ -481,16 +446,17 @@ namespace CsBoard
 				f2 = gameSession.player.LastMoveInfo.
 					dest_file;
 				boardWidget.Move (r1, f1, r2, f2, ' ');
-				if (gameSession.player.LastMoveInfo.
+				// Reload the position
+				// For next, the move is enough. but for spl positions like
+				// castling and enpassant, the position has to be reloaded
+				// for prev and other moves, the position has to be reloaded
+				if (!next
+				    || gameSession.player.LastMoveInfo.
 				    special_move)
-				  {
-					  // Reload the position
-					  boardWidget.
-						  SetPosition (gameSession.
-							       player.
-							       GetPosition
-							       ());
-				  }
+					boardWidget.SetPosition (gameSession.
+								 player.
+								 GetPosition
+								 ());
 				boardWidget.QueueDraw ();
 			}
 
@@ -507,8 +473,10 @@ namespace CsBoard
 				SelectGame (game);
 			}
 
-			public void OnHighlightMoveMenuItemActivated (object o,
-							       EventArgs args)
+			public void OnHighlightMoveMenuItemActivated (object
+								      o,
+								      EventArgs
+								      args)
 			{
 				boardWidget.ShowMove =
 					highlightMoveMenuItem.Active;
@@ -526,13 +494,15 @@ namespace CsBoard
 							 GetPosition ());
 				gameNotesTextView.Buffer.Text = "";
 				whiteLabel.Markup =
-					"<b>" + game.GetTagValue ("White",
-								  "White") +
-					"</b>";
+					String.
+					Format ("<b><big>{0}</big></b>",
+						game.GetTagValue ("White",
+								  "White"));
 				blackLabel.Markup =
-					"<b>" + game.GetTagValue ("Black",
-								  "Black") +
-					"</b>";
+					String.
+					Format ("<b><big>{0}</big></b>",
+						game.GetTagValue ("Black",
+								  "Black"));
 			}
 
 			public string AskForFile (Gtk.
@@ -573,19 +543,17 @@ namespace CsBoard
 								   Accept);
 				if (!open)
 					fc.DoOverwriteConfirmation = true;
-				if (filters != null)
-				  {
-					  foreach (FileFilter filter in
-						   filters) fc.
-						  AddFilter (filter);
-				  }
+				if (filters != null) {
+					foreach (FileFilter filter in
+						 filters) fc.
+						AddFilter (filter);
+				}
 				if (initialDirForFileChooser != null)
 					fc.SetCurrentFolder
 						(initialDirForFileChooser);
-				if (fc.Run () == (int) ResponseType.Accept)
-				  {
-					  file = fc.Filename;
-				  }
+				if (fc.Run () == (int) ResponseType.Accept) {
+					file = fc.Filename;
+				}
 				initialDirForFileChooser = fc.CurrentFolder;
 				//Don't forget to call Destroy() or the FileChooserDialog window won't get closed.
 				fc.Destroy ();
@@ -686,8 +654,7 @@ namespace CsBoard
 						       Catalog.
 						       GetString
 						       ("Parsing the file..."));
-				GLib.Idle.Add (new GLib.IdleHandler (delegate
-								     {
+				GLib.Idle.Add (new GLib.IdleHandler (delegate {
 								     parser.
 								     Parse ();
 								     dlg.
@@ -695,8 +662,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

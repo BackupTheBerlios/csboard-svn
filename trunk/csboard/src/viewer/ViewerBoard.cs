@@ -45,10 +45,10 @@ namespace CsBoard
 				}
 			}
 
-			public ViewerBoard (ArrayList
-					    position):base (position)
+			public ViewerBoard (ArrayList pos):base (pos)
 			{
 				highLightMove = true;
+				position.AskForPromotion = false;
 			}
 
 			public override void Move (int sr, int sf, int dr,
@@ -81,11 +81,10 @@ namespace CsBoard
 			public void GetCoordinates (int rank, int file,
 						    out int x, out int y)
 			{
-				if (side)
-				  {
-					  rank = 7 - rank;
-					  file = 7 - file;
-				  }
+				if (side) {
+					rank = 7 - rank;
+					file = 7 - file;
+				}
 				//White
 				x = start_x + file * (space + size) +
 					size / 2;
@@ -175,8 +174,7 @@ namespace CsBoard
 							3 * alpha, out c,
 							out d);
 
-				Gdk.Point[]points = new Gdk.Point[]
-				{
+				Gdk.Point[]points = new Gdk.Point[] {
 				a[0], a[1],
 						b[1], d, tip, c, b[0], a[0]};
 				map.DrawPolygon (gc, filled, points);

@@ -56,6 +56,7 @@ namespace CsBoard
 				viewer = GameViewer.Instance;
 				if (viewer == null)
 					return false;
+				Gnome.Vfs.Vfs.Initialize ();
 
 				viewer.Window.AddAccelGroup (accel);
 				viewer.RegisterGameLoader (this, menuItem);
@@ -98,12 +99,11 @@ namespace CsBoard
 
 			private bool LoadGamesIdleHandler ()
 			{
-				if (loadUrl == null)
-				  {
-					  loadingInProgress = false;
-					  viewer.StatusBar.Pop (1);
-					  return false;
-				  }
+				if (loadUrl == null) {
+					loadingInProgress = false;
+					viewer.StatusBar.Pop (1);
+					return false;
+				}
 				TextReader reader = new StreamReader (new VfsStream (loadUrl, FileMode.Open));	// url
 				viewer.LoadGames (reader);
 				reader.Close ();
@@ -120,10 +120,9 @@ namespace CsBoard
 			{
 				string url = null;
 				UrlDialog dlg = new UrlDialog (viewer.Window);
-				if (dlg.Run () == (int) ResponseType.Accept)
-				  {
-					  url = dlg.Url;
-				  }
+				if (dlg.Run () == (int) ResponseType.Accept) {
+					url = dlg.Url;
+				}
 				dlg.Destroy ();
 				return url;
 			}

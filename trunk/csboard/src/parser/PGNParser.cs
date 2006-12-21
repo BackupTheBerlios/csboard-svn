@@ -59,8 +59,7 @@ namespace Chess
 			public void Parse ()
 			{
 				bool tagFound = false;
-				while (ReadGame (ref tagFound))
-					;
+				while (ReadGame (ref tagFound));
 			}
 
 			private bool ReadGame (ref bool tagFound)
@@ -69,11 +68,10 @@ namespace Chess
 
 				string token;
 
-				if (tagFound)
-				  {
-					  token = "[";
-					  tagFound = false;	// clear it now
-				  }
+				if (tagFound) {
+					token = "[";
+					tagFound = false;	// clear it now
+				}
 				else
 					token = tokenizer.nextToken ();
 
@@ -81,17 +79,15 @@ namespace Chess
 					return false;
 
 				/* read tag-value pairs */
-				while (token != null)
-				  {
-					  if (token.Equals ("["))
-					    {
-						    readTagValuePair (tagList,
-								      tokenizer);
-					    }
-					  else
-						  break;
-					  token = tokenizer.nextToken ();
-				  }
+				while (token != null) {
+					if (token.Equals ("[")) {
+						readTagValuePair (tagList,
+								  tokenizer);
+					}
+					else
+						break;
+					token = tokenizer.nextToken ();
+				}
 
 				/* now parse the game */
 				return loadMoves (token, tagList,
@@ -104,11 +100,10 @@ namespace Chess
 			{
 				tokenizer.ReturnDelimiterAsToken = true;
 				while ((token =
-					tokenizer.nextToken ()) != null)
-				  {
-					  if (token.Equals ("\n"))
-						  break;
-				  }
+					tokenizer.nextToken ()) != null) {
+					if (token.Equals ("\n"))
+						break;
+				}
 				tokenizer.ReturnDelimiterAsToken = false;
 			}
 
@@ -120,12 +115,11 @@ namespace Chess
 				StringBuilder buffer = new StringBuilder ();
 				tokenizer.ReturnDelimiterAsToken = true;
 				while ((token =
-					tokenizer.nextToken ()) != null)
-				  {
-					  if (token.Equals ("\n"))
-						  break;
-					  buffer.Append (token);
-				  }
+					tokenizer.nextToken ()) != null) {
+					if (token.Equals ("\n"))
+						break;
+					buffer.Append (token);
+				}
 				tokenizer.ReturnDelimiterAsToken = false;
 				return buffer.ToString ();
 			}
@@ -138,34 +132,31 @@ namespace Chess
 				tokenizer.ReturnDelimiterAsToken = true;
 				StringBuilder buffer = new StringBuilder ();
 				while ((token =
-					tokenizer.nextToken ()) != null)
-				  {
-					  if (token.Equals ("\\"))
-					    {	// escape char
-						    string nextToken =
-							    tokenizer.
-							    nextToken ();
-						    if (nextToken == null)
-							    throw new
-								    PGNParserException
-								    ("No character after \\");
-						    if (!nextToken.
-							Equals ("\"")
-							&& !nextToken.
-							Equals ("\\"))
-							    throw new
-								    PGNParserException
-								    ("Invalid escape char: "
-								     +
-								     nextToken
-								     [0]);
-						    buffer.Append (nextToken);
-					    }
-					  else if (token.Equals ("\""))	// end of the string
-						  break;
-					  else
-						  buffer.Append (token);
-				  }
+					tokenizer.nextToken ()) != null) {
+					if (token.Equals ("\\")) {	// escape char
+						string nextToken =
+							tokenizer.
+							nextToken ();
+						if (nextToken == null)
+							throw new
+								PGNParserException
+								("No character after \\");
+						if (!nextToken.Equals ("\"")
+						    && !nextToken.
+						    Equals ("\\"))
+							throw new
+								PGNParserException
+								("Invalid escape char: "
+								 +
+								 nextToken
+								 [0]);
+						buffer.Append (nextToken);
+					}
+					else if (token.Equals ("\""))	// end of the string
+						break;
+					else
+						buffer.Append (token);
+				}
 
 				tokenizer.ReturnDelimiterAsToken = orig;
 				return buffer.ToString ();
@@ -189,95 +180,153 @@ namespace Chess
 					token = initialtoken;
 
 				bool whitesTurn = true;
+				PGNNAG nag = null;
+				ArrayList nags = new ArrayList ();
 				for (; token != null;
-				     token = tokenizer.nextToken ())
-				  {
-					  //      if(token.Equals("{") || token.Equals("(") || token.Equals("<")) {
-					  if (token.Equals ("%")) {
-						    ignoreLine (token, tokenizer);
-						    continue;
-					    }
-					  else if (token.Equals (";")) {
-						    string comment = readLineComment(token, tokenizer);
-						    commentBuffer.Append (comment);
-						    continue;
-					    }
-					  else if (token.Equals ("{") || token.Equals ("(")) {
-						    string comment = readComment(token, tokenizer);
-						    commentBuffer.Append (comment);
-						    continue;
-					    }
-					  else if (isNAG (token)) {
-						  /* TODO: convert comment into a nag */
-						  commentBuffer.Append (" " + token + " ");
-						  continue;
-					  }
-					  else if (tokenIsATermination(token)) {
-						  /* end of game */
-						  break;
-					  }
-					  else if (token.Equals ("[")) {
-						  Console.WriteLine("Abrupt end of the game. Didnt find the termination");
-						  tagFound = true;
-						  break;
-					  }
+				     token = tokenizer.nextToken ()) {
+					//      if(token.Equals("{") || token.Equals("(") || token.Equals("<")) {
+					if (token.Equals ("%")) {
+						ignoreLine (token, tokenizer);
+						continue;
+					}
+					else if (token.Equals (";")) {
+						string comment =
+							readLineComment
+							(token, tokenizer);
+						commentBuffer.
+							Append (comment);
+						continue;
+					}
+					else if (token.Equals ("{")
+						 || token.Equals ("(")) {
+						string comment =
+							readComment (token,
+								     tokenizer);
+						commentBuffer.
+							Append (comment);
+						continue;
+					}
+					else if (isNAG (token, ref nag)) {
+						/* TODO: convert comment into a nag */
+						nags.Add (nag);
+						continue;
+					}
+					else if (tokenIsATermination (token)) {
+						/* end of game */
+						break;
+					}
+					else if (token.Equals ("[")) {
+						Console.WriteLine
+							("Abrupt end of the game. Didnt find the termination");
+						tagFound = true;
+						break;
+					}
 
-					  if (moveidx > 0
-					      && token.Equals ("."))
-						  continue;
+					if (moveidx > 0 && token.Equals ("."))
+						continue;
 
-					  /* process moves */
-					  bool token_is_a_number = isNumber (token);
-					  if (!token_is_a_number && moveidx < 0)
-						  throw new PGNParserException ("Line " +
-										tokenizer.currentLine () +
-										": Expecting a number. Got this token: ["
-										+ token + "]");
+					/* process moves */
+					bool token_is_a_number =
+						isNumber (token);
+					if (!token_is_a_number && moveidx < 0)
+						throw new
+							PGNParserException
+							("Line " +
+							 tokenizer.
+							 currentLine () +
+							 ": Expecting a number. Got this token: ["
+							 + token + "]");
 
-					  if (token_is_a_number) {
-						  HandleMoveNumber(token, ref moveidx, ref initialComment, commentBuffer, moves);
-						  continue;
-					  }
+					if (token_is_a_number) {
+						HandleMoveNumber (token,
+								  ref moveidx,
+								  ref
+								  initialComment,
+								  commentBuffer,
+								  moves);
+						continue;
+					}
 
-					  if (commentBuffer.Length > 0) {
-						  FlushCommentToPreviousMove(moves, commentBuffer);
-					  }
-					  PGNChessMove move = new PGNChessMove();
-					  move.move = token;
-					  moves.Add (move);
-					  if(!whitesTurn) // this is a black move. so set moveidx to -1
-						  moveidx = -1;
+					if (commentBuffer.Length > 0) {
+						FlushCommentToPreviousMove
+							(moves,
+							 commentBuffer);
+					}
+					if (nags.Count > 0) {
+						PGNChessMove previousmove =
+							(PGNChessMove)
+							moves[moves.Count -
+							      1];
+						previousmove.Nags =
+							(PGNNAG[])nags.
+							ToArray (typeof
+								 (PGNNAG));
+						nags.Clear ();
+					}
+					PGNChessMove move =
+						new PGNChessMove ();
+					move.move = token;
+					moves.Add (move);
+					if (!whitesTurn)	// this is a black move. so set moveidx to -1
+						moveidx = -1;
 
-					  whitesTurn = !whitesTurn; // flip turn
-				  }
+					whitesTurn = !whitesTurn;	// flip turn
+				}
 
 				if (commentBuffer.Length > 0) {
-					FlushCommentToPreviousMove(moves, commentBuffer);
+					FlushCommentToPreviousMove (moves,
+								    commentBuffer);
+				}
+				if (nags.Count > 0) {
+					PGNChessMove previousmove =
+						(PGNChessMove) moves[moves.
+								     Count -
+								     1];
+					previousmove.Nags =
+						(PGNNAG[])nags.
+						ToArray (typeof (PGNNAG));
+					nags.Clear ();
 				}
 
 				PGNChessGame game =
 					new PGNChessGame (initialComment,
 							  tagList, moves);
 				if (GameLoaded != null) {
-					  GameLoaded (this,
-						      new
-						      GameLoadedEventArgs
-						      (game));
-				  }
+					GameLoaded (this,
+						    new
+						    GameLoadedEventArgs
+						    (game));
+				}
 				return true;
 			}
 
-			private void FlushCommentToPreviousMove(ArrayList moves, StringBuilder buffer) {
-				PGNChessMove previousmove = (PGNChessMove) moves[moves.Count - 1];
-				previousmove.comment = buffer.ToString();
-				buffer.Remove(0, buffer.Length);
+			private void FlushCommentToPreviousMove (ArrayList
+								 moves,
+								 StringBuilder
+								 buffer)
+			{
+				PGNChessMove previousmove =
+					(PGNChessMove) moves[moves.Count - 1];
+				previousmove.comment = buffer.ToString ();
+				buffer.Remove (0, buffer.Length);
 			}
 
-			private void HandleMoveNumber(string token, ref int moveidx, ref string initialComment, StringBuilder commentBuffer, ArrayList moves) {
+			private void HandleMoveNumber (string token,
+						       ref int moveidx,
+						       ref string
+						       initialComment,
+						       StringBuilder
+						       commentBuffer,
+						       ArrayList moves)
+			{
 				int val = Int32.Parse (token);
 				if (moveidx >= 0 && moveidx != val)
-					throw new PGNParserException("Line: " + tokenizer.currentLine());
-				if(moveidx < 0) // first time
+					throw new PGNParserException ("Line: "
+								      +
+								      tokenizer.
+								      currentLine
+								      ());
+				if (moveidx < 0)	// first time
 					moveidx = val;
 				/* if there is a comment here.. add it to the previous move
 				 * If there is no previous move.. then the comment is at the
@@ -286,26 +335,34 @@ namespace Chess
 				if (commentBuffer.Length == 0)
 					return;
 				if (moves.Count == 0) {
-					initialComment = commentBuffer.ToString();
-					commentBuffer.Remove(0, commentBuffer.Length);
+					initialComment =
+						commentBuffer.ToString ();
+					commentBuffer.Remove (0,
+							      commentBuffer.
+							      Length);
 				}
 				else
-					FlushCommentToPreviousMove(moves, commentBuffer);
+					FlushCommentToPreviousMove (moves,
+								    commentBuffer);
 			}
 
 			// Read the Numerical Annotated Glyph
-			private static bool isNAG (string nag)
+			private static bool isNAG (string nagstr,
+						   ref PGNNAG nag)
 			{
-				if (nag == null || nag.Length <= 1)
+				if (nagstr == null || nagstr.Length <= 1)
 					return false;
 
-				if (nag[0] != '$')
+				if (nagstr[0] != '$')
 					return false;
 
-				for (int i = 1; i < nag.Length; i++)
-					if (!Char.IsDigit (nag[i]))
+				for (int i = 1; i < nagstr.Length; i++)
+					if (!Char.IsDigit (nagstr[i]))
 						return false;
 
+				nag = new PGNNAG (Byte.
+						  Parse (nagstr.
+							 Substring (1)));
 				return true;
 			}
 
@@ -359,87 +416,70 @@ namespace Chess
 				tokenizer.ReturnDelimiterAsToken = true;
 
 				while ((token =
-					tokenizer.nextToken ()) != null)
-				  {
-					  if (token.Equals ("\\"))
-					    {
-						    string nextToken =
-							    tokenizer.
-							    nextToken ();
-						    if (nextToken == null)
-							    throw new
-								    PGNParserException
-								    ("Unable to find the next token after the escape char");
-						    if (!isSpecialToken
-							(nextToken))
-							    throw new
-								    PGNParserException
-								    ("Invalid escape char: "
-								     +
-								     nextToken);
-						    commentBuffer.
-							    Append
-							    (nextToken);
-						    continue;
-					    }
-					  //      if(token.Equals("{") || token.Equals("(") || token.Equals("[") || token.Equals("<")) {
-					  if (token.Equals ("{")
-					      || token.Equals (begintoken))
-					    {
-						    stack.Push (token);
-						    expected_token =
-							    (string)
-							    matching_tokens
-							    [token];
-						    if (commentBuffer.Length >
-							0)
-						      {
-							      // Another comment within a comment. Add one extra space to the comment buffer since
-							      // we are not adding the delims
-							      commentBuffer.
-								      Append
-								      (" ");
-						      }
-					    }
-					  else if (token.
-						   Equals (expected_token))
-					    {
-						    stack.Pop ();
-						    if (stack.Count == 0)
-							    break;
-						    expected_token =
-							    (string)
-							    matching_tokens
-							    [stack.Peek ()];
-					    }
-					  else if (token.Equals ("\""))
-					    {
-						    commentBuffer.
-							    Append (token);
-						    commentBuffer.
-							    Append (readString
-								    (token,
-								     tokenizer));
-						    commentBuffer.
-							    Append (token);
-					    }
-					  else
-						  commentBuffer.
-							  Append (token);
-				  }
+					tokenizer.nextToken ()) != null) {
+					if (token.Equals ("\\")) {
+						string nextToken =
+							tokenizer.
+							nextToken ();
+						if (nextToken == null)
+							throw new
+								PGNParserException
+								("Unable to find the next token after the escape char");
+						if (!isSpecialToken
+						    (nextToken))
+							throw new
+								PGNParserException
+								("Invalid escape char: "
+								 + nextToken);
+						commentBuffer.
+							Append (nextToken);
+						continue;
+					}
+					//      if(token.Equals("{") || token.Equals("(") || token.Equals("[") || token.Equals("<")) {
+					if (token.Equals ("{")
+					    || token.Equals (begintoken)) {
+						stack.Push (token);
+						expected_token = (string)
+							matching_tokens
+							[token];
+						if (commentBuffer.Length > 0) {
+							// Another comment within a comment. Add one extra space to the comment buffer since
+							// we are not adding the delims
+							commentBuffer.
+								Append (" ");
+						}
+					}
+					else if (token.
+						 Equals (expected_token)) {
+						stack.Pop ();
+						if (stack.Count == 0)
+							break;
+						expected_token = (string)
+							matching_tokens
+							[stack.Peek ()];
+					}
+					else if (token.Equals ("\"")) {
+						commentBuffer.Append (token);
+						commentBuffer.
+							Append (readString
+								(token,
+								 tokenizer));
+						commentBuffer.Append (token);
+					}
+					else
+						commentBuffer.Append (token);
+				}
 
-				if (token == null)
-				  {
-					  StringBuilder stackinfo =
-						  new StringBuilder ();
-					  foreach (string str in stack)
-						  stackinfo.Append (str +
-								    ", ");
-					  throw new
-						  PGNParserException
-						  ("Waiting for delimiter tokens for: "
-						   + stackinfo);
-				  }
+				if (token == null) {
+					StringBuilder stackinfo =
+						new StringBuilder ();
+					foreach (string str in stack)
+						stackinfo.Append (str + ", ");
+					throw new
+						PGNParserException
+						("Waiting for delimiter tokens for: "
+						 + stackinfo);
+				}
 
 				tokenizer.ReturnDelimiterAsToken = false;
 				return commentBuffer.ToString ();
@@ -473,30 +513,25 @@ namespace Chess
 
 				StringBuilder value_buf =
 					new StringBuilder ();
-				while (true)
-				  {
-					  value = tokenizer.nextToken ();
-					  if (value == null)
-					    {
-						    throw new
-							    PGNParserException
-							    ("No more tokens but i'm trying to read the tag value");
-					    }
-					  if (value.Equals ("]"))
-					    {
-						    PGNTag tag =
-							    new PGNTag (name,
-									extractTagValue
-									(value_buf.
-									 ToString
-									 ()));
-						    if (!tagList.
-							Contains (tag))
-							    tagList.Add (tag);
-						    break;
-					    }
-					  value_buf.Append (value);
-				  }
+				while (true) {
+					value = tokenizer.nextToken ();
+					if (value == null) {
+						throw new
+							PGNParserException
+							("No more tokens but i'm trying to read the tag value");
+					}
+					if (value.Equals ("]")) {
+						PGNTag tag = new PGNTag (name,
+									 extractTagValue
+									 (value_buf.
+									  ToString
+									  ()));
+						if (!tagList.Contains (tag))
+							tagList.Add (tag);
+						break;
+					}
+					value_buf.Append (value);
+				}
 			}
 
 			private static string extractTagValue (string str)

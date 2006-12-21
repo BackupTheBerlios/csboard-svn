@@ -18,32 +18,38 @@
 using System.Text;
 using System;
 
-namespace Chess {
-	namespace Parser {
+namespace Chess
+{
+	namespace Parser
+	{
 		public class PGNChessMove
 		{
 			public string move;
 			public string comment;
-			NAG[] nagComments;
+			  PGNNAG[] nags;
 
-			public void AddNag(byte value) {
-				int nreq = nagComments == null ? 1 : nagComments.Length + 1;
-				NAG[] nags = new NAG[nreq];
-				int i = 0;
-				if(nagComments != null)
-					foreach(NAG nag in nagComments)
-						nags[i++] = nag;
-
-				nags[i] = new NAG(value);
-				nagComments = nags;
+			public PGNNAG[] Nags
+			{
+				set
+				{
+					nags = value;
+				}
+				get
+				{
+					return nags;
+				}
 			}
 
 			public override string ToString ()
 			{
 				StringBuilder buffer = new StringBuilder ();
-				buffer.Append (String.Format ("{0}{1}", move, comment == null ? "" : " " + comment));
-				
-				return buffer.ToString ();
+				  buffer.Append (String.
+						 Format ("{0}{1}", move,
+							 comment ==
+							 null ? "" : " " +
+							 comment));
+
+				  return buffer.ToString ();
 			}
 		}
 	}

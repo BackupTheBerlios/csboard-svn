@@ -41,7 +41,9 @@ namespace CsBoard
 
 				gameInfoWidget = new ChessGameInfoWidget ();
 				gameView = new TreeView ();
-				moveStore = new ListStore (typeof (object), typeof (object));
+				moveStore =
+					new ListStore (typeof (object),
+						       typeof (object));
 				gameView.Model = moveStore;
 				SetupMovesTree ();
 				gameInfoWidget.Show ();
@@ -70,9 +72,9 @@ namespace CsBoard
 				highlightWhite = white;
 				highlightMoveIndex = moveIdx;
 				if (moveIdx < 0)
-				  {
-					  return;
-				  }
+				{
+					return;
+				}
 				TreeIter iter;
 				if (!moveStore.
 				    IterNthChild (out iter, moveIdx))
@@ -88,16 +90,16 @@ namespace CsBoard
 			{
 				moveStore.Clear ();
 				PGNChessMove white = null;
-				foreach (PGNChessMove move in game.Moves)
-				{
-					if(white == null) {
+				foreach (PGNChessMove move in game.Moves) {
+					if (white == null) {
 						white = move;
 						continue;
 					}
 					moveStore.AppendValues (white, move);
+					white = null;
 				}
-				if(white != null) // no black move
-					moveStore.AppendValues(white, null);
+				if (white != null)	// no black move
+					moveStore.AppendValues (white, null);
 			}
 
 			private void SetupMovesTree ()
@@ -115,7 +117,7 @@ namespace CsBoard
 						     new
 						     TreeCellDataFunc
 						     (MoveNumCellDataFunc));
-				col.Title = Catalog.GetString("No");
+				col.Title = Catalog.GetString ("No");
 				gameView.AppendColumn (col);
 
 				col = new TreeViewColumn ();
@@ -124,7 +126,7 @@ namespace CsBoard
 						     new
 						     TreeCellDataFunc
 						     (WhiteMoveCellDataFunc));
-				col.Title = Catalog.GetString("White");
+				col.Title = Catalog.GetString ("White");
 				col.Resizable = true;
 				col.Expand = true;
 				gameView.AppendColumn (col);
@@ -138,7 +140,7 @@ namespace CsBoard
 						     TreeCellDataFunc
 						     (BlackMoveCellDataFunc));
 				col.Expand = true;
-				col.Title = Catalog.GetString("Black");
+				col.Title = Catalog.GetString ("Black");
 				gameView.AppendColumn (col);
 				blackcol = col;
 
@@ -153,7 +155,9 @@ namespace CsBoard
 			{
 				CellRendererText renderer =
 					(CellRendererText) r;
-				renderer.Text = "" + (model.GetPath(iter).Indices[0] + 1);
+				renderer.Text =
+					"" +
+					(model.GetPath (iter).Indices[0] + 1);
 			}
 
 			protected void WhiteMoveCellDataFunc (TreeViewColumn
@@ -165,8 +169,9 @@ namespace CsBoard
 				CellRendererText renderer =
 					(CellRendererText) r;
 				PGNChessMove move =
-					(PGNChessMove) model.GetValue (iter, 0);
-				int idx = model.GetPath(iter).Indices[0];
+					(PGNChessMove) model.GetValue (iter,
+								       0);
+				int idx = model.GetPath (iter).Indices[0];
 				if (highlightWhite
 				    && (idx == highlightMoveIndex))
 					renderer.Underline =
@@ -175,7 +180,8 @@ namespace CsBoard
 					renderer.Underline =
 						Pango.Underline.None;
 
-				renderer.Text = move.move == null ? "" : move.move;
+				renderer.Text =
+					move.move == null ? "" : move.move;
 			}
 
 			protected void BlackMoveCellDataFunc (TreeViewColumn
@@ -187,15 +193,15 @@ namespace CsBoard
 				CellRendererText renderer =
 					(CellRendererText) r;
 				PGNChessMove move =
-					(PGNChessMove) model.GetValue (iter, 1);
-				if(move == null) {
+					(PGNChessMove) model.GetValue (iter,
+								       1);
+				if (move == null) {
 					renderer.Text = "";
 					return;
 				}
-				int idx = model.GetPath(iter).Indices[0];
+				int idx = model.GetPath (iter).Indices[0];
 				if (!highlightWhite
-				    && (idx ==
-					highlightMoveIndex))
+				    && (idx == highlightMoveIndex))
 					renderer.Underline =
 						Pango.Underline.Single;
 				else

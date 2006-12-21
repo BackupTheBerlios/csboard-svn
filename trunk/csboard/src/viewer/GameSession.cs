@@ -57,7 +57,8 @@ namespace CsBoard
 				game = g;
 
 				int n = game.Moves.Count;
-				if (n > 0) {
+				if (n > 0)
+				{
 					total_moves = n;
 				}
 
@@ -70,23 +71,21 @@ namespace CsBoard
 			public bool PlayNMoves (int n)
 			{
 				Reset ();	// reset session
-				for (int i = 0; i < n; i++)
-				  {
-					  Next ();
-					  if (!player.Move (CurrentMove))
-						  return false;
-				  }
+				for (int i = 0; i < n; i++) {
+					Next ();
+					if (!player.Move (CurrentMove))
+						return false;
+				}
 				return true;
 			}
 
 			public bool PlayTillTheEnd ()
 			{
-				while (HasNext ())
-				  {
-					  Next ();
-					  if (!player.Move (CurrentMove))
-						  return false;
-				  }
+				while (HasNext ()) {
+					Next ();
+					if (!player.Move (CurrentMove))
+						return false;
+				}
 				return true;
 			}
 
@@ -144,6 +143,14 @@ namespace CsBoard
 						return null;
 
 					return move.move;
+				}
+			}
+
+			public PGNChessMove CurrentPGNMove
+			{
+				get
+				{
+					return move;
 				}
 			}
 
