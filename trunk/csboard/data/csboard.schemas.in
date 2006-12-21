@@ -115,5 +115,17 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/csboard/session/viewer_split_pane_position</key>
+      <applyto>/apps/csboard/session/viewer_split_pane_position</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Split pane position</short>
+	<long>Split pane position</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

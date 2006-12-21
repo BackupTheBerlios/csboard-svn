@@ -38,7 +38,7 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.VBox chessBoardBox;
 			[Glade.Widget] private Gtk.VBox chessGameDetailsBox;
 			[Glade.Widget] private Gtk.TextView gameNotesTextView;
-			[Glade.Widget] private Gtk.HPaned leftSplitPane;
+			private Gtk.HPaned leftSplitPane;
 			[Glade.Widget] private Gtk.HPaned gamesSplitPane;
 			[Glade.Widget] private Gtk.VBox gamesListBox;
 			[Glade.Widget] private Gtk.Statusbar statusBar;
@@ -50,8 +50,6 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
 			[Glade.Widget] private Gtk.
 				CheckMenuItem highlightMoveMenuItem;
-			[Glade.Widget] private Gtk.
-				CheckMenuItem showGamesListMenuItem;
 			private Gtk.Label whiteLabel, blackLabel;
 			[Glade.Widget] private Gtk.Label nagCommentLabel;
 
@@ -260,7 +258,7 @@ namespace CsBoard
 				whiteLabel.Yalign = 0;	// top
 				chessBoardBox.PackStart (blackLabel, false,
 							 false, 2);
-				chessBoardBox.PackStart (boardWidget, true,
+				chessBoardBox.PackStart (boardWidget, false,
 							 true, 2);
 				chessBoardBox.PackStart (whiteLabel, false,
 							 false, 2);
@@ -278,19 +276,10 @@ namespace CsBoard
 					App.session.HighLightMove;
 				highlightMoveMenuItem.Active =
 					App.session.HighLightMove;
-				Label label =
-					new Label (Catalog.
-						   GetString
-						   ("<b>Games</b>"));
-				label.UseMarkup = true;
-				label.Show ();
-				gamesListBox.PackStart (label, false, false,
-							2);
 				gamesListBox.PackStart (gamesListWidget, true,
 							true, 0);
 
-				leftSplitPane.Position = 300;
-				gamesSplitPane.Position = 400;
+				gamesSplitPane.Position = App.session.ViewerSplitPanePosition;
 				gameViewerWindow.Show ();
 				gameSession = new GameSession ();
 			}
@@ -357,6 +346,7 @@ namespace CsBoard
 				App.session.SaveGeometry (gameViewerWindow);
 				App.session.CurrentFolder =
 					initialDirForFileChooser;
+				App.session.ViewerSplitPanePosition = gamesSplitPane.Position;
 				Gtk.Application.Quit ();
 			}
 
@@ -414,11 +404,6 @@ namespace CsBoard
 					return;
 				}
 				UpdateMoveDetails (true);
-			}
-
-			public void OnShowGamesListActivated (object o,
-							      EventArgs args)
-			{
 			}
 
 			private void UpdateMoveDetails (bool next)

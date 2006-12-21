@@ -204,6 +204,17 @@ namespace CsBoard
 								      (alpha *
 								       cos)));
 			}
+			protected override bool OnConfigureEvent (Gdk.
+								  EventConfigure
+								  evnt)
+			{
+				if (Allocation.Height != Allocation.Width) {
+					WidthRequest = HeightRequest =
+						Allocation.Width;
+					return false;
+				}
+				return base.OnConfigureEvent (evnt);
+			}
 		}
 	}
 }

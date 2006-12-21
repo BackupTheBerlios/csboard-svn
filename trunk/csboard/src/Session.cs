@@ -15,121 +15,205 @@
 //
 // Copyright (C) 2004 Nickolay V. Shmyrev
 
-namespace CsBoard {
-        
+namespace CsBoard
+{
+
 	using System.IO;
 	using System;
 
-	public class Session {
-	
-	    public string Filename;
+	public class Session
+	{
 
-	    private GConf.Client gconfClient;
+		public string Filename;
 
-	    public Session () {
-	    
-	       gconfClient = new GConf.Client ();
-	       gconfClient.AddNotify ("/apps/csboard", new GConf.NotifyEventHandler (SessionChanged));
+		private GConf.Client gconfClient;
 
-	       
-	       string dir = ""; 
-	       string gnomedir = "";
+		public Session ()
+		{
 
-	       gnomedir = Path.Combine (Environment.GetEnvironmentVariable ("HOME"), 
-	    				     ".gnome2");	 
-					     
-	       if (!Directory.Exists(gnomedir)) {
-	           Directory.CreateDirectory (gnomedir);
-	       }
-	       
-	       dir = Path.Combine (gnomedir, "csboard");	 
-					     
-	       if (!Directory.Exists(dir)) {
-	           Directory.CreateDirectory (dir);
-	       }
-	       
-	       Filename = Path.Combine (dir, "session.pgn");
-	    }
-	    
-	    public Level level {
-	             get {
-	        	return (Level) gconfClient.Get ("/apps/csboard/session/level");
-		     }
-		     set {
-        		gconfClient.Set ("/apps/csboard/session/level", (int)value);
-		     }
-	    }
+			gconfClient = new GConf.Client ();
+			gconfClient.AddNotify ("/apps/csboard",
+					       new GConf.
+					       NotifyEventHandler
+					       (SessionChanged));
 
-	    
-	    public void SetupGeometry (Gtk.Window w) {
-		      int width = (int) gconfClient.Get ("/apps/csboard/session/width");
-		      int height = (int) gconfClient.Get ("/apps/csboard/session/height");
-	      
-		      w.Resize (width, height);
-	    }
-	    
-	    public void SaveGeometry (Gtk.Window w) {
-		      int width, height;
-		      w.GetSize (out width, out height);
-        	      gconfClient.Set ("/apps/csboard/session/width", width);
-        	      gconfClient.Set ("/apps/csboard/session/height", height);	      
-	    }
-	    
-	    public string Engine {
-		    get {
-	    	      return (string) gconfClient.Get ("/apps/csboard/engine");
-		    }
-	    }
-	    public bool HighLightMove {
-	    
-		 get {
-        	      return (bool) gconfClient.Get ("/apps/csboard/session/last_move");
-		 }
-	         set {
-        	      gconfClient.Set ("/apps/csboard/session/last_move", value);
-		 }
-	    }
-	    
-	    public bool PossibleMoves {
-	    
-		 get {
-        	      return (bool) gconfClient.Get ("/apps/csboard/session/possible_moves");
-		 }
-	         set {
-        	      gconfClient.Set ("/apps/csboard/session/possible_moves", value);
-		 }
-	    }
-	    
-	    public bool ShowCoords {
-	           get {
-        	      return (bool) gconfClient.Get ("/apps/csboard/session/show_coords");
-		   }
-		   set {
-        	      gconfClient.Set ("/apps/csboard/session/show_coords", value);
-		   }
-	    }
 
-	    public bool showAnimations {
-	           get {
-        	      return (bool) gconfClient.Get ("/apps/csboard/session/animate");
-		   }
-		   set {
-        	      gconfClient.Set ("/apps/csboard/session/animate", value);
-		   }
-	    }
-	    
-	    public string CurrentFolder {
-		    get {
-			    return (string) gconfClient.Get ("/apps/csboard/session/current_folder");
-		    }
-		    set {
-			    gconfClient.Set("/apps/csboard/session/current_folder", value);
-		    }
-	    }
+			string dir = "";
+			string gnomedir = "";
 
-	    private void SessionChanged (object obj, GConf.NotifyEventArgs args) {
-		      return;
-	    }
+			  gnomedir =
+				Path.Combine (Environment.
+					      GetEnvironmentVariable ("HOME"),
+					      ".gnome2");
+
+			if (!Directory.Exists (gnomedir))
+			{
+				Directory.CreateDirectory (gnomedir);
+			}
+
+			dir = Path.Combine (gnomedir, "csboard");
+
+			if (!Directory.Exists (dir))
+			{
+				Directory.CreateDirectory (dir);
+			}
+
+			Filename = Path.Combine (dir, "session.pgn");
+		}
+
+		public Level level
+		{
+			get
+			{
+				return (Level) gconfClient.
+					Get ("/apps/csboard/session/level");
+			}
+			set
+			{
+				gconfClient.
+					Set ("/apps/csboard/session/level",
+					     (int) value);
+			}
+		}
+
+
+		public void SetupGeometry (Gtk.Window w)
+		{
+			int width =
+				(int) gconfClient.
+				Get ("/apps/csboard/session/width");
+			int height =
+				(int) gconfClient.
+				Get ("/apps/csboard/session/height");
+
+			w.Resize (width, height);
+		}
+
+		public void SaveGeometry (Gtk.Window w)
+		{
+			int width, height;
+			w.GetSize (out width, out height);
+			gconfClient.Set ("/apps/csboard/session/width",
+					 width);
+			gconfClient.Set ("/apps/csboard/session/height",
+					 height);
+		}
+
+		public string Engine
+		{
+			get
+			{
+				return (string) gconfClient.
+					Get ("/apps/csboard/engine");
+			}
+		}
+		public bool HighLightMove
+		{
+
+			get
+			{
+				return (bool) gconfClient.
+					Get
+					("/apps/csboard/session/last_move");
+			}
+			set
+			{
+				gconfClient.
+					Set
+					("/apps/csboard/session/last_move",
+					 value);
+			}
+		}
+
+		public bool PossibleMoves
+		{
+
+			get
+			{
+				return (bool) gconfClient.
+					Get
+					("/apps/csboard/session/possible_moves");
+			}
+			set
+			{
+				gconfClient.
+					Set
+					("/apps/csboard/session/possible_moves",
+					 value);
+			}
+		}
+
+		public bool ShowCoords
+		{
+			get
+			{
+				return (bool) gconfClient.
+					Get
+					("/apps/csboard/session/show_coords");
+			}
+			set
+			{
+				gconfClient.
+					Set
+					("/apps/csboard/session/show_coords",
+					 value);
+			}
+		}
+
+		public bool showAnimations
+		{
+			get
+			{
+				return (bool) gconfClient.
+					Get ("/apps/csboard/session/animate");
+			}
+			set
+			{
+				gconfClient.
+					Set ("/apps/csboard/session/animate",
+					     value);
+			}
+		}
+
+		public string CurrentFolder
+		{
+			get
+			{
+				return (string) gconfClient.
+					Get
+					("/apps/csboard/session/current_folder");
+			}
+			set
+			{
+				gconfClient.
+					Set
+					("/apps/csboard/session/current_folder",
+					 value);
+			}
+		}
+
+		public int ViewerSplitPanePosition
+		{
+			get
+			{
+				return (int) gconfClient.
+					Get
+					("/apps/csboard/session/viewer_split_pane_position");
+			}
+			set
+			{
+				gconfClient.
+					Set
+					("/apps/csboard/session/viewer_split_pane_position",
+					 value);
+			}
+		}
+
+		private void SessionChanged (object obj,
+					     GConf.NotifyEventArgs args)
+		{
+			return;
+		}
 
 	}
 }

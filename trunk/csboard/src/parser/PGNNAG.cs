@@ -188,24 +188,26 @@ namespace Chess
 
 			public string Markup ()
 			{
+				string format =
+					"<b><i><span foreground=\"{0}\">{1}</span></i></b>";
 				if (value >= 1 && value <= 9) {	// abt the move
 					return String.
 						Format
-						("<i><span foreground=\"{0}\">{1}</span></i>",
+						(format,
 						 "#800000", ToString ());
 				}
 
 				if (value >= 10 && value <= 135) {	// current position
 					return String.
 						Format
-						("<i><span foreground=\"{0}\">{1}</span></i>",
-						 "#800000", ToString ());
+						(format,
+						 "#008000", ToString ());
 				}
 				if (value > 136 && value <= 139) {	// time pressure
 					return String.
 						Format
-						("<i><span foreground=\"{0}\">{1}</span></i>",
-						 "#800000", ToString ());
+						(format,
+						 "#000080", ToString ());
 				}
 
 				return ToString ();

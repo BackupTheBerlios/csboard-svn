@@ -1,6 +1,17 @@
 2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* resource/csboard.glade
+	* data/csboard.schemas.in
+	* src/Board.cs
+	* src/Session.cs
+	* src/parser/PGNNAG.cs
+	* src/viewer/ViewerBoard.cs
+
+	modified the ui layout
+	
+2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* resource/csboard.glade
 	* src/Position.cs
 	* src/parser/PGNChessMove.cs
 	* src/parser/PGNNAG.cs
