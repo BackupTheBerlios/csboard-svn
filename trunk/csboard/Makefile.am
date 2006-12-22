@@ -7,6 +7,7 @@ PARSER_SOURCES = \
 	$(top_srcdir)/src/parser/PGNChessMove.cs \
 	$(top_srcdir)/src/parser/PGNTag.cs \
 	$(top_srcdir)/src/parser/PGNNAG.cs \
+	$(top_srcdir)/src/parser/PGNGameLoader.cs \
 	$(top_srcdir)/src/parser/PGNParser.cs
 
 GAME_PLAYER_SOURCES = \
@@ -114,7 +115,7 @@ RESOURCES =				\
 	-resource:$(srcdir)/resource/csboard.glade,csboard.glade
 
 csboard.exe: $(SOURCE) config.cs resource/csboard.glade
-	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
+	mcs $(BASE_DEPENDENCIES_LIBS) -r:System.Web $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
 	-r:Mono.Posix
 

@@ -45,9 +45,16 @@ namespace Chess
 						      GameLoadedEventArgs
 						      args);
 
+		public interface IParserListener {
+			void TagFound(string name, string value);
+			void MoveFound(string move);
+			void CommentFound(string comment);
+			void NAGsFound(PGNNAG[] nags);
+			void GameEndFound();
+		}
+
 		public class PGNParser
 		{
-			public event GameLoadedEvent GameLoaded;
 
 			PGNTokenizer tokenizer;
 
@@ -56,16 +63,14 @@ namespace Chess
 				tokenizer = new PGNTokenizer (reader, false);
 			}
 
-			public void Parse ()
+			public void Parse (IParserListener listener)
 			{
 				bool tagFound = false;
-				while (ReadGame (ref tagFound));
+				while (ReadGame (listener, ref tagFound));
 			}
 
-			private bool ReadGame (ref bool tagFound)
+			private bool ReadGame (IParserListener listener, ref bool tagFound)
 			{
-				ArrayList tagList = new ArrayList ();
-
 				string token;
 
 				if (tagFound) {
@@ -81,7 +86,7 @@ namespace Chess
 				/* read tag-value pairs */
 				while (token != null) {
 					if (token.Equals ("[")) {
-						readTagValuePair (tagList,
+						readTagValuePair (listener,
 								  tokenizer);
 					}
 					else
@@ -90,7 +95,7 @@ namespace Chess
 				}
 
 				/* now parse the game */
-				return loadMoves (token, tagList,
+				return loadMoves (token, listener,
 						  ref tagFound);
 			}
 
@@ -164,14 +169,13 @@ namespace Chess
 
 			private bool loadMoves (string
 						initialtoken,
-						ArrayList tagList,
+						IParserListener listener,
 						ref bool tagFound)
 			{
 				string token;
 				StringBuilder commentBuffer =
 					new StringBuilder ();
 				int moveidx = -1;
-				ArrayList moves = new ArrayList ();
 				string initialComment = null;
 
 				if (initialtoken == null)
@@ -243,30 +247,20 @@ namespace Chess
 								  ref
 								  initialComment,
 								  commentBuffer,
-								  moves);
+								  nags,
+								  listener);
 						continue;
 					}
 
 					if (commentBuffer.Length > 0) {
-						FlushCommentToPreviousMove
-							(moves,
-							 commentBuffer);
+						listener.CommentFound(commentBuffer.ToString());
+						commentBuffer.Remove(0, commentBuffer.Length);
 					}
 					if (nags.Count > 0) {
-						PGNChessMove previousmove =
-							(PGNChessMove)
-							moves[moves.Count -
-							      1];
-						previousmove.Nags =
-							(PGNNAG[])nags.
-							ToArray (typeof
-								 (PGNNAG));
+						listener.NAGsFound((PGNNAG[])nags.ToArray (typeof(PGNNAG)));;
 						nags.Clear ();
 					}
-					PGNChessMove move =
-						new PGNChessMove ();
-					move.move = token;
-					moves.Add (move);
+					listener.MoveFound (token);
 					if (!whitesTurn)	// this is a black move. so set moveidx to -1
 						moveidx = -1;
 
@@ -274,41 +268,17 @@ namespace Chess
 				}
 
 				if (commentBuffer.Length > 0) {
-					FlushCommentToPreviousMove (moves,
-								    commentBuffer);
+					listener.CommentFound(commentBuffer.ToString());
+					commentBuffer.Remove(0, commentBuffer.Length);
 				}
 				if (nags.Count > 0) {
-					PGNChessMove previousmove =
-						(PGNChessMove) moves[moves.
-								     Count -
-								     1];
-					previousmove.Nags =
-						(PGNNAG[])nags.
-						ToArray (typeof (PGNNAG));
+					listener.NAGsFound((PGNNAG[])nags.ToArray (typeof(PGNNAG)));;
 					nags.Clear ();
 				}
 
-				PGNChessGame game =
-					new PGNChessGame (initialComment,
-							  tagList, moves);
-				if (GameLoaded != null) {
-					GameLoaded (this,
-						    new
-						    GameLoadedEventArgs
-						    (game));
-				}
-				return true;
-			}
+				listener.GameEndFound();
 
-			private void FlushCommentToPreviousMove (ArrayList
-								 moves,
-								 StringBuilder
-								 buffer)
-			{
-				PGNChessMove previousmove =
-					(PGNChessMove) moves[moves.Count - 1];
-				previousmove.comment = buffer.ToString ();
-				buffer.Remove (0, buffer.Length);
+				return true;
 			}
 
 			private void HandleMoveNumber (string token,
@@ -317,7 +287,8 @@ namespace Chess
 						       initialComment,
 						       StringBuilder
 						       commentBuffer,
-						       ArrayList moves)
+						       ArrayList nags,
+						       IParserListener listener)
 			{
 				int val = Int32.Parse (token);
 				if (moveidx >= 0 && moveidx != val)
@@ -332,18 +303,15 @@ namespace Chess
 				 * If there is no previous move.. then the comment is at the
 				 * beginning of the game. So, create a dummy chess move.
 				 */
-				if (commentBuffer.Length == 0)
-					return;
-				if (moves.Count == 0) {
-					initialComment =
-						commentBuffer.ToString ();
-					commentBuffer.Remove (0,
-							      commentBuffer.
-							      Length);
+				if (nags.Count > 0) {
+					listener.NAGsFound((PGNNAG[])nags.ToArray (typeof(PGNNAG)));;
+					nags.Clear ();
 				}
-				else
-					FlushCommentToPreviousMove (moves,
-								    commentBuffer);
+
+				if (commentBuffer.Length > 0) {
+					listener.CommentFound(commentBuffer.ToString());
+					commentBuffer.Remove (0, commentBuffer.Length);
+				}
 			}
 
 			// Read the Numerical Annotated Glyph
@@ -498,8 +466,7 @@ namespace Chess
 			   }
 			 */
 
-			private static void readTagValuePair (IList
-							      tagList,
+			private static void readTagValuePair (IParserListener listener,
 							      PGNTokenizer
 							      tokenizer)
 			{
@@ -521,13 +488,10 @@ namespace Chess
 							("No more tokens but i'm trying to read the tag value");
 					}
 					if (value.Equals ("]")) {
-						PGNTag tag = new PGNTag (name,
-									 extractTagValue
+						listener.TagFound(name, extractTagValue
 									 (value_buf.
 									  ToString
 									  ()));
-						if (!tagList.Contains (tag))
-							tagList.Add (tag);
 						break;
 					}
 					value_buf.Append (value);

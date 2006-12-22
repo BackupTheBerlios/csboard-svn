@@ -1,3 +1,17 @@
+2006-12-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* Makefile.am
+	* src/parser/PGNGameLoader.cs
+
+	Added this file
+
+	* src/parser/PGNParser.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+
+	Escapes special chars in pango markup. Also makes the parser
+	generic by making it call the methods of a listener.
+
 2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* resource/csboard.glade

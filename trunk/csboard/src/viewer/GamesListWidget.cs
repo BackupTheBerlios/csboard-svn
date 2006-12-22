@@ -16,6 +16,7 @@
 // Copyright (C) 2006 Ravi Kiran UVS
 
 using System;
+using System.Text;
 using System.Collections;
 using Gtk;
 using Chess.Parser;
@@ -141,8 +142,8 @@ namespace CsBoard
 						       Catalog.
 						       GetString
 						       ("<small><i>Result</i>: <b>{2}</b> ({3} moves)</small>"),
-						       game.White,
-						       game.Black,
+						       MarkupEncode(game.White),
+						       MarkupEncode(game.Black),
 						       game.Result,
 						       (game.Moves.Count + 1) / 2);	// adding +1 will round it properly
 				string eventvalue =
@@ -154,7 +155,7 @@ namespace CsBoard
 						(Catalog.
 						 GetString
 						 ("\n<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"),
-						 eventvalue,
+						 MarkupEncode(eventvalue),
 						 game.GetTagValue ("Date",
 								   "?"));
 				}
@@ -202,6 +203,27 @@ namespace CsBoard
 				}
 				tree.Model = filter;
 				filter.Refilter ();
+			}
+
+			static string MarkupEncode(string str) {
+				string chars = "&<>";
+				string[] strs = { "&amp;", "&lt;", "&gt;" };
+				bool somethingFound = false;
+				StringBuilder buffer = new StringBuilder();
+				for(int i = 0; i < str.Length; i++) {
+					char ch = str[i];
+					int idx;
+					if((idx = chars.IndexOf(ch)) < 0) {
+						buffer.Append(ch);
+						continue;
+					}
+					somethingFound = true;
+					string replace_str = strs[idx];
+					buffer.Append(replace_str);
+				}
+				if(!somethingFound)
+					return str;
+				return buffer.ToString();
 			}
 		}
 	}

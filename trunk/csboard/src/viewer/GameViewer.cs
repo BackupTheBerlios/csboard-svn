@@ -32,6 +32,10 @@ namespace CsBoard
 		using Gtk;
 		using Gdk;
 
+		public interface IEcoDb {
+			string GetOpeningName(string econame);
+		}
+
 		public class GameViewer
 		{
 			[Glade.Widget] private Gtk.Window gameViewerWindow;
@@ -87,6 +91,12 @@ namespace CsBoard
 
 			ArrayList gameLoaders;
 			ArrayList exporters;
+
+			static IEcoDb ecoDb;
+			public static IEcoDb EcoDb {
+				set { ecoDb = value; }
+				get { return ecoDb; }
+			}
 
 			public void RegisterGameLoader (IGameLoader
 							gameLoader,
@@ -632,6 +642,7 @@ namespace CsBoard
 			}
 
 			ProgressDialog dlg;
+			PGNGameLoader gameloader;
 
 			public GameLoader (GameViewer viewer,
 					   TextReader reader)
@@ -643,7 +654,8 @@ namespace CsBoard
 							  ("Loading..."));
 				dlg.ProgressBar.PulseStep = 0.01;
 				PGNParser parser = new PGNParser (reader);
-				parser.GameLoaded += OnGameLoaded;
+				gameloader = new PGNGameLoader();
+				gameloader.GameLoaded += OnGameLoaded;
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,
 						       Catalog.
@@ -651,7 +663,7 @@ namespace CsBoard
 						       ("Parsing the file..."));
 				GLib.Idle.Add (new GLib.IdleHandler (delegate {
 								     parser.
-								     Parse ();
+								     Parse (gameloader);
 								     dlg.
 								     Respond
 								     (ResponseType.
