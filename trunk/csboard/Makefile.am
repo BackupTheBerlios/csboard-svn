@@ -115,7 +115,7 @@ RESOURCES =				\
 	-resource:$(srcdir)/resource/csboard.glade,csboard.glade
 
 csboard.exe: $(SOURCE) config.cs resource/csboard.glade
-	mcs $(BASE_DEPENDENCIES_LIBS) -r:System.Web $(RESOURCES) \
+	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
 	-r:Mono.Posix
 
