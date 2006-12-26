@@ -34,6 +34,7 @@ namespace CsBoard
 			Label dateLabel, dateValueLabel;
 			Label eventLabel, eventValueLabel;
 			Label siteLabel, siteValueLabel;
+			Label ecoLabel, ecoValueLabel;
 			Label titleLabel;
 
 			Expander otherTagsWidget;
@@ -65,10 +66,16 @@ namespace CsBoard
 						   GetString ("<b>Site</b>"));
 				siteLabel.UseMarkup = true;
 
+				ecoLabel =
+					new Label (Catalog.
+						   GetString ("<b>ECO</b>"));
+				ecoLabel.UseMarkup = true;
+
 				resultValueLabel = new Label ();
 				dateValueLabel = new Label ();
 				eventValueLabel = new Label ();
 				siteValueLabel = new Label ();
+				ecoValueLabel = new Label ();
 
 				titleLabel = new Label ();
 				titleLabel.UseMarkup = true;
@@ -112,6 +119,13 @@ namespace CsBoard
 						row + 1);
 				  siteValueLabel.Xalign = 0;
 
+				  row++;
+				  table.Attach (ecoLabel, 0, 1, row, row + 1);
+				  ecoLabel.Xalign = 0;
+				  table.Attach (ecoValueLabel, 1, 2, row,
+						row + 1);
+				  ecoValueLabel.Xalign = 0;
+
 				ScrolledWindow win = new ScrolledWindow ();
 				  win.HscrollbarPolicy = PolicyType.Automatic;
 				  win.VscrollbarPolicy = PolicyType.Never;
@@ -144,6 +158,11 @@ namespace CsBoard
 				string site = game.Site;
 				string date = game.Date;
 				string result = game.Result;
+				string eco;
+				  GameViewer.GetOpeningName (game.
+							     GetTagValue
+							     ("ECO", ""),
+							     out eco);
 
 				  titleLabel.Markup =
 					"<b>" + white +
@@ -153,6 +172,7 @@ namespace CsBoard
 				  siteValueLabel.Text = site;
 				  dateValueLabel.Text = date;
 				  resultValueLabel.Text = result;
+				  ecoValueLabel.Text = eco;
 
 				IList ignoreTags = new ArrayList ();
 				  ignoreTags.Add ("White");
@@ -161,6 +181,7 @@ namespace CsBoard
 				  ignoreTags.Add ("Date");
 				  ignoreTags.Add ("Site");
 				  ignoreTags.Add ("Event");
+				  ignoreTags.Add ("ECO");
 
 				  UpdateOtherTags (ignoreTags);
 			}
@@ -172,8 +193,7 @@ namespace CsBoard
 						   2, false);
 
 				uint i = 0;
-				foreach (PGNTag tag in game.TagList)
-				{
+				foreach (PGNTag tag in game.TagList) {
 					if (ignoreTags.Contains (tag.Name))
 						continue;
 
@@ -198,12 +218,11 @@ namespace CsBoard
 				win.VscrollbarPolicy = PolicyType.Automatic;
 				win.AddWithViewport (table);
 				win.ShowAll ();
-				if (otherTagsWidget.Child != null)
-				  {
-					  otherTagsWidget.
-						  Remove (otherTagsWidget.
-							  Child);
-				  }
+				if (otherTagsWidget.Child != null) {
+					otherTagsWidget.
+						Remove (otherTagsWidget.
+							Child);
+				}
 				otherTagsWidget.Add (win);
 			}
 		}

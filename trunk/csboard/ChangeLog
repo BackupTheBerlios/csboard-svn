@@ -1,3 +1,22 @@
+2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+	
+	* Makefile.am
+	* configure.in
+	* resource/csboard.glade
+	* src/parser/PGNParser.cs
+	* src/viewer/ChessGameInfoWidget.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/plugins/Makefile.am
+
+	Added the files
+	
+	* src/viewer/IEcoDb.cs
+	* src/viewer/plugins/EcoDBPlugin.cs
+	* src/viewer/ChessGameView.cs
+	* resource/eco.pgn
+
+	Modifies the viewer ui. also adds support for ECO database.
+	
 2006-12-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* Makefile.am

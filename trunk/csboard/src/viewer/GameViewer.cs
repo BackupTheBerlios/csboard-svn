@@ -32,8 +32,9 @@ namespace CsBoard
 		using Gtk;
 		using Gdk;
 
-		public interface IEcoDb {
-			string GetOpeningName(string econame);
+		public interface IEcoDb
+		{
+			string GetOpeningName (string econame);
 		}
 
 		public class GameViewer
@@ -41,7 +42,6 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.Window gameViewerWindow;
 			[Glade.Widget] private Gtk.VBox chessBoardBox;
 			[Glade.Widget] private Gtk.VBox chessGameDetailsBox;
-			[Glade.Widget] private Gtk.TextView gameNotesTextView;
 			private Gtk.HPaned leftSplitPane;
 			[Glade.Widget] private Gtk.HPaned gamesSplitPane;
 			[Glade.Widget] private Gtk.VBox gamesListBox;
@@ -93,9 +93,34 @@ namespace CsBoard
 			ArrayList exporters;
 
 			static IEcoDb ecoDb;
-			public static IEcoDb EcoDb {
-				set { ecoDb = value; }
-				get { return ecoDb; }
+			public static IEcoDb EcoDb
+			{
+				set
+				{
+					ecoDb = value;
+				}
+				get
+				{
+					return ecoDb;
+				}
+			}
+
+			public static void GetOpeningName (string eco,
+							   out string eco_str)
+			{
+				if (ecoDb == null) {
+					eco_str = eco;
+					return;
+				}
+				string name = ecoDb.GetOpeningName (eco);
+				if (name == null) {
+					eco_str = eco;
+					return;
+				}
+
+				eco_str =
+					String.Format ("{0} ({1})", name,
+						       eco);
 			}
 
 			public void RegisterGameLoader (IGameLoader
@@ -275,14 +300,10 @@ namespace CsBoard
 				boardWidget.Show ();
 
 				gameWidget = new ChessGameWidget ();
-				gameWidget.browserButtons.firstButton.
-					Clicked += on_first_clicked;
-				gameWidget.browserButtons.prevButton.
-					Clicked += on_prev_clicked;
-				gameWidget.browserButtons.nextButton.
-					Clicked += on_next_clicked;
-				gameWidget.browserButtons.lastButton.
-					Clicked += on_last_clicked;
+				gameWidget.FirstMove += on_first_clicked;
+				gameWidget.PreviousMove += on_prev_clicked;
+				gameWidget.NextMove += on_next_clicked;
+				gameWidget.LastMove += on_last_clicked;
 				chessGameDetailsBox.PackStart (gameWidget,
 							       true, true, 4);
 
@@ -338,10 +359,6 @@ namespace CsBoard
 				boardWidget.Reset ();
 				gameSession.Reset ();	// reset session
 
-				gameNotesTextView.Buffer.Text =
-					gameSession.CurrentComment ==
-					null ? "" : gameSession.
-					CurrentComment;
 				gameWidget.HighlightMove (gameSession.
 							  CurrentMoveIndex,
 							  gameSession.
@@ -428,10 +445,6 @@ namespace CsBoard
 
 			private void UpdateMoveDetails (bool next)
 			{
-				gameNotesTextView.Buffer.Text =
-					gameSession.CurrentComment ==
-					null ? "" : gameSession.
-					CurrentComment;
 				gameWidget.HighlightMove (gameSession.
 							  CurrentMoveIndex,
 							  gameSession.
@@ -497,7 +510,6 @@ namespace CsBoard
 				boardWidget.Reset ();
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
-				gameNotesTextView.Buffer.Text = "";
 				whiteLabel.Markup =
 					String.
 					Format ("<b><big>{0}</big></b>",
@@ -654,7 +666,7 @@ namespace CsBoard
 							  ("Loading..."));
 				dlg.ProgressBar.PulseStep = 0.01;
 				PGNParser parser = new PGNParser (reader);
-				gameloader = new PGNGameLoader();
+				gameloader = new PGNGameLoader ();
 				gameloader.GameLoaded += OnGameLoaded;
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,
@@ -663,14 +675,14 @@ namespace CsBoard
 						       ("Parsing the file..."));
 				GLib.Idle.Add (new GLib.IdleHandler (delegate {
 								     parser.
-								     Parse (gameloader);
+								     Parse
+								     (gameloader);
 								     dlg.
 								     Respond
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

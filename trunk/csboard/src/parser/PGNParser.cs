@@ -45,12 +45,13 @@ namespace Chess
 						      GameLoadedEventArgs
 						      args);
 
-		public interface IParserListener {
-			void TagFound(string name, string value);
-			void MoveFound(string move);
-			void CommentFound(string comment);
-			void NAGsFound(PGNNAG[] nags);
-			void GameEndFound();
+		public interface IParserListener
+		{
+			void TagFound (string name, string value);
+			void MoveFound (string move);
+			void CommentFound (string comment);
+			void NAGsFound (PGNNAG[]nags);
+			void GameEndFound ();
 		}
 
 		public class PGNParser
@@ -69,7 +70,8 @@ namespace Chess
 				while (ReadGame (listener, ref tagFound));
 			}
 
-			private bool ReadGame (IParserListener listener, ref bool tagFound)
+			private bool ReadGame (IParserListener listener,
+					       ref bool tagFound)
 			{
 				string token;
 
@@ -220,8 +222,10 @@ namespace Chess
 						break;
 					}
 					else if (token.Equals ("[")) {
+/*
 						Console.WriteLine
 							("Abrupt end of the game. Didnt find the termination");
+*/
 						tagFound = true;
 						break;
 					}
@@ -253,11 +257,21 @@ namespace Chess
 					}
 
 					if (commentBuffer.Length > 0) {
-						listener.CommentFound(commentBuffer.ToString());
-						commentBuffer.Remove(0, commentBuffer.Length);
+						listener.
+							CommentFound
+							(commentBuffer.
+							 ToString ());
+						commentBuffer.Remove (0,
+								      commentBuffer.
+								      Length);
 					}
 					if (nags.Count > 0) {
-						listener.NAGsFound((PGNNAG[])nags.ToArray (typeof(PGNNAG)));;
+						listener.
+							NAGsFound ((PGNNAG
+								    [])nags.
+								   ToArray
+								   (typeof
+								    (PGNNAG)));;
 						nags.Clear ();
 					}
 					listener.MoveFound (token);
@@ -268,15 +282,20 @@ namespace Chess
 				}
 
 				if (commentBuffer.Length > 0) {
-					listener.CommentFound(commentBuffer.ToString());
-					commentBuffer.Remove(0, commentBuffer.Length);
+					listener.CommentFound (commentBuffer.
+							       ToString ());
+					commentBuffer.Remove (0,
+							      commentBuffer.
+							      Length);
 				}
 				if (nags.Count > 0) {
-					listener.NAGsFound((PGNNAG[])nags.ToArray (typeof(PGNNAG)));;
+					listener.NAGsFound ((PGNNAG[])nags.
+							    ToArray (typeof
+								     (PGNNAG)));;
 					nags.Clear ();
 				}
 
-				listener.GameEndFound();
+				listener.GameEndFound ();
 
 				return true;
 			}
@@ -288,7 +307,8 @@ namespace Chess
 						       StringBuilder
 						       commentBuffer,
 						       ArrayList nags,
-						       IParserListener listener)
+						       IParserListener
+						       listener)
 			{
 				int val = Int32.Parse (token);
 				if (moveidx >= 0 && moveidx != val)
@@ -304,13 +324,18 @@ namespace Chess
 				 * beginning of the game. So, create a dummy chess move.
 				 */
 				if (nags.Count > 0) {
-					listener.NAGsFound((PGNNAG[])nags.ToArray (typeof(PGNNAG)));;
+					listener.NAGsFound ((PGNNAG[])nags.
+							    ToArray (typeof
+								     (PGNNAG)));;
 					nags.Clear ();
 				}
 
 				if (commentBuffer.Length > 0) {
-					listener.CommentFound(commentBuffer.ToString());
-					commentBuffer.Remove (0, commentBuffer.Length);
+					listener.CommentFound (commentBuffer.
+							       ToString ());
+					commentBuffer.Remove (0,
+							      commentBuffer.
+							      Length);
 				}
 			}
 
@@ -466,7 +491,8 @@ namespace Chess
 			   }
 			 */
 
-			private static void readTagValuePair (IParserListener listener,
+			private static void readTagValuePair (IParserListener
+							      listener,
 							      PGNTokenizer
 							      tokenizer)
 			{
@@ -488,10 +514,11 @@ namespace Chess
 							("No more tokens but i'm trying to read the tag value");
 					}
 					if (value.Equals ("]")) {
-						listener.TagFound(name, extractTagValue
-									 (value_buf.
-									  ToString
-									  ()));
+						listener.TagFound (name,
+								   extractTagValue
+								   (value_buf.
+								    ToString
+								    ()));
 						break;
 					}
 					value_buf.Append (value);

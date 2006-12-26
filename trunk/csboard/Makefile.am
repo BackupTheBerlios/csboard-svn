@@ -28,8 +28,7 @@ GAME_PLAYER_SOURCES = \
 VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/GameSession.cs \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
-	$(top_srcdir)/src/viewer/ChessGameWidget.cs \
-	$(top_srcdir)/src/viewer/ChessGameInfoWidget.cs \
+	$(top_srcdir)/src/viewer/ChessGameView.cs \
 	$(top_srcdir)/src/viewer/PositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/ViewerBoard.cs \
 	$(top_srcdir)/src/viewer/GamesListWidget.cs
@@ -111,8 +110,9 @@ images_DATA = $(IMAGES)
 appdir=$(prefix)/share/csboard
 app_DATA=csboard.exe
 
-RESOURCES =				\
-	-resource:$(srcdir)/resource/csboard.glade,csboard.glade
+RESOURCES =								\
+	-resource:$(srcdir)/resource/csboard.glade,csboard.glade	\
+	-resource:$(top_srcdir)/resource/eco.pgn,eco.pgn
 
 csboard.exe: $(SOURCE) config.cs resource/csboard.glade
 	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
