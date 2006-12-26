@@ -110,9 +110,21 @@ images_DATA = $(IMAGES)
 appdir=$(prefix)/share/csboard
 app_DATA=csboard.exe
 
-RESOURCES =								\
-	-resource:$(srcdir)/resource/csboard.glade,csboard.glade	\
-	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade	\
+RESOURCES =										\
+	-resource:$(top_srcdir)/images/white-rook.svg,white-rook.svg			\
+	-resource:$(top_srcdir)/images/white-king.svg,white-king.svg			\
+	-resource:$(top_srcdir)/images/white-queen.svg,white-queen.svg			\
+	-resource:$(top_srcdir)/images/white-bishop.svg,white-bishop.svg		\
+	-resource:$(top_srcdir)/images/white-pawn.svg,white-pawn.svg			\
+	-resource:$(top_srcdir)/images/white-knight.svg,white-knight.svg		\
+	-resource:$(top_srcdir)/images/black-rook.svg,black-rook.svg			\
+	-resource:$(top_srcdir)/images/black-king.svg,black-king.svg			\
+	-resource:$(top_srcdir)/images/black-queen.svg,black-queen.svg			\
+	-resource:$(top_srcdir)/images/black-bishop.svg,black-bishop.svg		\
+	-resource:$(top_srcdir)/images/black-pawn.svg,black-pawn.svg			\
+	-resource:$(top_srcdir)/images/black-knight.svg,black-knight.svg		\
+	-resource:$(srcdir)/resource/csboard.glade,csboard.glade			\
+	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade			\
 	-resource:$(top_srcdir)/resource/eco.pgn,eco.pgn
 
 csboard.exe: $(SOURCE) config.cs resource/csboard.glade

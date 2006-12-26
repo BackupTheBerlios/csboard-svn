@@ -18,76 +18,90 @@
 
 // FIXME: implement caching
 
-namespace CsBoard {
+namespace CsBoard
+{
 
-        using Gdk;
-        using Gtk;
-        using System;
+	using Gdk;
+	using Gtk;
+	using System;
 	using System.Collections;
 
-        public enum FigureType {
-                WhiteRook,
-                WhiteKing,
-                WhiteQueen,
-                WhiteBishop,
-                WhitePawn,
-                WhiteKnight,
-                BlackRook,
-                BlackKing,
-                BlackQueen,
-                BlackBishop,
-                BlackPawn,
-                BlackKnight,
-                None
-        };
+	public enum FigureType
+	{
+		WhiteRook,
+		WhiteKing,
+		WhiteQueen,
+		WhiteBishop,
+		WhitePawn,
+		WhiteKnight,
+		BlackRook,
+		BlackKing,
+		BlackQueen,
+		BlackBishop,
+		BlackPawn,
+		BlackKnight,
+		None
+	};
 
-        public class Figure {
+	public class Figure
+	{
 
-                private ArrayList pixbufs;
+		private ArrayList pixbufs;
 
-                public Figure () {
-                } 
-		
-		public Pixbuf GetPixbuf (FigureType type) {
+		public Figure ()
+		{
+		}
 
-                        return (Pixbuf) pixbufs[(int) type];
-                }
-		
-		public void SetSize (int s) {
-            
-	     	    pixbufs = new ArrayList ();
-                    
-		    string filename;
-		    		    
-		    s = Math.Max (s, 10);
-		    
-                    filename = "images/white-rook.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/white-king.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/white-queen.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/white-bishop.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/white-pawn.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/white-knight.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
+		public Pixbuf GetPixbuf (FigureType type)
+		{
 
-                    filename = "images/black-rook.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/black-king.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/black-queen.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/black-bishop.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/black-pawn.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
-                    filename = "images/black-knight.svg";
-                    pixbufs.Add (Rsvg.Tool.PixbufFromFileAtSize (filename, s, s));
+			return (Pixbuf) pixbufs[(int) type];
+		}
+
+		public void SetSize (int s)
+		{
+
+			pixbufs = new ArrayList ();
+
+			string filename;
+
+			s = Math.Max (s, 10);
+
+			filename = "white-rook.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "white-king.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "white-queen.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "white-bishop.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "white-pawn.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "white-knight.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+
+			filename = "black-rook.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "black-king.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "black-queen.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "black-bishop.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "black-pawn.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
+			filename = "black-knight.svg";
+			pixbufs.Add (GetPixbuf (filename, s, s));
 
 		}
 
-        }
+		static Gdk.Pixbuf GetPixbuf (string file, int width,
+					     int height)
+		{
+			Gdk.Pixbuf pix = Rsvg.Pixbuf.LoadFromResource (file);
+			return pix.ScaleSimple (width, height,
+						Gdk.InterpType.Bilinear);
+		}
+
+	}
 }

@@ -1,5 +1,12 @@
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
+	* Makefile.am
+	* src/Figure.cs
+
+	Modified to load the images from the assembly
+
+2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
 	* resource/csboard.glade
 	* src/viewer/ChessGameView.cs
 	* src/viewer/GameSession.cs
