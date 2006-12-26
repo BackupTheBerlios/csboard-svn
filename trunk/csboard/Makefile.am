@@ -112,6 +112,7 @@ app_DATA=csboard.exe
 
 RESOURCES =								\
 	-resource:$(srcdir)/resource/csboard.glade,csboard.glade	\
+	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade	\
 	-resource:$(top_srcdir)/resource/eco.pgn,eco.pgn
 
 csboard.exe: $(SOURCE) config.cs resource/csboard.glade

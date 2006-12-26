@@ -16,6 +16,7 @@
 // Copyright (C) 2006 Ravi Kiran UVS
 
 using System;
+using System.Text;
 using Gtk;
 using Chess.Parser;
 using Mono.Unix;
@@ -34,138 +35,99 @@ namespace CsBoard
 			}
 		}
 
-		public delegate void MoveEvent (object o, EventArgs args);
 		public delegate void NthMoveEvent (object o,
 						   MoveEventArgs args);
 
 		public class ChessGameWidget:VBox
 		{
 			PGNChessGame game;
-			int highlightMoveIndex;
-			bool highlightWhite;
+			int curMoveIdx;
 
-			public GameBrowserButtonsWidget browserButtons;
-
-			public event MoveEvent FirstMove, PreviousMove,
-				NextMove, LastMove;
-			public event NthMoveEvent NthMove;
+			public event NthMoveEvent ShowNthMove;
 
 			HTML html;
 			public ChessGameWidget ():base ()
 			{
-				highlightMoveIndex = -1;
+				curMoveIdx = -1;
 
 				html = new HTML ();
 				ScrolledWindow win = new ScrolledWindow ();
-				  win.HscrollbarPolicy = PolicyType.Never;
-				  win.VscrollbarPolicy = PolicyType.Automatic;
-				  win.AddWithViewport (html);
+				  win.SetPolicy (PolicyType.Never,
+						 PolicyType.Automatic);
+				  win.Add (html);
 
 				  PackStart (win, true, true, 0);
+				  html.WidthRequest = 150;
+				  html.LinkClicked += OnLinkClicked;
 
-				  browserButtons =
-					new GameBrowserButtonsWidget ();
-				  browserButtons.firstButton.Clicked +=
-					OnFirstClicked;
-				  browserButtons.prevButton.Clicked +=
-					OnPreviousClicked;
-				  browserButtons.nextButton.Clicked +=
-					OnNextClicked;
-				  browserButtons.lastButton.Clicked +=
-					OnLastClicked;
-				Alignment alignment =
-					new Alignment (0.5f, 1, 0, 0);
-				  alignment.Add (browserButtons);
-				  alignment.Show ();
-				  PackStart (alignment, false, false, 2);
 				  ShowAll ();
-				  html.WidthRequest = 200;
 			}
 
-			private void OnFirstClicked (object o, EventArgs args)
+			public void SetMoveIndex (int idx)
 			{
-				if (FirstMove != null)
-					FirstMove (o, args);
-			}
-
-			private void OnPreviousClicked (object o,
-							EventArgs args)
-			{
-				if (PreviousMove != null)
-					PreviousMove (o, args);
-			}
-
-			private void OnNextClicked (object o, EventArgs args)
-			{
-				if (NextMove != null)
-					NextMove (o, args);
-			}
-
-			private void OnLastClicked (object o, EventArgs args)
-			{
-				if (LastMove != null)
-					LastMove (o, args);
+				// jump to anchor
+				curMoveIdx = idx;
+				//html.JumpToAnchor(idx.ToString());
 			}
 
 			public void SetGame (PGNChessGame g)
 			{
-				highlightMoveIndex = -1;
+				curMoveIdx = -1;
 				game = g;
-				UpdateGameDetails ();
+				GLib.Idle.Add (UpdateGameDetails);
 			}
 
-			public void HighlightMove (int moveIdx, bool white)
+			private bool UpdateGameDetails ()
 			{
-				highlightWhite = white;
-				highlightMoveIndex = moveIdx;
-				if (moveIdx < 0) {
+				HTMLStream stream = html.Begin ();
+				StringBuilder buffer = new StringBuilder ();
+				buffer.Append
+					("<HTML><HEAD></HEAD><BODY LINK=\"#000000\" VLINK=\"#000000\">");
+
+				FillDetails (buffer);
+
+				buffer.Append ("</BODY></HTML>");
+				stream.Write (buffer.ToString ());
+				html.End (stream, HTMLStreamStatus.Ok);
+				return false;
+			}
+
+			private void FillDetails (StringBuilder buffer)
+			{
+				PrintTitle (buffer);
+				if (game == null)
 					return;
-				}
-			}
 
-			private void UpdateGameDetails ()
-			{
 				int i = 0;
 				int moveno = 1;
-				HTMLStream stream = html.Begin ();
-				stream.Write ("<HTML><HEAD></HEAD><BODY>");
-				PrintTitle (stream);
-				if (game == null) {
-					stream.Write ("</BODY></HTML>");
-					html.End (stream,
-						  HTMLStreamStatus.Ok);
-					return;
-				}
 				foreach (PGNChessMove move in game.Moves) {
 					if (i % 2 == 0)
-						stream.Write (String.
-							      Format
-							      ("<b>{0}. </b>",
-							       moveno++));
-					stream.Write (String.
-						      Format ("<b>{0} </b>",
-							      move.move));
+						buffer.Append (String.
+							       Format
+							       ("<b>{0}. </b>",
+								moveno++));
+					buffer.Append (String.
+						       Format
+						       ("<b><a name=\"{0}\" href=\"#{0}\">{1}</a> </b>",
+							i, move.move));
 					if (move.comment != null) {
-						stream.Write ("<BR>");
-						stream.Write (move.comment);	// TODO: format the markup
-						stream.Write ("<BR>");
+						buffer.Append ("<BR>");
+						buffer.Append (move.comment);	// TODO: format the markup
+						buffer.Append ("<BR>");
 					}
 					i++;
 				}
-
-				stream.Write ("</BODY></HTML>");
-				html.End (stream, HTMLStreamStatus.Ok);
 			}
 
-			private void PrintTitle (HTMLStream stream)
+			private void PrintTitle (StringBuilder buffer)
 			{
 				if (game == null)
 					return;
-				stream.Write (String.
-					      Format ("<H3>{0} vs {1}</H3>",
-						      game.White,
-						      game.Black));
-				stream.Write
+				buffer.Append (String.
+					       Format ("<H3>{0} vs {1}</H3>",
+						       game.White,
+						       game.Black));
+				buffer.Append
 					("<TABLE BORDER=0 CELLSPACING=4>");
 				string format =
 					"<TR><TD><B>{0}</B></TD><TD>{1}</TD></TR>";
@@ -175,129 +137,45 @@ namespace CsBoard
 									""),
 							   out eco);
 
-				stream.Write (String.Format (format,
-							     Catalog.
-							     GetString
-							     ("Result"),
-							     game.Result));
-				stream.Write (String.
-					      Format (format,
-						      Catalog.
-						      GetString ("Date"),
-						      game.Date));
-				stream.Write (String.
-					      Format (format,
-						      Catalog.
-						      GetString ("Event"),
-						      game.Event));
-				stream.Write (String.
-					      Format (format,
-						      Catalog.
-						      GetString ("Site"),
-						      game.Site));
-				stream.Write (String.
-					      Format (format,
-						      Catalog.
-						      GetString ("Opening"),
-						      eco));
-				stream.Write ("</TABLE><BR>");
+				buffer.Append (String.Format (format,
+							      Catalog.
+							      GetString
+							      ("Result"),
+							      game.Result));
+				buffer.Append (String.
+					       Format (format,
+						       Catalog.
+						       GetString ("Date"),
+						       game.Date));
+				buffer.Append (String.
+					       Format (format,
+						       Catalog.
+						       GetString ("Event"),
+						       game.Event));
+				buffer.Append (String.
+					       Format (format,
+						       Catalog.
+						       GetString ("Site"),
+						       game.Site));
+				buffer.Append (String.
+					       Format (format,
+						       Catalog.
+						       GetString ("Opening"),
+						       eco));
+				buffer.Append ("</TABLE><BR>");
 			}
 
-			protected void MoveNumCellDataFunc (TreeViewColumn
-							    column,
-							    CellRenderer r,
-							    TreeModel model,
-							    TreeIter iter)
+			private void OnLinkClicked (object o,
+						    LinkClickedArgs args)
 			{
-				CellRendererText renderer =
-					(CellRendererText) r;
-				renderer.Text =
-					"" +
-					(model.GetPath (iter).Indices[0] + 1);
-			}
-
-			protected void WhiteMoveCellDataFunc (TreeViewColumn
-							      column,
-							      CellRenderer r,
-							      TreeModel model,
-							      TreeIter iter)
-			{
-				CellRendererText renderer =
-					(CellRendererText) r;
-				PGNChessMove move =
-					(PGNChessMove) model.GetValue (iter,
-								       0);
-				int idx = model.GetPath (iter).Indices[0];
-				if (highlightWhite
-				    && (idx == highlightMoveIndex))
-					renderer.Underline =
-						Pango.Underline.Single;
-				else
-					renderer.Underline =
-						Pango.Underline.None;
-
-				renderer.Text =
-					move.move == null ? "" : move.move;
-			}
-
-			protected void BlackMoveCellDataFunc (TreeViewColumn
-							      column,
-							      CellRenderer r,
-							      TreeModel model,
-							      TreeIter iter)
-			{
-				CellRendererText renderer =
-					(CellRendererText) r;
-				PGNChessMove move =
-					(PGNChessMove) model.GetValue (iter,
-								       1);
-				if (move == null) {
-					renderer.Text = "";
+				if (ShowNthMove == null)
 					return;
-				}
-				int idx = model.GetPath (iter).Indices[0];
-				if (!highlightWhite
-				    && (idx == highlightMoveIndex))
-					renderer.Underline =
-						Pango.Underline.Single;
-				else
-					renderer.Underline =
-						Pango.Underline.None;
-
-				renderer.Text = move.move ==
-					null ? "" : move.move;
+				string url = args.Url;
+				if (!url.StartsWith ("#"))
+					return;
+				int idx = Int32.Parse (url.Substring (1));
+				ShowNthMove (this, new MoveEventArgs (idx));
 			}
 		}
-
-		public class GameBrowserButtonsWidget:HBox
-		{
-			public Button firstButton, prevButton, nextButton,
-				lastButton;
-			public GameBrowserButtonsWidget ():base ()
-			{
-				firstButton = new Button ();
-				firstButton.Image =
-					new Image (Stock.GotoFirst,
-						   IconSize.Button);
-				prevButton = new Button ();
-				prevButton.Image =
-					new Image (Stock.GoBack,
-						   IconSize.Button);
-				nextButton = new Button ();
-				nextButton.Image =
-					new Image (Stock.GoForward,
-						   IconSize.Button);
-				lastButton = new Button ();
-				lastButton.Image =
-					new Image (Stock.GotoLast,
-						   IconSize.Button);
-
-				PackStart (firstButton, false, false, 1);
-				PackStart (prevButton, false, false, 1);
-				PackStart (nextButton, false, false, 1);
-				PackStart (lastButton, false, false, 1);
-			}
-		}
-
 	}
 }

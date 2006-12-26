@@ -114,13 +114,13 @@ namespace CsBoard
 				idx--;
 			}
 
-			public int CurrentMoveIndex
+			public int CurrentMoveNumber
 			{
 				get
 				{
 					if (idx < 0)
 						return -1;
-					return idx / 2;
+					return (idx / 2) + 1;
 				}
 			}
 

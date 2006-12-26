@@ -1,4 +1,17 @@
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* resource/csboard.glade
+	* src/viewer/ChessGameView.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+
+	Added
+
+	* resource/csviewer.glade
+
+	more ui changes.
+	
+2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 	
 	* Makefile.am
 	* configure.in

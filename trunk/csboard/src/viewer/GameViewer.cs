@@ -42,7 +42,6 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.Window gameViewerWindow;
 			[Glade.Widget] private Gtk.VBox chessBoardBox;
 			[Glade.Widget] private Gtk.VBox chessGameDetailsBox;
-			private Gtk.HPaned leftSplitPane;
 			[Glade.Widget] private Gtk.HPaned gamesSplitPane;
 			[Glade.Widget] private Gtk.VBox gamesListBox;
 			[Glade.Widget] private Gtk.Statusbar statusBar;
@@ -54,13 +53,18 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
 			[Glade.Widget] private Gtk.
 				CheckMenuItem highlightMoveMenuItem;
+			[Glade.Widget] private Gtk.Notebook pgnDetailsBook;
 			private Gtk.Label whiteLabel, blackLabel;
 			[Glade.Widget] private Gtk.Label nagCommentLabel;
+			[Glade.Widget] private Gtk.Label moveNumberLabel;
 
 			private ViewerBoard boardWidget;
 			GameSession gameSession;
 			ChessGameWidget gameWidget;
 			GamesListWidget gamesListWidget;
+
+			const int ALL_GAMES_PAGE = 0;
+			const int GAME_DETAILS_PAGE = 1;
 
 			string initialDirForFileChooser = null;
 
@@ -212,8 +216,9 @@ namespace CsBoard
 					return;
 				this.games = loader.Games;
 				gamesListWidget.SetGames (games);
-				if (games.Count > 0)
+				if (games.Count > 0) {
 					SelectGame ((PGNChessGame) games[0]);
+				}
 			}
 
 			public PGNChessGame Game
@@ -257,7 +262,7 @@ namespace CsBoard
 			{
 				Glade.XML gXML =
 					Glade.XML.
-					FromAssembly ("csboard.glade",
+					FromAssembly ("csviewer.glade",
 						      "gameViewerWindow",
 						      null);
 				gXML.Autoconnect (this);
@@ -300,10 +305,7 @@ namespace CsBoard
 				boardWidget.Show ();
 
 				gameWidget = new ChessGameWidget ();
-				gameWidget.FirstMove += on_first_clicked;
-				gameWidget.PreviousMove += on_prev_clicked;
-				gameWidget.NextMove += on_next_clicked;
-				gameWidget.LastMove += on_last_clicked;
+				gameWidget.ShowNthMove += OnShowNthMoveEvent;
 				chessGameDetailsBox.PackStart (gameWidget,
 							       true, true, 4);
 
@@ -359,12 +361,12 @@ namespace CsBoard
 				boardWidget.Reset ();
 				gameSession.Reset ();	// reset session
 
-				gameWidget.HighlightMove (gameSession.
-							  CurrentMoveIndex,
-							  gameSession.
-							  IsWhitesTurn);
+				gameWidget.SetMoveIndex (gameSession.
+							 CurrentMoveIdx);
 				boardWidget.lastMove =
 					gameSession.CurrentMove;
+				moveNumberLabel.Text = "";
+				nagCommentLabel.Text = "";
 
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
@@ -412,7 +414,12 @@ namespace CsBoard
 					gameSession.CurrentMoveIdx;
 				if (currentMoveIdx < 0)
 					return;
-				if (!gameSession.PlayNMoves (currentMoveIdx)) {
+				PlayNMoves (currentMoveIdx);	// since we are passing the index, no need for -1
+			}
+
+			private void PlayNMoves (int nmoves)
+			{
+				if (!gameSession.PlayNMoves (nmoves)) {
 					Console.WriteLine
 						(Catalog.
 						 GetString
@@ -443,27 +450,63 @@ namespace CsBoard
 				UpdateMoveDetails (true);
 			}
 
+			public void on_all_games_button_clicked (object o,
+								 EventArgs
+								 args)
+			{
+				pgnDetailsBook.Page = ALL_GAMES_PAGE;
+			}
+
+			private void OnShowNthMoveEvent (object o,
+							 MoveEventArgs args)
+			{
+				int idx = args.nthMove;
+				PlayNMoves (idx + 1);
+			}
+
 			private void UpdateMoveDetails (bool next)
 			{
-				gameWidget.HighlightMove (gameSession.
-							  CurrentMoveIndex,
-							  gameSession.
-							  IsWhitesTurn);
-				string str =
-					gameSession.CurrentPGNMove.Nags ==
-					null ? "" : gameSession.
-					CurrentPGNMove.Nags[0].Markup ();
-				nagCommentLabel.Markup = str;
-				boardWidget.lastMove =
-					gameSession.CurrentMove;
-				int r1, f1, r2, f2;
-				r1 = gameSession.player.LastMoveInfo.src_rank;
-				f1 = gameSession.player.LastMoveInfo.src_file;
-				r2 = gameSession.player.LastMoveInfo.
-					dest_rank;
-				f2 = gameSession.player.LastMoveInfo.
-					dest_file;
-				boardWidget.Move (r1, f1, r2, f2, ' ');
+				int currentMoveIdx =
+					gameSession.CurrentMoveIdx;
+				gameWidget.SetMoveIndex (currentMoveIdx);
+				if (currentMoveIdx >= 0) {
+					string str =
+						gameSession.CurrentPGNMove.
+						Nags ==
+						null ? "" : gameSession.
+						CurrentPGNMove.Nags[0].
+						Markup ();
+					nagCommentLabel.Markup = str;
+					boardWidget.lastMove =
+						gameSession.CurrentMove;
+					int r1, f1, r2, f2;
+					r1 = gameSession.player.LastMoveInfo.
+						src_rank;
+					f1 = gameSession.player.LastMoveInfo.
+						src_file;
+					r2 = gameSession.player.LastMoveInfo.
+						dest_rank;
+					f2 = gameSession.player.LastMoveInfo.
+						dest_file;
+					boardWidget.Move (r1, f1, r2, f2,
+							  ' ');
+					string move_markup =
+						String.
+						Format ("<b>{0}{1} {2}</b>",
+							gameSession.
+							CurrentMoveNumber,
+							gameSession.
+							IsWhitesTurn ? "." :
+							"...",
+							gameSession.
+							CurrentMove);
+					moveNumberLabel.Markup = move_markup;
+				}
+				else {
+					moveNumberLabel.Text = "";
+					nagCommentLabel.Text = "";
+					boardWidget.Move (0, 0, 0, 0, ' ');
+				}
 				// Reload the position
 				// For next, the move is enough. but for spl positions like
 				// castling and enpassant, the position has to be reloaded
@@ -520,6 +563,9 @@ namespace CsBoard
 					Format ("<b><big>{0}</big></b>",
 						game.GetTagValue ("Black",
 								  "Black"));
+				moveNumberLabel.Text = "";
+				nagCommentLabel.Text = "";
+				pgnDetailsBook.Page = GAME_DETAILS_PAGE;
 			}
 
 			public string AskForFile (Gtk.
