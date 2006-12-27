@@ -109,7 +109,7 @@ namespace CsBoard
 				// outer box, coord, inner box
 				  ComputeSizes (width, height);
 
-				  figure = new Figure ();
+				  figure = CachingFigure.Instance;
 				  position = new Position (pos);
 
 				  figure.SetSize (size);

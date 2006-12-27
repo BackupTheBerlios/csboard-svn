@@ -1,5 +1,17 @@
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
+	* src/viewer/PositionSnapshot.cs
+	* src/Figure.cs
+
+	Added this file
+	
+	* src/viewer/CachingFigure.cs
+
+	Extracts the svg files from the assembly and caches them to speed up
+	the snapshot generation during printing.
+
+2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
 	* resource/csviewer.glade
 	* src/Figure.cs
 	* src/game/ChessGamePlayer.cs

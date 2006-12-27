@@ -24,6 +24,7 @@ namespace CsBoard
 	using Gdk;
 	using Gtk;
 	using System;
+	using System.IO;
 	using System.Collections;
 
 	public enum FigureType
@@ -46,7 +47,20 @@ namespace CsBoard
 	public class Figure
 	{
 
-		private ArrayList pixbufs;
+		protected ArrayList pixbufs;
+
+		  string[] files = {
+		"white-rook.svg",
+				"white-king.svg",
+				"white-queen.svg",
+				"white-bishop.svg",
+				"white-pawn.svg",
+				"white-knight.svg",
+				"black-rook.svg",
+				"black-king.svg",
+				"black-queen.svg",
+				"black-bishop.svg",
+				"black-pawn.svg", "black-knight.svg"};
 
 		public Figure ()
 		{
@@ -54,38 +68,28 @@ namespace CsBoard
 
 		public Pixbuf GetPixbuf (FigureType type)
 		{
-
 			return (Pixbuf) pixbufs[(int) type];
 		}
 
-		public void SetSize (int s)
+		public virtual void SetSize (int s)
 		{
-
 			pixbufs = new ArrayList ();
 
 			s = Math.Max (s, 10);
 
-			string[]files = {
-			"images/white-rook.svg",
-					"images/white-king.svg",
-					"images/white-queen.svg",
-					"images/white-bishop.svg",
-					"images/white-pawn.svg",
-					"images/white-knight.svg",
-					"images/black-rook.svg",
-					"images/black-king.svg",
-					"images/black-queen.svg",
-					"images/black-bishop.svg",
-					"images/black-pawn.svg",
-					"images/black-knight.svg"};
-
 			foreach (string filename in files) {
-				pixbufs.Add (Rsvg.Tool.
-					     PixbufFromFileAtSize (filename,
-								   s, s));
+				pixbufs.Add (GetPixbuf (filename, s));
 			}
-
 		}
 
+		protected virtual Gdk.Pixbuf GetPixbuf (string filename,
+							int size)
+		{
+			return Rsvg.Tool.PixbufFromFileAtSize (Path.
+							       Combine
+							       ("images",
+								filename),
+							       size, size);
+		}
 	}
 }
