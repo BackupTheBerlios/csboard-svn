@@ -1,5 +1,25 @@
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
+	* resource/csviewer.glade
+	* src/Figure.cs
+	* src/game/ChessGamePlayer.cs
+	* src/parser/PGNChessGame.cs
+	* src/viewer/ChessGameView.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/PositionSnapshot.cs
+	* src/viewer/plugins/EcoDBPlugin.cs
+	* src/viewer/plugins/PGNExporter.cs
+
+	Added files
+	
+	* src/viewer/PGNTree.cs
+	* src/viewer/plugins/OpeningsDb.cs
+
+	Organizes the moves as a tree. Falls back to the older implementation
+	of the Figure as the scale operation is taking a lot of time.
+
+2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
 	* Makefile.am
 	* src/Figure.cs
 

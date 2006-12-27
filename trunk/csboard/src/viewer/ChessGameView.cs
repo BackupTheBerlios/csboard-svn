@@ -111,9 +111,9 @@ namespace CsBoard
 						       ("<b><a name=\"{0}\" href=\"#{0}\">{1}</a> </b>",
 							i, move.move));
 					if (move.comment != null) {
-						buffer.Append ("<BR>");
+						buffer.Append ("<p>");
 						buffer.Append (move.comment);	// TODO: format the markup
-						buffer.Append ("<BR>");
+						buffer.Append ("</p>");
 					}
 					i++;
 				}
@@ -124,9 +124,10 @@ namespace CsBoard
 				if (game == null)
 					return;
 				buffer.Append (String.
-					       Format ("<H3>{0} vs {1}</H3>",
-						       game.White,
-						       game.Black));
+					       Format
+					       ("<H3><FONT COLOR=\"{0}\">{1} vs {2}</FONT></H3>",
+						"#600000", game.White,
+						game.Black));
 				buffer.Append
 					("<TABLE BORDER=0 CELLSPACING=4>");
 				string format =

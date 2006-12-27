@@ -28,7 +28,13 @@ namespace Chess
 		{
 			ArrayList tagList;
 
-			public ArrayList TagList { get { return tagList; } }
+			public ArrayList TagList
+			{
+				get
+				{
+					return tagList;
+				}
+			}
 
 			private IList moves;
 			public IList Moves
@@ -48,12 +54,59 @@ namespace Chess
 				}
 			}
 
-			public string White { get { return GetTagValue("White", "[White]"); } }
-			public string Black { get { return GetTagValue("Black", "[Black]"); } }
-			public string Result { get { return GetTagValue("Result", "?"); } }
-			public string Site { get { return GetTagValue("Site", ""); } }
-			public string Event { get { return GetTagValue("Event", ""); } }
-			public string Date { get { return GetTagValue("Date", ""); } }
+			public string White
+			{
+				get
+				{
+					return GetTagValue ("White",
+							    "[White]");
+				}
+			}
+			public string Black
+			{
+				get
+				{
+					return GetTagValue ("Black",
+							    "[Black]");
+				}
+			}
+			public string Result
+			{
+				get
+				{
+					return GetTagValue ("Result", "?");
+				}
+			}
+			public string Site
+			{
+				get
+				{
+					return GetTagValue ("Site", "");
+				}
+			}
+			public string Event
+			{
+				get
+				{
+					return GetTagValue ("Event", "");
+				}
+			}
+			public string Date
+			{
+				get
+				{
+					return GetTagValue ("Date", "");
+				}
+			}
+
+			public string Title
+			{
+				get
+				{
+					return String.Format ("{0} vs {1}",
+							      White, Black);
+				}
+			}
 
 			public PGNChessGame (string c, ArrayList t, IList m)
 			{
@@ -62,17 +115,21 @@ namespace Chess
 				moves = m;
 			}
 
-			public bool HasTag(string name) {
-				return tagList.Contains(new PGNTag(name, null));
+			public bool HasTag (string name)
+			{
+				return tagList.
+					Contains (new PGNTag (name, null));
 			}
 
 			// altvalue will be returned if the tag doesnt exist
-			public string GetTagValue(string name, string altvalue) {
-				PGNTag tag = new PGNTag(name, null);
-				if(!tagList.Contains(tag))
+			public string GetTagValue (string name,
+						   string altvalue)
+			{
+				PGNTag tag = new PGNTag (name, null);
+				if (!tagList.Contains (tag))
 					return altvalue;
 
-				int idx = tagList.IndexOf(tag);
+				int idx = tagList.IndexOf (tag);
 				tag = (PGNTag) tagList[idx];
 				return tag.Value;
 			}
@@ -82,8 +139,7 @@ namespace Chess
 				StringBuilder buffer = new StringBuilder ();
 
 				buffer.Append ("Moves:\n------\n");
-				foreach (object o in moves)
-				{
+				foreach (object o in moves) {
 					buffer.Append (o + "\n");
 				}
 
@@ -92,43 +148,43 @@ namespace Chess
 
 			public void WritePGN (TextWriter writer)
 			{
-				foreach (PGNTag tag in tagList)
-				{
+				foreach (PGNTag tag in tagList) {
 					writer.WriteLine (String.
 							  Format
 							  ("[{0} \"{1}\"]",
-							   tag.Name, tag.Value));
+							   tag.Name,
+							   tag.Value));
 				}
 
 				writer.WriteLine ();
 
 				int i = 1;
 				bool whiteMoveComment = false;
-				foreach (PGNChessMove move in moves)
-				{
+				foreach (PGNChessMove move in moves) {
 					if (move.move == null)
-						  // BUG. Empty move? This should not happen.
-						  break;
-					if(i % 2 == 1) { // white's turn
-						writer.Write (i + ". " + move.move);
+						// BUG. Empty move? This should not happen.
+						break;
+					if (i % 2 == 1) {	// white's turn
+						writer.Write (i + ". " +
+							      move.move);
 					}
-					else if(whiteMoveComment) {
-						writer.Write(i + "... ");
+					else if (whiteMoveComment) {
+						writer.Write (i + "... ");
 						whiteMoveComment = false;
 					}
-					writer.Write(move.move);
+					writer.Write (move.move);
 					if (move.comment != null) {
 						// we should escape '{' in the comment
 						writer.Write ("{" +
 							      move.
-							      comment +
-							      "} ");
+							      comment + "} ");
 						whiteMoveComment = true;
 					}
 					i++;
 				}
 				if (HasTag ("Result")) {
-					writer.Write (GetTagValue("Result", null));
+					writer.Write (GetTagValue
+						      ("Result", null));
 				}
 				writer.WriteLine ();
 			}

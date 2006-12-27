@@ -63,44 +63,28 @@ namespace CsBoard
 
 			pixbufs = new ArrayList ();
 
-			string filename;
-
 			s = Math.Max (s, 10);
 
-			filename = "white-rook.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "white-king.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "white-queen.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "white-bishop.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "white-pawn.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "white-knight.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
+			string[]files = {
+			"images/white-rook.svg",
+					"images/white-king.svg",
+					"images/white-queen.svg",
+					"images/white-bishop.svg",
+					"images/white-pawn.svg",
+					"images/white-knight.svg",
+					"images/black-rook.svg",
+					"images/black-king.svg",
+					"images/black-queen.svg",
+					"images/black-bishop.svg",
+					"images/black-pawn.svg",
+					"images/black-knight.svg"};
 
-			filename = "black-rook.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "black-king.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "black-queen.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "black-bishop.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "black-pawn.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
-			filename = "black-knight.svg";
-			pixbufs.Add (GetPixbuf (filename, s, s));
+			foreach (string filename in files) {
+				pixbufs.Add (Rsvg.Tool.
+					     PixbufFromFileAtSize (filename,
+								   s, s));
+			}
 
-		}
-
-		static Gdk.Pixbuf GetPixbuf (string file, int width,
-					     int height)
-		{
-			Gdk.Pixbuf pix = Rsvg.Pixbuf.LoadFromResource (file);
-			return pix.ScaleSimple (width, height,
-						Gdk.InterpType.Bilinear);
 		}
 
 	}

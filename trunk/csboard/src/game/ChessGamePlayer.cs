@@ -99,16 +99,14 @@ namespace Chess
 
 				IList pieces = whites.allPieces ();
 
-				foreach (ChessPiece piece in pieces)
-				{
+				foreach (ChessPiece piece in pieces) {
 					positions[piece.Rank, piece.File] =
 						piece;
 				}
 
 				pieces = blacks.allPieces ();
 
-				foreach (ChessPiece piece in pieces)
-				{
+				foreach (ChessPiece piece in pieces) {
 					positions[piece.Rank, piece.File] =
 						piece;
 				}
@@ -163,13 +161,12 @@ namespace Chess
 						ChessBoardConstants.
 						MOVE_EXCHANGE;
 
-				if (pieceType == PieceType.KING)
-				  {
-					  ChessPiece cp = side.King;
-					  rank = cp.Rank;
-					  file = cp.File;
-					  return;
-				  }
+				if (pieceType == PieceType.KING) {
+					ChessPiece cp = side.King;
+					rank = cp.Rank;
+					file = cp.File;
+					return;
+				}
 
 				IList list = side.getPiecesOfType (pieceType);
 				if (pieceType == PieceType.PAWN
@@ -182,104 +179,100 @@ namespace Chess
 						MOVE_EXCHANGE;
 
 				ArrayList cands = new ArrayList ();
-				foreach (ChessPiece cp in list)
-				{
+				foreach (ChessPiece cp in list) {
 					if (cp.
 					    isValidMove (dest_rank, dest_file,
 							 positions,
 							 exchange |
 							 ChessBoardConstants.
-							 MOVE_DEBUG))
-					  {
-						  cands.Add (cp);
-					  }
+							 MOVE_DEBUG)) {
+						cands.Add (cp);
+					}
 				}
 
-				if (cands.Count == 0)
-				  {
-					  Console.Error.
-						  WriteLine
-						  (GetPositionsString ());
-					  throw new
-						  InvalidMoveException
-						  (Catalog.GetString("Invalid move ") + move +
-						   Catalog.GetString(". Couldn't find any candidate for this."));
-				  }
+				if (cands.Count == 0) {
+					Console.Error.
+						WriteLine
+						(GetPositionsString ());
+					throw new
+						InvalidMoveException
+						(Catalog.
+						 GetString ("Invalid move ") +
+						 move +
+						 Catalog.
+						 GetString
+						 (". Couldn't find any candidate for this."));
+				}
 
-				if (cands.Count == 1)
-				  {
-					  ChessPiece cp =
-						  (ChessPiece) cands[0];
-					  rank = cp.Rank;
-					  file = cp.File;
-					  return;
-				  }
+				if (cands.Count == 1) {
+					ChessPiece cp = (ChessPiece) cands[0];
+					rank = cp.Rank;
+					file = cp.File;
+					return;
+				}
 
 				// Ambiguity
 				// More than one candidates
 				char ch;
 				int movelen = move.Length;
-				if (cands.Count == 2)
-				  {
-					  if (movelen < 3)
-						  throw new
-							  InvalidMoveException
-							  (Catalog.GetString("Insufficient chars in move ")
-							   + move);
-					  ch = move[move.Length - 3];
-					  if (ch >= 'a' && ch <= 'h')
-					    {
-						    // find the piece with matching file
-						    foreach (ChessPiece temp
-							     in cands)
-						    {
-							    if (ch ==
-								'a' +
-								temp.File)
-							      {
-								      rank = temp.Rank;
-								      file = temp.File;
-								      return;
-							      }
-						    }
-					    }
-					  else if (ch >= '1' && ch <= '8')
-					    {
-						    foreach (ChessPiece temp
-							     in cands)
-						    {
-							    if (ch ==
-								'1' +
-								temp.Rank)
-							      {
-								      rank = temp.Rank;
-								      file = temp.File;
-								      return;
-							      }
-						    }
-					    }
-					  else
-					    {
-						    throw new
-							    InvalidMoveException
-							    (Catalog.GetString("Invalid move ") +
-							     move);
-					    }
-				  }
-				else
-				  {
-					  if (movelen < 4)
-						  throw new
-							  InvalidMoveException
-							  (Catalog.GetString("Invalid move ") +
-							   move);
-					  char file_ch =
-						  move[move.Length - 3];
-					  char rank_ch =
-						  move[move.Length - 4];
-					  rank = rank_ch - 'a';
-					  file = file_ch - '1';
-				  }
+				if (cands.Count == 2) {
+					if (movelen < 3)
+						throw new
+							InvalidMoveException
+							(Catalog.
+							 GetString
+							 ("Insufficient chars in move ")
+							 + move);
+					ch = move[move.Length - 3];
+					if (ch >= 'a' && ch <= 'h') {
+						// find the piece with matching file
+						foreach (ChessPiece temp
+							 in cands) {
+							if (ch ==
+							    'a' + temp.File) {
+								rank = temp.
+									Rank;
+								file = temp.
+									File;
+								return;
+							}
+						}
+					}
+					else if (ch >= '1' && ch <= '8') {
+						foreach (ChessPiece temp
+							 in cands) {
+							if (ch ==
+							    '1' + temp.Rank) {
+								rank = temp.
+									Rank;
+								file = temp.
+									File;
+								return;
+							}
+						}
+					}
+					else {
+						throw new
+							InvalidMoveException
+							(Catalog.
+							 GetString
+							 ("Invalid move ") +
+							 move);
+					}
+				}
+				else {
+					if (movelen < 4)
+						throw new
+							InvalidMoveException
+							(Catalog.
+							 GetString
+							 ("Invalid move ") +
+							 move);
+					char file_ch = move[move.Length - 3];
+					char rank_ch = move[move.Length - 4];
+					rank = rank_ch - 'a';
+					file = file_ch - '1';
+				}
 			}
 
 			/*
@@ -339,23 +332,20 @@ namespace Chess
 					     PromotionType
 					     promoted_piece_type)
 			{
-				if (gameStatus != GAME_STATUS_PLAYING)
-				  {
-					  return false;
-				  }
+				if (gameStatus != GAME_STATUS_PLAYING) {
+					return false;
+				}
 				//                CBSquare cbs = new CBSquare( i1, j1 );
 				ChessPiece piece = positions[i1, j1];
-				if (piece == null)
-				  {
-					  // No source piece
-					  return false;
-				  }
+				if (piece == null) {
+					// No source piece
+					return false;
+				}
 
 				// Not your turn!
-				if (piece.Color != turn)
-				  {
-					  return false;
-				  }
+				if (piece.Color != turn) {
+					return false;
+				}
 
 				/* special case for enpass */
 				if (piece.Type == PieceType.PAWN && j1 != j2
@@ -374,23 +364,21 @@ namespace Chess
 
 				/* Now change the position */
 				piece = removePiece (i1, j1);
-				if (positions[i2, j2] != null)
-				  {
-					  positions[i2, j2].removeFromSide ();
-					  removePiece (i2, j2);
-				  }
+				if (positions[i2, j2] != null) {
+					positions[i2, j2].removeFromSide ();
+					removePiece (i2, j2);
+				}
 				/* special case for pawn */
-				if (promotion_case)
-				  {
-					  ChessPiece promoted_piece =
-						  createPiece ((PieceType)
-							       promoted_piece_type,
-							       piece.Color,
-							       i2, j2);
-					  piece.removeFromSide ();
-					  piece = promoted_piece;
-					  piece.addToSide ();
-				  }
+				if (promotion_case) {
+					ChessPiece promoted_piece =
+						createPiece ((PieceType)
+							     promoted_piece_type,
+							     piece.Color,
+							     i2, j2);
+					piece.removeFromSide ();
+					piece = promoted_piece;
+					piece.addToSide ();
+				}
 				setPiece (piece, i2, j2);
 				lastMoveInfo.movedPiece = piece;
 				lastMoveInfo.SetInfo (i1, j1, i2, j2,
@@ -400,84 +388,96 @@ namespace Chess
 				return true;
 			}
 
-			public bool Move (string str)
+			public static void NormalizeMove (string str,
+							  out string
+							  normalized_str)
 			{
-				if (str.EndsWith ("N"))
-				  {
-					  /* novelty */
-					  str = str.Substring (0,
-							       str.Length -
-							       1);
-				  }
+				if (str.EndsWith ("N")) {
+					/* novelty */
+					str = str.Substring (0,
+							     str.Length - 1);
+				}
 
 				int extra_chars = 0;
-				for (int i = str.Length - 1; i >= 0; i--)
-				  {
-					  char ch = str[i];
-					  if ("!?#+-".IndexOf (ch) < 0)
-						  break;
-					  extra_chars++;
-				  }
-				if (extra_chars > 0)
-				  {	// strip extra chars
-					  str = str.Substring (0,
-							       str.Length -
-							       extra_chars);
-				  }
+				for (int i = str.Length - 1; i >= 0; i--) {
+					char ch = str[i];
+					if ("!?#+-".IndexOf (ch) < 0)
+						break;
+					extra_chars++;
+				}
+				if (extra_chars > 0) {	// strip extra chars
+					str = str.Substring (0,
+							     str.Length -
+							     extra_chars);
+				}
 
+				if (str.IndexOf ('-') > 0) {
+					string lower = str.ToLower ();
+					if (lower.Equals ("o-o-o")
+					    || lower.Equals ("o-o")) {
+						normalized_str = lower;
+						return;
+					}
+				}
+
+				int index;
+				if ((index = str.IndexOf ('=')) > 0) {	// promotion case
+					str = str.Substring (0,
+							     index) +
+						str.Substring (index + 1);
+				}
+
+				int strlen = str.Length;
+				if (strlen > 3 && str[strlen - 3] == 'x') {	// remove the 'x' denoting an exchange
+					str = str.Substring (0,
+							     strlen - 3) +
+						str.Substring (strlen - 2);
+				}
+
+				normalized_str = str;
+			}
+
+			public bool Move (string str)
+			{
+				NormalizeMove (str, out str);
 				bool result = false;
-				if (str.IndexOf ("-") > 0)
-				  {
-					  if (str.ToUpper ().Equals ("O-O")
-					      || str.Equals ("0-0"))
-					    {
-						    result = castle (turn ==
-								     ColorType.
-								     WHITE ?
-								     whites :
-								     blacks,
-								     turn,
-								     CastleType.
-								     SHORT_CASTLE);
-					    }
-					  else if (str.ToUpper ().
-						   Equals ("O-O-O")
-						   || str.Equals ("0-0-0"))
-					    {
-						    result = castle (turn ==
-								     ColorType.
-								     WHITE ?
-								     whites :
-								     blacks,
-								     turn,
-								     CastleType.
-								     LONG_CASTLE);
-					    }
+				if (str.IndexOf ("-") > 0) {
+					if (str.Equals ("o-o")) {
+						result = castle (turn ==
+								 ColorType.
+								 WHITE ?
+								 whites :
+								 blacks,
+								 turn,
+								 CastleType.
+								 SHORT_CASTLE);
+					}
+					else if (str.Equals ("o-o-o")) {
+						result = castle (turn ==
+								 ColorType.
+								 WHITE ?
+								 whites :
+								 blacks,
+								 turn,
+								 CastleType.
+								 LONG_CASTLE);
+					}
 
-					  return result;
-				  }
+					return result;
+				}
 
 				PromotionType promotion_type;
 				GetPromotionInfo (ref str,
 						  out promotion_type);
-
-				int strlen = str.Length;
-				if (strlen > 3 && str[strlen - 3] == 'x')
-				  {	// remove the 'x' denoting an exchange
-					  str = str.Substring (0,
-							       strlen - 3) +
-						  str.Substring (strlen - 2);
-				  }
 
 				PieceType pieceType =
 					ChessUtils.getPiece (str);
 				int dest_rank, dest_file;
 				if (!ChessUtils.
 				    getSquare (str, out dest_rank,
-					       out dest_file))
-				  {
-					  return false;
-				  }
+					       out dest_file)) {
+					return false;
+				}
 
 				int src_rank, src_file;
 				getSource (pieceType, out src_rank,
@@ -502,40 +502,33 @@ namespace Chess
 					return;
 
 				string str;
-				int index;
-				if ((index = move.IndexOf ('=')) > 0)
-				  {
-					  str = move.Substring (0,
-								index) +
-						  move.Substring (index + 1);
-					  len--;
-				  }
-				else
-					str = move;
+				str = move;
 
 				char last_char = str[len - 1];
-				switch (last_char)
-				  {
-				  case 'Q':
-					  type = PromotionType.QUEEN;
-					  break;
-				  case 'R':
-					  type = PromotionType.ROOK;
-					  break;
-				  case 'B':
-					  type = PromotionType.BISHOP;
-					  break;
-				  case 'N':
-					  type = PromotionType.KNIGHT;
-					  break;
-				  default:
-					  throw new
-						  InvalidMoveException
-						  (Catalog.GetString("Invalid move ") +
-						   str +
-						   Catalog.GetString(". Invalid promotion type: ")
-						   + last_char);
-				  }
+				switch (last_char) {
+				case 'Q':
+					type = PromotionType.QUEEN;
+					break;
+				case 'R':
+					type = PromotionType.ROOK;
+					break;
+				case 'B':
+					type = PromotionType.BISHOP;
+					break;
+				case 'N':
+					type = PromotionType.KNIGHT;
+					break;
+				default:
+					throw new
+						InvalidMoveException
+						(Catalog.
+						 GetString ("Invalid move ") +
+						 str +
+						 Catalog.
+						 GetString
+						 (". Invalid promotion type: ")
+						 + last_char);
+				}
 
 				move = str.Substring (0, len - 1);
 			}
@@ -565,29 +558,29 @@ namespace Chess
 			public bool castle (ChessSide side, ColorType color,
 					    CastleType castle)
 			{
-				if (!side.King.CanCastle)
-				  {
-					  debug (Catalog.GetString("Cant castle (") + side.King);
-					  return false;
-				  }
+				if (!side.King.CanCastle) {
+					debug (Catalog.
+					       GetString ("Cant castle (") +
+					       side.King);
+					return false;
+				}
 
 				if (side.King.File !=
-				    ChessBoardConstants.FILE_E)
-				  {
-					  debug (Catalog.GetString("King not available ") +
-						 side.King);
-					  return false;
-				  }
+				    ChessBoardConstants.FILE_E) {
+					debug (Catalog.
+					       GetString
+					       ("King not available ") +
+					       side.King);
+					return false;
+				}
 
 				int file;
-				if (castle == CastleType.LONG_CASTLE)
-				  {
-					  file = ChessBoardConstants.FILE_A;
-				  }
-				else
-				  {
-					  file = ChessBoardConstants.FILE_H;
-				  }
+				if (castle == CastleType.LONG_CASTLE) {
+					file = ChessBoardConstants.FILE_A;
+				}
+				else {
+					file = ChessBoardConstants.FILE_H;
+				}
 
 				int rank;
 				if (color == ColorType.WHITE)
@@ -595,31 +588,28 @@ namespace Chess
 				else
 					rank = 7;
 
-				if (positions[rank, file] == null)
-				  {
-					  debug (Catalog.GetString("Rook not available"));
-					  return false;
-				  }
+				if (positions[rank, file] == null) {
+					debug (Catalog.
+					       GetString
+					       ("Rook not available"));
+					return false;
+				}
 
 				int i1, i2;
-				if (castle == CastleType.LONG_CASTLE)
-				  {
-					  i1 = ChessBoardConstants.FILE_B;
-					  i2 = ChessBoardConstants.FILE_E;
-				  }
-				else
-				  {
-					  i1 = ChessBoardConstants.FILE_F;
-					  i2 = ChessBoardConstants.FILE_H;
-				  }
+				if (castle == CastleType.LONG_CASTLE) {
+					i1 = ChessBoardConstants.FILE_B;
+					i2 = ChessBoardConstants.FILE_E;
+				}
+				else {
+					i1 = ChessBoardConstants.FILE_F;
+					i2 = ChessBoardConstants.FILE_H;
+				}
 
-				for (int i = i1; i < i2; i++)
-				  {
-					  if (positions[rank, i] != null)
-					    {	// some pieces blocking.. cannot castle
-						    return false;
-					    }
-				  }
+				for (int i = i1; i < i2; i++) {
+					if (positions[rank, i] != null) {	// some pieces blocking.. cannot castle
+						return false;
+					}
+				}
 
 				IList attackers = new ArrayList ();
 				ChessPiece.
@@ -636,87 +626,78 @@ namespace Chess
 						      attackers);
 				// check if king is under attack.
 				// cannot castle in that case
-				if (attackers.Count > 0)
-				  {
-					  return false;
-				  }
+				if (attackers.Count > 0) {
+					return false;
+				}
 
 				if (castle == CastleType.LONG_CASTLE)
 					i1 = ChessBoardConstants.FILE_C;
-				for (int i = i1; i < i2; i++)
-				  {
-					  attackers.Clear ();
-					  ChessPiece.
-						  getAttackers ((color ==
-								 ColorType.
-								 WHITE ?
-								 whites :
-								 blacks),
-								(color ==
-								 ColorType.
-								 WHITE ?
-								 blacks :
-								 whites),
-								rank, i,
-								positions,
-								null,
-								attackers);
-					  if (attackers.Count > 0)
-					    {	// king will be under attack in this case
-						    return false;
-					    }
-				  }
+				for (int i = i1; i < i2; i++) {
+					attackers.Clear ();
+					ChessPiece.
+						getAttackers ((color ==
+							       ColorType.
+							       WHITE ?
+							       whites :
+							       blacks),
+							      (color ==
+							       ColorType.
+							       WHITE ?
+							       blacks :
+							       whites),
+							      rank, i,
+							      positions,
+							      null,
+							      attackers);
+					if (attackers.Count > 0) {	// king will be under attack in this case
+						return false;
+					}
+				}
 
-				if (castle == CastleType.SHORT_CASTLE)
-				  {
-					  setPiece (side.King, rank,
-						    ChessBoardConstants.
-						    FILE_G);
-					  setPiece (positions
-						    [rank,
+				if (castle == CastleType.SHORT_CASTLE) {
+					setPiece (side.King, rank,
+						  ChessBoardConstants.FILE_G);
+					setPiece (positions
+						  [rank,
+						   ChessBoardConstants.
+						   FILE_H], rank,
+						  ChessBoardConstants.FILE_F);
+					removePiece (rank,
 						     ChessBoardConstants.
-						     FILE_H], rank,
-						    ChessBoardConstants.
-						    FILE_F);
-					  removePiece (rank,
-						       ChessBoardConstants.
-						       FILE_E);
-					  removePiece (rank,
-						       ChessBoardConstants.
-						       FILE_H);
-
-					  lastMoveInfo.movedPiece = side.King;
-					  lastMoveInfo.SetInfo (rank,
-								ChessBoardConstants.
-								FILE_E, rank,
-								ChessBoardConstants.
-								FILE_G, true);
-				  }
-				else
-				  {
-					  setPiece (side.King, rank,
-						    ChessBoardConstants.
-						    FILE_C);
-					  setPiece (positions
-						    [rank,
+						     FILE_E);
+					removePiece (rank,
 						     ChessBoardConstants.
-						     FILE_A], rank,
-						    ChessBoardConstants.
-						    FILE_D);
-					  removePiece (rank,
-						       ChessBoardConstants.
-						       FILE_E);
-					  removePiece (rank,
-						       ChessBoardConstants.
-						       FILE_A);
+						     FILE_H);
 
-					  lastMoveInfo.movedPiece = side.King;
-					  lastMoveInfo.SetInfo (rank,
-								ChessBoardConstants.
-								FILE_E, rank,
-								ChessBoardConstants.
-								FILE_C, true);
-				  }
+					lastMoveInfo.movedPiece = side.King;
+					lastMoveInfo.SetInfo (rank,
+							      ChessBoardConstants.
+							      FILE_E, rank,
+							      ChessBoardConstants.
+							      FILE_G, true);
+				}
+				else {
+					setPiece (side.King, rank,
+						  ChessBoardConstants.FILE_C);
+					setPiece (positions
+						  [rank,
+						   ChessBoardConstants.
+						   FILE_A], rank,
+						  ChessBoardConstants.FILE_D);
+					removePiece (rank,
+						     ChessBoardConstants.
+						     FILE_E);
+					removePiece (rank,
+						     ChessBoardConstants.
+						     FILE_A);
+
+					lastMoveInfo.movedPiece = side.King;
+					lastMoveInfo.SetInfo (rank,
+							      ChessBoardConstants.
+							      FILE_E, rank,
+							      ChessBoardConstants.
+							      FILE_C, true);
+				}
 
 				FlipTurn ();
 				return true;
@@ -724,7 +705,9 @@ namespace Chess
 
 			public void debug (Object obj)
 			{
-				Console.WriteLine (Catalog.GetString("[ChessGamePlayer] ") +
+				Console.WriteLine (Catalog.
+						   GetString
+						   ("[ChessGamePlayer] ") +
 						   obj);
 			}
 
@@ -735,45 +718,42 @@ namespace Chess
 			{
 				ChessPiece piece = null;
 				ChessSide myside, oppside;
-				if (color == ColorType.WHITE)
-				  {
-					  myside = whites;
-					  oppside = blacks;
-				  }
-				else
-				  {
-					  myside = blacks;
-					  oppside = blacks;
-				  }
+				if (color == ColorType.WHITE) {
+					myside = whites;
+					oppside = blacks;
+				}
+				else {
+					myside = blacks;
+					oppside = blacks;
+				}
 
-				switch (type)
-				  {
-				  case PieceType.KING:
-					  piece = new King (color, rank, file,
-							    myside, oppside);
-					  break;
-				  case PieceType.QUEEN:
-					  piece = new Queen (color, rank,
-							     file, myside,
-							     oppside);
-					  break;
-				  case PieceType.ROOK:
-					  piece = new Rook (color, rank, file,
-							    myside, oppside);
-					  break;
-				  case PieceType.KNIGHT:
-					  piece = new Knight (color, rank,
-							      file, myside,
-							      oppside);
-					  break;
-				  case PieceType.BISHOP:
-					  piece = new Bishop (color, rank,
-							      file, myside,
-							      oppside);
-					  break;
-				  default:
-					  return null;
-				  }
+				switch (type) {
+				case PieceType.KING:
+					piece = new King (color, rank, file,
+							  myside, oppside);
+					break;
+				case PieceType.QUEEN:
+					piece = new Queen (color, rank,
+							   file, myside,
+							   oppside);
+					break;
+				case PieceType.ROOK:
+					piece = new Rook (color, rank, file,
+							  myside, oppside);
+					break;
+				case PieceType.KNIGHT:
+					piece = new Knight (color, rank,
+							    file, myside,
+							    oppside);
+					break;
+				case PieceType.BISHOP:
+					piece = new Bishop (color, rank,
+							    file, myside,
+							    oppside);
+					break;
+				default:
+					return null;
+				}
 
 				return piece;
 			}
@@ -782,41 +762,45 @@ namespace Chess
 						   ChessPiece[,] positions)
 			{
 				for (int i = 0, rank = king.Rank - 1; i < 3;
-				     i++, rank++)
-				  {
-					  for (int j = 0, file =
-					       king.File - 1; j < 3;
-					       j++, file++)
-					    {
-						    if (rank < 0 || rank > 7
-							|| file < 0
-							|| file > 7
-							|| rank == file)
-							    continue;
-						    if (king.
-							isValidMove (rank,
-								     file,
-								     positions,
-								     ChessBoardConstants.
-								     MOVE_EXCHANGE))
-							    return false;
-					    }
-				  }
+				     i++, rank++) {
+					for (int j = 0, file =
+					     king.File - 1; j < 3;
+					     j++, file++) {
+						if (rank < 0 || rank > 7
+						    || file < 0
+						    || file > 7
+						    || rank == file)
+							continue;
+						if (king.
+						    isValidMove (rank,
+								 file,
+								 positions,
+								 ChessBoardConstants.
+								 MOVE_EXCHANGE))
+							return false;
+					}
+				}
 
 				return true;
 			}
 
 			public void PrintPositions ()
 			{
-				Console.WriteLine (Catalog.GetString("Turn: ") +
+				Console.WriteLine (Catalog.
+						   GetString ("Turn: ") +
 						   (turn ==
-						    ColorType.
-						    WHITE ? Catalog.GetString("WHITE") :
-						    Catalog.GetString("BLACK")));
+						    ColorType.WHITE ? Catalog.
+						    GetString ("WHITE") :
+						    Catalog.
+						    GetString ("BLACK")));
 				Console.WriteLine (GetPositionsString ());
 				Console.WriteLine ("================\n");
-				Console.WriteLine (Catalog.GetString("Whites:\n") + whites);
-				Console.WriteLine (Catalog.GetString("Blacks:\n") + blacks);
+				Console.WriteLine (Catalog.
+						   GetString ("Whites:\n") +
+						   whites);
+				Console.WriteLine (Catalog.
+						   GetString ("Blacks:\n") +
+						   blacks);
 			}
 
 			public string GetPositionsString ()
@@ -826,53 +810,48 @@ namespace Chess
 				/* Note that the rank is traversed in reverse order so that 0 comes at the end
 				 * i.e., white pieces comes at the bottom
 				 */
-				for (int i = 7; i >= 0; i--)
-				  {
-					  for (int j = 0; j < 8; j++)
-					    {
-						    if (positions[i, j] ==
-							null)
-							    buffer.Append
-								    (" .");
-						    else if (positions[i, j].
-							     Type ==
-							     PieceType.PAWN)
-							    buffer.Append
-								    (positions
-								     [i,
-								      j].
-								     Color ==
-								     ColorType.
-								     WHITE ?
-								     " P" :
-								     " p");
-						    else
-							    buffer.Append (" "
-									   +
-									   (positions
-									    [i,
-									     j].
-									    Color
-									    ==
-									    ColorType.
-									    WHITE
-									    ?
-									    positions
-									    [i,
-									     j].
-									    getNotationPrefix
-									    ()
-									    :
-									    positions
-									    [i,
-									     j].
-									    getNotationPrefix
-									    ().
-									    ToLower
-									    ()));
-					    }
-					  buffer.Append ("\n");
-				  }
+				for (int i = 7; i >= 0; i--) {
+					for (int j = 0; j < 8; j++) {
+						if (positions[i, j] == null)
+							buffer.Append (" .");
+						else if (positions[i, j].
+							 Type ==
+							 PieceType.PAWN)
+							buffer.Append
+								(positions
+								 [i,
+								  j].
+								 Color ==
+								 ColorType.
+								 WHITE ?
+								 " P" : " p");
+						else
+							buffer.Append (" "
+								       +
+								       (positions
+									[i,
+									 j].
+									Color
+									==
+									ColorType.
+									WHITE
+									?
+									positions
+									[i,
+									 j].
+									getNotationPrefix
+									()
+									:
+									positions
+									[i,
+									 j].
+									getNotationPrefix
+									().
+									ToLower
+									()));
+					}
+					buffer.Append ("\n");
+				}
 				buffer.Append ("\n");
 				return buffer.ToString ();
 			}
@@ -887,33 +866,28 @@ namespace Chess
 				/* Note that the rank is traversed in reverse order so that 0 comes at the end
 				 * i.e., white pieces comes at the bottom
 				 */
-				for (int i = 7; i >= 0; i--)
-				  {
-					  buffer.Remove (0, buffer.Length);
-					  for (int j = 0; j < 8; j++)
-					    {
-						    if (positions[i, j] ==
-							null)
-							    buffer.Append
-								    (".");
-						    else if (positions[i, j].
-							     Type ==
-							     PieceType.PAWN)
-							    buffer.Append
-								    (positions
-								     [i,
-								      j].
-								     Color ==
-								     ColorType.
-								     WHITE ?
-								     "P" :
-								     "p");
-						    else
-							    buffer.Append ((positions[i, j].Color == ColorType.WHITE ? positions[i, j].getNotationPrefix () : positions[i, j].getNotationPrefix ().ToLower ()));
-						    buffer.Append (" ");
-					    }
-					  list.Add (buffer.ToString ());
-				  }
+				for (int i = 7; i >= 0; i--) {
+					buffer.Remove (0, buffer.Length);
+					for (int j = 0; j < 8; j++) {
+						if (positions[i, j] == null)
+							buffer.Append (".");
+						else if (positions[i, j].
+							 Type ==
+							 PieceType.PAWN)
+							buffer.Append
+								(positions
+								 [i,
+								  j].
+								 Color ==
+								 ColorType.
+								 WHITE ?
+								 "P" : "p");
+						else
+							buffer.Append ((positions[i, j].Color == ColorType.WHITE ? positions[i, j].getNotationPrefix () : positions[i, j].getNotationPrefix ().ToLower ()));
+						buffer.Append (" ");
+					}
+					list.Add (buffer.ToString ());
+				}
 
 				list.Add ("");
 				return list;
@@ -962,36 +936,34 @@ namespace Chess
 				if (lines.Length != 8)
 					throw new
 						ChessException
-						(Catalog.GetString("Invalid number tokens in the FEN position"));
+						(Catalog.
+						 GetString
+						 ("Invalid number tokens in the FEN position"));
 				ChessSide whites =
 					new ChessSide (ColorType.WHITE);
 				ChessSide blacks =
 					new ChessSide (ColorType.BLACK);
-				for (int i = 0; i < lines.Length; i++)
-				  {
-					  string line = lines[i];
-					  for (int j = 0; j < line.Length;
-					       j++)
-					    {
-						    char ch = line[j];
-						    if (Char.IsNumber (ch))
-						      {
-							      j += ch - '1';	// starting from 1 since j++ will increment 1
-							      continue;
-						      }
-						    int rank = 7 - i;
-						    int file = j;
-						    ChessPiece piece;
-						    GetPieceForFENChar (ch,
-									whites,
-									blacks,
-									rank,
-									file,
-									out
-									piece);
-						    piece.addToSide ();
-					    }
-				  }
+				for (int i = 0; i < lines.Length; i++) {
+					string line = lines[i];
+					for (int j = 0; j < line.Length; j++) {
+						char ch = line[j];
+						if (Char.IsNumber (ch)) {
+							j += ch - '1';	// starting from 1 since j++ will increment 1
+							continue;
+						}
+						int rank = 7 - i;
+						int file = j;
+						ChessPiece piece;
+						GetPieceForFENChar (ch,
+								    whites,
+								    blacks,
+								    rank,
+								    file,
+								    out
+								    piece);
+						piece.addToSide ();
+					}
+				}
 				whites.King.CanCastle = info.WhiteCanCastle;
 				blacks.King.CanCastle = info.BlackCanCastle;
 				ChessGamePlayer game = new ChessGamePlayer ();
@@ -1012,60 +984,59 @@ namespace Chess
 			{
 				ColorType color;
 				ChessSide myside, oppside;
-				if (Char.IsUpper (fench))
-				  {
-					  color = ColorType.WHITE;
-					  myside = whites;
-					  oppside = blacks;
-				  }
-				else
-				  {
-					  color = ColorType.BLACK;
-					  myside = blacks;
-					  oppside = whites;
-				  }
+				if (Char.IsUpper (fench)) {
+					color = ColorType.WHITE;
+					myside = whites;
+					oppside = blacks;
+				}
+				else {
+					color = ColorType.BLACK;
+					myside = blacks;
+					oppside = whites;
+				}
 
 				char ch = Char.ToLower (fench);
-				switch (ch)
-				  {
-				  case 'p':
-					  piece = new Pawn (color, rank, file,
-							    myside, oppside);
-					  break;
-				  case 'k':
-					  piece = new King (color, rank, file,
-							    myside, oppside);
-					  break;
-				  case 'q':
-					  piece = new Queen (color, rank,
-							     file, myside,
-							     oppside);
-					  break;
-				  case 'b':
-					  piece = new Bishop (color, rank,
-							      file, myside,
-							      oppside);
-					  break;
-				  case 's':
-					  piece = new Knight (color, rank,
-							      file, myside,
-							      oppside);
-					  break;
-				  case 'n':
-					  piece = new Knight (color, rank,
-							      file, myside,
-							      oppside);
-					  break;
-				  case 'r':
-					  piece = new Rook (color, rank, file,
-							    myside, oppside);
-					  break;
-				  default:
-					  throw new
-						  ChessException
-						  (Catalog.GetString("Invalid piece type ") +
-						   ch);
-				  }
+				switch (ch) {
+				case 'p':
+					piece = new Pawn (color, rank, file,
+							  myside, oppside);
+					break;
+				case 'k':
+					piece = new King (color, rank, file,
+							  myside, oppside);
+					break;
+				case 'q':
+					piece = new Queen (color, rank,
+							   file, myside,
+							   oppside);
+					break;
+				case 'b':
+					piece = new Bishop (color, rank,
+							    file, myside,
+							    oppside);
+					break;
+				case 's':
+					piece = new Knight (color, rank,
+							    file, myside,
+							    oppside);
+					break;
+				case 'n':
+					piece = new Knight (color, rank,
+							    file, myside,
+							    oppside);
+					break;
+				case 'r':
+					piece = new Rook (color, rank, file,
+							  myside, oppside);
+					break;
+				default:
+					throw new
+						ChessException
+						(Catalog.
+						 GetString
+						 ("Invalid piece type ") +
+						 ch);
+				}
 
 			}
 
@@ -1102,40 +1073,40 @@ namespace Chess
 				public PositionInfo (string fen)
 				{
 					string[]lines = fen.Split (' ');
-					  position_str = lines[0];
-					  active_str = lines[1];
+					position_str = lines[0];
+					active_str = lines[1];
 					if (active_str.ToLower ().
 					    Equals ("b"))
-						  Turn = ColorType.BLACK;
+						Turn = ColorType.BLACK;
 					else
-						  Turn = ColorType.WHITE;
+						Turn = ColorType.WHITE;
 
-					  castling_available_str = lines[2];
-					  WhiteCanCastle = false;
-					  BlackCanCastle = false;
+					castling_available_str = lines[2];
+					WhiteCanCastle = false;
+					BlackCanCastle = false;
 					if (!castling_available_str.
 					    Equals ("-"))
-					  {
-						  for (int i = 0;
-						       i <
-						       castling_available_str.
-						       Length; i++)
-						    {
-							    char ch =
-								    castling_available_str
-								    [i];
-							    if (ch == 'K'
-								|| ch == 'Q')
-								    WhiteCanCastle
-									    =
-									    true;
-							    if (ch == 'k'
-								|| ch == 'q')
-								    BlackCanCastle
-									    =
-									    true;
-						    }
-					  }
+					{
+						for (int i = 0;
+						     i <
+						     castling_available_str.
+						     Length; i++)
+						{
+							char ch =
+								castling_available_str
+								[i];
+							if (ch == 'K'
+							    || ch == 'Q')
+								WhiteCanCastle
+									=
+									true;
+							if (ch == 'k'
+							    || ch == 'q')
+								BlackCanCastle
+									=
+									true;
+						}
+					}
 					enpassant_target_str =
 						lines[3].ToLower ();
 					halfmove_clock_str = lines[4];

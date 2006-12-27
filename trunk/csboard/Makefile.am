@@ -31,6 +31,7 @@ VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/ChessGameView.cs \
 	$(top_srcdir)/src/viewer/PositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/ViewerBoard.cs \
+	$(top_srcdir)/src/viewer/PGNTree.cs \
 	$(top_srcdir)/src/viewer/GamesListWidget.cs
 
 PLUGIN_SOURCES = \

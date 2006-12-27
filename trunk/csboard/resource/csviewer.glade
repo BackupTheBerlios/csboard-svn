@@ -97,13 +97,13 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="view1">
+	    <widget class="GtkMenuItem" id="viewMenuItem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_View</property>
 	      <property name="use_underline">True</property>
 
 	      <child>
-		<widget class="GtkMenu" id="view1_menu">
+		<widget class="GtkMenu" id="viewMenuItem_menu">
 
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="highlightMoveMenuItem">

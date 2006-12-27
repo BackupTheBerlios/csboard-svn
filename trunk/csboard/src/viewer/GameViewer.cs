@@ -53,6 +53,7 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
 			[Glade.Widget] private Gtk.
 				CheckMenuItem highlightMoveMenuItem;
+			[Glade.Widget] private Gtk.MenuItem viewMenuItem;
 			[Glade.Widget] private Gtk.Notebook pgnDetailsBook;
 			private Gtk.Label whiteLabel, blackLabel;
 			[Glade.Widget] private Gtk.Label nagCommentLabel;
@@ -163,6 +164,25 @@ namespace CsBoard
 				Menu menu = (Menu) exportAsMenuItem.Submenu;
 				menu.Remove (item);
 				exporters.Remove (exporter);
+				return true;
+			}
+
+			public bool AddToViewMenu (Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) viewMenuItem.Submenu;
+				if (menu == null) {
+					menu = new Menu ();
+					menu.Show ();
+					viewMenuItem.Submenu = menu;
+				}
+				menu.Append (item);
+				return true;
+			}
+
+			public bool RemoveFromViewMenu (Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) viewMenuItem.Submenu;
+				menu.Remove (item);
 				return true;
 			}
 

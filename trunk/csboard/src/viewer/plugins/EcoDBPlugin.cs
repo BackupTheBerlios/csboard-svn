@@ -1,3 +1,20 @@
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU Library General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// Copyright (C) 2006 Ravi Kiran UVS
+
 using System;
 using System.Collections;
 using System.IO;
@@ -6,6 +23,7 @@ using Chess.Parser;
 using Chess.Game;
 using CsBoard.Plugin;
 using Mono.Unix;
+using Gtk;
 
 namespace CsBoard
 {
@@ -14,8 +32,10 @@ namespace CsBoard
 		public class EcoDBPlugin:CsPlugin, IEcoDb
 		{
 			OpeningsDb db;
+			GameViewer viewer;
+			  Gtk.MenuItem item;
 
-			public EcoDBPlugin ():base ("url-loader",
+			public EcoDBPlugin ():base ("ecodb",
 						    Catalog.
 						    GetString
 						    ("ECO Database Plugin"),
@@ -23,10 +43,61 @@ namespace CsBoard
 						    GetString
 						    ("Provides the ECO database"))
 			{
+				item = new MenuItem (Catalog.
+						     GetString
+						     ("Opening Browser"));
+				item.Activated +=
+					on_view_opening_browser_activate;
+				item.Show ();
+			}
+
+			private void on_view_opening_browser_activate (object
+								       o,
+								       EventArgs
+								       args)
+			{
+				TreeStore store =
+					new TreeStore (typeof (string),
+						       typeof (string));
+				  db.PopulateTree (store);
+				TreeView view = new TreeView ();
+				  view.Model = store;
+				  view.AppendColumn ("Moves",
+						     new CellRendererText (),
+						     "text", 0);
+				  view.AppendColumn ("Opening",
+						     new CellRendererText (),
+						     "text", 1);
+
+				ScrolledWindow win = new ScrolledWindow ();
+				  win.SetPolicy (PolicyType.Automatic,
+						 PolicyType.Automatic);
+				  win.Add (view);
+				  win.ShowAll ();
+				Dialog dlg =
+					new Dialog (Catalog.
+						    GetString
+						    ("Opening Browser"),
+						    viewer.Window,
+						    DialogFlags.
+						    DestroyWithParent,
+						    Catalog.
+						    GetString ("Close"),
+						    ResponseType.None);
+				  dlg.VBox.PackStart (win, true, true, 2);
+				  dlg.SetSizeRequest (600, 400);
+				  dlg.ShowAll ();
+				  dlg.Run ();
+				  dlg.Hide ();
+				  dlg.Dispose ();
 			}
 
 			public override bool Initialize ()
 			{
+				viewer = GameViewer.Instance;
+				if (viewer == null)
+					return false;
+
 				System.Reflection.Assembly exec =
 					System.Reflection.Assembly.
 					GetExecutingAssembly ();
@@ -36,11 +107,14 @@ namespace CsBoard
 				EcoDbLoader loader = new EcoDbLoader (stream);
 				  db = loader.Openings;
 				  GameViewer.EcoDb = this;
+				  viewer.AddToViewMenu (item);
+
 				  return true;
 			}
 
 			public override bool Shutdown ()
 			{
+				viewer.RemoveFromViewMenu (item);
 				return true;
 			}
 
@@ -77,7 +151,7 @@ namespace CsBoard
 						   GameLoadedEventArgs args)
 			{
 				PGNChessGame game = args.Game;
-				Opening opening;
+				Opening opening = new Opening ();
 				opening.ecoName =
 					game.GetTagValue ("Site", null);
 				opening.name =
@@ -94,48 +168,6 @@ namespace CsBoard
 						 opening.ecoName,
 						 opening.name);
 			}
-		}
-
-		class OpeningsDb
-		{
-			Hashtable openings;
-			public OpeningsDb ()
-			{
-				openings = new Hashtable ();
-			}
-
-			public void AddOpening (Opening opening)
-			{
-				ArrayList list;
-				if (openings.ContainsKey (opening.ecoName))
-					list = (ArrayList) openings[opening.
-								    ecoName];
-				else
-					list = new ArrayList ();
-				list.Add (opening);
-				openings[opening.ecoName] = list;
-			}
-
-			public string GetName (string eco)
-			{
-				if (!openings.ContainsKey (eco)) {
-					Console.WriteLine ("[{0}] not found",
-							   eco);
-					return null;
-				}
-				ArrayList list = (ArrayList) openings[eco];
-				if (list.Count == 0)
-					return null;
-				return ((Opening) list[0]).name;
-			}
-		}
-
-		struct Opening
-		{
-			public string ecoName;
-			public string name;
-			public string variation;
-			public IList moves;
 		}
 	}
 }

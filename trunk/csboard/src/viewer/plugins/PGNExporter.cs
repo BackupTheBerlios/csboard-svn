@@ -133,18 +133,22 @@ namespace CsBoard
 
 
 				if (white == null)
-					white = Catalog.GetString("[White]");
+					white = Catalog.GetString ("[White]");
 				if (black == null)
-					black = Catalog.GetString("[Black]");
+					black = Catalog.GetString ("[Black]");
 				if (result == null)
-					result = Catalog.GetString("Unknown");
+					result = Catalog.
+						GetString ("Unknown");
 
 				printer.Font = fonts.titleFont;
-				printer.PrintText (white + Catalog.GetString(" vs ") + black +
-						   "\n\n");
+				printer.PrintText (white +
+						   Catalog.
+						   GetString (" vs ") +
+						   black + "\n\n");
 				printer.Font = fonts.regularFont;
-				printer.PrintText (Catalog.GetString("Result: ") + result +
-						   "\n\n");
+				printer.PrintText (Catalog.
+						   GetString ("Result: ") +
+						   result + "\n\n");
 
 				printer.Font = fonts.moveFont;
 				int moveno = 1;
@@ -154,42 +158,47 @@ namespace CsBoard
 
 				bool whitesTurn = true;
 				bool whiteMoveComment = false;
-				foreach (PGNChessMove move in game.Moves)
-				{
+				foreach (PGNChessMove move in game.Moves) {
 					// print move
 					if (move.move == null)
 						break;
-					if(!session.HasNext())
+					if (!session.HasNext ())
 						break;
 
 					session.Next ();
-					session.player.Move (session.CurrentMove);
+					session.player.Move (session.
+							     CurrentMove);
 
-					if(whitesTurn) {
-						printer.PrintText (moveno + ".");
+					if (whitesTurn) {
+						printer.PrintText (moveno +
+								   ". ");
 						whitesTurn = false;
 					}
-					else { // black
+					else {	// black
 						moveno++;
 						whitesTurn = true;
-						if(whiteMoveComment) {
-							printer.PrintText ("\n" + moveno + "...");
-							whiteMoveComment = false;
+						if (whiteMoveComment) {
+							printer.PrintText
+								("\n" +
+								 moveno +
+								 "... ");
+							whiteMoveComment =
+								false;
 						}
 					}
 
-					printer.PrintText(" " + move.move);
+					printer.PrintText (move.move + " ");
 
 					if (move.comment != null) {
-						  printer.LineBreak ();
-						  PrintImageForPosition
-							  (session.player);
-						  printer.Font =
-							  fonts.commentFont;
-						  printer.PrintText (move.comment);
-						  printer.Font =
-							  fonts.moveFont;
-						  whiteMoveComment = true;
+						printer.LineBreak ();
+						PrintImageForPosition
+							(session.player);
+						printer.Font =
+							fonts.commentFont;
+						printer.PrintText (move.
+								   comment);
+						printer.Font = fonts.moveFont;
+						whiteMoveComment = true;
 					}
 				}
 			}
