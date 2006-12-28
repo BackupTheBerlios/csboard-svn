@@ -50,6 +50,8 @@ namespace CsBoard
 		protected ArrayList pixbufs;
 		SvgFileManager svgFileManager;
 
+		int cursize = -1;
+
 		  string[] files = {
 		"white-rook.svg",
 				"white-king.svg",
@@ -75,9 +77,12 @@ namespace CsBoard
 
 		public virtual void SetSize (int s)
 		{
-			pixbufs = new ArrayList ();
-
 			s = Math.Max (s, 10);
+			if(cursize == s)
+				return;
+			cursize = s;
+
+			pixbufs = new ArrayList ();
 
 			foreach (string filename in files) {
 				pixbufs.Add (GetPixbuf (filename, s));
@@ -184,7 +189,7 @@ namespace CsBoard
 				try {
 					File.Delete (details.filepath);
 				}
-				catch (Exception e) {
+				finally {
 				}
 			}
 		}

@@ -469,14 +469,7 @@ namespace CsBoard
 				}
 				UpdateMoveDetails (true);
 			}
-
-			public void on_all_games_button_clicked (object o,
-								 EventArgs
-								 args)
-			{
-				pgnDetailsBook.Page = ALL_GAMES_PAGE;
-			}
-
+ 
 			private void OnShowNthMoveEvent (object o,
 							 MoveEventArgs args)
 			{
