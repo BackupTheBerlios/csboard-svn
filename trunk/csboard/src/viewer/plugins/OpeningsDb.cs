@@ -36,6 +36,8 @@ namespace CsBoard
 		public class OpeningsDb:PGNTree
 		{
 			Hashtable openings;
+			bool reverseTraversal = false;
+
 			public OpeningsDb ():base ()
 			{
 				openings = new Hashtable ();
@@ -81,7 +83,14 @@ namespace CsBoard
 			{
 				if (node == null)
 					return;
-				PGNTreeNode last = node.prev;
+				PGNTreeNode last;
+				if (reverseTraversal) {
+					last = node;
+					node = node.prev;
+				}
+				else
+					last = node.prev;
+
 				for (;;) {
 					TreeIter newiter;
 					Opening opening =
@@ -91,6 +100,8 @@ namespace CsBoard
 							store.
 							AppendValues (node.
 								      move,
+								      node.
+								      count,
 								      opening
 								      ==
 								      null ?
@@ -108,6 +119,8 @@ namespace CsBoard
 							AppendValues (iter,
 								      node.
 								      move,
+								      node.
+								      count,
 								      opening
 								      ==
 								      null ?
@@ -123,7 +136,10 @@ namespace CsBoard
 						    node.firstChild);
 					if (node == last)
 						break;
-					node = node.next;
+					if (reverseTraversal)
+						node = node.prev;
+					else
+						node = node.next;
 				}
 			}
 		}

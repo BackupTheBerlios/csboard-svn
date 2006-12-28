@@ -109,7 +109,6 @@ namespace CsBoard
 		protected override bool OnConfigureEvent (Gdk.
 							  EventConfigure evnt)
 		{
-
 			int width = Allocation.Width;
 			int height = Allocation.Height;
 

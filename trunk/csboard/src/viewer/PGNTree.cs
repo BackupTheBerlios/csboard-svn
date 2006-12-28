@@ -27,6 +27,7 @@ namespace CsBoard
 	{
 		public class PGNTreeNode
 		{
+			public int count;
 			public string move;
 			public PGNTreeNode prev, next;
 			public PGNTreeNode firstChild, parent;
@@ -76,8 +77,13 @@ namespace CsBoard
 
 				AddMove (((PGNChessMove) moves[0]).move, null,
 					 root, out node);
+				node.count++;
 				if (root == null)
 					root = node;
+				else {
+					if (RearrangeList (root, node))
+						root = node;
+				}
 
 				PGNTreeNode parent;
 				bool first = true;
@@ -91,10 +97,65 @@ namespace CsBoard
 					node = parent.firstChild;
 					AddMove (move.move, parent,
 						 parent.firstChild, out node);
+					node.count++;
+					if (RearrangeList
+					    (parent.firstChild, node))
+						parent.firstChild = node;
 				}
 
 				node.value = value;
 				leafnode = node;
+			}
+
+			private void PrintList (PGNTreeNode node)
+			{
+				PGNTreeNode last = node.prev;
+				for (;;) {
+					Console.Write ("{0}[{1}] ", node.move,
+						       node.count);
+					if (node == last)
+						break;
+					node = node.next;
+				}
+				Console.WriteLine ();
+			}
+
+			private bool RearrangeList (PGNTreeNode first,
+						    PGNTreeNode node)
+			{
+				if (node == first)
+					return false;
+				if (node.count <= node.prev.count)
+					return false;
+
+				// no need to check the prev node as it was already checked above
+				// also this avoids the case where node is the last element and
+				// first.prev and node.prev will be the same
+				PGNTreeNode tmpnode = node.prev.prev;
+
+				RemoveNode (node);
+				PGNTreeNode max = first.prev;
+				while (tmpnode != max) {
+					// note that 'node' is still part of the list
+					if (node.count <= tmpnode.count)
+						break;
+					tmpnode = tmpnode.prev;
+				}
+
+				// node should be moved to the right of tmpnode
+				InsertBetweenNodes (tmpnode, tmpnode.next,
+						    node);
+				if (node.count > first.count)
+					return true;	// this should be the first child
+				return false;
+			}
+
+			private void RemoveNode (PGNTreeNode node)
+			{
+				PGNTreeNode left = node.prev;
+				PGNTreeNode right = node.next;
+				left.next = right;
+				right.prev = left;
 			}
 
 			// The 'node' will have the node which should parent the next insertion
@@ -113,9 +174,16 @@ namespace CsBoard
 				// first is null or unable to find the move
 				PGNTreeNode newnode = AllocNode (move);
 				newnode.parent = parent;
+/*
 				if (first == null && parent != null)
 					parent.firstChild = newnode;
 				PrependToList (first, newnode);
+*/
+				if (parent != null
+				    && parent.firstChild == null)
+					parent.firstChild = newnode;
+				AppendToList (first, newnode);
+
 				slot = newnode;
 			}
 
@@ -132,6 +200,28 @@ namespace CsBoard
 				first.prev = newnode;
 				newnode.prev.next = newnode;	// update the last node
 
+			}
+
+			private void AppendToList (PGNTreeNode first,
+						   PGNTreeNode newnode)
+			{
+				if (first == null) {
+					newnode.next = newnode.prev = newnode;
+					return;
+				}
+
+				InsertBetweenNodes (first.prev, first,
+						    newnode);
+			}
+
+			private void InsertBetweenNodes (PGNTreeNode left,
+							 PGNTreeNode right,
+							 PGNTreeNode newnode)
+			{
+				newnode.prev = left;
+				newnode.next = right;
+				right.prev = newnode;
+				left.next = newnode;
 			}
 
 			private bool FindNode (string move, PGNTreeNode node,

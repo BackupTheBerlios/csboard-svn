@@ -56,36 +56,9 @@ namespace CsBoard
 								       EventArgs
 								       args)
 			{
-				TreeStore store =
-					new TreeStore (typeof (string),
-						       typeof (string));
-				  db.PopulateTree (store);
-				TreeView view = new TreeView ();
-				  view.Model = store;
-				  view.AppendColumn ("Moves",
-						     new CellRendererText (),
-						     "text", 0);
-				  view.AppendColumn ("Opening",
-						     new CellRendererText (),
-						     "text", 1);
-
-				ScrolledWindow win = new ScrolledWindow ();
-				  win.SetPolicy (PolicyType.Automatic,
-						 PolicyType.Automatic);
-				  win.Add (view);
-				  win.ShowAll ();
 				Dialog dlg =
-					new Dialog (Catalog.
-						    GetString
-						    ("Opening Browser"),
-						    viewer.Window,
-						    DialogFlags.
-						    DestroyWithParent,
-						    Catalog.
-						    GetString ("Close"),
-						    ResponseType.None);
-				  dlg.VBox.PackStart (win, true, true, 2);
-				  dlg.SetSizeRequest (600, 400);
+					new OpeningBrowser (viewer.Window,
+							    db);
 				  dlg.ShowAll ();
 				  dlg.Run ();
 				  dlg.Hide ();
@@ -167,6 +140,111 @@ namespace CsBoard
 						("skipping this opening. econame = [{0}], name = [{1}]",
 						 opening.ecoName,
 						 opening.name);
+			}
+		}
+
+		public class OpeningBrowser:Dialog
+		{
+			OpeningsDb db;
+			GameViewerBoard boardWidget;
+			TreeView view;
+			TreeStore store;
+			public OpeningBrowser (Window parent,
+					       OpeningsDb db):base (Catalog.
+								    GetString
+								    ("Opening Browser"),
+								    parent,
+								    DialogFlags.
+								    DestroyWithParent,
+								    Catalog.
+								    GetString
+								    ("Close"),
+								    ResponseType.
+								    Close)
+			{
+				this.db = db;
+				store = new TreeStore (typeof (string),
+						       typeof (int),
+						       typeof (string));
+				  db.PopulateTree (store);
+				  view = new TreeView ();
+				  view.Model = store;
+				  view.AppendColumn (Catalog.
+						     GetString ("Moves"),
+						     new CellRendererText (),
+						     "text", 0);
+				  view.AppendColumn ("Count",
+						     new CellRendererText (),
+						     "text", 1);
+				  view.AppendColumn ("Name",
+						     new CellRendererText (),
+						     "text", 2);
+
+				ScrolledWindow win = new ScrolledWindow ();
+				  win.SetPolicy (PolicyType.Automatic,
+						 PolicyType.Automatic);
+				  win.Add (view);
+
+				  boardWidget = new GameViewerBoard ();
+				HPaned split = new HPaned ();
+				VBox box = new VBox ();
+				  box.PackStart (boardWidget, false, true, 2);
+				  split.Pack1 (box, false, true);	// resize, shrink
+				  split.Pack2 (win, true, true);
+				  split.ShowAll ();
+				  split.Position = 250;
+				  split.PositionSet = true;
+				  VBox.PackStart (split, true, true, 2);
+				  SetSizeRequest (700, 300);
+
+				  view.CursorChanged += OnCursorChanged;
+			}
+
+			private void OnCursorChanged (object o,
+						      System.EventArgs args)
+			{
+				TreePath path;
+				TreeViewColumn col;
+				view.GetCursor (out path, out col);
+				ArrayList moves = new ArrayList ();
+
+				TreePath tmppath = new TreePath ();
+				foreach (int i in path.Indices)
+				{
+					tmppath.AppendIndex (i);
+					TreeIter iter;
+					store.GetIter (out iter, tmppath);
+					moves.Add (store.GetValue (iter, 0));
+				}
+
+				boardWidget.PlayMoves (moves);
+			}
+		}
+
+		public class GameViewerBoard:ViewerBoard
+		{
+			public GameViewerBoard ():base (ChessGamePlayer.
+							GetDefaultPosition ())
+			{
+			}
+
+			public void PlayMoves (ArrayList moves)
+			{
+				ChessGamePlayer player =
+					ChessGamePlayer.CreatePlayer ();
+				int count = moves.Count;
+				string lastmove = null;
+				int i = 0;
+				foreach (string move in moves) {
+					player.Move (move);
+				}
+				int r1, f1, r2, f2;
+				r1 = player.LastMoveInfo.src_rank;
+				f1 = player.LastMoveInfo.src_file;
+				r2 = player.LastMoveInfo.dest_rank;
+				f2 = player.LastMoveInfo.dest_file;
+				Move (r1, f1, r2, f2, ' ');
+				SetPosition (player.GetPosition ());
 			}
 		}
 	}

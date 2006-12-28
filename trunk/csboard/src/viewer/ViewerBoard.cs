@@ -32,6 +32,7 @@ namespace CsBoard
 		{
 			int src_rank, src_file, dest_rank, dest_file;
 			bool showMove = true;
+			bool firstTime = true;
 
 			public bool ShowMove
 			{
@@ -208,6 +209,10 @@ namespace CsBoard
 								  EventConfigure
 								  evnt)
 			{
+				if (firstTime) {
+					base.OnConfigureEvent (evnt);
+					firstTime = false;
+				}
 				if (Allocation.Height != Allocation.Width) {
 					WidthRequest = HeightRequest =
 						Allocation.Width;
