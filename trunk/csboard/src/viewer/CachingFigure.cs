@@ -72,8 +72,6 @@ namespace CsBoard
 					stream.Write (buf, 0, nread);
 				}
 				stream.Close ();
-				Console.WriteLine ("Cached {0} in {1}", file,
-						   tmpfile);
 			}
 
 			protected override Gdk.Pixbuf GetPixbuf (string file,
