@@ -128,7 +128,7 @@ RESOURCES =										\
 	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade			\
 	-resource:$(top_srcdir)/resource/eco.pgn,eco.pgn
 
-csboard.exe: $(SOURCE) config.cs resource/csboard.glade
+csboard.exe: $(SOURCE) config.cs resource/csboard.glade resource/csviewer.glade
 	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
 	-r:Mono.Posix

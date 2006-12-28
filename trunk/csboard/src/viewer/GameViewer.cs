@@ -64,8 +64,8 @@ namespace CsBoard
 			ChessGameWidget gameWidget;
 			GamesListWidget gamesListWidget;
 
-			const int ALL_GAMES_PAGE = 0;
-			const int GAME_DETAILS_PAGE = 1;
+			const int ALL_GAMES_PAGE = 1;
+			const int GAME_DETAILS_PAGE = 0;
 
 			string initialDirForFileChooser = null;
 
