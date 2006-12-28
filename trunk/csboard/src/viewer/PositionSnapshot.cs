@@ -52,7 +52,7 @@ namespace CsBoard
 			public bool side = false;
 
 			// Figure Renderer
-			private Figure figure;
+			private static Figure figure;
 
 			// Position
 			private Position position;
@@ -109,7 +109,8 @@ namespace CsBoard
 				// outer box, coord, inner box
 				  ComputeSizes (width, height);
 
-				  figure = CachingFigure.Instance;
+				if (figure == null)
+					figure = new Figure ();
 				  position = new Position (pos);
 
 				  figure.SetSize (size);
