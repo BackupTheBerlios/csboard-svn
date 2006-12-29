@@ -1,5 +1,37 @@
 2006-12-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
+	* configure.in
+	* Makefile.am
+	* src/viewer/Makefile.am
+
+	Moved the files
+
+	* src/viewer/plugins/EcoDBPlugin.cs
+	* src/viewer/plugins/OpeningsDb.cs
+	* src/viewer/plugins/PGNExporter.cs
+	* src/viewer/plugins/PGNPrinterPlugin.cs
+	* src/viewer/plugins/PrintWrapper.cs
+	* src/viewer/plugins/PGNUrlLoader.cs
+
+	as
+	
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
+	* src/viewer/plugins/ecodb/OpeningsDb.cs
+	* src/viewer/plugins/urlloader/PGNUrlLoader.cs
+	* src/viewer/plugins/printer/PrintWrapper.cs
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
+	* src/viewer/plugins/printer/PGNExporter.cs
+
+	created makefiles
+	
+	* src/viewer/plugins/ecodb/Makefile.am
+	* src/viewer/plugins/urlloader/Makefile.am
+	* src/viewer/plugins/printer/Makefile.am
+
+	Arranged the plugins under separate sub folders.
+
+2006-12-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
 	* Makefile.am
 	* src/Figure.cs
 	* src/viewer/PositionSnapshot.cs

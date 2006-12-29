@@ -125,10 +125,26 @@ RESOURCES =										\
 	-resource:$(top_srcdir)/images/black-pawn.svg,black-pawn.svg			\
 	-resource:$(top_srcdir)/images/black-knight.svg,black-knight.svg		\
 	-resource:$(srcdir)/resource/csboard.glade,csboard.glade			\
-	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade			\
-	-resource:$(top_srcdir)/resource/eco.pgn,eco.pgn
+	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade
 
-csboard.exe: $(SOURCE) config.cs resource/csboard.glade resource/csviewer.glade
+RESOURCE_FILE_DEPENDENCIES =						\
+	$(top_srcdir)/images/white-rook.svg				\
+	$(top_srcdir)/images/white-king.svg				\
+	$(top_srcdir)/images/white-queen.svg				\
+	$(top_srcdir)/images/white-bishop.svg				\
+	$(top_srcdir)/images/white-pawn.svg				\
+	$(top_srcdir)/images/white-knight.svg				\
+	$(top_srcdir)/images/black-rook.svg				\
+	$(top_srcdir)/images/black-king.svg				\
+	$(top_srcdir)/images/black-queen.svg				\
+	$(top_srcdir)/images/black-bishop.svg				\
+	$(top_srcdir)/images/black-pawn.svg				\
+	$(top_srcdir)/images/black-knight.svg				\
+	$(srcdir)/resource/csboard.glade				\
+	$(srcdir)/resource/csviewer.glade
+
+
+csboard.exe: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDENCIES)
 	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
 	-r:Mono.Posix

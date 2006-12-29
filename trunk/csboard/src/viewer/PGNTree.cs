@@ -106,7 +106,7 @@ namespace CsBoard
 				node.value = value;
 				leafnode = node;
 			}
-
+/*
 			private void PrintList (PGNTreeNode node)
 			{
 				PGNTreeNode last = node.prev;
@@ -119,7 +119,7 @@ namespace CsBoard
 				}
 				Console.WriteLine ();
 			}
-
+*/
 			private bool RearrangeList (PGNTreeNode first,
 						    PGNTreeNode node)
 			{
@@ -185,21 +185,6 @@ namespace CsBoard
 				AppendToList (first, newnode);
 
 				slot = newnode;
-			}
-
-			private void PrependToList (PGNTreeNode first,
-						    PGNTreeNode newnode)
-			{
-				if (first == null) {
-					newnode.next = newnode.prev = newnode;
-					return;
-				}
-
-				newnode.next = first;
-				newnode.prev = first.prev;
-				first.prev = newnode;
-				newnode.prev.next = newnode;	// update the last node
-
 			}
 
 			private void AppendToList (PGNTreeNode first,

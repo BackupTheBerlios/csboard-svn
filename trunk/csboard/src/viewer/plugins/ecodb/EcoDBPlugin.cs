@@ -137,7 +137,9 @@ namespace CsBoard
 					db.AddOpening (opening);
 				else
 					Console.WriteLine
-						("skipping this opening. econame = [{0}], name = [{1}]",
+						(Catalog.
+						 GetString
+						 ("skipping this opening. econame = [{0}], name = [{1}]"),
 						 opening.ecoName,
 						 opening.name);
 			}
@@ -166,17 +168,19 @@ namespace CsBoard
 				store = new TreeStore (typeof (string),
 						       typeof (int),
 						       typeof (string));
-				  db.PopulateTree (store);
+				  this.db.PopulateTree (store);
 				  view = new TreeView ();
 				  view.Model = store;
 				  view.AppendColumn (Catalog.
 						     GetString ("Moves"),
 						     new CellRendererText (),
 						     "text", 0);
-				  view.AppendColumn ("Count",
+				  view.AppendColumn (Catalog.
+						     GetString ("Variations"),
 						     new CellRendererText (),
 						     "text", 1);
-				  view.AppendColumn ("Name",
+				  view.AppendColumn (Catalog.
+						     GetString ("Name"),
 						     new CellRendererText (),
 						     "text", 2);
 
@@ -232,9 +236,6 @@ namespace CsBoard
 			{
 				ChessGamePlayer player =
 					ChessGamePlayer.CreatePlayer ();
-				int count = moves.Count;
-				string lastmove = null;
-				int i = 0;
 				foreach (string move in moves) {
 					player.Move (move);
 				}
