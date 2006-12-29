@@ -74,7 +74,7 @@ namespace CsBoard
 			{
 				curMoveIdx = -1;
 				game = g;
-				GLib.Idle.Add (UpdateGameDetails);
+				UpdateGameDetails();
 			}
 
 			private bool UpdateGameDetails ()
