@@ -52,7 +52,7 @@ namespace CsBoard
 
 				loadItem = new MenuItem (Catalog.
 							 GetString
-							 ("Load Games from Database"));
+							 ("Load Rated Games"));
 				loadItem.Activated +=
 					on_load_from_db_activate;
 				loadItem.Show ();
@@ -99,7 +99,7 @@ namespace CsBoard
 							       EventArgs args)
 			{
 				ArrayList list = new ArrayList ();
-				GameDb.Instance.LoadGames (list);
+				GameDb.Instance.LoadRatedGames (list, GameRating.Average);
 				viewer.LoadGames (list);
 			}
 
@@ -188,11 +188,11 @@ namespace CsBoard
 							 ("Must Have"))};
 				GameRating[]ratings =
 				{
-				GameRating.Ignore,
-						GameRating.Average,
-						GameRating.Good,
-						GameRating.Excellent,
-						GameRating.MustHave};
+					GameRating.Ignore,
+					GameRating.Average,
+					GameRating.Good,
+					GameRating.Excellent,
+					GameRating.MustHave};
 
 				int i = 0;
 				foreach (CheckMenuItem item in ratingItems)

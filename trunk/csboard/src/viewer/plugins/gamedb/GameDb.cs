@@ -31,246 +31,281 @@ namespace CsBoard
 	namespace Viewer
 	{
 
-		public enum GameRating
+	public enum GameRating
+	{
+		Unknown = 0,
+		Ignore = -1,
+		Average = 1,
+		Good = 2,
+		Excellent = 3,
+		MustHave = 4
+	}
+
+	public class PGNGameDetails
+	{
+		public PGNChessGame Game
 		{
-			Unknown = 0,
-			Ignore = -1,
-			Average = 1,
-			Good = 2,
-			Excellent = 3,
-			MustHave = 4
+			get
+			{
+				return game;
+			}
+		}
+		PGNChessGame game; int nmoves; string white;
+		string black;
+		string result;
+		public GameRating Rating
+		{
+			get
+			{
+				return (GameRating) rating;
+			}
+			set
+			{
+				rating = (int) value;
+			}
+		}
+		int rating = (int) GameRating.Unknown;
+		public string Hash
+		{
+			get
+			{
+				return hash;
+			}
+		}
+		public string hash;
+		public PGNGameDetails (PGNChessGame game)
+		{
+			this.game = game;
+			nmoves =
+				game.Moves.Count;
+			white =
+				game.
+				GetTagValue ("White",
+					     "");
+			black =
+				game.
+				GetTagValue ("Black",
+					     "");
+			result = game.GetTagValue ("Result", "*");
+			hash = GenerateHash ();
 		}
 
-		public class PGNGameDetails
+		private string GenerateHash ()
 		{
-			public PGNChessGame Game
+			StringBuilder buffer =
+				new StringBuilder ();
+			buffer.Append (String.
+				       Format
+				       ("{0}:",
+					nmoves));
+			ChessGamePlayer player;
+			player =
+				game.
+				HasTag ("FEN") ?
+				ChessGamePlayer.
+				CreateFromFEN (game.
+					       GetTagValue
+					       ("FEN",
+						null))
+				: ChessGamePlayer.
+				CreatePlayer ();
+			player =
+				Chess.Game.
+				ChessGamePlayer.
+				CreatePlayer ();
+			foreach (PGNChessMove move in game.Moves)
 			{
-			 get
-			 {
-			  return game;}
-			  }
-			  PGNChessGame game;
-			  int nmoves;
-			  string white;
-			  string black;
-			  string result; public GameRating Rating
-			  {
-			  get
-			  {
-			  return rating;
-			  }
-			  set
-			  {
-			  rating = value;
-			  }
-			  }
-			  GameRating rating = GameRating.Unknown;
-			  public string Hash
-			  {
-			  get
-			  {
-			  return hash;}
-			  }
-			  public string hash;
-			  public PGNGameDetails (PGNChessGame game)
-			  {
-			  this.game = game;
-			  nmoves =
-			  game.Moves.Count;
-			  white =
-			  game.
-			  GetTagValue ("White",
-				       "");
-			  black =
-			  game.
-			  GetTagValue ("Black",
-				       "");
-			  result = game.GetTagValue ("Result", "*");
-			  hash = GenerateHash ();}
+				player.Move (move.Move);
+			}
 
-			  private string GenerateHash ()
-			  {
-			  StringBuilder buffer =
-			  new StringBuilder ();
-			  buffer.Append (String.
-					 Format
-					 ("{0}:",
-					  nmoves));
-			  ChessGamePlayer player;
-			  player =
-			  game.
-			  HasTag ("FEN") ?
-			  ChessGamePlayer.
-			  CreateFromFEN (game.
-					 GetTagValue
-					 ("FEN",
-					  null))
-			  : ChessGamePlayer.
-			  CreatePlayer ();
-			  player =
-			  Chess.Game.
-			  ChessGamePlayer.
-			  CreatePlayer ();
-			  foreach (PGNChessMove move in game.Moves)
-			  {
-			  player.Move (move.Move);}
+			buffer.Append (player.
+				       GetPositionAsFEN
+				       ());
+			buffer.Append (((nmoves + 1) / 2));
+			return buffer.ToString ();
+		}
+	}
 
-			  buffer.Append (player.
-					 GetPositionAsFEN
-					 ());
-			  buffer.Append (((nmoves + 1) / 2));
-			  return buffer.ToString ();}
-			  }
+	public class GameDb
+	{
+		ObjectContainer db;
+		const string DB_FILE = "games.db";
+		static GameDb instance = null;
+		public static GameDb Instance
+		{
+			get
+			{
+				if (instance == null)
+					instance = new GameDb ();
+				return instance;
+			}
+		}
 
-			  public class GameDb
-			  {
-			  ObjectContainer db;
-			  const string DB_FILE = "games.db";
-			  static GameDb instance = null;
-			  public static GameDb Instance
-			  {
-			  get
-			  {
-			  if (instance == null)
-			  instance = new GameDb (); return instance;}
-			  }
-
-			  GameDb ()
-			  {
-			  string dir = "";
-			  string gnomedir = "";
-			  gnomedir =
-			  Path.
-			  Combine (Environment.
-				   GetEnvironmentVariable
-				   ("HOME"),
-				   ".gnome2");
-			  if (!Directory.Exists (gnomedir))
-			  {
-			  Directory.CreateDirectory (gnomedir);}
-
-			  dir =
-			  Path.Combine (gnomedir,
-					"csboard");
-			  if (!Directory.Exists (dir))
-			  {
-			  Directory.CreateDirectory (dir);}
-
-			  string dbfile = Path.Combine (dir, DB_FILE);
-			  // 1 - generate for specific classes only
-			  // Int32.MaxValue - generate for all classes
-			  Db4o.Configure ().GenerateUUIDs (1);
-			  Db4o.Configure ().
-			  ObjectClass (typeof (PGNGameDetails)).
-			  GenerateUUIDs (true);
-			  Db4o.Configure ().MessageLevel (0);
-			  Db4o.Configure ().
-			  ObjectClass (typeof (PGNGameDetails)).
-			  ObjectField ("hash").Indexed (true);
-			  Db4o.Configure ().
-			  ObjectClass (typeof (PGNGameDetails)).
-			  ObjectField ("rating").Indexed (true);
-			  db = Db4o.OpenFile (dbfile);}
-
-			  public void AddGame (PGNChessGame game)
-			  {
-			  AddGame (game, GameRating.Unknown);}
-
-			  public void AddGame (PGNChessGame game,
-					       GameRating rating)
-			  {
-			  PGNGameDetails info =
-			  new PGNGameDetails (game);
-			  info.Rating = rating;
-			  PGNGameDetails existing;
-			  if (!FindGame (info, out existing))
-			  {
-			  db.Set (info); return;}
-
-			  // Game found
-			  if (existing.Rating == rating)
-			  return; existing.Rating = rating; db.Set (info);}
-
-			  private bool FindGame (PGNGameDetails info,
-						 out PGNGameDetails match)
-			  {
-			  match = null;
-			  com.db4o.query.
-			  Query query =
-			  db.Query ();
-			  query.
-			  Constrain (typeof
+		GameDb ()
+		{
+			string dir = "";
+			string gnomedir = "";
+			gnomedir =
+				Path.
+				Combine (Environment.
+					 GetEnvironmentVariable
+					 ("HOME"),
+					 ".gnome2");
+			if (!Directory.Exists (gnomedir))
+			{
+				Directory.CreateDirectory (gnomedir);
+			}
+			
+			dir =
+				Path.Combine (gnomedir,
+					      "csboard");
+			if (!Directory.Exists (dir))
+			{
+				Directory.CreateDirectory (dir);
+			}
+			
+			string dbfile = Path.Combine (dir, DB_FILE);
+			// 1 - generate for specific classes only
+			// Int32.MaxValue - generate for all classes
+			Db4o.Configure ().GenerateUUIDs (1);
+			Db4o.Configure ().
+				ObjectClass (typeof (PGNGameDetails)).
+				GenerateUUIDs (true);
+			Db4o.Configure ().MessageLevel (0);
+			Db4o.Configure ().
+				ObjectClass (typeof (PGNGameDetails)).
+				ObjectField ("hash").Indexed (true);
+			Db4o.Configure ().
+				ObjectClass (typeof (PGNGameDetails)).
+				ObjectField ("rating").Indexed (true);
+			db = Db4o.OpenFile (dbfile);
+		}
+		
+		public void AddGame (PGNChessGame game)
+		{
+			AddGame (game, GameRating.Unknown);
+		}
+		
+		public void AddGame (PGNChessGame game,
+				     GameRating rating)
+		{
+			PGNGameDetails info =
+				new PGNGameDetails (game);
+			info.Rating = rating;
+			PGNGameDetails existing;
+			if (!FindGame (info, out existing))
+			{
+				db.Set (info);
+				return;
+			}
+			
+			// Game found
+			if (existing.Rating == rating)
+				return;
+			existing.Rating = rating;
+			db.Set (existing);
+		}
+		
+		private bool FindGame (PGNGameDetails info,
+				       out PGNGameDetails match)
+		{
+			match = null;
+			com.db4o.query.
+				Query query =
+				db.Query ();
+			query.
+				Constrain (typeof
+					   (PGNGameDetails));
+			query.Descend ("hash").
+				Constrain (info.Hash).
+				Equal ();
+			ObjectSet res =
+				query.Execute ();
+			if (!res.HasNext ())
+				return false;
+			PGNChessGame game1 =
+				info.Game;
+			while (res.HasNext ())
+			{
+				PGNGameDetails info2 = (PGNGameDetails) res.Next ();
+				PGNChessGame game2 = info2.Game;
+				if (game1.Moves.
+				    Count !=
+				    game2.Moves.Count)
+					continue;
+				int i =
+					game1.Moves.Count - 1;
+				bool matched = true;
+				while (i >= 0)
+				{
+					PGNChessMove move1 =
+						(PGNChessMove) game1.
+						Moves[i];
+					PGNChessMove move2 =
+						(PGNChessMove) game2.
+						Moves[i];
+					if (!move1.Move.Equals (move2.Move))
+					{
+						matched = false;
+						break;
+					}
+					i--;
+				}
+				
+				if (matched)
+				{
+					match = info2;
+					return true;
+				}
+			}
+			
+			// nothing matched (but the games had the same hash!)
+			return false;
+		}
+		
+		public void AddGames (IList games)
+		{
+			foreach (PGNChessGame game in games)
+			{
+				AddGame (game);
+			}
+		}
+		
+		public void DeleteAll ()
+		{
+			ObjectSet res =
+				db.
+				Get (typeof
 				     (PGNGameDetails));
-			  query.Descend ("hash").
-			  Constrain (info.Hash).
-			  Equal ();
-			  ObjectSet res =
-			  query.Execute ();
-			  if (!res.HasNext ())return false;
-			  PGNChessGame game1 =
-			  info.Game; while (res.HasNext ())
-			  {
-			  PGNGameDetails info2 = (PGNGameDetails) res.Next ();
-			  PGNChessGame game2 = info2.Game;
-			  if (game1.Moves.
-			      Count !=
-			      game2.Moves.Count)
-			  continue;
-			  int i =
-			  game1.Moves.Count - 1;
-			  bool matched = true; while (i >= 0)
-			  {
-			  PGNChessMove move1 =
-			  (PGNChessMove) game1.
-			  Moves[i];
-			  PGNChessMove move2 =
-			  (PGNChessMove) game2.
-			  Moves[i]; if (!move1.Move.Equals (move2.Move))
-			  {
-			  matched = false; break;}
-			  i--;}
-
-			  if (matched)
-			  {
-			  match = info2; return true;}
-			  }
-
-			  // nothing matched (but the games had the same hash!)
-			  return false;}
-
-			  public void AddGames (IList games)
-			  {
-			  foreach (PGNChessGame game in games)
-			  {
-			  AddGame (game);}
-			  }
-
-			  public void DeleteAll ()
-			  {
-			  ObjectSet res =
-			  db.
-			  Get (typeof
-			       (PGNGameDetails)); while (res.HasNext ())
-			  {
-			  db.Delete (res.Next ());}
-			  }
-
-			  public void LoadGames (IList list)
-			  {
-			  ObjectSet res =
-			  db.
-			  Get (typeof
-			       (PGNGameDetails)); while (res.HasNext ())
-			  {
-			  PGNGameDetails details
-			  =
-			  (PGNGameDetails) res.
-			  Next (); list.Add (details.Game);}
-			  }
-
-			  ~GameDb ()
-			  {
-			  db.Close ();}
-			  }
-			  }
-			  }
+			while (res.HasNext ())
+			{
+				db.Delete (res.Next ());
+			}
+		}
+		
+		public void LoadRatedGames (IList list, GameRating aboveThis)
+		{
+			Query query = db.Query();
+			query.Constrain(typeof(PGNGameDetails));
+			Query ratingQuery = query.Descend("rating");
+			ratingQuery.Constrain(aboveThis).Greater();
+			ratingQuery.OrderDescending();
+			
+			ObjectSet res = query.Execute();
+			while (res.HasNext ())
+			{
+				PGNGameDetails details
+					=
+					(PGNGameDetails) res.
+					Next ();
+				list.Add (details.Game);
+			}
+		}
+		
+		~GameDb ()
+		{
+			db.Close ();
+		}
+	}
+	}
+}
