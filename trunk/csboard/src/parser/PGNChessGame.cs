@@ -161,18 +161,19 @@ namespace Chess
 				int i = 1;
 				bool whiteMoveComment = false;
 				foreach (PGNChessMove move in moves) {
-					if (move.move == null)
+					if (move.Move == null)
 						// BUG. Empty move? This should not happen.
 						break;
 					if (i % 2 == 1) {	// white's turn
 						writer.Write (i + ". " +
-							      move.move);
+							      move.
+							      DetailedMove);
 					}
 					else if (whiteMoveComment) {
 						writer.Write (i + "... ");
 						whiteMoveComment = false;
 					}
-					writer.Write (move.move);
+					writer.Write (move.DetailedMove);
 					if (move.comment != null) {
 						// we should escape '{' in the comment
 						writer.Write ("{" +

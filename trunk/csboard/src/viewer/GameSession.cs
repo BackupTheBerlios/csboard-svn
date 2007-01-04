@@ -142,7 +142,7 @@ namespace CsBoard
 					if (idx < 0)
 						return null;
 
-					return move.move;
+					return move.Move;
 				}
 			}
 

@@ -160,7 +160,7 @@ namespace CsBoard
 				bool whiteMoveComment = false;
 				foreach (PGNChessMove move in game.Moves) {
 					// print move
-					if (move.move == null)
+					if (move.Move == null)
 						break;
 					if (!session.HasNext ())
 						break;
@@ -187,7 +187,8 @@ namespace CsBoard
 						}
 					}
 
-					printer.PrintText (move.move + " ");
+					printer.PrintText (move.DetailedMove +
+							   " ");
 
 					if (move.comment != null) {
 						printer.LineBreak ();

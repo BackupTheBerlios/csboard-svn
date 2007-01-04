@@ -48,6 +48,8 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.MenuItem fileMenuItem;
 			[Glade.Widget] private Gtk.
 				SeparatorMenuItem fileOpenSeparator;
+			[Glade.Widget] private Gtk.
+				SeparatorMenuItem saveAsSeparator;
 			[Glade.Widget] private Gtk.MenuItem printMenuItem;
 			[Glade.Widget] private Gtk.MenuItem exportAsMenuItem;
 			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
@@ -128,12 +130,13 @@ namespace CsBoard
 						       eco);
 			}
 
-			public void RegisterGameLoader (IGameLoader
+			public bool RegisterGameLoader (IGameLoader
 							gameLoader,
 							Gtk.MenuItem item)
 			{
 				gameLoaders.Add (gameLoader);
-				AppendToFileOpenMenu (item);
+				return AddToMenu (fileMenuItem, item,
+						  fileOpenSeparator);
 			}
 
 			public void UnregisterGameLoader (IGameLoader
@@ -147,13 +150,8 @@ namespace CsBoard
 			public bool RegisterExporter (IExporter exporter,
 						      Gtk.MenuItem item)
 			{
-				Menu menu = (Menu) exportAsMenuItem.Submenu;
-				if (menu == null) {
-					menu = new Menu ();
-					menu.Show ();
-					exportAsMenuItem.Submenu = menu;
-				}
-				menu.Append (item);
+				if (!AddToMenu (exportAsMenuItem, item, null))
+					return false;
 				exporters.Add (exporter);
 				return true;
 			}
@@ -169,19 +167,25 @@ namespace CsBoard
 
 			public bool AddToViewMenu (Gtk.MenuItem item)
 			{
-				Menu menu = (Menu) viewMenuItem.Submenu;
-				if (menu == null) {
-					menu = new Menu ();
-					menu.Show ();
-					viewMenuItem.Submenu = menu;
-				}
-				menu.Append (item);
-				return true;
+				return AddToMenu (viewMenuItem, item, null);
 			}
 
 			public bool RemoveFromViewMenu (Gtk.MenuItem item)
 			{
 				Menu menu = (Menu) viewMenuItem.Submenu;
+				menu.Remove (item);
+				return true;
+			}
+
+			public bool AddToFileMenu (Gtk.MenuItem item)
+			{
+				return AddToMenu (fileMenuItem, item,
+						  saveAsSeparator);
+			}
+
+			public bool RemoveFromFileMenu (Gtk.MenuItem item)
+			{
+				Menu menu = (Menu) fileMenuItem.Submenu;
 				menu.Remove (item);
 				return true;
 			}
@@ -201,17 +205,26 @@ namespace CsBoard
 					handler.OnPrintActivated;
 			}
 
-			private bool AppendToFileOpenMenu (Gtk.
-							   MenuItem
-							   itemToBeAdded)
+			private bool AddToMenu (Gtk.MenuItem parentMenu,
+						Gtk.MenuItem itemToBeAdded,
+						Gtk.MenuItem beforeThis)
 			{
-				Gtk.Menu menu =
-					(Gtk.Menu) fileMenuItem.Submenu;
+				Gtk.Menu menu = (Gtk.Menu) parentMenu.Submenu;
+				if (menu == null) {
+					menu = new Menu ();
+					menu.Show ();
+					parentMenu.Submenu = menu;
+				}
+				if (beforeThis == null) {
+					menu.Append (itemToBeAdded);
+					return true;
+				}
+
 				// find the index
 				int index = 0;
 				foreach (Gtk.MenuItem item in menu.
 					 AllChildren) {
-					if (fileOpenSeparator.Equals (item)) {
+					if (beforeThis.Equals (item)) {
 						menu.Insert (itemToBeAdded,
 							     index);
 						return true;
@@ -221,20 +234,18 @@ namespace CsBoard
 				return false;
 			}
 
-			bool RemoveFromFileMenu (Gtk.MenuItem item)
-			{
-				Menu menu = (Menu) fileMenuItem.Submenu;
-				menu.Remove (item);
-				return true;
-			}
-
 			public void LoadGames (TextReader reader)
 			{
 				GameLoader loader =
 					new GameLoader (this, reader);
 				if (loader.Games == null)
 					return;
-				this.games = loader.Games;
+				LoadGames (loader.Games);
+			}
+
+			public void LoadGames (ArrayList games)
+			{
+				this.games = games;
 				gamesListWidget.SetGames (games);
 				if (games.Count > 0) {
 					SelectGame ((PGNChessGame) games[0]);
@@ -469,7 +480,7 @@ namespace CsBoard
 				}
 				UpdateMoveDetails (true);
 			}
- 
+
 			private void OnShowNthMoveEvent (object o,
 							 MoveEventArgs args)
 			{
@@ -741,7 +752,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

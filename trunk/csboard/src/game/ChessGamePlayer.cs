@@ -392,7 +392,9 @@ namespace Chess
 							  out string
 							  normalized_str)
 			{
-				if (str.EndsWith ("N")) {
+				string move = str;
+				if (str.EndsWith ("N")
+				    && !str.EndsWith ("=N")) {
 					/* novelty */
 					str = str.Substring (0,
 							     str.Length - 1);
@@ -418,13 +420,6 @@ namespace Chess
 						normalized_str = lower;
 						return;
 					}
-				}
-
-				int index;
-				if ((index = str.IndexOf ('=')) > 0) {	// promotion case
-					str = str.Substring (0,
-							     index) +
-						str.Substring (index + 1);
 				}
 
 				int strlen = str.Length;
@@ -498,7 +493,8 @@ namespace Chess
 				type = PromotionType.NONE;
 
 				int len = move.Length;
-				if (Char.IsNumber (move[len - 1]))
+				if (len < 2 || move[len - 2] != '='
+				    || Char.IsNumber (move[len - 1]))
 					return;
 
 				string str;
@@ -530,7 +526,7 @@ namespace Chess
 						 + last_char);
 				}
 
-				move = str.Substring (0, len - 1);
+				move = str.Substring (0, len - 2);
 			}
 
 			public ColorType Turn
@@ -909,6 +905,85 @@ namespace Chess
 				string fen_str =
 					"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 				return CreateFromFEN (fen_str);
+			}
+
+			public string GetPositionAsFEN ()
+			{
+				StringBuilder buffer = new StringBuilder ();
+				/* Note that the rank is traversed in reverse order so that 0 comes at the end
+				 * i.e., white pieces comes at the bottom
+				 */
+				for (int i = 7; i >= 0; i--) {
+					int count = 0;
+					for (int j = 0; j < 8; j++) {
+						if (positions[i, j] == null) {
+							count++;
+							continue;
+						}
+						if (count > 0) {
+							buffer.Append (count);
+							count = 0;
+						}
+						buffer.Append
+							(GetFENCharForPiece
+							 (positions[i, j]));
+					}
+					if (count > 0)
+						buffer.Append (count);
+					if (i != 1)
+						buffer.Append ('/');
+				}
+
+				buffer.Append (' ');
+				buffer.Append (String.
+					       Format ("{0} ",
+						       turn ==
+						       ColorType.
+						       WHITE ? 'w' : 'b'));
+				if (!whites.King.CanCastle
+				    && !blacks.King.CanCastle)
+					buffer.Append ('-');
+				if (whites.King.CanCastle)
+					buffer.Append ("KQ");
+				if (blacks.King.CanCastle)
+					buffer.Append ("kq");
+				buffer.Append (' ');
+
+				buffer.Append ("- ");	// enpass case. ignore for now
+				buffer.Append ("0 ");
+
+				return buffer.ToString ();
+			}
+
+			private static char GetFENCharForPiece (ChessPiece
+								piece)
+			{
+				char ch = ' ';
+				switch (piece.Type) {
+				case PieceType.PAWN:
+					ch = 'p';
+					break;
+				case PieceType.ROOK:
+					ch = 'r';
+					break;
+				case PieceType.KNIGHT:
+					ch = 'n';
+					break;
+				case PieceType.BISHOP:
+					ch = 'p';
+					break;
+				case PieceType.QUEEN:
+					ch = 'q';
+					break;
+				case PieceType.KING:
+					ch = 'k';
+					break;
+				}
+
+				if (piece.Color == ColorType.WHITE)
+					return Char.ToUpper (ch);
+
+				return ch;
 			}
 
 			public static ArrayList GetDefaultPosition ()

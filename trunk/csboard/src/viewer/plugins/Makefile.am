@@ -1,2 +1,2 @@
 
-SUBDIRS = urlloader printer ecodb
+SUBDIRS = gamedb urlloader printer ecodb

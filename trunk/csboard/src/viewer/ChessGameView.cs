@@ -74,7 +74,7 @@ namespace CsBoard
 			{
 				curMoveIdx = -1;
 				game = g;
-				UpdateGameDetails();
+				UpdateGameDetails ();
 			}
 
 			private bool UpdateGameDetails ()
@@ -109,7 +109,8 @@ namespace CsBoard
 					buffer.Append (String.
 						       Format
 						       ("<b><a name=\"{0}\" href=\"#{0}\">{1}</a> </b>",
-							i, move.move));
+							i,
+							move.DetailedMove));
 					if (move.comment != null) {
 						buffer.Append ("<p>");
 						buffer.Append (move.comment);	// TODO: format the markup

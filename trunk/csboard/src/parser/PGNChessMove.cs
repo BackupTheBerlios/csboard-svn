@@ -24,9 +24,35 @@ namespace Chess
 	{
 		public class PGNChessMove
 		{
-			public string move;
+			string detailedMove;
+
+			public string DetailedMove
+			{
+				get
+				{
+					return detailedMove;
+				}
+			}
+
+			string move;	// normalized
+
+			public string Move
+			{
+				get
+				{
+					return move;
+				}
+			}
+
+			public PGNChessMove (string move)
+			{
+				detailedMove = move;
+				Chess.Game.ChessGamePlayer.
+					NormalizeMove (move, out this.move);
+			}
+
 			public string comment;
-			  PGNNAG[] nags;
+			PGNNAG[]nags;
 
 			public PGNNAG[] Nags
 			{
@@ -43,13 +69,13 @@ namespace Chess
 			public override string ToString ()
 			{
 				StringBuilder buffer = new StringBuilder ();
-				  buffer.Append (String.
-						 Format ("{0}{1}", move,
-							 comment ==
-							 null ? "" : " " +
-							 comment));
+				buffer.Append (String.
+					       Format ("{0}{1}", move,
+						       comment ==
+						       null ? "" : " " +
+						       comment));
 
-				  return buffer.ToString ();
+				return buffer.ToString ();
 			}
 		}
 	}

@@ -57,6 +57,7 @@ AC_CONFIG_FILES([
     src/viewer/plugins/urlloader/Makefile
     src/viewer/plugins/printer/Makefile
     src/viewer/plugins/ecodb/Makefile
+    src/viewer/plugins/gamedb/Makefile
     resource/Makefile
     config.cs
     ])

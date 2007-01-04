@@ -1,3 +1,29 @@
+2007-01-04 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* configure.in
+	* resource/csviewer.glade
+	* src/game/ChessGamePlayer.cs
+	* src/parser/PGNChessGame.cs
+	* src/parser/PGNChessMove.cs
+	* src/parser/PGNGameLoader.cs
+	* src/viewer/ChessGameView.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/PGNTree.cs
+	* src/viewer/plugins/Makefile.am
+	* src/viewer/plugins/printer/PGNExporter.cs
+
+	Added files
+
+	* src/viewer/plugins/gamedb/GameDb.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/gamedb/Makefile.am
+	* src/viewer/plugins/gamedb/db4o.dll
+
+	Cleaned up some code.
+	Adds a new feature to store games in a database. Feature implemented as a plugin
+	and uses DB4O to store the database.
+
 2006-12-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* configure.in

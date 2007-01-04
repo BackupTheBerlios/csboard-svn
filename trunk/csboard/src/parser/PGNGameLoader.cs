@@ -21,48 +21,62 @@ namespace Chess
 {
 	namespace Parser
 	{
-		public class PGNGameLoader : IParserListener {
+		public class PGNGameLoader:IParserListener
+		{
 			ArrayList curTagList;
 			ArrayList curMoves;
 			string initialComment;
 
 			public event GameLoadedEvent GameLoaded;
 
-			public PGNGameLoader() {
-				curTagList = new ArrayList();
-				curMoves = new ArrayList();
+			public PGNGameLoader ()
+			{
+				curTagList = new ArrayList ();
+				curMoves = new ArrayList ();
 			}
 
-			public void TagFound(string name, string value) {
-				PGNTag tag = new PGNTag(name, value);
-				if(curTagList.Contains(tag))
-					return;
-				curTagList.Add(tag);
+			public void TagFound (string name, string value)
+			{
+				PGNTag tag = new PGNTag (name, value);
+				if (curTagList.Contains (tag))
+					  return;
+				  curTagList.Add (tag);
 			}
 
-			public void MoveFound(string movestr) {
-				PGNChessMove move = new PGNChessMove();
-				move.move = movestr;
-				curMoves.Add(move);
+			public void MoveFound (string movestr)
+			{
+				PGNChessMove move =
+					new PGNChessMove (movestr);
+				  curMoves.Add (move);
 			}
 
-			public void CommentFound(string comment) {
-				if(curMoves.Count == 0) {
+			public void CommentFound (string comment)
+			{
+				if (curMoves.Count == 0) {
 					initialComment = comment;
 					return;
 				}
 
-				PGNChessMove move = (PGNChessMove) curMoves[curMoves.Count - 1];
+				PGNChessMove move =
+					(PGNChessMove) curMoves[curMoves.
+								Count - 1];
 				move.comment = comment;
 			}
 
-			public void NAGsFound(PGNNAG[] nags) {
-				PGNChessMove move = (PGNChessMove) curMoves[curMoves.Count - 1];
+			public void NAGsFound (PGNNAG[]nags)
+			{
+				PGNChessMove move =
+					(PGNChessMove) curMoves[curMoves.
+								Count - 1];
 				move.Nags = nags;
 			}
 
-			public void GameEndFound() {
-				PGNChessGame game = new PGNChessGame (initialComment, curTagList, curMoves);
+			public void GameEndFound ()
+			{
+				PGNChessGame game =
+					new PGNChessGame (initialComment,
+							  curTagList,
+							  curMoves);
 				if (GameLoaded != null) {
 					GameLoaded (this,
 						    new
@@ -70,8 +84,8 @@ namespace Chess
 						    (game));
 				}
 				initialComment = null;
-				curTagList = new ArrayList();
-				curMoves = new ArrayList();
+				curTagList = new ArrayList ();
+				curMoves = new ArrayList ();
 			}
 		}
 	}

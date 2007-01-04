@@ -75,7 +75,7 @@ namespace CsBoard
 			{
 				PGNTreeNode node;
 
-				AddMove (((PGNChessMove) moves[0]).move, null,
+				AddMove (((PGNChessMove) moves[0]).Move, null,
 					 root, out node);
 				node.count++;
 				if (root == null)
@@ -95,7 +95,7 @@ namespace CsBoard
 
 					parent = node;
 					node = parent.firstChild;
-					AddMove (move.move, parent,
+					AddMove (move.Move, parent,
 						 parent.firstChild, out node);
 					node.count++;
 					if (RearrangeList
