@@ -52,10 +52,11 @@ namespace Chess
 
 			public void CommentFound (string comment)
 			{
-				if (curMoves.Count == 0) {
-					initialComment = comment;
-					return;
-				}
+				if (curMoves.Count == 0)
+				  {
+					  initialComment = comment;
+					  return;
+				  }
 
 				PGNChessMove move =
 					(PGNChessMove) curMoves[curMoves.
@@ -77,12 +78,13 @@ namespace Chess
 					new PGNChessGame (initialComment,
 							  curTagList,
 							  curMoves);
-				if (GameLoaded != null) {
-					GameLoaded (this,
-						    new
-						    GameLoadedEventArgs
-						    (game));
-				}
+				if (GameLoaded != null)
+				  {
+					  GameLoaded (this,
+						      new
+						      GameLoadedEventArgs
+						      (game));
+				  }
 				initialComment = null;
 				curTagList = new ArrayList ();
 				curMoves = new ArrayList ();

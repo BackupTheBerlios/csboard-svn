@@ -31,7 +31,7 @@ namespace CsBoard
 	namespace Viewer
 	{
 
-		enum GameRating
+		public enum GameRating
 		{
 			Unknown = 0,
 			Ignore = -1,
@@ -44,14 +44,26 @@ namespace CsBoard
 		public class PGNGameDetails
 		{
 			public PGNChessGame Game
-			{get
-			 {return game;}
+			{
+			 get
+			 {
+			  return game;}
 			  }
 			  PGNChessGame game;
 			  int nmoves;
 			  string white;
 			  string black;
-			  string result;
+			  string result; public GameRating Rating
+			  {
+			  get
+			  {
+			  return rating;
+			  }
+			  set
+			  {
+			  rating = value;
+			  }
+			  }
 			  GameRating rating = GameRating.Unknown;
 			  public string Hash
 			  {
@@ -74,8 +86,7 @@ namespace CsBoard
 			  GetTagValue ("Black",
 				       "");
 			  result = game.GetTagValue ("Result", "*");
-			  hash = GenerateHash ();
-			  }
+			  hash = GenerateHash ();}
 
 			  private string GenerateHash ()
 			  {
@@ -102,15 +113,13 @@ namespace CsBoard
 			  CreatePlayer ();
 			  foreach (PGNChessMove move in game.Moves)
 			  {
-			  player.Move (move.Move);
-			  }
+			  player.Move (move.Move);}
 
 			  buffer.Append (player.
 					 GetPositionAsFEN
 					 ());
 			  buffer.Append (((nmoves + 1) / 2));
-			  return buffer.ToString ();
-			  }
+			  return buffer.ToString ();}
 			  }
 
 			  public class GameDb
@@ -163,17 +172,29 @@ namespace CsBoard
 			  ObjectField ("rating").Indexed (true);
 			  db = Db4o.OpenFile (dbfile);}
 
-			  // TODO: Check duplicates
 			  public void AddGame (PGNChessGame game)
 			  {
-			  PGNGameDetails info =
-			  new PGNGameDetails (game); if (GameExists (info))
-			  {
-			  return;}
-			  db.Set (info);}
+			  AddGame (game, GameRating.Unknown);}
 
-			  private bool GameExists (PGNGameDetails info)
+			  public void AddGame (PGNChessGame game,
+					       GameRating rating)
 			  {
+			  PGNGameDetails info =
+			  new PGNGameDetails (game);
+			  info.Rating = rating;
+			  PGNGameDetails existing;
+			  if (!FindGame (info, out existing))
+			  {
+			  db.Set (info); return;}
+
+			  // Game found
+			  if (existing.Rating == rating)
+			  return; existing.Rating = rating; db.Set (info);}
+
+			  private bool FindGame (PGNGameDetails info,
+						 out PGNGameDetails match)
+			  {
+			  match = null;
 			  com.db4o.query.
 			  Query query =
 			  db.Query ();
@@ -189,9 +210,8 @@ namespace CsBoard
 			  PGNChessGame game1 =
 			  info.Game; while (res.HasNext ())
 			  {
-			  PGNChessGame game2 =
-			  ((PGNGameDetails) res.
-			   Next ()).Game;
+			  PGNGameDetails info2 = (PGNGameDetails) res.Next ();
+			  PGNChessGame game2 = info2.Game;
 			  if (game1.Moves.
 			      Count !=
 			      game2.Moves.Count)
@@ -210,7 +230,10 @@ namespace CsBoard
 			  matched = false; break;}
 			  i--;}
 
-			  if (matched) return true;}
+			  if (matched)
+			  {
+			  match = info2; return true;}
+			  }
 
 			  // nothing matched (but the games had the same hash!)
 			  return false;}

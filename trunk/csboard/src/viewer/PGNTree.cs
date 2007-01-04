@@ -65,7 +65,8 @@ namespace CsBoard
 				     node != null; node = node.parent)
 					stack.Push (node);
 
-				foreach (PGNTreeNode node in stack) {
+				foreach (PGNTreeNode node in stack)
+				{
 					ReadNode (node);
 				}
 			}
@@ -80,18 +81,21 @@ namespace CsBoard
 				node.count++;
 				if (root == null)
 					root = node;
-				else {
-					if (RearrangeList (root, node))
-						root = node;
-				}
+				else
+				  {
+					  if (RearrangeList (root, node))
+						  root = node;
+				  }
 
 				PGNTreeNode parent;
 				bool first = true;
-				foreach (PGNChessMove move in moves) {
-					if (first) {
-						first = false;
-						continue;
-					}
+				foreach (PGNChessMove move in moves)
+				{
+					if (first)
+					  {
+						  first = false;
+						  continue;
+					  }
 
 					parent = node;
 					node = parent.firstChild;
@@ -135,12 +139,13 @@ namespace CsBoard
 
 				RemoveNode (node);
 				PGNTreeNode max = first.prev;
-				while (tmpnode != max) {
-					// note that 'node' is still part of the list
-					if (node.count <= tmpnode.count)
-						break;
-					tmpnode = tmpnode.prev;
-				}
+				while (tmpnode != max)
+				  {
+					  // note that 'node' is still part of the list
+					  if (node.count <= tmpnode.count)
+						  break;
+					  tmpnode = tmpnode.prev;
+				  }
 
 				// node should be moved to the right of tmpnode
 				InsertBetweenNodes (tmpnode, tmpnode.next,
@@ -166,10 +171,11 @@ namespace CsBoard
 				PGNTreeNode sibling;
 
 				if (first != null
-				    && FindNode (move, first, out sibling)) {
-					slot = sibling;
-					return;
-				}
+				    && FindNode (move, first, out sibling))
+				  {
+					  slot = sibling;
+					  return;
+				  }
 
 				// first is null or unable to find the move
 				PGNTreeNode newnode = AllocNode (move);
@@ -190,10 +196,12 @@ namespace CsBoard
 			private void AppendToList (PGNTreeNode first,
 						   PGNTreeNode newnode)
 			{
-				if (first == null) {
-					newnode.next = newnode.prev = newnode;
-					return;
-				}
+				if (first == null)
+				  {
+					  newnode.next = newnode.prev =
+						  newnode;
+					  return;
+				  }
 
 				InsertBetweenNodes (first.prev, first,
 						    newnode);
@@ -213,16 +221,18 @@ namespace CsBoard
 					       out PGNTreeNode slot)
 			{
 				PGNTreeNode last = node.prev;
-				for (;;) {
-					if (move.Equals (node.move)) {
-						slot = node;
-						return true;
-					}
-					if (node == last)
-						break;
+				for (;;)
+				  {
+					  if (move.Equals (node.move))
+					    {
+						    slot = node;
+						    return true;
+					    }
+					  if (node == last)
+						  break;
 
-					node = node.next;
-				}
+					  node = node.next;
+				  }
 				slot = null;
 				return false;
 			}
@@ -237,20 +247,21 @@ namespace CsBoard
 				if (node == null)
 					return;
 				PGNTreeNode last = node.prev;
-				for (;;) {
-					for (int i = 0; i < level; i++)
-						Console.Write ("=== ");
-					Console.Write (node.move);
-					if (node.value != null)
-						Console.Write (" [{0}]",
-							       node.value);
-					Console.WriteLine ();
-					PrintNode (node.firstChild,
-						   level + 1);
-					if (node == last)
-						break;
-					node = node.next;
-				}
+				for (;;)
+				  {
+					  for (int i = 0; i < level; i++)
+						  Console.Write ("=== ");
+					  Console.Write (node.move);
+					  if (node.value != null)
+						  Console.Write (" [{0}]",
+								 node.value);
+					  Console.WriteLine ();
+					  PrintNode (node.firstChild,
+						     level + 1);
+					  if (node == last)
+						  break;
+					  node = node.next;
+				  }
 			}
 		}
 	}

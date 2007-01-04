@@ -45,6 +45,13 @@ namespace CsBoard
 
 			public event NthMoveEvent ShowNthMove;
 
+			public HTML HTML
+			{
+				get
+				{
+					return html;
+				}
+			}
 			HTML html;
 			public ChessGameWidget ():base ()
 			{
@@ -100,7 +107,8 @@ namespace CsBoard
 
 				int i = 0;
 				int moveno = 1;
-				foreach (PGNChessMove move in game.Moves) {
+				foreach (PGNChessMove move in game.Moves)
+				{
 					if (i % 2 == 0)
 						buffer.Append (String.
 							       Format
@@ -111,11 +119,12 @@ namespace CsBoard
 						       ("<b><a name=\"{0}\" href=\"#{0}\">{1}</a> </b>",
 							i,
 							move.DetailedMove));
-					if (move.comment != null) {
-						buffer.Append ("<p>");
-						buffer.Append (move.comment);	// TODO: format the markup
-						buffer.Append ("</p>");
-					}
+					if (move.comment != null)
+					  {
+						  buffer.Append ("<p>");
+						  buffer.Append (move.comment);	// TODO: format the markup
+						  buffer.Append ("</p>");
+					  }
 					i++;
 				}
 			}

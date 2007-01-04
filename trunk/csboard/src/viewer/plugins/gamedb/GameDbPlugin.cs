@@ -75,13 +75,15 @@ namespace CsBoard
 			private bool AddGamesIdleHandler ()
 			{
 				IList games = viewer.Games;
-				if (games == null) {
-					dlg.Respond (ResponseType.Ok);
-					return false;
-				}
+				if (games == null)
+				  {
+					  dlg.Respond (ResponseType.Ok);
+					  return false;
+				  }
 				double totalgames = games.Count;
 				int ngames = 0;
-				foreach (PGNChessGame game in games) {
+				foreach (PGNChessGame game in games)
+				{
 					GameDb.Instance.AddGame (game);
 					ngames++;
 					dlg.UpdateProgress (ngames /
@@ -110,6 +112,13 @@ namespace CsBoard
 				viewer.AddToFileMenu (saveItem);
 				viewer.AddToFileMenu (loadItem);
 
+				viewer.ChessGameWidget.HTML.
+					ButtonPressEvent +=
+					new
+					ButtonPressEventHandler
+					(OnButtonPressEvent);
+				viewer.ChessGameWidget.HTML.PopupMenu +=
+					new PopupMenuHandler (PopupMenuCb);
 				return true;
 			}
 
@@ -119,6 +128,92 @@ namespace CsBoard
 				viewer.RemoveFromViewMenu (loadItem);
 				return true;
 			}
+
+			private void PopupMenuCb (object o,
+						  PopupMenuArgs args)
+			{
+				Console.WriteLine ("Popup");
+				Menu menu = new RatingPopup (viewer);
+				menu.ShowAll ();
+				menu.Popup ();
+			}
+
+			[GLib.ConnectBefore]
+				public void OnButtonPressEvent (object o,
+								ButtonPressEventArgs
+								args)
+			{
+				Gdk.EventButton eb = args.Event;
+				if (args.Event.Button != 3)
+					return;
+				Menu menu = new RatingPopup (viewer);
+				menu.ShowAll ();
+				menu.Popup ();
+			}
 		}
+
+		class RatingPopup:Gtk.Menu
+		{
+			GameViewer viewer;
+			Hashtable map;
+
+			public RatingPopup (GameViewer viewer)
+			{
+				this.viewer = viewer;
+				map = new Hashtable ();
+				CheckMenuItem[] ratingItems =
+				{
+				new CheckMenuItem (Catalog.
+							   GetString
+							   ("Not interested")),
+						new
+						CheckMenuItem
+						(Catalog.
+							 GetString
+							 ("Average Game")),
+						new
+						CheckMenuItem
+						(Catalog.
+							 GetString
+							 ("Good Game")),
+						new
+						CheckMenuItem
+						(Catalog.
+							 GetString
+							 ("Excellent Game")),
+						new
+						CheckMenuItem
+						(Catalog.
+							 GetString
+							 ("Must Have"))};
+				GameRating[]ratings =
+				{
+				GameRating.Ignore,
+						GameRating.Average,
+						GameRating.Good,
+						GameRating.Excellent,
+						GameRating.MustHave};
+
+				int i = 0;
+				foreach (CheckMenuItem item in ratingItems)
+				{
+					Append (item);
+					item.Activated += OnRatingActivated;
+					map[item] = ratings[i++];
+					item.Show ();
+				}
+			}
+
+			private void OnRatingActivated (object o,
+							EventArgs args)
+			{
+				GameRating rating = (GameRating) map[o];
+				PGNChessGame game = viewer.Game;
+				if (game == null)
+					return;
+				GameDb.Instance.AddGame (viewer.Game, rating);
+			}
+		}
+
 	}
 }

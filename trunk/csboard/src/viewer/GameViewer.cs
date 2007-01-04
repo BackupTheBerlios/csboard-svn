@@ -63,7 +63,23 @@ namespace CsBoard
 
 			private ViewerBoard boardWidget;
 			GameSession gameSession;
+
+			public ChessGameWidget ChessGameWidget
+			{
+				get
+				{
+					return gameWidget;
+				}
+			}
 			ChessGameWidget gameWidget;
+
+			public GamesListWidget GamesListWidget
+			{
+				get
+				{
+					return gamesListWidget;
+				}
+			}
 			GamesListWidget gamesListWidget;
 
 			const int ALL_GAMES_PAGE = 1;
@@ -115,15 +131,17 @@ namespace CsBoard
 			public static void GetOpeningName (string eco,
 							   out string eco_str)
 			{
-				if (ecoDb == null) {
-					eco_str = eco;
-					return;
-				}
+				if (ecoDb == null)
+				  {
+					  eco_str = eco;
+					  return;
+				  }
 				string name = ecoDb.GetOpeningName (eco);
-				if (name == null) {
-					eco_str = eco;
-					return;
-				}
+				if (name == null)
+				  {
+					  eco_str = eco;
+					  return;
+				  }
 
 				eco_str =
 					String.Format ("{0} ({1})", name,
@@ -210,25 +228,29 @@ namespace CsBoard
 						Gtk.MenuItem beforeThis)
 			{
 				Gtk.Menu menu = (Gtk.Menu) parentMenu.Submenu;
-				if (menu == null) {
-					menu = new Menu ();
-					menu.Show ();
-					parentMenu.Submenu = menu;
-				}
-				if (beforeThis == null) {
-					menu.Append (itemToBeAdded);
-					return true;
-				}
+				if (menu == null)
+				  {
+					  menu = new Menu ();
+					  menu.Show ();
+					  parentMenu.Submenu = menu;
+				  }
+				if (beforeThis == null)
+				  {
+					  menu.Append (itemToBeAdded);
+					  return true;
+				  }
 
 				// find the index
 				int index = 0;
 				foreach (Gtk.MenuItem item in menu.
-					 AllChildren) {
-					if (beforeThis.Equals (item)) {
-						menu.Insert (itemToBeAdded,
-							     index);
-						return true;
-					}
+					 AllChildren)
+				{
+					if (beforeThis.Equals (item))
+					  {
+						  menu.Insert (itemToBeAdded,
+							       index);
+						  return true;
+					  }
 					index++;
 				}
 				return false;
@@ -247,9 +269,11 @@ namespace CsBoard
 			{
 				this.games = games;
 				gamesListWidget.SetGames (games);
-				if (games.Count > 0) {
-					SelectGame ((PGNChessGame) games[0]);
-				}
+				if (games.Count > 0)
+				  {
+					  SelectGame ((PGNChessGame)
+						      games[0]);
+				  }
 			}
 
 			public PGNChessGame Game
@@ -361,7 +385,8 @@ namespace CsBoard
 			{
 				// just ask each IGameLoader
 				foreach (IGameLoader gameLoader in
-					 gameLoaders) {
+					 gameLoaders)
+				{
 					if (gameLoader.Load (resource))
 						break;
 				}
@@ -380,7 +405,8 @@ namespace CsBoard
 				if (file == null)
 					return;
 				TextWriter writer = new StreamWriter (file);
-				foreach (PGNChessGame game in games) {
+				foreach (PGNChessGame game in games)
+				{
 					game.WritePGN (writer);
 					writer.WriteLine ();
 				}
@@ -450,14 +476,15 @@ namespace CsBoard
 
 			private void PlayNMoves (int nmoves)
 			{
-				if (!gameSession.PlayNMoves (nmoves)) {
-					Console.WriteLine
-						(Catalog.
-						 GetString
-						 ("Failed to play to go back"));
-					// dont return now. let the position be set so that we can see
-					// where it stopped
-				}
+				if (!gameSession.PlayNMoves (nmoves))
+				  {
+					  Console.WriteLine
+						  (Catalog.
+						   GetString
+						   ("Failed to play to go back"));
+					  // dont return now. let the position be set so that we can see
+					  // where it stopped
+				  }
 
 				UpdateMoveDetails (false);
 			}
@@ -465,19 +492,21 @@ namespace CsBoard
 			public void on_next_clicked (System.Object o,
 						     EventArgs e)
 			{
-				if (!gameSession.HasNext ()) {
-					return;
-				}
+				if (!gameSession.HasNext ())
+				  {
+					  return;
+				  }
 				gameSession.Next ();
 				if (!gameSession.player.Move (gameSession.
-							      CurrentMove)) {
-					Console.WriteLine
-						(Catalog.
-						 GetString
-						 ("Failed to play the move: ")
-						 + gameSession.CurrentMove);
-					return;
-				}
+							      CurrentMove))
+				  {
+					  Console.WriteLine
+						  (Catalog.
+						   GetString
+						   ("Failed to play the move: ")
+						   + gameSession.CurrentMove);
+					  return;
+				  }
 				UpdateMoveDetails (true);
 			}
 
@@ -493,44 +522,47 @@ namespace CsBoard
 				int currentMoveIdx =
 					gameSession.CurrentMoveIdx;
 				gameWidget.SetMoveIndex (currentMoveIdx);
-				if (currentMoveIdx >= 0) {
-					string str =
-						gameSession.CurrentPGNMove.
-						Nags ==
-						null ? "" : gameSession.
-						CurrentPGNMove.Nags[0].
-						Markup ();
-					nagCommentLabel.Markup = str;
-					boardWidget.lastMove =
-						gameSession.CurrentMove;
-					int r1, f1, r2, f2;
-					r1 = gameSession.player.LastMoveInfo.
-						src_rank;
-					f1 = gameSession.player.LastMoveInfo.
-						src_file;
-					r2 = gameSession.player.LastMoveInfo.
-						dest_rank;
-					f2 = gameSession.player.LastMoveInfo.
-						dest_file;
-					boardWidget.Move (r1, f1, r2, f2,
-							  ' ');
-					string move_markup =
-						String.
-						Format ("<b>{0}{1} {2}</b>",
-							gameSession.
-							CurrentMoveNumber,
-							gameSession.
-							IsWhitesTurn ? "." :
-							"...",
-							gameSession.
-							CurrentMove);
-					moveNumberLabel.Markup = move_markup;
-				}
-				else {
-					moveNumberLabel.Text = "";
-					nagCommentLabel.Text = "";
-					boardWidget.Move (0, 0, 0, 0, ' ');
-				}
+				if (currentMoveIdx >= 0)
+				  {
+					  string str =
+						  gameSession.CurrentPGNMove.
+						  Nags ==
+						  null ? "" : gameSession.
+						  CurrentPGNMove.Nags[0].
+						  Markup ();
+					  nagCommentLabel.Markup = str;
+					  boardWidget.lastMove =
+						  gameSession.CurrentMove;
+					  int r1, f1, r2, f2;
+					  r1 = gameSession.player.
+						  LastMoveInfo.src_rank;
+					  f1 = gameSession.player.
+						  LastMoveInfo.src_file;
+					  r2 = gameSession.player.
+						  LastMoveInfo.dest_rank;
+					  f2 = gameSession.player.
+						  LastMoveInfo.dest_file;
+					  boardWidget.Move (r1, f1, r2, f2,
+							    ' ');
+					  string move_markup =
+						  String.
+						  Format ("<b>{0}{1} {2}</b>",
+							  gameSession.
+							  CurrentMoveNumber,
+							  gameSession.
+							  IsWhitesTurn ? "." :
+							  "...",
+							  gameSession.
+							  CurrentMove);
+					  moveNumberLabel.Markup =
+						  move_markup;
+				  }
+				else
+				  {
+					  moveNumberLabel.Text = "";
+					  nagCommentLabel.Text = "";
+					  boardWidget.Move (0, 0, 0, 0, ' ');
+				  }
 				// Reload the position
 				// For next, the move is enough. but for spl positions like
 				// castling and enpassant, the position has to be reloaded
@@ -630,17 +662,19 @@ namespace CsBoard
 								   Accept);
 				if (!open)
 					fc.DoOverwriteConfirmation = true;
-				if (filters != null) {
-					foreach (FileFilter filter in
-						 filters) fc.
-						AddFilter (filter);
-				}
+				if (filters != null)
+				  {
+					  foreach (FileFilter filter in
+						   filters) fc.
+						  AddFilter (filter);
+				  }
 				if (initialDirForFileChooser != null)
 					fc.SetCurrentFolder
 						(initialDirForFileChooser);
-				if (fc.Run () == (int) ResponseType.Accept) {
-					file = fc.Filename;
-				}
+				if (fc.Run () == (int) ResponseType.Accept)
+				  {
+					  file = fc.Filename;
+				  }
 				initialDirForFileChooser = fc.CurrentFolder;
 				//Don't forget to call Destroy() or the FileChooserDialog window won't get closed.
 				fc.Destroy ();
@@ -743,7 +777,8 @@ namespace CsBoard
 						       Catalog.
 						       GetString
 						       ("Parsing the file..."));
-				GLib.Idle.Add (new GLib.IdleHandler (delegate {
+				GLib.Idle.Add (new GLib.IdleHandler (delegate
+								     {
 								     parser.
 								     Parse
 								     (gameloader);

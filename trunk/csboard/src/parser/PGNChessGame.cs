@@ -139,7 +139,8 @@ namespace Chess
 				StringBuilder buffer = new StringBuilder ();
 
 				buffer.Append ("Moves:\n------\n");
-				foreach (object o in moves) {
+				foreach (object o in moves)
+				{
 					buffer.Append (o + "\n");
 				}
 
@@ -148,7 +149,8 @@ namespace Chess
 
 			public void WritePGN (TextWriter writer)
 			{
-				foreach (PGNTag tag in tagList) {
+				foreach (PGNTag tag in tagList)
+				{
 					writer.WriteLine (String.
 							  Format
 							  ("[{0} \"{1}\"]",
@@ -160,33 +162,39 @@ namespace Chess
 
 				int i = 1;
 				bool whiteMoveComment = false;
-				foreach (PGNChessMove move in moves) {
+				foreach (PGNChessMove move in moves)
+				{
 					if (move.Move == null)
 						// BUG. Empty move? This should not happen.
 						break;
-					if (i % 2 == 1) {	// white's turn
-						writer.Write (i + ". " +
-							      move.
-							      DetailedMove);
-					}
-					else if (whiteMoveComment) {
-						writer.Write (i + "... ");
-						whiteMoveComment = false;
-					}
+					if (i % 2 == 1)
+					  {	// white's turn
+						  writer.Write (i + ". " +
+								move.
+								DetailedMove);
+					  }
+					else if (whiteMoveComment)
+					  {
+						  writer.Write (i + "... ");
+						  whiteMoveComment = false;
+					  }
 					writer.Write (move.DetailedMove);
-					if (move.comment != null) {
-						// we should escape '{' in the comment
-						writer.Write ("{" +
-							      move.
-							      comment + "} ");
-						whiteMoveComment = true;
-					}
+					if (move.comment != null)
+					  {
+						  // we should escape '{' in the comment
+						  writer.Write ("{" +
+								move.
+								comment +
+								"} ");
+						  whiteMoveComment = true;
+					  }
 					i++;
 				}
-				if (HasTag ("Result")) {
-					writer.Write (GetTagValue
-						      ("Result", null));
-				}
+				if (HasTag ("Result"))
+				  {
+					  writer.Write (GetTagValue
+							("Result", null));
+				  }
 				writer.WriteLine ();
 			}
 		}

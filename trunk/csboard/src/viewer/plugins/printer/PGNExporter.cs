@@ -158,7 +158,8 @@ namespace CsBoard
 
 				bool whitesTurn = true;
 				bool whiteMoveComment = false;
-				foreach (PGNChessMove move in game.Moves) {
+				foreach (PGNChessMove move in game.Moves)
+				{
 					// print move
 					if (move.Move == null)
 						break;
@@ -169,38 +170,43 @@ namespace CsBoard
 					session.player.Move (session.
 							     CurrentMove);
 
-					if (whitesTurn) {
-						printer.PrintText (moveno +
-								   ". ");
-						whitesTurn = false;
-					}
-					else {	// black
-						moveno++;
-						whitesTurn = true;
-						if (whiteMoveComment) {
-							printer.PrintText
-								("\n" +
-								 moveno +
-								 "... ");
-							whiteMoveComment =
-								false;
-						}
-					}
+					if (whitesTurn)
+					  {
+						  printer.PrintText (moveno +
+								     ". ");
+						  whitesTurn = false;
+					  }
+					else
+					  {	// black
+						  moveno++;
+						  whitesTurn = true;
+						  if (whiteMoveComment)
+						    {
+							    printer.PrintText
+								    ("\n" +
+								     moveno +
+								     "... ");
+							    whiteMoveComment =
+								    false;
+						    }
+					  }
 
 					printer.PrintText (move.DetailedMove +
 							   " ");
 
-					if (move.comment != null) {
-						printer.LineBreak ();
-						PrintImageForPosition
-							(session.player);
-						printer.Font =
-							fonts.commentFont;
-						printer.PrintText (move.
-								   comment);
-						printer.Font = fonts.moveFont;
-						whiteMoveComment = true;
-					}
+					if (move.comment != null)
+					  {
+						  printer.LineBreak ();
+						  PrintImageForPosition
+							  (session.player);
+						  printer.Font =
+							  fonts.commentFont;
+						  printer.PrintText (move.
+								     comment);
+						  printer.Font =
+							  fonts.moveFont;
+						  whiteMoveComment = true;
+					  }
 				}
 			}
 		}

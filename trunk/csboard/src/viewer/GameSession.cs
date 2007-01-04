@@ -58,9 +58,9 @@ namespace CsBoard
 
 				int n = game.Moves.Count;
 				if (n > 0)
-				{
-					total_moves = n;
-				}
+				  {
+					  total_moves = n;
+				  }
 
 				if (total_moves == 0)
 					hasNext = false;
@@ -71,21 +71,23 @@ namespace CsBoard
 			public bool PlayNMoves (int n)
 			{
 				Reset ();	// reset session
-				for (int i = 0; i < n; i++) {
-					Next ();
-					if (!player.Move (CurrentMove))
-						return false;
-				}
+				for (int i = 0; i < n; i++)
+				  {
+					  Next ();
+					  if (!player.Move (CurrentMove))
+						  return false;
+				  }
 				return true;
 			}
 
 			public bool PlayTillTheEnd ()
 			{
-				while (HasNext ()) {
-					Next ();
-					if (!player.Move (CurrentMove))
-						return false;
-				}
+				while (HasNext ())
+				  {
+					  Next ();
+					  if (!player.Move (CurrentMove))
+						  return false;
+				  }
 				return true;
 			}
 
