@@ -61,7 +61,7 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.Label nagCommentLabel;
 			[Glade.Widget] private Gtk.Label moveNumberLabel;
 
-			private ViewerBoard boardWidget;
+			private CairoViewerBoard boardWidget;
 			GameSession gameSession;
 
 			public ChessGameWidget ChessGameWidget
@@ -332,7 +332,7 @@ namespace CsBoard
 				exporters = new ArrayList ();
 
 				boardWidget =
-					new ViewerBoard (ChessGamePlayer.
+					new CairoViewerBoard (ChessGamePlayer.
 							 GetDefaultPosition
 							 ());
 				//boardWidget.WidthRequest = 400;

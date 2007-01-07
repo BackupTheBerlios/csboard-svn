@@ -143,7 +143,6 @@ namespace CsBoard
 								ButtonPressEventArgs
 								args)
 			{
-				Gdk.EventButton eb = args.Event;
 				if (args.Event.Button != 3)
 					return;
 				Menu menu = new RatingPopup (viewer);

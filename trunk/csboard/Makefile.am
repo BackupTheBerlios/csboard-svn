@@ -30,7 +30,9 @@ VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
 	$(top_srcdir)/src/viewer/ChessGameView.cs \
 	$(top_srcdir)/src/viewer/PositionSnapshot.cs \
+	$(top_srcdir)/src/viewer/CairoPositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/ViewerBoard.cs \
+	$(top_srcdir)/src/viewer/CairoViewerBoard.cs \
 	$(top_srcdir)/src/viewer/PGNTree.cs \
 	$(top_srcdir)/src/viewer/GamesListWidget.cs
 
@@ -45,6 +47,8 @@ SOURCE = \
 	$(top_srcdir)/src/Window.cs \
 	$(top_srcdir)/src/IControl.cs \
 	$(top_srcdir)/src/Board.cs \
+	$(top_srcdir)/src/FigureManager.cs \
+	$(top_srcdir)/src/CairoBoard.cs \
 	$(top_srcdir)/src/PlayerBoard.cs \
 	$(top_srcdir)/src/Figure.cs \
 	$(top_srcdir)/src/GnuChess.cs \
@@ -147,7 +151,7 @@ RESOURCE_FILE_DEPENDENCIES =						\
 csboard.exe: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDENCIES)
 	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
-	-r:Mono.Posix
+	-r:Mono.Posix -r:Mono.Cairo
 
 CLEANFILES = csboard.exe
 

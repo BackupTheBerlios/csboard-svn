@@ -103,8 +103,8 @@ namespace CsBoard
 			{
 				int width = 200;
 				int height = 200;
-				PositionSnapshot ps =
-					new PositionSnapshot (player.
+				CairoPositionSnapshot ps =
+					new CairoPositionSnapshot (player.
 							      GetPosition (),
 							      width,
 							      height);

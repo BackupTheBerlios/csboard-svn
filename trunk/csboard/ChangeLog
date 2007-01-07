@@ -1,3 +1,22 @@
+2007-01-07 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	Added files
+	
+	* src/viewer/CairoPositionSnapshot.cs
+	* src/viewer/CairoViewerBoard.cs
+	* src/FigureManager.cs
+	* src/CairoBoard.cs
+
+	Modified
+
+	* Makefile.am
+	* src/game/ChessGamePlayer.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/printer/PGNExporter.cs
+
+	Added cairo support to the viewer.
+
 2007-01-04 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* configure.in

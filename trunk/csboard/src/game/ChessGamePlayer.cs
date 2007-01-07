@@ -414,7 +414,6 @@ namespace Chess
 							  out string
 							  normalized_str)
 			{
-				string move = str;
 				if (str.EndsWith ("N")
 				    && !str.EndsWith ("=N"))
 				  {
