@@ -160,35 +160,36 @@ namespace Chess
 
 				writer.WriteLine ();
 
-				int i = 1;
+				int moveno = 1;
+				bool whitesTurn = true;
 				bool whiteMoveComment = false;
 				foreach (PGNChessMove move in moves)
 				{
 					if (move.Move == null)
 						// BUG. Empty move? This should not happen.
 						break;
-					if (i % 2 == 1)
+					if (whitesTurn)
 					  {	// white's turn
-						  writer.Write (i + ". " +
-								move.
-								DetailedMove);
+						  writer.Write (String.Format("{0}. ", moveno));
 					  }
 					else if (whiteMoveComment)
 					  {
-						  writer.Write (i + "... ");
+						  writer.Write (String.Format("{0}... ", moveno));
 						  whiteMoveComment = false;
 					  }
-					writer.Write (move.DetailedMove);
+
+					writer.Write (String.Format("{0} ", move.DetailedMove));
 					if (move.comment != null)
 					  {
 						  // we should escape '{' in the comment
-						  writer.Write ("{" +
+						  writer.WriteLine ("{" +
 								move.
-								comment +
-								"} ");
+								comment + "}");
 						  whiteMoveComment = true;
 					  }
-					i++;
+					if(!whitesTurn)
+						moveno++;
+					whitesTurn = !whitesTurn; // flip turn
 				}
 				if (HasTag ("Result"))
 				  {

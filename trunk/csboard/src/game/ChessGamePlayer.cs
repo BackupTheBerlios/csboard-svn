@@ -1095,17 +1095,14 @@ namespace Chess
 				for (int i = 0; i < lines.Length; i++)
 				  {
 					  string line = lines[i];
-					  for (int j = 0; j < line.Length;
-					       j++)
-					    {
-						    char ch = line[j];
+					  int file = 0;
+					  foreach(char ch in line) {
 						    if (Char.IsNumber (ch))
 						      {
-							      j += ch - '1';	// starting from 1 since j++ will increment 1
+							      file += ch - '0';
 							      continue;
 						      }
 						    int rank = 7 - i;
-						    int file = j;
 						    ChessPiece piece;
 						    GetPieceForFENChar (ch,
 									whites,
@@ -1115,6 +1112,7 @@ namespace Chess
 									out
 									piece);
 						    piece.addToSide ();
+						    file++;
 					    }
 				  }
 				whites.King.CanCastle = info.WhiteCanCastle;
