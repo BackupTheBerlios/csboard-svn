@@ -15,11 +15,13 @@ ASSEMBLIES = 					\
 GAMEDB_TARGET = GameDbPlugin.dll
 GAMEDB_CSFILES = 				\
 	$(srcdir)/GameDb.cs			\
+	$(srcdir)/GameDbBrowser.cs		\
 	$(srcdir)/GameDbPlugin.cs
 
-GAMEDB_RESOURCES =
+GAMEDB_RESOURCES =				\
+	-resource:$(srcdir)/gamedb.glade
 
-$(GAMEDB_TARGET): $(GAMEDB_CSFILES) $(top_builddir)/csboard.exe
+$(GAMEDB_TARGET): $(GAMEDB_CSFILES) $(top_builddir)/csboard.exe $(srcdir)/gamedb.glade
 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(GAMEDB_CSFILES) $(GAMEDB_RESOURCES)
 
 #

@@ -84,12 +84,12 @@ namespace CsBoard
 				printer.Start ();
 				printer.LineSpaceRatio = 2;
 				bool first = true;
-				  foreach (PGNChessGame game in games)
+				  foreach (PGNGameDetails info in games)
 				{
 					if (!first)
 						printer.HorizontalLineBreak
 							();
-					WriteGame (game);
+					WriteGame (info.Game);
 					if (GamePrinted != null)
 						GamePrinted (this,
 							     EventArgs.Empty);
@@ -105,9 +105,10 @@ namespace CsBoard
 				int height = 200;
 				CairoPositionSnapshot ps =
 					new CairoPositionSnapshot (player.
-							      GetPosition (),
-							      width,
-							      height);
+								   GetPosition
+								   (),
+								   width,
+								   height);
 
 				ps.DrawMove (player.LastMoveInfo.src_rank,
 					     player.LastMoveInfo.src_file,

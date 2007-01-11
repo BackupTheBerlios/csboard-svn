@@ -37,6 +37,14 @@ namespace CsBoard
 			string GetOpeningName (string econame);
 		}
 
+		public interface IGameDb
+		{
+			void SaveGameDetails (PGNGameDetails details,
+					      bool overrite);
+			bool GetGameDetails (PGNChessGame game,
+					     out PGNGameDetails details);
+		}
+
 		public class GameViewer
 		{
 			[Glade.Widget] private Gtk.Window gameViewerWindow;
@@ -125,6 +133,19 @@ namespace CsBoard
 				get
 				{
 					return ecoDb;
+				}
+			}
+
+			static IGameDb gameDb;
+			public static IGameDb GameDb
+			{
+				set
+				{
+					gameDb = value;
+				}
+				get
+				{
+					return gameDb;
 				}
 			}
 
@@ -271,7 +292,7 @@ namespace CsBoard
 				gamesListWidget.SetGames (games);
 				if (games.Count > 0)
 				  {
-					  SelectGame ((PGNChessGame)
+					  SelectGame ((PGNGameDetails)
 						      games[0]);
 				  }
 			}
@@ -333,8 +354,8 @@ namespace CsBoard
 
 				boardWidget =
 					new CairoViewerBoard (ChessGamePlayer.
-							 GetDefaultPosition
-							 ());
+							      GetDefaultPosition
+							      ());
 				//boardWidget.WidthRequest = 400;
 				//boardWidget.HeightRequest = 400;
 				whiteLabel =
@@ -474,6 +495,30 @@ namespace CsBoard
 				PlayNMoves (currentMoveIdx);	// since we are passing the index, no need for -1
 			}
 
+			public void OnEditCommentActivated (object o,
+							    EventArgs e)
+			{
+				BufferDialog dlg =
+					new BufferDialog (gameViewerWindow,
+							  Catalog.
+							  GetString
+							  ("Edit current comment"));
+				string currentComment =
+					gameSession.CurrentComment;
+				if (currentComment != null)
+					dlg.Buffer = currentComment;
+				if (dlg.Run () == (int) ResponseType.Ok)
+				  {
+					  string comment = dlg.Buffer.Trim ();
+					  gameSession.CurrentComment =
+						  comment.Length ==
+						  0 ? null : comment;
+					  gameWidget.Refresh ();
+				  }
+				dlg.Hide ();
+				dlg.Dispose ();
+			}
+
 			private void PlayNMoves (int nmoves)
 			{
 				if (!gameSession.PlayNMoves (nmoves))
@@ -584,10 +629,10 @@ namespace CsBoard
 				gamesListWidget.Tree.Model.GetIter (out iter,
 								    args.
 								    Path);
-				PGNChessGame game =
-					(PGNChessGame) gamesListWidget.Tree.
+				PGNGameDetails details =
+					(PGNGameDetails) gamesListWidget.Tree.
 					Model.GetValue (iter, 0);
-				SelectGame (game);
+				SelectGame (details);
 			}
 
 			public void OnHighlightMoveMenuItemActivated (object
@@ -602,10 +647,11 @@ namespace CsBoard
 				boardWidget.QueueDraw ();
 			}
 
-			private void SelectGame (PGNChessGame game)
+			private void SelectGame (PGNGameDetails details)
 			{
+				PGNChessGame game = details.Game;
 				gameSession.Set (game);
-				gameWidget.SetGame (game);
+				gameWidget.SetGame (details);
 				boardWidget.Reset ();
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
@@ -798,7 +844,21 @@ namespace CsBoard
 			private void OnGameLoaded (System.Object o,
 						   GameLoadedEventArgs args)
 			{
-				games.Add (args.Game);
+				if (GameViewer.GameDb == null)
+					games.Add (new
+						   PGNGameDetails (args.
+								   Game));
+				else
+				  {
+					  PGNGameDetails details;
+					  if (!GameViewer.GameDb.GetGameDetails (args.Game, out details))	// not found in the db
+						  details =
+							  new
+							  PGNGameDetails
+							  (args.Game);
+					  games.Add (details);
+				  }
+
 				dlg.ProgressBar.Text =
 					Catalog.GetString ("Loaded ") +
 					games.Count +

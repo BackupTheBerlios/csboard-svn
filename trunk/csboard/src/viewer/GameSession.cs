@@ -165,6 +165,14 @@ namespace CsBoard
 
 					return move.comment;
 				}
+
+				set
+				{
+					if (idx < 0)
+						return;
+					move.comment = value;
+					game.Moves[idx] = move;
+				}
 			}
 		}
 	}

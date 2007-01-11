@@ -89,6 +89,28 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkMenuItem" id="edit1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Edit</property>
+	      <property name="use_underline">True</property>
+
+	      <child>
+		<widget class="GtkMenu" id="edit1_menu">
+
+		  <child>
+		    <widget class="GtkMenuItem" id="move_comment1">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Move Comment</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="OnEditCommentActivated" last_modification_time="Mon, 08 Jan 2007 02:56:31 GMT"/>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="exportAsMenuItem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Export As</property>

@@ -1,3 +1,22 @@
+2007-01-11 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	Added files
+	* src/viewer/PGNGameDetails.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+
+	Modified files
+	
+	* src/viewer/ChessGameView.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+	* src/viewer/PGNBufferLoader.cs
+	* src/viewer/plugins/gamedb/GameDb.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/printer/PGNExporter.cs
+
+	Adds a game database browser with search functionality.
+
 2007-01-07 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Added files

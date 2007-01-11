@@ -40,7 +40,7 @@ namespace CsBoard
 
 		public class ChessGameWidget:VBox
 		{
-			PGNChessGame game;
+			PGNGameDetails details;
 			int curMoveIdx;
 
 			public event NthMoveEvent ShowNthMove;
@@ -77,10 +77,15 @@ namespace CsBoard
 				//html.JumpToAnchor(idx.ToString());
 			}
 
-			public void SetGame (PGNChessGame g)
+			public void SetGame (PGNGameDetails d)
 			{
 				curMoveIdx = -1;
-				game = g;
+				details = d;
+				UpdateGameDetails ();
+			}
+
+			public void Refresh ()
+			{
 				UpdateGameDetails ();
 			}
 
@@ -102,8 +107,10 @@ namespace CsBoard
 			private void FillDetails (StringBuilder buffer)
 			{
 				PrintTitle (buffer);
-				if (game == null)
+				if (details == null)
 					return;
+
+				PGNChessGame game = details.Game;
 
 				int i = 0;
 				int moveno = 1;
@@ -131,8 +138,10 @@ namespace CsBoard
 
 			private void PrintTitle (StringBuilder buffer)
 			{
-				if (game == null)
+				if (details == null)
 					return;
+				PGNChessGame game = details.Game;
+
 				buffer.Append (String.
 					       Format
 					       ("<H3><FONT COLOR=\"{0}\">{1} vs {2}</FONT></H3>",

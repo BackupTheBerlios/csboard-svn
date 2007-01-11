@@ -32,7 +32,7 @@ namespace CsBoard
 		public class GameDBPlugin:CsPlugin
 		{
 			GameViewer viewer;
-			  Gtk.MenuItem saveItem, loadItem;
+			  Gtk.MenuItem saveItem, openDbItem;
 
 			ProgressDialog dlg;
 
@@ -50,12 +50,20 @@ namespace CsBoard
 				saveItem.Activated += on_add_to_db_activate;
 				saveItem.Show ();
 
-				loadItem = new MenuItem (Catalog.
-							 GetString
-							 ("Load Rated Games"));
-				loadItem.Activated +=
-					on_load_from_db_activate;
-				loadItem.Show ();
+				openDbItem = new MenuItem (Catalog.
+							   GetString
+							   ("Games Database"));
+				openDbItem.Activated +=
+					on_open_games_db_activate;
+				openDbItem.Show ();
+			}
+
+			private void on_open_games_db_activate (object
+								o,
+								EventArgs
+								args)
+			{
+				GameDbBrowser br = new GameDbBrowser ();
 			}
 
 			private void on_add_to_db_activate (object
@@ -82,9 +90,9 @@ namespace CsBoard
 				  }
 				double totalgames = games.Count;
 				int ngames = 0;
-				foreach (PGNChessGame game in games)
+				foreach (PGNGameDetails details in games)
 				{
-					GameDb.Instance.AddGame (game);
+					GameDb.Instance.AddGame (details);
 					ngames++;
 					dlg.UpdateProgress (ngames /
 							    totalgames);
@@ -94,15 +102,6 @@ namespace CsBoard
 				return false;
 			}
 
-			private void on_load_from_db_activate (object
-							       o,
-							       EventArgs args)
-			{
-				ArrayList list = new ArrayList ();
-				GameDb.Instance.LoadRatedGames (list, GameRating.Average);
-				viewer.LoadGames (list);
-			}
-
 			public override bool Initialize ()
 			{
 				viewer = GameViewer.Instance;
@@ -110,7 +109,7 @@ namespace CsBoard
 					return false;
 
 				viewer.AddToFileMenu (saveItem);
-				viewer.AddToFileMenu (loadItem);
+				viewer.AddToViewMenu (openDbItem);
 
 				viewer.ChessGameWidget.HTML.
 					ButtonPressEvent +=
@@ -125,7 +124,7 @@ namespace CsBoard
 			public override bool Shutdown ()
 			{
 				viewer.RemoveFromViewMenu (saveItem);
-				viewer.RemoveFromViewMenu (loadItem);
+				viewer.RemoveFromViewMenu (openDbItem);
 				return true;
 			}
 
@@ -187,11 +186,11 @@ namespace CsBoard
 							 ("Must Have"))};
 				GameRating[]ratings =
 				{
-					GameRating.Ignore,
-					GameRating.Average,
-					GameRating.Good,
-					GameRating.Excellent,
-					GameRating.MustHave};
+				GameRating.Ignore,
+						GameRating.Average,
+						GameRating.Good,
+						GameRating.Excellent,
+						GameRating.MustHave};
 
 				int i = 0;
 				foreach (CheckMenuItem item in ratingItems)
