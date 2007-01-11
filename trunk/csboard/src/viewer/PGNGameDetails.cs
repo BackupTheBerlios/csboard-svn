@@ -40,82 +40,137 @@ namespace CsBoard
 		{
 			public PGNChessGame Game
 			{
-			 get
-			 {
-			  return game;
-			  }
-			  }
-			  PGNChessGame game;
-			  int nmoves;
-			  string white; string black; string result;
-			  public GameRating Rating
-			  {
-			  get
-			  {
-			  return (GameRating) rating;
-			  }
-			  set
-			  {
-			  rating = (int) value;
-			  }
-			  }
-			  int rating = (int)GameRating.Unknown; string hash;
-			  public string Hash
-			  {
-			  get
-			  {
-			  if (hash == null)
-			  hash = GenerateHash (game); return hash;}
-			  }
-			  public PGNGameDetails (PGNChessGame game)
-			  {
-			  this.game = game;
-			  nmoves =
-			  game.Moves.Count;
-			  white =
-			  game.
-			  GetTagValue ("White",
-				       "");
-			  black =
-			  game.
-			  GetTagValue ("Black",
-				       "");
-			  result = game.GetTagValue ("Result", "*");}
+				get
+				{
+					return game;
+				}
+			}
+			PGNChessGame game;
+			int nmoves;
+			string white; string black; string result;
 
-			  private static string GenerateHash (PGNChessGame
-							      game)
-			  {
-			  StringBuilder buffer =
-			  new StringBuilder ();
-			  int nmoves = game.Moves.Count;
-			  buffer.Append (String.
-					 Format
-					 ("{0}:",
-					  nmoves));
-			  ChessGamePlayer player;
-			  player =
-			  game.
-			  HasTag ("FEN") ?
-			  ChessGamePlayer.
-			  CreateFromFEN (game.
-					 GetTagValue
-					 ("FEN",
-					  null))
-			  : ChessGamePlayer.
-			  CreatePlayer ();
-			  player =
-			  Chess.Game.
-			  ChessGamePlayer.
-			  CreatePlayer ();
-			  foreach (PGNChessMove move in game.Moves)
-			  {
-			  player.Move (move.Move);}
+			string[] tags;
+			public string[] Tags {
+				get {
+					return tags;
+				}
+			}
 
-			  buffer.Append (player.
-					 GetPositionAsFEN
-					 ());
-			  buffer.Append (((nmoves + 1) / 2));
-			  return buffer.ToString ();}
-			  }
-			  }
-			  }
+			public GameRating Rating
+			{
+				get
+				{
+					return (GameRating) rating;
+				}
+				set
+				{
+					rating = (int) value;
+				}
+			}
+
+			int rating = (int)GameRating.Unknown; string hash;
+			public string Hash
+			{
+				get
+				{
+					if (hash == null)
+						hash = GenerateHash (game); return hash;
+				}
+			}
+
+			public bool AddTag(string tag) {
+				if(tags == null) {
+					tags = new string[] { tag };
+					return true;
+				}
+
+				foreach(string t in tags) {
+					if(t.Equals(tag))
+						return false;
+				}
+
+				string[] newtags = new string[tags.Length + 1];
+				int i = 0;
+				foreach(string t in tags) {
+					newtags[i++] = t;
+				}
+
+				newtags[i] = tag;
+				tags = newtags;
+				return true;
+			}
+
+			public bool RemoveTag(string tag) {
+				if(tags == null)
+					return false;
+				int i = 0;
+				string[] newtags = new string[tags.Length - 1];
+				bool found = false;
+				foreach(string t in tags) {
+					if(!found && t.Equals(tag)) {
+						found = true;
+						continue;
+					}
+
+					newtags[i++] = t;
+				}
+
+				if(found)
+					tags = newtags.Length == 0 ? null : newtags;
+				return found;
+			}
+
+			public PGNGameDetails (PGNChessGame game)
+			{
+				this.game = game;
+				nmoves =
+					game.Moves.Count;
+				white =
+					game.
+					GetTagValue ("White",
+						     "");
+				black =
+					game.
+					GetTagValue ("Black",
+						     "");
+				result = game.GetTagValue ("Result", "*");
+			}
+			
+			private static string GenerateHash (PGNChessGame
+							    game)
+			{
+				StringBuilder buffer =
+					new StringBuilder ();
+				int nmoves = game.Moves.Count;
+				buffer.Append (String.
+					       Format
+					       ("{0}:",
+						nmoves));
+				ChessGamePlayer player;
+				player =
+					game.
+					HasTag ("FEN") ?
+					ChessGamePlayer.
+					CreateFromFEN (game.
+						       GetTagValue
+						       ("FEN",
+							null))
+					: ChessGamePlayer.
+					CreatePlayer ();
+				player =
+					Chess.Game.
+					ChessGamePlayer.
+					CreatePlayer ();
+				foreach (PGNChessMove move in game.Moves)
+				{
+					player.Move (move.Move);}
+				
+				buffer.Append (player.
+					       GetPositionAsFEN
+					       ());
+				buffer.Append (((nmoves + 1) / 2));
+				return buffer.ToString ();
+			}
+		}
+	}
+}

@@ -33,6 +33,7 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.Window gameDbWindow;
 			[Glade.Widget] private Gtk.TreeView searchTreeView;
 			[Glade.Widget] private Gtk.Entry searchEntry;
+			[Glade.Widget] private Gtk.Entry tagSearchEntry;
 
 			[Glade.Widget] private Gtk.ComboBox colorOption;
 
@@ -47,8 +48,13 @@ namespace CsBoard
 
 			Hashtable ratingMap;
 
+			ObjectSet results;
+
+			ArrayList modifiedGames;
+
 			public GameDbBrowser ()
 			{
+				modifiedGames = new ArrayList ();
 
 				ratingMap = new Hashtable ();
 				ratingMap["Average"] = GameRating.Average;
@@ -77,6 +83,7 @@ namespace CsBoard
 				searchTreeView.Model = searchStore;
 
 				searchEntry.Activated += OnSearch;
+				tagSearchEntry.Activated += OnSearch;
 
 				int width, height;
 				  GameViewer.Instance.Window.
@@ -111,6 +118,39 @@ namespace CsBoard
 				HandleBrowse ();
 			}
 
+			protected void OnEditGamesButtonClicked (object o,
+								 EventArgs
+								 args)
+			{
+				ArrayList list = new ArrayList ();
+				GetSelectedGames (list);
+
+				GamesEditorDialog editor =
+					new GamesEditorDialog (list,
+							       modifiedGames);
+				int width, height;
+				gameDbWindow.GetSize (out width, out height);
+				width = (int) Math.Round (0.9 * width);
+				height = (int) Math.Round (0.9 * height);
+				editor.Dialog.Resize (width, height);
+
+				editor.SplitPane.Position =
+					(int) Math.Round (0.40 * width);
+				editor.Dialog.Run ();
+				editor.Dialog.Hide ();
+			}
+
+			protected void
+				OnSaveModifiedGamesButtonClicked (object o,
+								  EventArgs
+								  args)
+			{
+				foreach (PGNGameDetails info in modifiedGames)
+				{
+					GameDb.Instance.DB.Set (info);
+				}
+			}
+
 			private void OnSearchButtonClicked (object o,
 							    EventArgs args)
 			{
@@ -131,12 +171,20 @@ namespace CsBoard
 
 			private void LoadSelectedGames ()
 			{
+				ArrayList list = new ArrayList ();
+				GetSelectedGames (list);
+
+				GameViewer.Instance.LoadGames (list);
+				GameViewer.Instance.Window.Present ();
+			}
+
+			private void GetSelectedGames (ArrayList list)
+			{
 				TreePath[]selected =
 					searchTreeView.Selection.
 					GetSelectedRows ();
 				if (selected == null || selected.Length == 0)
 					return;
-				ArrayList list = new ArrayList ();
 				foreach (TreePath path in selected)
 				{
 					TreeIter iter;
@@ -148,15 +196,13 @@ namespace CsBoard
 						GetValue (iter, 0);
 					list.Add (info);
 				}
-
-				GameViewer.Instance.LoadGames (list);
-				GameViewer.Instance.Window.Present ();
 			}
 
 			private void HandleBrowse ()
 			{
 				searchEntry.Text = "";
 				ratingChoice.Active = 0;
+				tagSearchEntry.Text = "";
 				HandleSearch ();
 			}
 
@@ -251,22 +297,47 @@ namespace CsBoard
 						    break;
 					    }
 				  }
-				ObjectSet res = query.Execute ();
+
+				HandleTagSearchOptions (query);
+				results = query.Execute ();
 
 				statusbar.Pop (1);
 				statusbar.Push (1,
 						String.Format ("{0} games",
-							       res.Size ()));
+							       results.
+							       Size ()));
 				ArrayList list = new ArrayList ();
-				while (res.HasNext ())
+				while (results.HasNext ())
 				  {
 					  PGNGameDetails details
 						  =
-						  (PGNGameDetails) res.
+						  (PGNGameDetails) results.
 						  Next ();
 					  list.Add (details);
 				  }
 				searchGamesList.SetGames (list);
+			}
+
+			private void HandleTagSearchOptions (Query query)
+			{
+				string tagstr = tagSearchEntry.Text.Trim ();
+				if (tagstr.Length == 0)
+					return;
+				// TODO: split
+				ArrayList tags = new ArrayList ();
+				tags.Add (tagstr);
+				Constraint prev = null;
+				foreach (string tag in tags)
+				{
+					if (prev != null)
+						query.Descend ("tags").
+							Constrain (tag).
+							Equal ().Or (prev);
+					else
+						prev = query.Descend ("tags").
+							Constrain (tag).
+							Equal ();
+				}
 			}
 		}
 	}

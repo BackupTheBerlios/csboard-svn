@@ -16,6 +16,7 @@ GAMEDB_TARGET = GameDbPlugin.dll
 GAMEDB_CSFILES = 				\
 	$(srcdir)/GameDb.cs			\
 	$(srcdir)/GameDbBrowser.cs		\
+	$(srcdir)/GamesEditorDialog.cs		\
 	$(srcdir)/GameDbPlugin.cs
 
 GAMEDB_RESOURCES =				\

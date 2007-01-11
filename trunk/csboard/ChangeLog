@@ -1,8 +1,25 @@
 2007-01-11 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
+	Added file
+
+	* src/viewer/plugins/gamedb/GamesEditorDialog.cs
+
+	Modified
+
+	* src/viewer/plugins/gamedb/GameDb.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/gamedb/Makefile.am
+	* src/viewer/plugins/gamedb/gamedb.glade
+
+	Adds tags capability to the games database.
+
+2007-01-11 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
 	Added files
+	* src/viewer/BufferDialog.cs
 	* src/viewer/PGNGameDetails.cs
 	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/gamedb/gamedb.glade
 
 	Modified files
 	

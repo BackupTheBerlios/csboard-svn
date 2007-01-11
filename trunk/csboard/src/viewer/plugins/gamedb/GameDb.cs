@@ -98,6 +98,10 @@ namespace CsBoard
 					ObjectClass (typeof (PGNGameDetails)).
 					ObjectField ("black").Indexed (true);
 
+				Db4o.Configure ().
+					ObjectClass (typeof (PGNGameDetails)).
+					ObjectField ("tags").Indexed (true);
+
 				db = Db4o.OpenFile (dbfile);
 			}
 
