@@ -56,6 +56,16 @@ namespace CsBoard
 				}
 			}
 
+			int id;
+			public int ID {
+				get {
+					return id;
+				}
+				set {
+					id = value;
+				}
+			}
+
 			public GameRating Rating
 			{
 				get

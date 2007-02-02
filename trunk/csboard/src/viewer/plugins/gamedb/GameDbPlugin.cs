@@ -64,6 +64,7 @@ namespace CsBoard
 								args)
 			{
 				GameDbBrowser br = new GameDbBrowser ();
+				br.Window.Show();
 			}
 
 			private void on_add_to_db_activate (object
@@ -131,7 +132,6 @@ namespace CsBoard
 			private void PopupMenuCb (object o,
 						  PopupMenuArgs args)
 			{
-				Console.WriteLine ("Popup");
 				Menu menu = new RatingPopup (viewer);
 				menu.ShowAll ();
 				menu.Popup ();

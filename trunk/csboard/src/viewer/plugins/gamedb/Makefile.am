@@ -17,6 +17,7 @@ GAMEDB_CSFILES = 				\
 	$(srcdir)/GameDb.cs			\
 	$(srcdir)/GameDbBrowser.cs		\
 	$(srcdir)/GamesEditorDialog.cs		\
+	$(srcdir)/GamesCollectionDialog.cs	\
 	$(srcdir)/GameDbPlugin.cs
 
 GAMEDB_RESOURCES =				\
