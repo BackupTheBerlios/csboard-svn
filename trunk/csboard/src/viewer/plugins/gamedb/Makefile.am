@@ -14,6 +14,7 @@ ASSEMBLIES = 					\
 
 GAMEDB_TARGET = GameDbPlugin.dll
 GAMEDB_CSFILES = 				\
+	$(srcdir)/PGNGameDetails.cs	 	\
 	$(srcdir)/GameDb.cs			\
 	$(srcdir)/GameDbBrowser.cs		\
 	$(srcdir)/GamesEditorDialog.cs		\

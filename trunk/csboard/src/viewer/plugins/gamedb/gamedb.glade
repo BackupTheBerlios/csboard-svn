@@ -187,9 +187,7 @@
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="ratingMatchOption">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">Equals
-Above
-Below</property>
+		      <property name="items" translatable="yes">EqualsAboveBelow</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
@@ -208,11 +206,7 @@ Below</property>
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="ratingChoice">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">
-Average
-Good
-Excellent
-Must Have</property>
+		      <property name="items" translatable="yes">AverageGoodExcellentMust Have</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
@@ -260,9 +254,7 @@ Must Have</property>
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="colorOption">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">Any
-White
-Black</property>
+		      <property name="items" translatable="yes">AnyWhiteBlack</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
@@ -946,7 +938,7 @@ Black</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="button13">
+		<widget class="GtkButton" id="deleteGameCollectionButton">
 		  <property name="visible">True</property>
 		  <property name="can_default">True</property>
 		  <property name="can_focus">True</property>
@@ -1240,12 +1232,7 @@ Black</property>
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="ratingComboBox">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">Average
-Good
-Excellent
-Must Have
-No Rating
-Ignore</property>
+		      <property name="items" translatable="yes">AverageGoodExcellentMust HaveNo RatingIgnore</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
@@ -1926,13 +1913,13 @@ Ignore</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHButtonBox" id="hbuttonbox2">
+		<widget class="GtkHButtonBox" id="hbuttonbox3">
 		  <property name="visible">True</property>
 		  <property name="layout_style">GTK_BUTTONBOX_START</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkButton" id="button14">
+		    <widget class="GtkButton" id="removeSelectedGamesButton">
 		      <property name="visible">True</property>
 		      <property name="can_default">True</property>
 		      <property name="can_focus">True</property>
@@ -1977,7 +1964,7 @@ Ignore</property>
 			      <child>
 				<widget class="GtkLabel" id="label25">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Remove Games</property>
+				  <property name="label" translatable="yes">Remove Selected Games</property>
 				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2004,6 +1991,19 @@ Ignore</property>
 		      </child>
 		    </widget>
 		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkHButtonBox" id="hbuttonbox2">
+		  <property name="visible">True</property>
+		  <property name="layout_style">GTK_BUTTONBOX_START</property>
+		  <property name="spacing">0</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>

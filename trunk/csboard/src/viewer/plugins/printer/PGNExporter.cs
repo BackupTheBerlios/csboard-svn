@@ -84,12 +84,12 @@ namespace CsBoard
 				printer.Start ();
 				printer.LineSpaceRatio = 2;
 				bool first = true;
-				  foreach (PGNGameDetails info in games)
+				  foreach (ChessGame info in games)
 				{
 					if (!first)
 						printer.HorizontalLineBreak
 							();
-					WriteGame (info.Game);
+					WriteGame (info);
 					if (GamePrinted != null)
 						GamePrinted (this,
 							     EventArgs.Empty);
@@ -124,7 +124,7 @@ namespace CsBoard
 				printer.PrintImage (image);
 			}
 
-			private void WriteGame (PGNChessGame game)
+			private void WriteGame (ChessGame game)
 			{
 				GameSession session = new GameSession ();
 				session.Set (game);

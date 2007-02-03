@@ -42,11 +42,17 @@ namespace CsBoard
 
 			[Glade.Widget] private Gtk.Statusbar statusbar;
 
-			[Glade.Widget] private Gtk.TreeView gamesCollectionTree;
-			[Glade.Widget] private Gtk.Entry gamesCollectionFilterEntry;
-			[Glade.Widget] private Gtk.Button gamesCollectionFilterButton;
+			[Glade.Widget] private Gtk.
+				TreeView gamesCollectionTree;
+			[Glade.Widget] private Gtk.
+				Entry gamesCollectionFilterEntry;
+			[Glade.Widget] private Gtk.
+				Button gamesCollectionFilterButton;
 
-			[Glade.Widget] private Gtk.Button newCollectionButton, addGamesToCollectionButton, editGameCollectionButton;
+			[Glade.Widget] private Gtk.Button newCollectionButton,
+				addGamesToCollectionButton,
+				editGameCollectionButton,
+				deleteGameCollectionButton;
 
 			private Gtk.ListStore searchStore;
 			private Gtk.ListStore gamesCollectionStore;
@@ -80,8 +86,7 @@ namespace CsBoard
 
 				searchTreeView.Selection.Mode =
 					SelectionMode.Multiple;
-				searchGamesList =
-					new GamesList (searchTreeView); // this will add the column and other details
+				searchGamesList = new GamesList (searchTreeView);	// this will add the column and other details
 
 				searchStore =
 					new
@@ -89,25 +94,41 @@ namespace CsBoard
 
 				gamesCollectionStore =
 					new
-					ListStore (typeof (string), typeof(GameCollection));
+					ListStore (typeof (string),
+						   typeof (GameCollection));
 
 				searchTreeView.Model = searchStore;
-				gamesCollectionTree.Model = gamesCollectionStore;
+				gamesCollectionTree.Model =
+					gamesCollectionStore;
 
-				gamesCollectionTree.RowActivated += OnGamesCollectionRowActivated;
+				gamesCollectionTree.RowActivated +=
+					OnGamesCollectionRowActivated;
 
-				CellRendererText renderer = new CellRendererText();
-				gamesCollectionTree.AppendColumn(new TreeViewColumn("Collections", renderer, "markup", 0));
+				CellRendererText renderer =
+					new CellRendererText ();
+				  gamesCollectionTree.
+					AppendColumn (new
+						      TreeViewColumn
+						      ("Collections",
+						       renderer, "markup",
+						       0));
 
-				searchEntry.Activated += OnSearch;
-				tagSearchEntry.Activated += OnSearch;
+				  searchEntry.Activated += OnSearch;
+				  tagSearchEntry.Activated += OnSearch;
 
-				gamesCollectionFilterEntry.Activated += OnFilterGamesCollection;
-				gamesCollectionFilterButton.Clicked += OnFilterGamesCollection;
+				  gamesCollectionFilterEntry.Activated +=
+					OnFilterGamesCollection;
+				  gamesCollectionFilterButton.Clicked +=
+					OnFilterGamesCollection;
 
-				newCollectionButton.Clicked += OnNewCollection;
-				addGamesToCollectionButton.Clicked += OnAddGamesToCollection;
-				editGameCollectionButton.Clicked += OnEditGameCollection;
+				  newCollectionButton.Clicked +=
+					OnNewCollection;
+				  addGamesToCollectionButton.Clicked +=
+					OnAddGamesToCollection;
+				  editGameCollectionButton.Clicked +=
+					OnEditGameCollection;
+				  deleteGameCollectionButton.Clicked +=
+					OnDeleteGameCollection;
 
 				int width, height;
 				  GameViewer.Instance.Window.
@@ -122,8 +143,10 @@ namespace CsBoard
 					OnRowActivated;
 			}
 
-			public Window Window {
-				get {
+			public Window Window
+			{
+				get
+				{
 					return gameDbWindow;
 				}
 			}
@@ -140,49 +163,83 @@ namespace CsBoard
 				HandleSearch ();
 			}
 
-			protected void OnGamesCollectionRowActivated(object o, RowActivatedArgs args) {
-				TreeModel model = ((TreeView)o).Model;
+			protected void OnGamesCollectionRowActivated (object
+								      o,
+								      RowActivatedArgs
+								      args)
+			{
+				TreeModel model = ((TreeView) o).Model;
 				TreeIter iter;
-				model.GetIter(out iter, args.Path);
-				GameCollection col = (GameCollection) model.GetValue(iter, 1);
-				ArrayList list = new ArrayList();
-				col.LoadGames(list);
+				model.GetIter (out iter, args.Path);
+				GameCollection col =
+					(GameCollection) model.GetValue (iter,
+									 1);
+				ArrayList list = new ArrayList ();
+				col.LoadGames (list);
 
 				GameViewer.Instance.LoadGames (list);
 				GameViewer.Instance.Window.Present ();
 			}
 
-			private void OnFilterGamesCollection(object o, EventArgs args) {
-				ArrayList list = new ArrayList();
-				string filter = gamesCollectionFilterEntry.Text.Trim();
-				GameDb.Instance.GetGameCollections(list, filter.Length == 0 ? null : filter);
-				gamesCollectionStore.Clear();
-				foreach(GameCollection collection in list) {
-					gamesCollectionStore.AppendValues(GenerateGameCollectionCellValue(collection), collection);
+			private void OnFilterGamesCollection (object o,
+							      EventArgs args)
+			{
+				ArrayList list = new ArrayList ();
+				string filter =
+					gamesCollectionFilterEntry.Text.
+					Trim ();
+				GameDb.Instance.GetGameCollections (list,
+								    filter.
+								    Length ==
+								    0 ? null :
+								    filter);
+				gamesCollectionStore.Clear ();
+				foreach (GameCollection collection in list)
+				{
+					gamesCollectionStore.
+						AppendValues
+						(GenerateGameCollectionCellValue
+						 (collection), collection);
 				}
 			}
 
-			private void OnNewCollection(object o, EventArgs args) {
-				GamesCollectionDialog dlg = GamesCollectionDialog.CreateEmpty();
-				if(dlg.Dialog.Run() == (int) ResponseType.Ok) {
-					GameCollection collection = new GameCollection(dlg.Title, dlg.Description, new ArrayList());
-					GameDb.Instance.AddCollection(collection);
-				}
+			private void OnNewCollection (object o,
+						      EventArgs args)
+			{
+				GamesCollectionDialog dlg =
+					GamesCollectionDialog.CreateEmpty ();
+				if (dlg.Dialog.Run () ==
+				    (int) ResponseType.Ok)
+				  {
+					  GameCollection collection =
+						  new GameCollection (dlg.
+								      Title,
+								      dlg.
+								      Description,
+								      new
+								      ArrayList
+								      ());
+					  GameDb.Instance.
+						  AddCollection (collection);
+				  }
 
-				dlg.Dialog.Hide();
-				dlg.Dialog.Dispose();
+				dlg.Dialog.Hide ();
+				dlg.Dialog.Dispose ();
 			}
 
-			private void OnAddGamesToCollection(object o, EventArgs args) {
-				ArrayList list = new ArrayList();
-				GetSelectedGames(list);
-				if(list.Count == 0)
+			private void OnAddGamesToCollection (object o,
+							     EventArgs args)
+			{
+				ArrayList list = new ArrayList ();
+				GetSelectedGames (list);
+				if (list.Count == 0)
 					return;
 
 				TreeViewColumn col;
 				TreePath path;
-				gamesCollectionTree.GetCursor(out path, out col);
-				if(path == null)
+				gamesCollectionTree.GetCursor (out path,
+							       out col);
+				if (path == null)
 					return;
 
 				TreeIter iter;
@@ -193,44 +250,82 @@ namespace CsBoard
 					gamesCollectionTree.Model.
 					GetValue (iter, 1);
 
-				foreach(PGNGameDetails info in list) {
-					collection.AddGame(info);
+				foreach (PGNGameDetails info in list)
+				{
+					collection.AddGame (info);
 				}
 
-				string updated_details = GenerateGameCollectionCellValue(collection);
-				gamesCollectionTree.Model.SetValue(iter, 0, updated_details);
+				string updated_details =
+					GenerateGameCollectionCellValue
+					(collection);
+				gamesCollectionTree.Model.SetValue (iter, 0,
+								    updated_details);
 
-				GameDb.Instance.AddCollection(collection);
+				GameDb.Instance.AddCollection (collection);
 			}
 
-			private void OnEditGameCollection(object o, EventArgs args) {
+			private void OnDeleteGameCollection (object o,
+							     EventArgs args)
+			{
 				TreeViewColumn col;
 				TreePath path;
-				gamesCollectionTree.GetCursor(out path, out col);
-				if(path == null)
+				gamesCollectionTree.GetCursor (out path,
+							       out col);
+				if (path == null)
 					return;
 
 				TreeIter iter;
-				gamesCollectionTree.Model.GetIter(out iter, path);
-				GameCollection collection = (GameCollection) gamesCollectionTree.Model.GetValue(iter, 1);
-				EditGamesCollectionDialog dlg = new EditGamesCollectionDialog(collection);
+				gamesCollectionTree.Model.GetIter (out iter,
+								   path);
+				GameCollection collection =
+					(GameCollection) gamesCollectionTree.
+					Model.GetValue (iter, 1);
+				GameDb.Instance.DeleteCollection (collection);
+				((ListStore) gamesCollectionTree.Model).
+					Remove (ref iter);
+			}
+
+			private void OnEditGameCollection (object o,
+							   EventArgs args)
+			{
+				TreeViewColumn col;
+				TreePath path;
+				gamesCollectionTree.GetCursor (out path,
+							       out col);
+				if (path == null)
+					return;
+
+				TreeIter iter;
+				gamesCollectionTree.Model.GetIter (out iter,
+								   path);
+				GameCollection collection =
+					(GameCollection) gamesCollectionTree.
+					Model.GetValue (iter, 1);
+				EditGamesCollectionDialog dlg =
+					new
+					EditGamesCollectionDialog
+					(collection);
 
 				int width, height;
 				gameDbWindow.GetSize (out width, out height);
 				width = (int) Math.Round (0.9 * width);
 				height = (int) Math.Round (0.9 * height);
 				dlg.Dialog.Resize (width, height);
-				dlg.Dialog.Show();
+				dlg.Dialog.Show ();
 
-				dlg.Dialog.Run();
-				dlg.Dialog.Hide();
-				dlg.Dialog.Dispose();
+				dlg.Dialog.Run ();
+				dlg.Dialog.Hide ();
+				dlg.Dialog.Dispose ();
 			}
 
-			static string GenerateGameCollectionCellValue(GameCollection col) {
-				return String.Format("<b>{0}</b>\n<small>{1} games</small>",
-						     col.Title,
-						     col.Games.Count);
+			static string
+				GenerateGameCollectionCellValue
+				(GameCollection col)
+			{
+				return String.
+					Format
+					("<b>{0}</b>\n<small>{1} games</small>",
+					 col.Title, col.Games.Count);
 			}
 
 			protected void OnShowAllButtonClicked (object o,
@@ -254,7 +349,7 @@ namespace CsBoard
 				width = (int) Math.Round (0.9 * width);
 				height = (int) Math.Round (0.9 * height);
 				editor.Dialog.Resize (width, height);
-				editor.Dialog.Show();
+				editor.Dialog.Show ();
 
 				editor.SplitPane.Position =
 					(int) Math.Round (0.40 * width);
@@ -271,7 +366,7 @@ namespace CsBoard
 				{
 					GameDb.Instance.DB.Set (info);
 				}
-				GameDb.Instance.DB.Commit();
+				GameDb.Instance.DB.Commit ();
 			}
 
 			private void OnSearchButtonClicked (object o,

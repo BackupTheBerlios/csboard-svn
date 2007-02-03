@@ -31,7 +31,7 @@ namespace CsBoard
 {
 	namespace Viewer
 	{
-		public class GameDb
+		public class GameDb : IGameDb
 		{
 			ObjectContainer db;
 
@@ -106,25 +106,36 @@ namespace CsBoard
 					ObjectClass (typeof (PGNGameDetails)).
 					ObjectField ("tags").Indexed (true);
 
-				Db4o.Configure().ObjectClass(typeof(PGNGameDetails)).CascadeOnDelete(true);
-				Db4o.Configure().ObjectClass(typeof(PGNGameDetails)).CascadeOnUpdate(true);
+				Db4o.Configure ().
+					ObjectClass (typeof (PGNGameDetails)).
+					CascadeOnDelete (true);
+				Db4o.Configure ().
+					ObjectClass (typeof (PGNGameDetails)).
+					CascadeOnUpdate (true);
 
-				Db4o.Configure().ObjectClass(typeof(GameCollection)).CascadeOnDelete(true);
-				Db4o.Configure().ObjectClass(typeof(GameCollection)).CascadeOnUpdate(true);
+				Db4o.Configure ().
+					ObjectClass (typeof (GameCollection)).
+					CascadeOnDelete (true);
+				Db4o.Configure ().
+					ObjectClass (typeof (GameCollection)).
+					CascadeOnUpdate (true);
 
 				db = Db4o.OpenFile (dbfile);
 			}
 
-			public void AddGame (PGNChessGame game)
+			public void AddGame (ChessGame game)
 			{
 				AddGame (game, GameRating.Unknown);
 			}
 
-			public void AddGame (PGNChessGame game,
+			public void AddGame (ChessGame game,
 					     GameRating rating)
 			{
-				PGNGameDetails info =
-					new PGNGameDetails (game);
+				PGNGameDetails info;
+				if(game is PGNGameDetails)
+					info = (PGNGameDetails) game;
+				else
+					info = new PGNGameDetails (game);
 				info.Rating = rating;
 
 				AddGame (info);
@@ -135,9 +146,9 @@ namespace CsBoard
 				PGNGameDetails existing;
 				if (!FindGame (info, out existing))
 				  {
-					  info.ID = Config.Instance.NextID();
+					  info.ID = Config.Instance.NextID ();
 					  db.Set (info);
-					  Config.Instance.Save();
+					  Config.Instance.Save ();
 					  return;
 				  }
 
@@ -148,9 +159,9 @@ namespace CsBoard
 				db.Set (existing);
 			}
 
-			public Config LoadConfig() {
-				ObjectSet res =
-					db.Get (typeof (Config));
+			public Config LoadConfig ()
+			{
+				ObjectSet res = db.Get (typeof (Config));
 				if (res.HasNext ())
 					return (Config) res.Next ();
 				return null;
@@ -167,13 +178,13 @@ namespace CsBoard
 				ObjectSet res = query.Execute ();
 				if (!res.HasNext ())
 					return false;
-				PGNChessGame game1 = info.Game;
+				ChessGame game1 = info;
 				while (res.HasNext ())
 				  {
 					  PGNGameDetails info2 =
 						  (PGNGameDetails) res.
 						  Next ();
-					  PGNChessGame game2 = info2.Game;
+					  ChessGame game2 = info2;
 					  if (game1.Moves.
 					      Count != game2.Moves.Count)
 						  continue;
@@ -207,24 +218,38 @@ namespace CsBoard
 				return false;
 			}
 
-			public void AddCollection(GameCollection col) {
-				db.Set(col);
-				db.Commit();
+			public void AddCollection (GameCollection col)
+			{
+				db.Set (col);
+				db.Commit ();
 			}
 
-			public void GetGameCollections (IList list, string filter)
+			public void DeleteCollection (GameCollection col)
+			{
+				db.Delete (col);
+				db.Commit ();
+			}
+
+			public void GetGameCollections (IList list,
+							string filter)
 			{
 				ObjectSet res;
-				if(filter == null) {
-					res = db.Get (typeof (GameCollection));
-				}
-				else {
-					com.db4o.query.Query query = db.Query ();
-					query.Constrain (typeof (GameCollection));
-					query.Descend ("title").
-						Constrain (filter).Like ();
-					res = query.Execute();
-				}
+				if (filter == null)
+				  {
+					  res = db.
+						  Get (typeof
+						       (GameCollection));
+				  }
+				else
+				  {
+					  com.db4o.query.Query query =
+						  db.Query ();
+					  query.Constrain (typeof
+							   (GameCollection));
+					  query.Descend ("title").
+						  Constrain (filter).Like ();
+					  res = query.Execute ();
+				  }
 
 				while (res.HasNext ())
 				  {
@@ -234,11 +259,11 @@ namespace CsBoard
 
 			public void AddGames (IList games)
 			{
-				foreach (PGNChessGame game in games)
+				foreach (ChessGame game in games)
 				{
 					AddGame (game);
 				}
-				db.Commit();
+				db.Commit ();
 			}
 
 			public void DeleteAll ()
@@ -281,105 +306,154 @@ namespace CsBoard
 				  }
 			}
 
+			public void SaveGameDetails (ChessGame game, bool overrite) {
+				if(!(game is PGNGameDetails))
+					game = new PGNGameDetails(game);
+				AddGame(game); // this will check for duplicates
+			}
+
+			public bool GetGameDetails (ChessGame game,
+					     out ChessGame details) {
+				PGNGameDetails gamedetails;
+				if(!(game is PGNGameDetails))
+					gamedetails = new PGNGameDetails(game);
+				else
+					gamedetails = (PGNGameDetails) game;
+
+				PGNGameDetails dbgame;
+				bool ret = FindGame(gamedetails, out dbgame);
+				details = dbgame;
+				return ret;
+			}
+
 			~GameDb ()
 			{
 				db.Close ();
 			}
 		}
 
-		public class GameCollection {
+		public class GameCollection
+		{
 			string title;
-			public string Title {
-				get {
+			public string Title
+			{
+				get
+				{
 					return title;
 				}
-				set {
+				set
+				{
 					title = value;
 				}
 			}
 			string description;
-			public string Description {
-				get {
+			public string Description
+			{
+				get
+				{
 					return description;
 				}
 
-				set {
+				set
+				{
 					description = value;
 				}
 			}
 
 			IList ids;
-			public IList Games {
-				get {
+			public IList Games
+			{
+				get
+				{
 					return ids;
 				}
 			}
 
-			public GameCollection(string title, string description, ArrayList list) {
+			public GameCollection (string title,
+					       string description,
+					       ArrayList list)
+			{
 				this.title = title;
 				this.description = description;
 				ids = list;
 			}
 
-			public void AddGame(PGNGameDetails details) {
-				if(!ids.Contains(details.ID))
-					ids.Add(details.ID);
+			public void AddGame (PGNGameDetails details)
+			{
+				if (!ids.Contains (details.ID))
+					ids.Add (details.ID);
 			}
 
-			public void RemoveGame(PGNGameDetails details) {
-				ids.Remove(details.ID);
+			public void RemoveGame (PGNGameDetails details)
+			{
+				ids.Remove (details.ID);
 			}
 
-			public void LoadGames(ArrayList list) {
-				foreach(int id in ids) {
-					Query query = GameDb.Instance.DB.Query ();
-					query.Constrain (typeof (PGNGameDetails));
+			public void LoadGames (ArrayList list)
+			{
+				foreach (int id in ids)
+				{
+					Query query =
+						GameDb.Instance.DB.Query ();
+					query.Constrain (typeof
+							 (PGNGameDetails));
 					Query idQuery = query.Descend ("id");
 					idQuery.Constrain (id).Equal ();
-					ObjectSet set = query.Execute();
-					if(set.HasNext())
-						list.Add(set.Next());
+					ObjectSet set = query.Execute ();
+					if (set.HasNext ())
+						list.Add (set.Next ());
 				}
 			}
 
-			public override string ToString() {
-				StringBuilder buf = new StringBuilder();
-				buf.Append(String.Format("Title: {0}\n\t{1} games", title, ids.Count));
-				return buf.ToString();
+			public override string ToString ()
+			{
+				StringBuilder buf = new StringBuilder ();
+				buf.Append (String.
+					    Format ("Title: {0}\n\t{1} games",
+						    title, ids.Count));
+				return buf.ToString ();
 			}
 		}
 
-		public class Config {
+		public class Config
+		{
 			int nextid;
-			Config() {
+			  Config ()
+			{
 			}
 
-			public int NextID() {
+			public int NextID ()
+			{
 				return ++nextid;
 			}
 
 			static Config instance;
-			public static Config Instance {
-				get {
-					if(instance == null)
-						instance = LoadInstance();
+			public static Config Instance
+			{
+				get
+				{
+					if (instance == null)
+						instance = LoadInstance ();
 					return instance;
 				}
 			}
 
-			private static Config LoadInstance() {
-				Config config  = GameDb.Instance.LoadConfig();
-				if(config == null)
-					config = CreateNew();
+			private static Config LoadInstance ()
+			{
+				Config config = GameDb.Instance.LoadConfig ();
+				if (config == null)
+					config = CreateNew ();
 				return config;
 			}
 
-			private static Config CreateNew() {
-				return new Config();
+			private static Config CreateNew ()
+			{
+				return new Config ();
 			}
 
-			public void Save() {
-				GameDb.Instance.DB.Set(this);
+			public void Save ()
+			{
+				GameDb.Instance.DB.Set (this);
 			}
 		}
 	}

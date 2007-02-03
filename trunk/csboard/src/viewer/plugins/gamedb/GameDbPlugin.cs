@@ -64,7 +64,7 @@ namespace CsBoard
 								args)
 			{
 				GameDbBrowser br = new GameDbBrowser ();
-				br.Window.Show();
+				  br.Window.Show ();
 			}
 
 			private void on_add_to_db_activate (object
@@ -91,9 +91,9 @@ namespace CsBoard
 				  }
 				double totalgames = games.Count;
 				int ngames = 0;
-				foreach (PGNGameDetails details in games)
+				foreach (ChessGame game in games)
 				{
-					GameDb.Instance.AddGame (details);
+					GameDb.Instance.AddGame (game);
 					ngames++;
 					dlg.UpdateProgress (ngames /
 							    totalgames);
@@ -119,6 +119,8 @@ namespace CsBoard
 					(OnButtonPressEvent);
 				viewer.ChessGameWidget.HTML.PopupMenu +=
 					new PopupMenuHandler (PopupMenuCb);
+
+				GameViewer.GameDb = GameDb.Instance;
 				return true;
 			}
 

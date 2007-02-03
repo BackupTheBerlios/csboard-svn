@@ -39,7 +39,7 @@ namespace CsBoard
 
 			Expander otherTagsWidget;
 
-			PGNChessGame game;
+			ChessGame game;
 
 			public ChessGameInfoWidget ()
 			{
@@ -144,7 +144,7 @@ namespace CsBoard
 				  Child = box;
 			}
 
-			public void SetGame (PGNChessGame g)
+			public void SetGame (ChessGame g)
 			{
 				game = g;
 				UpdateGameDetails ();
@@ -193,7 +193,8 @@ namespace CsBoard
 						   2, false);
 
 				uint i = 0;
-				foreach (PGNTag tag in game.TagList) {
+				foreach (PGNTag tag in game.TagList)
+				{
 					if (ignoreTags.Contains (tag.Name))
 						continue;
 
@@ -218,11 +219,12 @@ namespace CsBoard
 				win.VscrollbarPolicy = PolicyType.Automatic;
 				win.AddWithViewport (table);
 				win.ShowAll ();
-				if (otherTagsWidget.Child != null) {
-					otherTagsWidget.
-						Remove (otherTagsWidget.
-							Child);
-				}
+				if (otherTagsWidget.Child != null)
+				  {
+					  otherTagsWidget.
+						  Remove (otherTagsWidget.
+							  Child);
+				  }
 				otherTagsWidget.Add (win);
 			}
 		}

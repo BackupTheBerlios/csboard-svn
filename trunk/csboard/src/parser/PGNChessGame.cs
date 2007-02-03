@@ -26,7 +26,7 @@ namespace Chess
 	{
 		public class PGNChessGame
 		{
-			ArrayList tagList;
+			protected ArrayList tagList;
 
 			public ArrayList TagList
 			{
@@ -36,7 +36,7 @@ namespace Chess
 				}
 			}
 
-			private IList moves;
+			protected IList moves;
 			public IList Moves
 			{
 				get
@@ -45,7 +45,7 @@ namespace Chess
 				}
 			}
 
-			private string comment;
+			protected string comment;
 			public string Comment
 			{
 				get
@@ -115,6 +115,13 @@ namespace Chess
 				moves = m;
 			}
 
+			protected PGNChessGame (PGNChessGame game)
+			{
+				comment = game.comment;
+				tagList = game.tagList;
+				moves = game.moves;
+			}
+
 			public bool HasTag (string name)
 			{
 				return tagList.
@@ -170,26 +177,36 @@ namespace Chess
 						break;
 					if (whitesTurn)
 					  {	// white's turn
-						  writer.Write (String.Format("{0}. ", moveno));
+						  writer.Write (String.
+								Format
+								("{0}. ",
+								 moveno));
 					  }
 					else if (whiteMoveComment)
 					  {
-						  writer.Write (String.Format("{0}... ", moveno));
+						  writer.Write (String.
+								Format
+								("{0}... ",
+								 moveno));
 						  whiteMoveComment = false;
 					  }
 
-					writer.Write (String.Format("{0} ", move.DetailedMove));
+					writer.Write (String.
+						      Format ("{0} ",
+							      move.
+							      DetailedMove));
 					if (move.comment != null)
 					  {
 						  // we should escape '{' in the comment
 						  writer.WriteLine ("{" +
-								move.
-								comment + "}");
+								    move.
+								    comment +
+								    "}");
 						  whiteMoveComment = true;
 					  }
-					if(!whitesTurn)
+					if (!whitesTurn)
 						moveno++;
-					whitesTurn = !whitesTurn; // flip turn
+					whitesTurn = !whitesTurn;	// flip turn
 				}
 				if (HasTag ("Result"))
 				  {

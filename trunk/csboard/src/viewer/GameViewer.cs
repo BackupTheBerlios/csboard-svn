@@ -39,10 +39,9 @@ namespace CsBoard
 
 		public interface IGameDb
 		{
-			void SaveGameDetails (PGNGameDetails details,
-					      bool overrite);
-			bool GetGameDetails (PGNChessGame game,
-					     out PGNGameDetails details);
+			void SaveGameDetails (ChessGame game, bool overrite);
+			bool GetGameDetails (ChessGame game,
+					     out ChessGame details);
 		}
 
 		public class GameViewer
@@ -292,12 +291,11 @@ namespace CsBoard
 				gamesListWidget.SetGames (games);
 				if (games.Count > 0)
 				  {
-					  SelectGame ((PGNGameDetails)
-						      games[0]);
+					  SelectGame ((ChessGame) games[0]);
 				  }
 			}
 
-			public PGNChessGame Game
+			public ChessGame Game
 			{
 				get
 				{
@@ -426,7 +424,7 @@ namespace CsBoard
 				if (file == null)
 					return;
 				TextWriter writer = new StreamWriter (file);
-				foreach (PGNChessGame game in games)
+				foreach (ChessGame game in games)
 				{
 					game.WritePGN (writer);
 					writer.WriteLine ();
@@ -629,8 +627,8 @@ namespace CsBoard
 				gamesListWidget.Tree.Model.GetIter (out iter,
 								    args.
 								    Path);
-				PGNGameDetails details =
-					(PGNGameDetails) gamesListWidget.Tree.
+				ChessGame details =
+					(ChessGame) gamesListWidget.Tree.
 					Model.GetValue (iter, 0);
 				SelectGame (details);
 			}
@@ -647,11 +645,10 @@ namespace CsBoard
 				boardWidget.QueueDraw ();
 			}
 
-			private void SelectGame (PGNGameDetails details)
+			private void SelectGame (ChessGame game)
 			{
-				PGNChessGame game = details.Game;
 				gameSession.Set (game);
-				gameWidget.SetGame (details);
+				gameWidget.SetGame (game);
 				boardWidget.Reset ();
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
@@ -844,19 +841,16 @@ namespace CsBoard
 			private void OnGameLoaded (System.Object o,
 						   GameLoadedEventArgs args)
 			{
+				ChessGame game = new ChessGame (args.Game);
 				if (GameViewer.GameDb == null)
-					games.Add (new
-						   PGNGameDetails (args.
-								   Game));
+					games.Add (game);
 				else
 				  {
-					  PGNGameDetails details;
-					  if (!GameViewer.GameDb.GetGameDetails (args.Game, out details))	// not found in the db
-						  details =
-							  new
-							  PGNGameDetails
-							  (args.Game);
-					  games.Add (details);
+					  ChessGame dbgame;
+					  if (!GameViewer.GameDb.GetGameDetails (game, out dbgame)) {	// not found in the db
+						  dbgame = game;
+					  }
+					  games.Add (dbgame);
 				  }
 
 				dlg.ProgressBar.Text =

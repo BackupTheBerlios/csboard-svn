@@ -42,7 +42,7 @@ namespace CsBoard
 			private void Update ()
 			{
 				gamesStore.Clear ();
-				foreach (PGNGameDetails game in games)
+				foreach (PGNChessGame game in games)
 					gamesStore.AppendValues (game);
 			}
 
@@ -95,66 +95,10 @@ namespace CsBoard
 			{
 				CellRendererText renderer =
 					(CellRendererText) r;
-				PGNGameDetails details =
-					(PGNGameDetails) model.GetValue (iter,
-									 0);
-				PGNChessGame game = details.Game;
-
-				string markup =
-					String.Format (Catalog.
-						       GetString
-						       ("<b>{0} vs {1}</b>\n")
-						       +
-						       Catalog.
-						       GetString
-						       ("<small><i>Result</i>: <b>{2}</b> ({3} moves)</small>"),
-						       MarkupEncode (game.
-								     White),
-						       MarkupEncode (game.
-								     Black),
-						       game.Result,
-						       (game.Moves.Count + 1) / 2);	// adding +1 will round it properly
-				string eventvalue =
-					game.GetTagValue ("Event", null);
-				if (eventvalue != null)
-				  {
-					  markup +=
-						  String.
-						  Format
-						  (Catalog.
-						   GetString
-						   ("\n<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"),
-						   MarkupEncode (eventvalue),
-						   game.GetTagValue ("Date",
-								     "?"));
-				  }
-				renderer.Markup = markup;
-			}
-
-			static string MarkupEncode (string str)
-			{
-				string chars = "&<>";
-				string[]strs =
-				{
-				"&amp;", "&lt;", "&gt;"};
-				bool somethingFound = false;
-				StringBuilder buffer = new StringBuilder ();
-				for (int i = 0; i < str.Length; i++)
-				  {
-					  char ch = str[i];
-					  int idx;
-					  if ((idx = chars.IndexOf (ch)) < 0)
-					    {
-						    buffer.Append (ch);
-						    continue;
-					    }
-					  somethingFound = true;
-					  string replace_str = strs[idx];
-					  buffer.Append (replace_str);
-				  }
-				if (!somethingFound)
-					return str;
-				return buffer.ToString ();
+				ChessGame game =
+					(ChessGame) model.GetValue (iter,
+								    0);
+				renderer.Markup = game.ToPango ();
 			}
 
 			public virtual void SetGames (ArrayList g)
@@ -188,10 +132,9 @@ namespace CsBoard
 					return true;
 				search = search.ToLower ();
 
-				PGNGameDetails details =
-					(PGNGameDetails) model.GetValue (iter,
-									 0);
-				PGNChessGame game = details.Game;
+				PGNChessGame game =
+					(PGNChessGame) model.GetValue (iter,
+								       0);
 
 				string str;
 				if ((str =

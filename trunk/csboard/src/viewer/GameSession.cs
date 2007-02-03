@@ -26,7 +26,7 @@ namespace CsBoard
 
 		public class GameSession
 		{
-			public PGNChessGame game;
+			public ChessGame game;
 			public ChessGamePlayer player;
 			int idx;
 			int total_moves;	// including whites and blacks
@@ -42,7 +42,7 @@ namespace CsBoard
 				}
 			}
 
-			public void Set (PGNChessGame g)
+			public void Set (ChessGame g)
 			{
 				idx = -1;
 				move = null;
