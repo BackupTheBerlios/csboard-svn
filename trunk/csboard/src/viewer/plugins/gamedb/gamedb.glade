@@ -143,7 +143,7 @@
 	    <widget class="GtkExpander" id="expander1">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="expanded">False</property>
+	      <property name="expanded">True</property>
 	      <property name="spacing">0</property>
 
 	      <child>
@@ -187,7 +187,10 @@
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="ratingMatchOption">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">EqualsAboveBelow</property>
+		      <property name="items" translatable="yes">
+Equals
+Above
+Below</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
@@ -206,7 +209,11 @@
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="ratingChoice">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">AverageGoodExcellentMust Have</property>
+		      <property name="items" translatable="yes">
+Average
+Good
+Excellent
+Must Have</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
@@ -254,7 +261,9 @@
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="colorOption">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">AnyWhiteBlack</property>
+		      <property name="items" translatable="yes">Any
+White
+Black</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
@@ -1232,7 +1241,12 @@
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="ratingComboBox">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">AverageGoodExcellentMust HaveNo RatingIgnore</property>
+		      <property name="items" translatable="yes">Average
+Good
+Excellent
+Must Have
+No Rating
+Ignore</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
