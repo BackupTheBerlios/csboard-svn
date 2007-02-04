@@ -98,6 +98,8 @@ namespace CsBoard
 					dlg.UpdateProgress (ngames /
 							    totalgames);
 				}
+				if(ngames > 0)
+					GameDb.Instance.Commit();
 
 				dlg.Respond (ResponseType.Ok);
 				return false;
@@ -212,6 +214,7 @@ namespace CsBoard
 				if (game == null)
 					return;
 				GameDb.Instance.AddGame (viewer.Game, rating);
+				GameDb.Instance.Commit();
 			}
 		}
 

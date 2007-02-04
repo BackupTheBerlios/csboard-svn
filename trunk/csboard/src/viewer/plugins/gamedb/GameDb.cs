@@ -330,6 +330,10 @@ namespace CsBoard
 			{
 				db.Close ();
 			}
+
+			public void Commit() {
+				db.Commit();
+			}
 		}
 
 		public class GameCollection
