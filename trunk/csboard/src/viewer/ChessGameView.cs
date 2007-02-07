@@ -40,7 +40,7 @@ namespace CsBoard
 
 		public class ChessGameWidget:VBox
 		{
-			ChessGame game;
+			GameViewer viewer;
 			int curMoveIdx;
 
 			public event NthMoveEvent ShowNthMove;
@@ -53,8 +53,9 @@ namespace CsBoard
 				}
 			}
 			HTML html;
-			public ChessGameWidget ():base ()
+			public ChessGameWidget (GameViewer viewer):base ()
 			{
+				this.viewer = viewer;
 				curMoveIdx = -1;
 
 				html = new HTML ();
@@ -67,6 +68,7 @@ namespace CsBoard
 				  html.WidthRequest = 150;
 				  html.LinkClicked += OnLinkClicked;
 
+				  viewer.CurrentGameChanged += OnCurrentGameChanged;
 				  ShowAll ();
 			}
 
@@ -77,10 +79,13 @@ namespace CsBoard
 				//html.JumpToAnchor(idx.ToString());
 			}
 
-			public void SetGame (ChessGame game)
+			private void OnCurrentGameChanged(object o, EventArgs args) {
+				SetGame(viewer.CurrentGame);
+			}
+
+			private void SetGame (ChessGame game)
 			{
 				curMoveIdx = -1;
-				this.game = game;
 				UpdateGameDetails ();
 			}
 
@@ -106,6 +111,7 @@ namespace CsBoard
 
 			private void FillDetails (StringBuilder buffer)
 			{
+				ChessGame game = viewer.CurrentGame;
 				PrintTitle (buffer);
 				if (game == null)
 					return;
@@ -136,6 +142,7 @@ namespace CsBoard
 
 			private void PrintTitle (StringBuilder buffer)
 			{
+				ChessGame game = viewer.CurrentGame;
 				if (game == null)
 					return;
 

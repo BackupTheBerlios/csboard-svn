@@ -26,7 +26,7 @@ namespace CsBoard
 
 		public class GameSession
 		{
-			public ChessGame game;
+			ChessGame game;
 			public ChessGamePlayer player;
 			int idx;
 			int total_moves;	// including whites and blacks

@@ -1,3 +1,19 @@
+2007-02-07 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	Modified files
+
+	* src/viewer/ChessGameView.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+	* src/viewer/plugins/gamedb/GameDb.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs
+	* src/viewer/plugins/gamedb/GamesEditorDialog.cs
+
+	some ui improvements while adding the files to the database.
+
 2007-02-03 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Added file

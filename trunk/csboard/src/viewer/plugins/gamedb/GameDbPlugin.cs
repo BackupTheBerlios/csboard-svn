@@ -91,9 +91,15 @@ namespace CsBoard
 				  }
 				double totalgames = games.Count;
 				int ngames = 0;
-				foreach (ChessGame game in games)
-				{
-					GameDb.Instance.AddGame (game);
+				// Dont use 'foreach' since the list is going to change
+				for(int i = 0; i < games.Count; i++) {
+					ChessGame game = (ChessGame) games[i];
+					PGNGameDetails updated;
+					if(!(game is PGNGameDetails)) {
+						GameDb.Instance.AddGame (game, out updated);
+						viewer.UpdateGame(game, updated);
+					}
+					
 					ngames++;
 					dlg.UpdateProgress (ngames /
 							    totalgames);
@@ -210,11 +216,13 @@ namespace CsBoard
 							EventArgs args)
 			{
 				GameRating rating = (GameRating) map[o];
-				PGNChessGame game = viewer.Game;
+				ChessGame game = viewer.CurrentGame;
 				if (game == null)
 					return;
-				GameDb.Instance.AddGame (viewer.Game, rating);
+				PGNGameDetails updated;
+				GameDb.Instance.AddGame (game, rating, out updated);
 				GameDb.Instance.Commit();
+				viewer.UpdateCurrentGame(updated);
 			}
 		}
 

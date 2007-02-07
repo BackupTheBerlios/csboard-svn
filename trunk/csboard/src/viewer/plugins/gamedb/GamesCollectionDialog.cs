@@ -152,7 +152,7 @@ namespace CsBoard
 
 				ArrayList games = new ArrayList ();
 				col.LoadGames (games);
-				collectionGamesList.SetGames (games);
+				collectionGamesList.Update (games);
 			}
 		}
 	}

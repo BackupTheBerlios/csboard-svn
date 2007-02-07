@@ -31,7 +31,6 @@ namespace CsBoard
 		{
 			public TreeView tree;
 			protected ListStore gamesStore;
-			protected ArrayList games;
 
 			public GamesList (TreeView t)
 			{
@@ -39,11 +38,30 @@ namespace CsBoard
 				SetupTree ();
 			}
 
-			private void Update ()
+			public virtual void Update (IList games)
 			{
 				gamesStore.Clear ();
 				foreach (PGNChessGame game in games)
 					gamesStore.AppendValues (game);
+				tree.Model = gamesStore;
+			}
+
+			public void UpdateGame(PGNChessGame game, PGNChessGame replace) {
+				UpdateGameInModel(game, replace, gamesStore);
+			}
+
+			private static bool UpdateGameInModel(PGNChessGame game, PGNChessGame replace, TreeModel model) {
+				TreeIter iter;
+				bool ret;
+				for(ret = model.GetIterFirst(out iter); ret; ret = model.IterNext(ref iter)) {
+					PGNChessGame g = (PGNChessGame) model.GetValue(iter, 0);
+					if(g.Equals(game)) {
+						model.SetValue(iter, 0, replace);
+						return true;
+					}
+				}
+
+				return false;
 			}
 
 			CellRendererText info_renderer, idx_renderer;
@@ -99,13 +117,6 @@ namespace CsBoard
 					(ChessGame) model.GetValue (iter,
 								    0);
 				renderer.Markup = game.ToPango ();
-			}
-
-			public virtual void SetGames (ArrayList g)
-			{
-				tree.Model = gamesStore;
-				games = g;
-				Update ();
 			}
 		}
 
@@ -169,10 +180,10 @@ namespace CsBoard
 				filter.Refilter ();
 			}
 
-			public override void SetGames (ArrayList g)
+			public override void Update (IList games)
 			{
 				searchEntry.Text = "";
-				base.SetGames (g);
+				base.Update (games);
 			}
 		}
 
@@ -214,9 +225,12 @@ namespace CsBoard
 				ShowAll ();
 			}
 
-			public void SetGames (ArrayList g)
-			{
-				gamesList.SetGames (g);
+			public void UpdateGame(PGNChessGame game, PGNChessGame replace) {
+				gamesList.UpdateGame(game, replace);
+			}
+
+			public void SetGames (ArrayList g) {
+				gamesList.Update(g);
 			}
 		}
 	}

@@ -84,7 +84,7 @@ namespace CsBoard {
 			tagsListView.Model = tagsStore;
 			gamesList = new GamesList(gamesListView);
 
-			gamesList.SetGames(games);
+			gamesList.Update(games);
 
 			tagsListView.AppendColumn(new TreeViewColumn("Tags", new CellRendererText(), "text", 0));
 			gamesListView.CursorChanged += OnCursorChanged;

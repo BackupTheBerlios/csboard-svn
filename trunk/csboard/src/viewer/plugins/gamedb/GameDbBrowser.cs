@@ -533,7 +533,7 @@ namespace CsBoard
 						  Next ();
 					  list.Add (details);
 				  }
-				searchGamesList.SetGames (list);
+				searchGamesList.Update (list);
 			}
 
 			private void HandleTagSearchOptions (Query query)

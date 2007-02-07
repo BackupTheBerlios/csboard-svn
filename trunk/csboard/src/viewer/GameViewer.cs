@@ -32,6 +32,7 @@ namespace CsBoard
 		using Gtk;
 		using Gdk;
 
+		public delegate void CurrentGameChangedEvent(object o, EventArgs args);
 		public interface IEcoDb
 		{
 			string GetOpeningName (string econame);
@@ -39,7 +40,7 @@ namespace CsBoard
 
 		public interface IGameDb
 		{
-			void SaveGameDetails (ChessGame game, bool overrite);
+			void SaveGameDetails (ChessGame game, out ChessGame updated, bool overrite);
 			bool GetGameDetails (ChessGame game,
 					     out ChessGame details);
 		}
@@ -291,21 +292,67 @@ namespace CsBoard
 				gamesListWidget.SetGames (games);
 				if (games.Count > 0)
 				  {
-					  SelectGame ((ChessGame) games[0]);
+					  CurrentGame = (ChessGame) games[0];
 				  }
 			}
 
-			public ChessGame Game
-			{
-				get
-				{
-					return gameSession.game;
-				}
+			public event CurrentGameChangedEvent CurrentGameChanged;
 
-				set
-				{
-					gameSession.Set (value);
+			public ChessGame CurrentGame {
+				get {
+					return currentGame;
 				}
+				set {
+					currentGame = value;
+					SelectGame(currentGame);
+				}
+			}
+
+			private ChessGame currentGame;
+
+			private void SelectGame (ChessGame game)
+			{
+				gameSession.Set(game);
+
+				if(CurrentGameChanged != null)
+					CurrentGameChanged(this, EventArgs.Empty);
+
+				boardWidget.Reset ();
+				boardWidget.SetPosition (gameSession.player.
+							 GetPosition ());
+				whiteLabel.Markup =
+					String.
+					Format ("<b><big>{0}</big></b>",
+						game.GetTagValue ("White",
+								  "White"));
+				blackLabel.Markup =
+					String.
+					Format ("<b><big>{0}</big></b>",
+						game.GetTagValue ("Black",
+								  "Black"));
+				moveNumberLabel.Text = "";
+				nagCommentLabel.Text = "";
+				pgnDetailsBook.Page = GAME_DETAILS_PAGE;
+			}
+
+			/* This replaces the current game with the new game!
+			 * This needs to replace the object in the list and also
+			 * from the tree views (including the filter)
+			 * The game is assumed to be an exact copy of the existing
+			 * game but a subclass of it.
+			 */
+
+			public void UpdateCurrentGame(ChessGame game) {
+				UpdateGame(currentGame, game);
+			}
+
+			public void UpdateGame(ChessGame curgame, ChessGame game) {
+				int idx = games.IndexOf(curgame);
+				games.RemoveAt(idx);
+				games.Insert(idx, game);
+				// TODO: fire an event
+				// Replace it in the stores
+				gamesListWidget.UpdateGame(curgame, game);
 			}
 
 			ArrayList games;
@@ -378,7 +425,7 @@ namespace CsBoard
 							 false, 2);
 				boardWidget.Show ();
 
-				gameWidget = new ChessGameWidget ();
+				gameWidget = new ChessGameWidget (this);
 				gameWidget.ShowNthMove += OnShowNthMoveEvent;
 				chessGameDetailsBox.PackStart (gameWidget,
 							       true, true, 4);
@@ -630,7 +677,7 @@ namespace CsBoard
 				ChessGame details =
 					(ChessGame) gamesListWidget.Tree.
 					Model.GetValue (iter, 0);
-				SelectGame (details);
+				CurrentGame = details;
 			}
 
 			public void OnHighlightMoveMenuItemActivated (object
@@ -643,28 +690,6 @@ namespace CsBoard
 				App.session.HighLightMove =
 					highlightMoveMenuItem.Active;
 				boardWidget.QueueDraw ();
-			}
-
-			private void SelectGame (ChessGame game)
-			{
-				gameSession.Set (game);
-				gameWidget.SetGame (game);
-				boardWidget.Reset ();
-				boardWidget.SetPosition (gameSession.player.
-							 GetPosition ());
-				whiteLabel.Markup =
-					String.
-					Format ("<b><big>{0}</big></b>",
-						game.GetTagValue ("White",
-								  "White"));
-				blackLabel.Markup =
-					String.
-					Format ("<b><big>{0}</big></b>",
-						game.GetTagValue ("Black",
-								  "Black"));
-				moveNumberLabel.Text = "";
-				nagCommentLabel.Text = "";
-				pgnDetailsBook.Page = GAME_DETAILS_PAGE;
 			}
 
 			public string AskForFile (Gtk.

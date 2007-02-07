@@ -123,13 +123,13 @@ namespace CsBoard
 				db = Db4o.OpenFile (dbfile);
 			}
 
-			public void AddGame (ChessGame game)
+			public void AddGame (ChessGame game, out PGNGameDetails updated)
 			{
-				AddGame (game, GameRating.Unknown);
+				AddGame (game, GameRating.Unknown, out updated);
 			}
 
 			public void AddGame (ChessGame game,
-					     GameRating rating)
+					     GameRating rating, out PGNGameDetails updated)
 			{
 				PGNGameDetails info;
 				if(game is PGNGameDetails)
@@ -138,10 +138,10 @@ namespace CsBoard
 					info = new PGNGameDetails (game);
 				info.Rating = rating;
 
-				AddGame (info);
+				AddGame (info, out updated);
 			}
 
-			public void AddGame (PGNGameDetails info)
+			public void AddGame (PGNGameDetails info, out PGNGameDetails updated)
 			{
 				PGNGameDetails existing;
 				if (!FindGame (info, out existing))
@@ -149,9 +149,11 @@ namespace CsBoard
 					  info.ID = Config.Instance.NextID ();
 					  db.Set (info);
 					  Config.Instance.Save ();
+					  updated = info;
 					  return;
 				  }
 
+				updated = existing;
 				// Game found
 				if (existing.Rating == info.Rating)
 					return;
@@ -261,7 +263,8 @@ namespace CsBoard
 			{
 				foreach (ChessGame game in games)
 				{
-					AddGame (game);
+					PGNGameDetails updated;
+					AddGame (game, out updated);
 				}
 				db.Commit ();
 			}
@@ -306,10 +309,12 @@ namespace CsBoard
 				  }
 			}
 
-			public void SaveGameDetails (ChessGame game, bool overrite) {
+			public void SaveGameDetails (ChessGame game, out ChessGame updated, bool overrite) {
 				if(!(game is PGNGameDetails))
 					game = new PGNGameDetails(game);
-				AddGame(game); // this will check for duplicates
+				PGNGameDetails updatedgame;
+				AddGame(game, out updatedgame); // this will check for duplicates
+				updated = updatedgame;
 			}
 
 			public bool GetGameDetails (ChessGame game,
