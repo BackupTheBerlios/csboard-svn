@@ -27,11 +27,8 @@ namespace CsBoard
 
 		public static Session session;
 
-		static int StartViewer (string[]args)
+		public static int StartViewer (string[]args)
 		{
-
-			Application.Init ();
-
 			Catalog.Init (Config.packageName,
 				      Config.prefix + "/share/locale");
 
@@ -43,7 +40,6 @@ namespace CsBoard
 					StartPlugins ();
 				if (args.Length > 1)
 					GameViewer.Instance.Load (args[1]);
-				Application.Run ();
 			}
 			catch (ApplicationException)
 			{
@@ -94,18 +90,26 @@ namespace CsBoard
 			return 0;
 		}
 
+		public static int StartApp(string[] args) {
+			CsApp app = new CsApp(args);
+			return 0;
+		}
+
 		public static int Main (string[]args)
 		{
+			Application.Init ();
 			if (args.Length > 0 && args[0].Equals ("-viewer"))
-				return StartViewer (args);
-			return StartPlayer (args);
+				StartViewer (args);
+			else if (args.Length > 0 && args[0].Equals ("-player"))
+				StartPlayer (args);
+			else
+				StartApp (args);
+			Application.Run ();
+			return 0;
 		}
 
 		public static int StartPlayer (string[]args)
 		{
-
-			Application.Init ();
-
 			Catalog.Init (Config.packageName,
 				      Config.prefix + "/share/locale");
 
@@ -119,7 +123,6 @@ namespace CsBoard
 					  filename = args[0];
 				  }
 				new ChessWindow (filename);
-				Application.Run ();
 			}
 			catch (System.Exception e)
 			{
@@ -161,6 +164,36 @@ namespace CsBoard
 			}
 
 			return 0;
+		}
+
+		class CsApp {
+			string[] args;
+			[Glade.Widget] private Gtk.Button startPlayerButton, startViewerButton;
+			[Glade.Widget] private Gtk.Window csAppWindow;
+			public CsApp(string[] args) {
+				this.args = args;
+				Glade.XML xml = Glade.XML.FromAssembly("csboard.glade", "csAppWindow", null);
+				xml.Autoconnect(this);
+
+				startPlayerButton.Clicked += OnButtonClicked;
+				startViewerButton.Clicked += OnButtonClicked;
+
+				csAppWindow.DeleteEvent += delegate (object o, DeleteEventArgs e)
+				{
+					Application.Quit();
+				};
+			}
+
+			private void OnButtonClicked(object o, EventArgs evargs) {
+				csAppWindow.Hide();
+				if(o.Equals(startPlayerButton)) {
+					App.StartPlayer(args);
+				}
+				else {
+					App.StartViewer(args);
+				}
+				csAppWindow.Dispose();
+			}
 		}
 	}
 }

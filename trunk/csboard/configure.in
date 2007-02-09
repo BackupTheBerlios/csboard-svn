@@ -47,6 +47,7 @@ AC_CONFIG_FILES([
     Makefile
     data/Makefile
     data/csboard
+    data/csplayer
     data/csviewer
     data/csboard.spec
     help/Makefile

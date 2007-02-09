@@ -1,3 +1,22 @@
+2007-02-09 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	Modified files
+
+	* configure.in
+	* data/Makefile.am
+	* src/App.cs
+	* src/GnuChess.cs
+	* data/csboard.desktop.in
+	* resource/csboard.glade
+
+	Added files
+
+	* data/csplayer.in
+	* data/csplayer.desktop.in
+
+	Modified the UI to show a window to pick the player or the viewer.
+	Added another script 'csplayer' to start the player
+	
 2007-02-07 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Modified files

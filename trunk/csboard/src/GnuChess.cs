@@ -50,7 +50,6 @@ namespace CsBoard {
                         proc.StartInfo.UseShellExecute = false;
                         proc.StartInfo.RedirectStandardOutput = true;
                         proc.Start ();
-                        proc.WaitForExit ();
                         string str = proc.StandardOutput.ReadLine ();
 
                         if (!(str.StartsWith ("GNU Chess 5.07") || str.StartsWith("GNU Chess 2.17"))) {
@@ -69,6 +68,7 @@ namespace CsBoard {
                         proc.StartInfo.RedirectStandardInput = true;
                         proc.StartInfo.RedirectStandardOutput = true;
                         proc.Start ();
+			Console.WriteLine("proc.Id = {0}", proc.Id);
 
                         input = proc.StandardInput;
                         output = proc.StandardOutput;
@@ -84,6 +84,8 @@ namespace CsBoard {
 
                 public void Shutdown () {
                         Put ("exit");
+			proc.Kill();
+			proc.WaitForExit();
                 }
 
                 public ArrayList GetPosition () {
@@ -423,7 +425,6 @@ namespace CsBoard {
                 }
 
                 private void Put (string text) {
-		        
 		        if (!WaitForOutput) {
                         input.WriteLine (text);
 			
