@@ -21,6 +21,9 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using Cairo;
 
+using System.Threading;
+using System.Globalization;
+
 namespace CsBoard
 {
 	public struct SvgInfo
@@ -61,7 +64,13 @@ namespace CsBoard
 			this.width = width;
 			this.height = height;
 			list = new ArrayList ();
+			// This is to fix the bug which causes Double.Parse to throw an exception
+			// when LANG=ru_RU
+			// TODO: find a better method of rendering svg
+			CultureInfo orig = Thread.CurrentThread.CurrentCulture;
+			Thread.CurrentThread.CurrentCulture = new CultureInfo("en-us");
 			Parse (svg);
+			Thread.CurrentThread.CurrentCulture = orig;
 		}
 
 		private void Parse (string svg)
@@ -105,7 +114,7 @@ namespace CsBoard
 			string str = new string (chars, i, j - i);
 
 			i = j;
-			return Double.Parse (str);
+			return Double.Parse (str, System.Globalization.NumberStyles.Any);
 		}
 	}
 

@@ -1,3 +1,33 @@
+2007-02-11 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	Modified files
+
+	* resource/csboard.glade
+	* src/FigureManager.cs
+	* src/Session.cs
+	* src/Window.cs
+	* src/GnuChess.cs
+
+	Moved files to src/ics
+
+	* src/ICSSeek.cs
+	* src/ICS.cs
+	* src/ICSClient.cs
+	
+	Added files
+
+	* src/ics/GameAdvertisements.cs
+	* src/ics/ICSClient.cs
+	* src/ics/ICS.cs
+	* src/ics/ICSDetailsWindow.cs
+	* src/ics/ICSParser.cs
+	* src/ics/ICSSeek.cs
+
+	Fixes the Double.Parse bug with LANG=ru_RU
+	Adds ui to choose the chess engine
+	Shows the game advertisements from ICS server. Needs a lot of
+	work before we can play games on the server :-)
+
 2007-02-09 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Modified files

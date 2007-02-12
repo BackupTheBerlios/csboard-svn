@@ -44,6 +44,14 @@ PLUGIN_SOURCES = \
 	$(top_srcdir)/src/viewer/PluginManager.cs		\
 	$(top_srcdir)/src/viewer/PluginManagerDialog.cs
 
+ICS_PLAYER_SOURCES = \
+	$(top_srcdir)/src/ics/ICS.cs \
+	$(top_srcdir)/src/ics/ICSClient.cs \
+	$(top_srcdir)/src/ics/ICSParser.cs \
+	$(top_srcdir)/src/ics/GameAdvertisements.cs \
+	$(top_srcdir)/src/ics/ICSDetailsWindow.cs \
+	$(top_srcdir)/src/ics/ICSSeek.cs
+
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
 	$(top_srcdir)/src/Window.cs \
@@ -61,13 +69,11 @@ SOURCE = \
 	$(top_srcdir)/src/Crafty.cs \
 	$(top_srcdir)/src/Phalanx.cs \
 	$(top_srcdir)/src/ProgressBar.cs \
-	$(top_srcdir)/src/ICS.cs \
-	$(top_srcdir)/src/ICSClient.cs \
 	$(PARSER_SOURCES) \
 	$(GAME_PLAYER_SOURCES) \
 	$(VIEWER_SOURCES) \
 	$(PLUGIN_SOURCES) \
-	$(top_srcdir)/src/ICSSeek.cs
+	$(ICS_PLAYER_SOURCES)
 
 TEST_GAMES = \
 	test/a.pgn \

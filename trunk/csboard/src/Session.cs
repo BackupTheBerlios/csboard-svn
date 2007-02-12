@@ -106,6 +106,11 @@ namespace CsBoard
 				return (string) gconfClient.
 					Get ("/apps/csboard/engine");
 			}
+			set
+			{
+				gconfClient.
+					Set ("/apps/csboard/engine", value);
+			}
 		}
 		public bool HighLightMove
 		{

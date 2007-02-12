@@ -69,7 +69,7 @@ namespace CsBoard {
 				if (engine.LastIndexOf ("gnuchess ") >= 0) {
 				    control = new GnuChess (engine);
 				} else 
-				if (engine.LastIndexOf ("ICS ") >= 0) {
+				if (engine.LastIndexOf ("ICS") >= 0) {
 				    control = new ICS (engine);
 				} else {
 				  MessageDialog md =
@@ -503,5 +503,53 @@ namespace CsBoard {
 			
 		}
 
+		protected void on_edit_engine_activate(object o, EventArgs args) {
+			string engine = EngineChooser.ChooseEngine(App.session.Engine);
+			if(engine != null)
+				App.session.Engine = engine;
+		}
         }
+
+	class EngineChooser {
+		[Glade.Widget] private Gtk.Dialog chooseEngineDialog;
+		[Glade.Widget] private Gtk.RadioButton gnuchessButton, craftyButton, phalanxButton, icsButton;
+
+		EngineChooser(string engine) {
+			Glade.XML xml = Glade.XML.FromAssembly("csboard.glade", "chooseEngineDialog", null);
+			xml.Autoconnect(this);
+
+			if(engine.StartsWith("gnuchess"))
+				gnuchessButton.Active = true;
+			else if(engine.StartsWith("crafty"))
+				craftyButton.Active = true;
+			else if(engine.StartsWith("phalanx"))
+				phalanxButton.Active = true;
+			else if(engine.StartsWith("ICS"))
+				icsButton.Active = true;
+		}
+
+		public static string ChooseEngine(string curengine) {
+			EngineChooser chooser = new EngineChooser(curengine);
+			string engine;
+			if(chooser.chooseEngineDialog.Run() != (int) ResponseType.Ok)
+				engine = null;
+			else
+				engine = chooser.ChosenEngine();
+			chooser.chooseEngineDialog.Hide();
+			chooser.chooseEngineDialog.Dispose();
+			return engine;
+		}
+
+		private string ChosenEngine() {
+			if(gnuchessButton.Active)
+				return "gnuchess -x -e";
+			if(craftyButton.Active)
+				return null;
+			if(phalanxButton.Active)
+				return "phalanx -l-";
+			if(icsButton.Active)
+				return "ICS ";
+			return null;
+		}
+	}
 }

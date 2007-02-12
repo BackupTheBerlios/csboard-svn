@@ -43,6 +43,7 @@ namespace CsBoard {
 
                         // Check for version
 
+			command = "gnuchess -x -e";
                         proc = new System.Diagnostics.Process ();
 
                         proc.StartInfo.FileName = "gnuchess";
