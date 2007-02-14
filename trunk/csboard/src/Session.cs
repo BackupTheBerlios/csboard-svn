@@ -197,19 +197,55 @@ namespace CsBoard
 			}
 		}
 
+		public int ViewerWidth {
+			get {
+				return (int) gconfClient.
+					Get ("/apps/csboard/viewer/session/width");
+			}
+		}
+
+		public int ViewerHeight {
+			get {
+				return (int) gconfClient.
+					Get ("/apps/csboard/viewer/session/height");
+			}
+		}
+
+		public void SetupViewerGeometry (Gtk.Window w)
+		{
+			int width =
+				(int) gconfClient.
+				Get ("/apps/csboard/viewer/session/width");
+			int height =
+				(int) gconfClient.
+				Get ("/apps/csboard/viewer/session/height");
+
+			w.Resize (width, height);
+		}
+
+		public void SaveViewerGeometry (Gtk.Window w)
+		{
+			int width, height;
+			w.GetSize (out width, out height);
+			gconfClient.Set ("/apps/csboard/viewer/session/width",
+					 width);
+			gconfClient.Set ("/apps/csboard/viewer/session/height",
+					 height);
+		}
+
 		public int ViewerSplitPanePosition
 		{
 			get
 			{
 				return (int) gconfClient.
 					Get
-					("/apps/csboard/session/viewer_split_pane_position");
+					("/apps/csboard/viewer/session/viewer_split_pane_position");
 			}
 			set
 			{
 				gconfClient.
 					Set
-					("/apps/csboard/session/viewer_split_pane_position",
+					("/apps/csboard/viewer/session/viewer_split_pane_position",
 					 value);
 			}
 		}

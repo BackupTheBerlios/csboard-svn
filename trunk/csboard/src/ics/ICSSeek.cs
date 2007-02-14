@@ -19,6 +19,7 @@
 namespace CsBoard
 {
 
+	namespace ICS {
 	using System;
 	using System.Collections;
 	using Gtk;
@@ -172,5 +173,6 @@ namespace CsBoard
 							true);
 			  }
 		}
+	}
 	}
 }

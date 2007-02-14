@@ -15,8 +15,12 @@
 //
 // Copyright (C) 2004 Jamin Gray
 
+using System;
+using System.Text;
+
 namespace CsBoard
 {
+	namespace ICS {
 
 	using System;
 	using System.IO;
@@ -41,13 +45,66 @@ namespace CsBoard
 		}
 	}
 
+	public class MoveMadeEventArgs : EventArgs {
+		MoveDetails details;
+		public MoveDetails Details {
+			get {
+				return details;
+			}
+		}
+
+		public MoveMadeEventArgs(MoveDetails details) {
+			this.details = details;
+		}
+	}
+
 	public delegate void GameAdvertisementAddEventHandler (object o,
 							       GameAdvertisement
 							       ad);
 	public delegate void GameAdvertisementRemoveEventHandler (object o,
-								  GameAdvertisement
-								  ad);
+								  GameAdvertisement ad);
+	public delegate void GameAdvertisementsClearedEventHandler (object o,
+								  EventArgs args);
 	public delegate void AuthEventHandler (object o, bool success);
+	public delegate void MoveMadeEventHandler(object o, MoveMadeEventArgs args);
+
+	public enum LineType {
+		Normal,
+		Talk, // server talk
+		Info, // <starts with>
+		Prompt // ends with %
+	}
+
+	public class LineReceivedEventArgs : EventArgs {
+		string line;
+		public string Line {
+			get {
+				return line;
+			}
+		}
+
+		LineType type;
+		public LineType LineType {
+			get {
+				return type;
+			}
+		}
+
+		public LineReceivedEventArgs(string line, LineType type) {
+			this.line = line;
+			this.type = type;
+		}
+	}
+
+	enum NotificationType {
+		None,
+		SC,
+		SR,
+		S,
+		STYLE12,
+	}
+
+	public delegate void LineReceivedHandler(object o, LineReceivedEventArgs args);
 
 	public class ICSClient
 	{
@@ -62,7 +119,11 @@ namespace CsBoard
 			GameAdvertisementAddEvent;
 		public event GameAdvertisementRemoveEventHandler
 			GameAdvertisementRemoveEvent;
+		public event GameAdvertisementsClearedEventHandler
+			GameAdvertisementsClearedEvent;
 		public event AuthEventHandler AuthEvent;
+		public event LineReceivedHandler LineReceivedEvent;
+		public event MoveMadeEventHandler MoveMadeEvent;
 
 		SessionState state = SessionState.NONE;
 
@@ -83,6 +144,8 @@ namespace CsBoard
 		int start, end;
 		  System.Text.Decoder decoder;
 
+		  Hashtable notificationMap;
+
 		public ICSClient ()
 		{
 			map = new Hashtable ();
@@ -90,6 +153,12 @@ namespace CsBoard
 			buffer = new byte[4096];
 			start = end = 0;
 			decoder = System.Text.Encoding.UTF8.GetDecoder ();
+
+			notificationMap = new Hashtable();
+			notificationMap["sr"] = NotificationType.SR;
+			notificationMap["sc"] = NotificationType.SC;
+			notificationMap["s"] = NotificationType.S;
+			notificationMap["12"] = NotificationType.STYLE12;
 		}
 
 		public bool Start ()
@@ -161,36 +230,55 @@ namespace CsBoard
 			PostReadRequest ();
 		}
 
-		private void ProcessGameAdvertisementDetails (int start,
-							      int count)
+		private NotificationType GetNotificationType(ref int start, int end) {
+			int i = start;
+			while(buffer[i] != '>' && i < end)
+				i++;
+			char[] chrs = new char[i - start];
+			decoder.GetChars(buffer, start, i - start, chrs, 0);
+			string str = new string(chrs);
+
+			start = i;
+
+			if(notificationMap.ContainsKey(str))
+				return (NotificationType) notificationMap[str];
+			Console.WriteLine("Tag [{0}] not found", str);
+			return NotificationType.None;
+		}
+
+		private void ProcessServerNotification (int start,
+							      int end)
 		{
-			if (buffer[start + 1] == 's'
-			    && buffer[start + 2] == 'r'
-			    && buffer[start + 3] == '>')
-			  {
-				  ArrayList list = new ArrayList ();
-				  GameAdvertisement.ReadCancellations (buffer,
-								       start +
-								       4,
-								       start +
-								       count,
-								       list);
-				  foreach (int handle in list)
-				  {
-					  RemoveGameAdvertisement (handle);
-				  }
-				  return;
-			  }
-
-			if (buffer[start + 1] != 's'
-			    || buffer[start + 2] != '>')
-				return;
-
-			GameAdvertisement ad =
-				GameAdvertisement.FromBuffer (buffer,
-							      start + 3,
-							      start + count);
-			AddGameAdvertisement (ad);
+			NotificationType type = GetNotificationType(ref start, end);
+			start++;
+			switch(type) {
+			case NotificationType.SR:
+				ArrayList list = new ArrayList ();
+				GameAdvertisement.ReadCancellations (buffer,
+								     start,
+								     end,
+								     list);
+				foreach (int handle in list)
+				{
+					RemoveGameAdvertisement (handle);
+				}
+				break;
+			case NotificationType.S:
+				GameAdvertisement ad =
+					GameAdvertisement.FromBuffer (buffer,
+								      start,
+								      end);
+				AddGameAdvertisement (ad);
+				break;
+			case NotificationType.SC:
+				ClearGameAdvertisements();
+				break;
+			case NotificationType.STYLE12:
+				MoveDetails details = MoveDetails.FromBuffer(buffer, start, end);
+				if(MoveMadeEvent != null)
+					MoveMadeEvent(this, new MoveMadeEventArgs(details));
+				break;
+			}
 		}
 
 		ArrayList ads;
@@ -218,6 +306,32 @@ namespace CsBoard
 				GameAdvertisementRemoveEvent (this, ad);
 		}
 
+		private void ClearGameAdvertisements() {
+			map.Clear();
+			if(GameAdvertisementsClearedEvent != null)
+				GameAdvertisementsClearedEvent(this, EventArgs.Empty);
+		}
+
+		private LineType GetLineType(byte[] buffer, int start, int end) {
+			while(buffer[end - 1] == ' ' && end > start)
+				end--;
+			if(end == start)
+				return LineType.Normal;
+
+			if(buffer[end - 1] == '%')
+				return LineType.Prompt;
+			if(buffer[end - 1] == ':')
+				return LineType.Talk;
+			if(buffer[start] == '<') {
+				int i = start + 1;
+				while(buffer[i] != '>' && i < end)
+					i++;
+				return i != end ? LineType.Info : LineType.Normal;
+			}
+
+			return LineType.Normal;
+		}
+
 		private void ProcessLine (int start, int count)
 		{
 			if (buffer[start + count - 1] == '\r')
@@ -232,13 +346,17 @@ namespace CsBoard
 			char[] chrs = new char[count];
 			decoder.GetChars (buffer, start, count, chrs, 0);
 
+			LineType type = GetLineType(buffer, start, start + count);
 			string line = new string (chrs);
+
+			if(LineReceivedEvent != null)
+				LineReceivedEvent(this, new LineReceivedEventArgs(line, type));
 			//Console.WriteLine("[STATE = {0}]: {1}", state, line);
 
 			if (buffer[start] == '<')
 			  {
-				  ProcessGameAdvertisementDetails (start,
-								   count);
+				  ProcessServerNotification (start + 1,
+							     start + count);
 				  return;
 			  }
 
@@ -269,17 +387,21 @@ namespace CsBoard
 				  if (AuthEvent != null)
 					  AuthEvent (this, true);
 			  }
-
 		}
 
 		private void HandleAuthSuccess ()
 		{
+			string logo = Catalog.GetString("CsBoard (http://csboard.berlios.de)");
 			streamWriter.WriteLine ("iset seekinfo 1");
+			streamWriter.WriteLine ("iset seekremove 1");
+			streamWriter.WriteLine ("set seek 1");
 			streamWriter.WriteLine ("set bell 0");
+			streamWriter.WriteLine ("set style 12");
+			streamWriter.WriteLine (String.Format("set interface {0}", logo));
 			streamWriter.Flush ();
 		}
 
-		private void WriteLine (string str)
+		public void WriteLine (string str)
 		{
 			streamWriter.WriteLine (str);
 			streamWriter.Flush ();
@@ -313,5 +435,6 @@ namespace CsBoard
 
 		}
 
+	}
 	}
 }

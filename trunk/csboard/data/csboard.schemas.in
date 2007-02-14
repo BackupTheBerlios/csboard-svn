@@ -55,6 +55,31 @@
       </locale>
     </schema>
 
+
+    <schema>
+      <key>/schemas/apps/csboard/viewer/session/width</key>
+      <applyto>/apps/csboard/viewer/session/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Viewer window width</short>
+	<long>Saved viewer window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/viewer/session/height</key>
+      <applyto>/apps/csboard/viewer/session/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Viewer window height</short>
+	<long>Saved game viewer window height</long>
+      </locale>
+    </schema>
+
     <schema>
       <key>/schemas/apps/csboard/session/show_coords</key>
       <applyto>/apps/csboard/session/show_coords</applyto>
@@ -116,11 +141,11 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/csboard/session/viewer_split_pane_position</key>
-      <applyto>/apps/csboard/session/viewer_split_pane_position</applyto>
+      <key>/schemas/apps/csboard/viewer/session/viewer_split_pane_position</key>
+      <applyto>/apps/csboard/viewer/session/viewer_split_pane_position</applyto>
       <owner>csboard</owner>
       <type>int</type>
-      <default>400</default>
+      <default>300</default>
       <locale name="C">
 	<short>Split pane position</short>
 	<long>Split pane position</long>

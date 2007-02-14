@@ -69,7 +69,6 @@ namespace CsBoard {
                         proc.StartInfo.RedirectStandardInput = true;
                         proc.StartInfo.RedirectStandardOutput = true;
                         proc.Start ();
-			Console.WriteLine("proc.Id = {0}", proc.Id);
 
                         input = proc.StandardInput;
                         output = proc.StandardOutput;

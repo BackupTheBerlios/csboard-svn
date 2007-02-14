@@ -43,7 +43,9 @@ namespace CsBoard {
 		// Menus to make them unsensitive
 		[Glade.Widget] private Gtk.Container game_menu;
 		[Glade.Widget] private Gtk.Container action_menu;
-		
+
+		[Glade.Widget] private Gtk.Alignment topAlign, bottomAlign;
+		[Glade.Widget] private Gtk.Label topLabel, bottomLabel;
 
 		private bool menusSensitive;
 
@@ -53,6 +55,11 @@ namespace CsBoard {
                 private PlayerBoard boardWidget;
 		private ProgressBar progressbar;
                 private IControl control;
+
+		private ChessClock whiteClock, blackClock;
+
+		bool whitesTurn;
+		int nmoves = 0;
 
                 public ChessWindow (string filename) {
 
@@ -70,7 +77,7 @@ namespace CsBoard {
 				    control = new GnuChess (engine);
 				} else 
 				if (engine.LastIndexOf ("ICS") >= 0) {
-				    control = new ICS (engine);
+				    control = new CsBoard.ICS.ICS (engine);
 				} else {
 				  MessageDialog md =
                                         new MessageDialog (csboardWindow,
@@ -108,7 +115,16 @@ namespace CsBoard {
                                 Glade.XML.FromAssembly ("csboard.glade",
                                      "csboardWindow", null);
                         gXML.Autoconnect (this);
-                        
+			topLabel.Markup = GetMarkup(Catalog.GetString("Black"));
+			bottomLabel.Markup = GetMarkup(Catalog.GetString("White"));
+			whiteClock = new ChessClock();
+			blackClock = new ChessClock();
+			whiteClock.Show();
+			blackClock.Show();
+
+                        topAlign.Add(blackClock);
+			bottomAlign.Add(whiteClock);
+
                         gameStatusbarId = statusbar.GetContextId ("game");
                         gameStatusbarId = statusbar.GetContextId ("move");
 
@@ -185,8 +201,49 @@ namespace CsBoard {
                         statusbar.Pop (gameStatusbarId);
 
                         control.NewGame ();
+			whitesTurn = true;
+			nmoves = 0;
+
+			whiteClock.Reset(5 * 60, 0);
+			blackClock.Reset(5 * 60, 0);
+			UpdateGameDetails();
+
                         control.SaveGame(App.session.Filename);
                 }
+
+		private void UpdateGameDetails() {
+			Widget top = !boardWidget.side ? blackClock : whiteClock;
+			Widget bottom = !boardWidget.side ? whiteClock : blackClock;
+
+			if(topAlign.Child != null)
+				topAlign.Remove(topAlign.Child);
+			if(bottomAlign.Child != null)
+				bottomAlign.Remove(bottomAlign.Child);
+
+			topAlign.Add(top);
+			bottomAlign.Add(bottom);
+
+			if(!boardWidget.side) {
+				bottomLabel.Markup = GetMarkup(GetWhitePlayerName());
+				topLabel.Markup = GetMarkup(GetBlackPlayerName());
+			}
+			else {
+				topLabel.Markup = GetMarkup(GetWhitePlayerName());
+				bottomLabel.Markup = GetMarkup(GetBlackPlayerName());
+			}
+		}
+
+		static string GetMarkup(string str) {
+			return String.Format("<big><big><big><b>{0}</b></big></big></big>", str);
+		}
+
+		private string GetWhitePlayerName() {
+			return "White";
+		}
+
+		private string GetBlackPlayerName() {
+			return "Black";
+		}
 
                 public void on_open_activate (System.Object b, EventArgs e) {
 
@@ -252,6 +309,7 @@ namespace CsBoard {
                 public void on_switch_side_activate (System.Object b,
                                                       EventArgs e) {
                         control.SwitchSide ();
+			UpdateGameDetails();
                         return;
                 }
 
@@ -404,11 +462,28 @@ namespace CsBoard {
 
                         SetSensitive (true);
 			progressbar.Stop();
+
+			UpdateAfterMove();
                 }
 
                 public void on_position_changed (ArrayList data) {
                         statusbar.Pop (moveStatusbarId);
                         boardWidget.SetPosition (data);
+                }
+
+		private void UpdateAfterMove() {
+			nmoves++;
+			whitesTurn = !whitesTurn; // flip turn
+			if(whitesTurn) {
+				blackClock.Stop();
+				whiteClock.Start();
+			}
+			else {
+				whiteClock.Stop();
+				blackClock.Start();
+			}
+
+                        return;
                 }
 
                 public void on_board_move (string move) {
@@ -428,8 +503,9 @@ namespace CsBoard {
                                 md.Dispose ();
 
                         }
-                        return;
-                }
+			else
+				UpdateAfterMove();
+		}
 
                 public void on_board_start_move (string pos) {
 			if (possible_moves.Active) {
@@ -441,8 +517,12 @@ namespace CsBoard {
 
                 public void on_control_game_over (string reason) {
 
-
+			
                         statusbar.Push (gameStatusbarId, Catalog.GetString("Game Over"));
+			if(whitesTurn)
+				whiteClock.Stop();
+			else
+				blackClock.Stop();
 
                         MessageDialog md = new MessageDialog (csboardWindow,
                                                               DialogFlags.

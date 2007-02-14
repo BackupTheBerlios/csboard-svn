@@ -321,15 +321,11 @@ namespace CsBoard
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
 				whiteLabel.Markup =
-					String.
-					Format ("<b><big>{0}</big></b>",
-						game.GetTagValue ("White",
-								  "White"));
+					GetMarkupForTitle(game.GetTagValue ("White",
+									    "White"));
 				blackLabel.Markup =
-					String.
-					Format ("<b><big>{0}</big></b>",
-						game.GetTagValue ("Black",
-								  "Black"));
+					GetMarkupForTitle(game.GetTagValue ("Black",
+									    "Black"));
 				moveNumberLabel.Text = "";
 				nagCommentLabel.Text = "";
 				pgnDetailsBook.Page = GAME_DETAILS_PAGE;
@@ -390,7 +386,7 @@ namespace CsBoard
 
 				// FIXME: Use libglade to create toolbar                  
 
-				App.session.SetupGeometry (gameViewerWindow);
+				App.session.SetupViewerGeometry (gameViewerWindow);
 				initialDirForFileChooser =
 					App.session.CurrentFolder;
 
@@ -404,13 +400,11 @@ namespace CsBoard
 				//boardWidget.WidthRequest = 400;
 				//boardWidget.HeightRequest = 400;
 				whiteLabel =
-					new Gtk.Label (Catalog.
-						       GetString
-						       ("<b>White</b>"));
+					new Gtk.Label (GetMarkupForTitle(Catalog.GetString("White")));
 				blackLabel =
-					new Gtk.Label (Catalog.
+					new Gtk.Label (GetMarkupForTitle(Catalog.
 						       GetString
-						       ("<b>Black</b>"));
+						       ("Black")));
 				whiteLabel.UseMarkup = true;
 				blackLabel.UseMarkup = true;
 				whiteLabel.Show ();
@@ -441,10 +435,17 @@ namespace CsBoard
 				gamesListBox.PackStart (gamesListWidget, true,
 							true, 0);
 
-				gamesSplitPane.Position =
-					App.session.ViewerSplitPanePosition;
+				int pos = App.session.ViewerSplitPanePosition;
+				int height = App.session.ViewerHeight;
+				if(pos > height)
+					pos = height / 2;
+				gamesSplitPane.Position = pos;
 				gameViewerWindow.Show ();
 				gameSession = new GameSession ();
+			}
+
+			private static string GetMarkupForTitle(string str) {
+				return String.Format("<big><big><big><b>{0}</b></big></big></big>", str);
 			}
 
 			public void Load (string resource)
@@ -504,7 +505,7 @@ namespace CsBoard
 			public void on_quit_activate (System.Object b,
 						      EventArgs e)
 			{
-				App.session.SaveGeometry (gameViewerWindow);
+				App.session.SaveViewerGeometry (gameViewerWindow);
 				App.session.CurrentFolder =
 					initialDirForFileChooser;
 				App.session.ViewerSplitPanePosition =

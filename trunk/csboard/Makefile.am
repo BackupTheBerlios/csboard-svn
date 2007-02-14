@@ -47,8 +47,12 @@ PLUGIN_SOURCES = \
 ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/ICS.cs \
 	$(top_srcdir)/src/ics/ICSClient.cs \
-	$(top_srcdir)/src/ics/ICSParser.cs \
-	$(top_srcdir)/src/ics/GameAdvertisements.cs \
+	$(top_srcdir)/src/ics/ParserUtils.cs \
+	$(top_srcdir)/src/ics/GameAdvertisement.cs \
+	$(top_srcdir)/src/ics/MoveDetails.cs \
+	$(top_srcdir)/src/ics/ICSConfigDialog.cs \
+	$(top_srcdir)/src/ics/ICSShell.cs \
+	$(top_srcdir)/src/ics/GameAdvertisementsWidget.cs \
 	$(top_srcdir)/src/ics/ICSDetailsWindow.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs
 
@@ -69,6 +73,7 @@ SOURCE = \
 	$(top_srcdir)/src/Crafty.cs \
 	$(top_srcdir)/src/Phalanx.cs \
 	$(top_srcdir)/src/ProgressBar.cs \
+	$(top_srcdir)/src/ChessClock.cs\
 	$(PARSER_SOURCES) \
 	$(GAME_PLAYER_SOURCES) \
 	$(VIEWER_SOURCES) \
@@ -136,6 +141,7 @@ RESOURCES =										\
 	-resource:$(top_srcdir)/images/black-bishop.svg,black-bishop.svg		\
 	-resource:$(top_srcdir)/images/black-pawn.svg,black-pawn.svg			\
 	-resource:$(top_srcdir)/images/black-knight.svg,black-knight.svg		\
+	-resource:$(top_srcdir)/images/computer.png,computer.png			\
 	-resource:$(srcdir)/resource/csboard.glade,csboard.glade			\
 	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade
 

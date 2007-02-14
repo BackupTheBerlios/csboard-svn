@@ -21,10 +21,12 @@ using Mono.Unix;
 
 namespace CsBoard
 {
+	namespace ICS {
 	public class ICSDetailsWindow:Window
 	{
 		ICSClient client;
 		GameAdvertisements ads;
+		ICSShell shell;
 
 		Notebook book;
 		public ICSDetailsWindow (ICSClient client,
@@ -40,6 +42,9 @@ namespace CsBoard
 						    GetString
 						    ("Game Advertisements")));
 
+			shell = new ICSShell(client);
+			book.AppendPage (shell,
+					 new Label(Catalog.GetString("Shell")));
 			DeleteEvent +=
 				delegate (object o, DeleteEventArgs args)
 			{
@@ -48,5 +53,6 @@ namespace CsBoard
 
 			  ShowAll ();
 		}
+	}
 	}
 }

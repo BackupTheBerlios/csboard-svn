@@ -1,3 +1,38 @@
+2007-02-14 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	added files
+
+	* src/ChessClock.cs
+	* src/ics/GameAdvertisement.cs
+	* src/ics/GameAdvertisementsWidget.cs
+	* src/ics/ICSConfigDialog.cs
+	* src/ics/ICSShell.cs
+	* src/ics/MoveDetails.cs
+	* src/ics/ParserUtils.cs
+	* images/computer.png
+
+	Modified files
+
+	* Makefile.am
+	* data/csboard.schemas.in
+	* resource/csboard.glade
+	* src/GnuChess.cs
+	* src/Session.cs
+	* src/Window.cs
+	* src/ics/ICS.cs
+	* src/ics/ICSClient.cs
+	* src/ics/ICSDetailsWindow.cs
+	* src/ics/ICSSeek.cs
+	* src/viewer/GameViewer.cs
+
+	Removed files
+
+	* src/ics/ICSParser.cs
+	* src/ics/GameAdvertisements.cs
+
+	cleaned up code and added more functionality for ics client. need to do
+	a lot before we can start playing :-)
+
 2007-02-11 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Modified files

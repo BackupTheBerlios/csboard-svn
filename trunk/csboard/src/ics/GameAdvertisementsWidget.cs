@@ -18,10 +18,13 @@
 using Gtk;
 using System;
 using Mono.Unix;
+using Gdk;
+using System.Reflection;
 
 
 namespace CsBoard
 {
+	namespace ICS {
 	public class GameAdvertisements:VBox
 	{
 		private Gtk.TreeView adList;
@@ -32,6 +35,8 @@ namespace CsBoard
 		Label infoLabel;
 		int ngames;
 		int nrated;
+
+		static Pixbuf ComputerPixbuf = Gdk.Pixbuf.LoadFromResource("computer.png");
 
 		public GameAdvertisements (ICSClient client)
 		{
@@ -45,6 +50,8 @@ namespace CsBoard
 				OnGameAdvertisementAddEvent;
 			client.GameAdvertisementRemoveEvent +=
 				OnGameAdvertisementRemoveEvent;
+			client.GameAdvertisementsClearedEvent +=
+				OnGameAdvertisementsCleared;
 			client.AuthEvent += OnAuthEvent;
 
 			store = new ListStore (typeof (object), typeof (int));
@@ -52,9 +59,12 @@ namespace CsBoard
 			  adList.HeadersVisible = true;
 			  adList.HeadersClickable = true;
 
-			TreeViewColumn col;
+			  TreeViewColumn col = new TreeViewColumn ();
 
-			  col = new TreeViewColumn ();
+			  CellRendererPixbuf title_renderer = new CellRendererPixbuf();
+			  col.PackStart(title_renderer, false);
+			  col.SetCellDataFunc (title_renderer, new TreeCellDataFunc(GameTitleCellDataFunc));
+
 			CellRendererText renderer = new CellRendererText ();
 			  renderer.Yalign = 0;
 			  col.Title = Catalog.GetString ("Games");
@@ -95,6 +105,20 @@ namespace CsBoard
 			  renderer.Markup = ad.ToPango ();
 		}
 
+		protected void GameTitleCellDataFunc (TreeViewColumn col,
+						      CellRenderer r,
+						      TreeModel model,
+						      TreeIter iter)
+		{
+			CellRendererPixbuf renderer = (CellRendererPixbuf) r;
+			GameAdvertisement ad =
+				(GameAdvertisement) model.GetValue (iter, 0);
+			if(ad.IsComputer)
+				renderer.Pixbuf = ComputerPixbuf;
+			else
+				renderer.Pixbuf = null;
+		}
+
 		public void OnGameAdvertisementAddEvent (object o,
 							 GameAdvertisement ad)
 		{
@@ -102,6 +126,13 @@ namespace CsBoard
 			ngames++;
 			if (ad.rated)
 				nrated++;
+			UpdateInfoLabel ();
+		}
+
+		private void OnGameAdvertisementsCleared(object o, EventArgs args) {
+			store.Clear();
+			ngames = 0;
+			nrated = 0;
 			UpdateInfoLabel ();
 		}
 
@@ -144,5 +175,6 @@ namespace CsBoard
 		public void OnAuthEvent (object o, bool success)
 		{
 		}
+	}
 	}
 }
