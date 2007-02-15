@@ -17,7 +17,6 @@
 
 using System;
 using System.Text;
-using Mono.Unix;
 
 namespace CsBoard
 {

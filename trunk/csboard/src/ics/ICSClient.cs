@@ -136,6 +136,8 @@ namespace CsBoard
 								LineBufferReceivedEventArgs
 								args);
 
+		public delegate void GameInfoEventHandler(object o, GameInfo info);
+
 		public enum LineType
 		{
 			Normal,
@@ -180,6 +182,7 @@ namespace CsBoard
 			SR,
 			S,
 			STYLE12,
+			GAMEINFO
 		}
 
 		public class ICSClient
@@ -204,6 +207,7 @@ namespace CsBoard
 			public event MoveMadeEventHandler MoveMadeEvent;
 			public event ResultNotificationEventHandler
 				ResultNotificationEvent;
+			public event GameInfoEventHandler GameInfoEvent;
 
 			SessionState state = SessionState.NONE;
 
@@ -242,6 +246,7 @@ namespace CsBoard
 				notificationMap["s"] = NotificationType.S;
 				notificationMap["12"] =
 					NotificationType.STYLE12;
+				notificationMap["g1"] = NotificationType.GAMEINFO;
 			}
 
 			public bool Start ()
@@ -392,6 +397,11 @@ namespace CsBoard
 								 new
 								 MoveMadeEventArgs
 								 (details));
+					  break;
+				  case NotificationType.GAMEINFO:
+					  GameInfo info = GameInfo.FromBuffer(buffer, start, end);
+					  if(GameInfoEvent != null)
+						  GameInfoEvent(this, info);
 					  break;
 				  }
 			}
@@ -567,6 +577,7 @@ namespace CsBoard
 					("CsBoard (http://csboard.berlios.de)");
 				streamWriter.WriteLine ("iset seekinfo 1");
 				streamWriter.WriteLine ("iset seekremove 1");
+				streamWriter.WriteLine ("iset gameinfo 1");
 				streamWriter.WriteLine ("set seek 1");
 				streamWriter.WriteLine ("set bell 0");
 				streamWriter.WriteLine ("set style 12");

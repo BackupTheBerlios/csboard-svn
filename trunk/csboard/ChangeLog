@@ -8,6 +8,7 @@
 	* src/ics/ICSGameObserverWindow.cs
 	* src/ics/ObservableGamesWidget.cs
 	* src/ics/ResultNotification.cs
+	* src/ics/GameInfo.cs
 
 	modified files
 

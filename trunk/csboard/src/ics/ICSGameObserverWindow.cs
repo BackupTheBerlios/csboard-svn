@@ -27,6 +27,13 @@ namespace CsBoard
 		public class ICSGameObserverWindow:Window
 		{
 			int gameId;
+			bool needsUnobserve = true;
+			public bool NeedsUnobserve {
+				get {
+					return needsUnobserve;
+				}
+			}
+
 			public int GameId
 			{
 				get
@@ -37,6 +44,8 @@ namespace CsBoard
 
 			ChessGameWidget gameWidget;
 			CairoViewerBoard board;
+
+			string white, black;
 
 			public ICSGameObserverWindow (MoveDetails
 						      details):base ("")
@@ -68,8 +77,10 @@ namespace CsBoard
 								 details.
 								 increment);
 
-				gameWidget.White = details.white;
-				gameWidget.Black = details.black;
+				white = details.white;
+				black = details.black;
+				gameWidget.White = white;
+				gameWidget.Black = black;
 
 				Update (details);
 			}
@@ -100,8 +111,19 @@ namespace CsBoard
 				  }
 			}
 
+			public void Update(GameInfo info) {
+				if(info == null)
+					return;
+
+				if(info.whitesRating > 0)
+					gameWidget.White = String.Format("{0} ({1})", white, info.whitesRating);
+				if(info.blacksRating > 0)
+					gameWidget.Black = String.Format("{0} ({1})", black, info.blacksRating);
+			}
+
 			public void Update (ResultNotification notification)
 			{
+				needsUnobserve = false;
 				gameWidget.whiteClock.Stop ();
 				gameWidget.blackClock.Stop ();
 

@@ -31,6 +31,7 @@ namespace CsBoard
 		{
 			ICSClient client;
 			Hashtable currentGames;
+			Hashtable gameInfos;
 			bool expecting_results;
 			bool first_result;
 
@@ -46,10 +47,12 @@ namespace CsBoard
 			{
 				expecting_results = false;
 				currentGames = new Hashtable ();
+				gameInfos = new Hashtable();
 				this.client = client;
 				client.MoveMadeEvent += OnMoveMade;
 				client.ResultNotificationEvent +=
 					OnResultNotification;
+				client.GameInfoEvent += OnGameInfo;
 			}
 
 			public void GetGames ()
@@ -122,24 +125,46 @@ namespace CsBoard
 				    && details.relation !=
 				    Relation.IamObservingGameBeingObserved)
 					return;
+
 				ICSGameObserverWindow win;
 				if (currentGames.
-				    ContainsKey (details.gameNumber))
+				    ContainsKey (details.gameNumber)) {
 					win = (ICSGameObserverWindow)
 						currentGames[details.
 							     gameNumber];
+					win.Update(details);
+					return;
+				}
+
+				GameInfo info;
+				if(gameInfos.ContainsKey(details.gameNumber)) {
+					info = (GameInfo) gameInfos[details.gameNumber];
+					gameInfos.Remove(details.gameNumber);
+				}
 				else
-				  {
-					  win = new
-						  ICSGameObserverWindow
-						  (details);
-					  currentGames[details.gameNumber] =
-						  win;
-					  win.DeleteEvent += OnDelete;
-					  win.Resize (500, 400);
-					  win.Show ();
-				  }
-				win.Update (details);
+					info = null;
+
+				win = new
+					ICSGameObserverWindow
+					(details);
+				win.Update(info);
+				currentGames[details.gameNumber] =
+					win;
+				win.DeleteEvent += OnDelete;
+				win.Resize (500, 400);
+				win.Show ();
+			}
+
+			private void OnGameInfo(object o, GameInfo info) {
+				ICSGameObserverWindow win;
+				if (currentGames.
+				    ContainsKey (info.gameId)) {
+					win = (ICSGameObserverWindow)
+						currentGames[info.gameId];
+					win.Update(info);
+					return;
+				}
+				gameInfos[info.gameId] = info;
 			}
 
 			private void OnDelete (object o, EventArgs args)
@@ -148,9 +173,11 @@ namespace CsBoard
 					o as ICSGameObserverWindow;
 				if (win == null)
 					return;
-				client.WriteLine (String.
-						  Format ("unobserve {0}",
-							  win.GameId));
+				currentGames.Remove(win.GameId);
+				if(win.NeedsUnobserve)
+					client.WriteLine (String.
+							  Format ("unobserve {0}",
+								  win.GameId));
 			}
 
 			private void OnResultNotification (object o,
