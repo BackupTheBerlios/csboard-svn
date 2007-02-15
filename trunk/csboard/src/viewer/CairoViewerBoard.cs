@@ -52,14 +52,20 @@ namespace CsBoard
 				position.AskForPromotion = false;
 			}
 
-			public override void Move (int sr, int sf, int dr,
-						   int df,
-						   char promotion_type)
+			public void SetMoveInfo (int sr, int sf,
+						 int dr, int df)
 			{
 				src_rank = sr;
 				src_file = sf;
 				dest_rank = dr;
 				dest_file = df;
+			}
+
+			public override void Move (int sr, int sf, int dr,
+						   int df,
+						   char promotion_type)
+			{
+				SetMoveInfo (sr, sf, dr, df);
 				base.Move (sr, sf, dr, df, promotion_type);
 			}
 

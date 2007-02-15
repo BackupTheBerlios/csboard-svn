@@ -1,3 +1,31 @@
+2007-02-15 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	added files
+
+	* src/ChessGameWidget.cs
+	* src/ics/GameDetails.cs
+	* src/ics/GameObservationManager.cs
+	* src/ics/ICSGameObserverWindow.cs
+	* src/ics/ObservableGamesWidget.cs
+	* src/ics/ResultNotification.cs
+
+	modified files
+
+	* Makefile.am
+	* resource/csboard.glade
+	* src/ChessClock.cs
+	* src/Window.cs
+	* src/ics/GameAdvertisement.cs
+	* src/ics/GameAdvertisementsWidget.cs
+	* src/ics/ICS.cs
+	* src/ics/ICSClient.cs
+	* src/ics/ICSDetailsWindow.cs
+	* src/ics/MoveDetails.cs
+	* src/ics/ParserUtils.cs
+	* src/viewer/CairoViewerBoard.cs
+
+	added game observation functionality for ics
+
 2007-02-14 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	added files

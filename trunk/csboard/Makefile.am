@@ -54,10 +54,16 @@ ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/ICSShell.cs \
 	$(top_srcdir)/src/ics/GameAdvertisementsWidget.cs \
 	$(top_srcdir)/src/ics/ICSDetailsWindow.cs \
+	$(top_srcdir)/src/ics/ICSGameObserverWindow.cs \
+	$(top_srcdir)/src/ics/ResultNotification.cs \
+	$(top_srcdir)/src/ics/GameObservationManager.cs \
+	$(top_srcdir)/src/ics/GameDetails.cs \
+	$(top_srcdir)/src/ics/ObservableGamesWidget.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs
 
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
+	$(top_srcdir)/src/ChessGameWidget.cs \
 	$(top_srcdir)/src/Window.cs \
 	$(top_srcdir)/src/IControl.cs \
 	$(top_srcdir)/src/Board.cs \

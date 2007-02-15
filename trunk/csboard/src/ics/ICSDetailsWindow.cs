@@ -21,38 +21,52 @@ using Mono.Unix;
 
 namespace CsBoard
 {
-	namespace ICS {
-	public class ICSDetailsWindow:Window
+	namespace ICS
 	{
-		ICSClient client;
-		GameAdvertisements ads;
-		ICSShell shell;
-
-		Notebook book;
-		public ICSDetailsWindow (ICSClient client,
-					 string title):base (title)
+		public class ICSDetailsWindow:Window
 		{
-			book = new Notebook ();
-			this.client = client;
-			Add (book);
-			book.ShowTabs = true;
-			ads = new GameAdvertisements (client);
-			book.AppendPage (ads,
-					 new Label (Catalog.
-						    GetString
-						    ("Game Advertisements")));
+			ICSClient client;
+			GameAdvertisements ads;
+			ICSShell shell;
 
-			shell = new ICSShell(client);
-			book.AppendPage (shell,
-					 new Label(Catalog.GetString("Shell")));
-			DeleteEvent +=
-				delegate (object o, DeleteEventArgs args)
+			Notebook book;
+
+			public Notebook Book
 			{
-				args.RetVal = true;
-			};
+				get
+				{
+					return book;
+				}
+			}
 
-			  ShowAll ();
+			public ICSDetailsWindow (ICSClient client,
+						 string title):base (title)
+			{
+				book = new Notebook ();
+				this.client = client;
+				Add (book);
+				book.ShowTabs = true;
+				ads = new GameAdvertisements (client);
+				book.AppendPage (ads,
+						 new Label (Catalog.
+							    GetString
+							    ("Game Advertisements")));
+
+				shell = new ICSShell (client);
+				book.AppendPage (shell,
+						 new Label (Catalog.
+							    GetString
+							    ("Shell")));
+
+				DeleteEvent +=
+					delegate (object o,
+						  DeleteEventArgs args)
+				{
+					args.RetVal = true;
+				};
+
+				  ShowAll ();
+			}
 		}
-	}
 	}
 }

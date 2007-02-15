@@ -17,220 +17,275 @@
 
 namespace CsBoard
 {
-	namespace ICS {
-
-	using System;
-	using System.IO;
-	using System.Collections;
-	using Mono.Unix;
-
-	using Gtk;
-	using Glade;
-
-	using System.Text;
-	using System.Text.RegularExpressions;
-
-	using CsBoard;
-
-	public class ICS:IControl
+	namespace ICS
 	{
 
-		public event ControlBusyHandler BusyEvent
-		{
-			add
-			{
-			}
-			remove
-			{
-			}
-		}
-		public event ControlWaitHandler WaitEvent
-		{
-			add
-			{
-			}
-			remove
-			{
-			}
-		}
-		public event ControlPositionChangedHandler
-			PositionChangedEvent
-		{
-			add
-			{
-			}
-			remove
-			{
-			}
-		}
-		public event ControlGameOverHandler GameOverEvent
-		{
-			add
-			{
-			}
-			remove
-			{
-			}
-		}
-		public event ControlSwitchSideHandler SwitchSideEvent
-		{
-			add
-			{
-			}
-			remove
-			{
-			}
-		}
-		public event ControlHintHandler HintEvent
-		{
-			add
-			{
-			}
-			remove
-			{
-			}
-		}
+		using System;
+		using System.IO;
+		using System.Collections;
+		using Mono.Unix;
 
-		private ICSClient client;
+		using Gtk;
+		using Glade;
 
-		ICSDetailsWindow adWin;
+		using System.Text;
+		using System.Text.RegularExpressions;
 
-		public ICS (string command)
+		using CsBoard;
+
+		public class ICS:IControl
 		{
-			client = new ICSClient ();
 
-			try
+			public event ControlBusyHandler BusyEvent
 			{
-				string[]args = Regex.Split (command, " +");
+				add
+				{
+				}
+				remove
+				{
+				}
+			}
+			public event ControlWaitHandler WaitEvent
+			{
+				add
+				{
+				}
+				remove
+				{
+				}
+			}
+			public event ControlPositionChangedHandler
+				PositionChangedEvent
+			{
+				add
+				{
+				}
+				remove
+				{
+				}
+			}
+			public event ControlGameOverHandler GameOverEvent
+			{
+				add
+				{
+				}
+				remove
+				{
+				}
+			}
+			public event ControlSwitchSideHandler SwitchSideEvent
+			{
+				add
+				{
+				}
+				remove
+				{
+				}
+			}
+			public event ControlHintHandler HintEvent
+			{
+				add
+				{
+				}
+				remove
+				{
+				}
+			}
 
-				for (int i = 0; i < args.Length; i++)
+			private ICSClient client;
+
+			ICSDetailsWindow adWin;
+			GameObservationManager obManager;
+			ObservableGamesWidget observableGames;
+
+			public ICS (string command)
+			{
+				client = new ICSClient ();
+
+				try
+				{
+					string[]args =
+						Regex.Split (command, " +");
+
+					for (int i = 0; i < args.Length; i++)
+					  {
+						  if (args[i].
+						      Equals ("--server"))
+						    {
+							    client.server =
+								    args[i +
+									 1];
+						    }
+						  if (args[i].
+						      Equals ("--port"))
+						    {
+							    client.port =
+								    args[i +
+									 1];
+						    }
+						  if (args[i].
+						      Equals ("--user"))
+						    {
+							    client.user =
+								    args[i +
+									 1];
+						    }
+						  if (args[i].
+						      Equals ("--passwd"))
+						    {
+							    client.passwd =
+								    args[i +
+									 1];
+						    }
+					  }
+				}
+				catch
+				{
+					throw new
+						ApplicationException (Catalog.
+								      GetString
+								      ("Can't parse command line"));
+				}
+
+				//Test();
+
+				ICSConfigDialog dlg =
+					new ICSConfigDialog (client);
+				if (dlg.Run () != ResponseType.Ok)
 				  {
-					  if (args[i].Equals ("--server"))
-					    {
-						    client.server =
-							    args[i + 1];
-					    }
-					  if (args[i].Equals ("--port"))
-					    {
-						    client.port = args[i + 1];
-					    }
-					  if (args[i].Equals ("--user"))
-					    {
-						    client.user = args[i + 1];
-					    }
-					  if (args[i].Equals ("--passwd"))
-					    {
-						    client.passwd =
-							    args[i + 1];
-					    }
+					  throw new
+						  ApplicationException
+						  (Catalog.
+						   GetString
+						   ("No details to connect"));
 				  }
-			}
-			catch
-			{
-				throw new ApplicationException (Catalog.
-								GetString
-								("Can't parse command line"));
-			}
 
-			ICSConfigDialog dlg = new ICSConfigDialog (client);
-			if (dlg.Run () != ResponseType.Ok)
-			  {
-				  throw new ApplicationException (Catalog.
+				adWin = new ICSDetailsWindow (client,
+							      String.
+							      Format (Catalog.
+								      GetString
+								      ("ICS: {0}@{1}:{2}"),
+								      client.
+								      user,
+								      client.
+								      server,
+								      client.
+								      port));
+
+				obManager =
+					new GameObservationManager (client);
+
+				observableGames =
+					new ObservableGamesWidget (obManager);
+				adWin.Book.AppendPage (observableGames,
+						       new Label (Catalog.
 								  GetString
-								  ("No details to connect"));
-			  }
+								  ("Current Games")));
+				adWin.Show ();
 
-			adWin = new ICSDetailsWindow (client,
-						      String.Format (Catalog.
-								     GetString
-								     ("ICS: {0}@{1}:{2}"),
-								     client.
-								     user,
-								     client.
-								     server,
-								     client.
-								     port));
-			adWin.Show ();
+				client.Connect ();
+				client.Start ();
+			}
 
-			client.Connect ();
-			client.Start ();
+			static void Popup (string str)
+			{
+				byte[]buffer =
+					System.Text.Encoding.ASCII.
+					GetBytes (str);
+				MoveDetails details =
+					MoveDetails.FromBuffer (buffer, 4,
+								buffer.
+								Length);
+				details.PrintTimeInfo ();
+				(new ICSGameObserverWindow (details)).Show ();
+			}
+
+			static void Test ()
+			{
+				string str =
+					"<12> r-r---k- ---nqpp- --p-pnp- b-Pp---- ---P-P-- --N-P-P- --QB--BP RR----K- B -1 0 0 0 0 4 134 GMPopov GMAkopian 0 120 0 34 34 3060 522 19 R/f1-b1 (14:29) Rfb1 0 1 0";
+				str = "<12> r-r---k- ---nqpp- --p-pnp- b-Pp---- ---P-P-- --N-P-P- --QB--BP RR----K- B -1 0 0 0 0 4 134 GMPopov GMAkopian 0 120 0 34 34 3060 352 19 R/f1-b1 (14:29) Rfb1 0 0 0\n\n";
+				Popup (str);
+				str = "<12> rnbqkb-r pppppppp -----n-- -------- ---P---- -------- PPP-PPPP RNBQKBNR W -1 1 1 1 1 1 65 GuestSDSP uvsravikiran -1 3 0 39 39 180000 180000 2 N/g8-f6 (0:00.000) Nf6 1 1 0";
+				Popup (str);
+
+			}
+
+			public void Shutdown ()
+			{
+			}
+
+			public ArrayList GetPosition ()
+			{
+				ArrayList result = new ArrayList ();
+
+				result.Add ("");
+				result.Add ("");
+
+				result.Add (". . . . . . . . .");
+				result.Add (". . . . . . . . .");
+				result.Add (". . . . . . . . .");
+				result.Add (". . . . . . . . .");
+				result.Add (". . . . . . . . .");
+				result.Add (". . . . . . . . .");
+				result.Add (". . . . . . . . .");
+				result.Add (". . . . . . . . .");
+
+				return result;
+			}
+
+
+			public void NewGame ()
+			{
+				SeekDialog sd = new SeekDialog (client);
+				sd.SeekNewGame ();
+			}
+
+
+			public bool MakeMove (string move)
+			{
+				return false;
+			}
+
+
+			public void SaveGame (string filename)
+			{
+				return;
+			}
+
+			public void OpenGame (string filename)
+			{
+				return;
+			}
+
+			public void SetLevel (Level l)
+			{
+			}
+
+			public void Undo ()
+			{
+
+			}
+
+			public void SwitchSide ()
+			{
+			}
+
+			public void Hint ()
+			{
+			}
+
+			public ArrayList Book ()
+			{
+				ArrayList result = new ArrayList ();
+
+				return result;
+			}
+
+			public string PossibleMoves (string pos)
+			{
+				return "";
+			}
 		}
-
-		public void Shutdown ()
-		{
-		}
-
-		public ArrayList GetPosition ()
-		{
-			ArrayList result = new ArrayList ();
-
-			result.Add ("");
-			result.Add ("");
-
-			result.Add (". . . . . . . . .");
-			result.Add (". . . . . . . . .");
-			result.Add (". . . . . . . . .");
-			result.Add (". . . . . . . . .");
-			result.Add (". . . . . . . . .");
-			result.Add (". . . . . . . . .");
-			result.Add (". . . . . . . . .");
-			result.Add (". . . . . . . . .");
-
-			return result;
-		}
-
-
-		public void NewGame ()
-		{
-			SeekDialog sd = new SeekDialog (client);
-			sd.SeekNewGame ();
-		}
-
-
-		public bool MakeMove (string move)
-		{
-			return false;
-		}
-
-
-		public void SaveGame (string filename)
-		{
-			return;
-		}
-
-		public void OpenGame (string filename)
-		{
-			return;
-		}
-
-		public void SetLevel (Level l)
-		{
-		}
-
-		public void Undo ()
-		{
-
-		}
-
-		public void SwitchSide ()
-		{
-		}
-
-		public void Hint ()
-		{
-		}
-
-		public ArrayList Book ()
-		{
-			ArrayList result = new ArrayList ();
-
-			return result;
-		}
-
-		public string PossibleMoves (string pos)
-		{
-			return "";
-		}
-	}
 	}
 }

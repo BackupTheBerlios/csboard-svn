@@ -19,160 +19,193 @@
 namespace CsBoard
 {
 
-	namespace ICS {
-	using System;
-	using System.Collections;
-	using Gtk;
-	using Gdk;
-	using Mono.Unix;
-
-
-	public class SeekDialog:Dialog
+	namespace ICS
 	{
+		using System;
+		using System.Collections;
+		using Gtk;
+		using Gdk;
+		using Mono.Unix;
 
-		[Glade.Widget] Gtk.Widget seek_vbox;
-		[Glade.Widget] Gtk.TreeView seek_treeview;
 
-		private ICSClient client;
-		private ListStore store;
-
-		public SeekDialog (ICSClient c)
+		public class SeekDialog:Dialog
 		{
 
-			client = c;
+			[Glade.Widget] Gtk.Widget seek_vbox;
+			[Glade.Widget] Gtk.TreeView seek_treeview;
 
-			Glade.XML gXML =
-				Glade.XML.FromAssembly ("csboard.glade",
-							"seek_vbox", null);
-			gXML.Autoconnect (this);
+			private ICSClient client;
+			private ListStore store;
 
-			HasSeparator = false;
-			Title = Catalog.GetString ("Start new ICS game");
-			SetSizeRequest (550, 300);
+			public SeekDialog (ICSClient c)
+			{
 
-			VBox.Add (seek_vbox);
-			AddButton (Stock.Refresh, (int) ResponseType.Apply);
-			AddButton (Stock.Cancel, (int) ResponseType.Close);
-			AddButton (Stock.New, (int) ResponseType.Accept);
+				client = c;
+
+				Glade.XML gXML =
+					Glade.XML.
+					FromAssembly ("csboard.glade",
+						      "seek_vbox", null);
+				gXML.Autoconnect (this);
+
+				HasSeparator = false;
+				Title = Catalog.
+					GetString ("Start new ICS game");
+				SetSizeRequest (550, 300);
+
+				VBox.Add (seek_vbox);
+				AddButton (Stock.Refresh,
+					   (int) ResponseType.Apply);
+				AddButton (Stock.Cancel,
+					   (int) ResponseType.Close);
+				AddButton (Stock.New,
+					   (int) ResponseType.Accept);
 
 
-			store = new ListStore (typeof (string),
-					       typeof (string),
-					       typeof (string),
-					       typeof (string),
-					       typeof (string),
-					       typeof (string),
-					       typeof (string),
-					       typeof (string),
-					       typeof (string),
-					       typeof (string));
-			seek_treeview.Model = store;
-			seek_treeview.HeadersVisible = true;
-			seek_treeview.HeadersClickable = true;
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Index"),
-						    new CellRendererText (),
-						    "text", 0);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Rating"),
-						    new CellRendererText (),
-						    "text", 1);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Player"),
-						    new CellRendererText (),
-						    "text", 2);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Time"),
-						    new CellRendererText (),
-						    "text", 3);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Increment"),
-						    new CellRendererText (),
-						    "text", 4);
-			// Translators: This means that player seeks for Rated/Unrated game
-			seek_treeview.AppendColumn (Catalog.GetString ("R/U"),
-						    new CellRendererText (),
-						    "text", 5);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Type"),
-						    new CellRendererText (),
-						    "text", 6);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Color"),
-						    new CellRendererText (),
-						    "text", 7);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Range"),
-						    new CellRendererText (),
-						    "text", 8);
-			seek_treeview.AppendColumn (Catalog.
-						    GetString ("Flags"),
-						    new CellRendererText (),
-						    "text", 9);
+				store = new ListStore (typeof (string),
+						       typeof (string),
+						       typeof (string),
+						       typeof (string),
+						       typeof (string),
+						       typeof (string),
+						       typeof (string),
+						       typeof (string),
+						       typeof (string),
+						       typeof (string));
+				seek_treeview.Model = store;
+				seek_treeview.HeadersVisible = true;
+				seek_treeview.HeadersClickable = true;
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Index"),
+							    new
+							    CellRendererText
+							    (), "text", 0);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Rating"),
+							    new
+							    CellRendererText
+							    (), "text", 1);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Player"),
+							    new
+							    CellRendererText
+							    (), "text", 2);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Time"),
+							    new
+							    CellRendererText
+							    (), "text", 3);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Increment"),
+							    new
+							    CellRendererText
+							    (), "text", 4);
+				// Translators: This means that player seeks for Rated/Unrated game
+				seek_treeview.AppendColumn (Catalog.
+							    GetString ("R/U"),
+							    new
+							    CellRendererText
+							    (), "text", 5);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Type"),
+							    new
+							    CellRendererText
+							    (), "text", 6);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Color"),
+							    new
+							    CellRendererText
+							    (), "text", 7);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Range"),
+							    new
+							    CellRendererText
+							    (), "text", 8);
+				seek_treeview.AppendColumn (Catalog.
+							    GetString
+							    ("Flags"),
+							    new
+							    CellRendererText
+							    (), "text", 9);
 
-			seek_treeview.RowActivated +=
-				new RowActivatedHandler (on_line_activate);
-			seek_treeview.Selection.Changed +=
-				on_selection_changed;
-		}
+				seek_treeview.RowActivated +=
+					new
+					RowActivatedHandler
+					(on_line_activate);
+				seek_treeview.Selection.Changed +=
+					on_selection_changed;
+			}
 
-		public bool SeekNewGame ()
-		{
-			Gtk.ResponseType response;
+			public bool SeekNewGame ()
+			{
+				Gtk.ResponseType response;
 
-			do
-			  {
-				  RefreshModel ();
+				do
+				  {
+					  RefreshModel ();
 
-				  response = (Gtk.ResponseType) Run ();
+					  response =
+						  (Gtk.ResponseType) Run ();
 
-			  }
-			while (response == ResponseType.Apply);
+				  }
+				while (response == ResponseType.Apply);
 
-			Hide ();
+				  Hide ();
 
-			if (response == ResponseType.Close)
+				if (response == ResponseType.Close)
+					return false;
+
+				TreeIter iter;
+				TreeModel model;
+
+				if (seek_treeview.Selection.
+				    GetSelected (out model, out iter))
+				  {
+					  string game_num =
+						  (string) store.
+						  GetValue (iter, 0);
+					    client.Write ("play " + game_num);
+					    return true;
+				  }
 				return false;
+			}
 
-			TreeIter iter;
-			TreeModel model;
+			private void RefreshModel ()
+			{
+				store.Clear ();
+				SetResponseSensitive (ResponseType.Accept,
+						      false);
+				client.Write ("seek");
+			}
 
-			if (seek_treeview.Selection.
-			    GetSelected (out model, out iter))
-			  {
-				  string game_num =
-					  (string) store.GetValue (iter, 0);
-				  client.Write ("play " + game_num);
-				  return true;
-			  }
-			return false;
+			private void on_line_activate (object o,
+						       Gtk.
+						       RowActivatedArgs args)
+			{
+				Respond (ResponseType.Accept);
+			}
+
+			private void on_selection_changed (object o,
+							   EventArgs args)
+			{
+				TreeIter iter;
+				TreeModel model;
+
+				if (seek_treeview.Selection.
+				    GetSelected (out model, out iter))
+				  {
+					  SetResponseSensitive (ResponseType.
+								Accept, true);
+				  }
+			}
 		}
-
-		private void RefreshModel ()
-		{
-			store.Clear ();
-			SetResponseSensitive (ResponseType.Accept, false);
-			client.Write ("seek");
-		}
-
-		private void on_line_activate (object o,
-					       Gtk.RowActivatedArgs args)
-		{
-			Respond (ResponseType.Accept);
-		}
-
-		private void on_selection_changed (object o, EventArgs args)
-		{
-			TreeIter iter;
-			TreeModel model;
-
-			if (seek_treeview.Selection.
-			    GetSelected (out model, out iter))
-			  {
-				  SetResponseSensitive (ResponseType.Accept,
-							true);
-			  }
-		}
-	}
 	}
 }

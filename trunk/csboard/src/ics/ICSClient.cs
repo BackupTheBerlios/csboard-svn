@@ -20,421 +20,601 @@ using System.Text;
 
 namespace CsBoard
 {
-	namespace ICS {
-
-	using System;
-	using System.IO;
-	using System.Collections;
-	using System.Net;
-	using System.Net.Sockets;
-	using System.Threading;
-	using Mono.Unix;
-
-	enum SessionState
+	namespace ICS
 	{
-		NONE,
-		AUTH_REQUEST,
-		AUTH_REJECTED,
-		AUTHENTICATED
-	};
 
-	public class AuthFailedException:Exception
-	{
-		public AuthFailedException (string str):base (str)
+		using System;
+		using System.IO;
+		using System.Collections;
+		using System.Net;
+		using System.Net.Sockets;
+		using System.Threading;
+		using Mono.Unix;
+
+		enum SessionState
 		{
-		}
-	}
+			NONE,
+			AUTH_REQUEST,
+			AUTH_REJECTED,
+			AUTHENTICATED
+		};
 
-	public class MoveMadeEventArgs : EventArgs {
-		MoveDetails details;
-		public MoveDetails Details {
-			get {
-				return details;
+		public class AuthFailedException:Exception
+		{
+			public AuthFailedException (string str):base (str)
+			{
 			}
 		}
 
-		public MoveMadeEventArgs(MoveDetails details) {
-			this.details = details;
-		}
-	}
+		public class MoveMadeEventArgs:EventArgs
+		{
+			MoveDetails details;
+			public MoveDetails Details
+			{
+				get
+				{
+					return details;
+				}
+			}
 
-	public delegate void GameAdvertisementAddEventHandler (object o,
-							       GameAdvertisement
-							       ad);
-	public delegate void GameAdvertisementRemoveEventHandler (object o,
-								  GameAdvertisement ad);
-	public delegate void GameAdvertisementsClearedEventHandler (object o,
-								  EventArgs args);
-	public delegate void AuthEventHandler (object o, bool success);
-	public delegate void MoveMadeEventHandler(object o, MoveMadeEventArgs args);
-
-	public enum LineType {
-		Normal,
-		Talk, // server talk
-		Info, // <starts with>
-		Prompt // ends with %
-	}
-
-	public class LineReceivedEventArgs : EventArgs {
-		string line;
-		public string Line {
-			get {
-				return line;
+			public MoveMadeEventArgs (MoveDetails details)
+			{
+				this.details = details;
 			}
 		}
 
-		LineType type;
-		public LineType LineType {
-			get {
-				return type;
+		public class LineBufferReceivedEventArgs:EventArgs
+		{
+			byte[] buffer;
+			public byte[] Buffer
+			{
+				get
+				{
+					return buffer;
+				}
+			}
+			int start;
+			public int Start
+			{
+				get
+				{
+					return start;
+				}
+			}
+			int end;
+			public int End
+			{
+				get
+				{
+					return end;
+				}
+			}
+			LineType type;
+			public LineType LineType
+			{
+				get
+				{
+					return type;
+				}
+			}
+
+			public LineBufferReceivedEventArgs (byte[]buf, int s,
+							    int e,
+							    LineType lt)
+			{
+				buffer = buf;
+				start = s;
+				end = e;
+				type = lt;
 			}
 		}
 
-		public LineReceivedEventArgs(string line, LineType type) {
-			this.line = line;
-			this.type = type;
-		}
-	}
+		public delegate void GameAdvertisementAddEventHandler (object
+								       o,
+								       GameAdvertisement
+								       ad);
+		public delegate void
+			GameAdvertisementRemoveEventHandler (object o,
+							     GameAdvertisement
+							     ad);
+		public delegate void
+			GameAdvertisementsClearedEventHandler (object o,
+							       EventArgs
+							       args);
+		public delegate void AuthEventHandler (object o,
+						       bool success);
+		public delegate void MoveMadeEventHandler (object o,
+							   MoveMadeEventArgs
+							   args);
+		public delegate void ResultNotificationEventHandler (object o,
+								     ResultNotification
+								     res);
+		public delegate void LineReceivedHandler (object o,
+							  LineReceivedEventArgs
+							  args);
+		public delegate void LineBufferReceivedHandler (object o,
+								LineBufferReceivedEventArgs
+								args);
 
-	enum NotificationType {
-		None,
-		SC,
-		SR,
-		S,
-		STYLE12,
-	}
-
-	public delegate void LineReceivedHandler(object o, LineReceivedEventArgs args);
-
-	public class ICSClient
-	{
-
-		public string server = "www.freechess.org";
-		public string port = "5000";
-		public string user = "";
-		public string assigned_name;	// assigned for guest login
-		public string passwd = "";
-
-		public event GameAdvertisementAddEventHandler
-			GameAdvertisementAddEvent;
-		public event GameAdvertisementRemoveEventHandler
-			GameAdvertisementRemoveEvent;
-		public event GameAdvertisementsClearedEventHandler
-			GameAdvertisementsClearedEvent;
-		public event AuthEventHandler AuthEvent;
-		public event LineReceivedHandler LineReceivedEvent;
-		public event MoveMadeEventHandler MoveMadeEvent;
-
-		SessionState state = SessionState.NONE;
-
-		// This is a separate thread which runs continually while connected 
-		// to an ICS server.  It reads data from the server and takes action.
-		public Thread readThread;
-
-		// Our TCP client to connect to an ICS server
-		public TcpClient client;
-
-		// Once we're connected we get a stream that we can read and write from/to
-		public NetworkStream stream;
-		public StreamReader streamReader;
-		public StreamWriter streamWriter;
-
-
-		  byte[] buffer;
-		int start, end;
-		  System.Text.Decoder decoder;
-
-		  Hashtable notificationMap;
-
-		public ICSClient ()
+		public enum LineType
 		{
-			map = new Hashtable ();
-			ads = new ArrayList ();
-			buffer = new byte[4096];
-			start = end = 0;
-			decoder = System.Text.Encoding.UTF8.GetDecoder ();
-
-			notificationMap = new Hashtable();
-			notificationMap["sr"] = NotificationType.SR;
-			notificationMap["sc"] = NotificationType.SC;
-			notificationMap["s"] = NotificationType.S;
-			notificationMap["12"] = NotificationType.STYLE12;
+			Normal,
+			Talk,	// server talk
+			Info,	// <starts with>
+			Prompt,	// ends with %
+			ResultNotification
 		}
 
-		public bool Start ()
+		public class LineReceivedEventArgs:EventArgs
 		{
-			return PostReadRequest ();
+			string line;
+			public string Line
+			{
+				get
+				{
+					return line;
+				}
+			}
+
+			LineType type;
+			public LineType LineType
+			{
+				get
+				{
+					return type;
+				}
+			}
+
+			public LineReceivedEventArgs (string line,
+						      LineType type)
+			{
+				this.line = line;
+				this.type = type;
+			}
 		}
 
-		public void Stop ()
+		enum NotificationType
 		{
-			if (pending != null)
-				stream.EndRead (pending);
+			None,
+			SC,
+			SR,
+			S,
+			STYLE12,
 		}
 
-		IAsyncResult pending;
-		private bool PostReadRequest ()
+		public class ICSClient
 		{
-			if (end == buffer.Length)
-				return false;	// buffer full
-			pending =
-				stream.BeginRead (buffer, end,
-						  buffer.Length - end,
-						  ReadAsyncCallback, null);
-			return true;
-		}
 
-		private void ReadAsyncCallback (IAsyncResult res)
-		{
-			int nbytes = stream.EndRead (res);
-			end += nbytes;
-			GLib.Idle.Add (ProcessBufferIdleHandler);
-			pending = null;
-		}
+			public string server = "www.freechess.org";
+			public string port = "5000";
+			public string user = "";
+			public string assigned_name;	// assigned for guest login
+			public string passwd = "";
 
-		private bool ProcessBufferIdleHandler ()
-		{
-			ProcessBuffer (true);
-			return false;
-		}
+			public event GameAdvertisementAddEventHandler
+				GameAdvertisementAddEvent;
+			public event GameAdvertisementRemoveEventHandler
+				GameAdvertisementRemoveEvent;
+			public event GameAdvertisementsClearedEventHandler
+				GameAdvertisementsClearedEvent;
+			public event AuthEventHandler AuthEvent;
+			public event LineReceivedHandler LineReceivedEvent;
+			public event LineBufferReceivedHandler
+				LineBufferReceivedEvent;
+			public event MoveMadeEventHandler MoveMadeEvent;
+			public event ResultNotificationEventHandler
+				ResultNotificationEvent;
 
-		private void ProcessBuffer (bool expecting_auth)
-		{
-			for (int i = start; i < end; i++)
-			  {
-				  if (buffer[i] == '\n')
-				    {
-					    if (i > start)
-						    ProcessLine (start,
-								 i - start);
-					    start = i + 1;
-				    }
-				  else if (expecting_auth && buffer[i] == ':')
-				    {
-					    ProcessLine (start, i - start + 1);	// including the delim
-					    start = i + 1;
-				    }
-			  }
+			SessionState state = SessionState.NONE;
 
-			if (start > 0)
-			  {
-				  for (int i = start, j = 0; i < end;
-				       i++, j++)
-				    {
-					    buffer[j] = buffer[i];
-				    }
-				  end -= start;
-				  start = 0;
-			  }
+			// This is a separate thread which runs continually while connected 
+			// to an ICS server.  It reads data from the server and takes action.
+			public Thread readThread;
 
-			PostReadRequest ();
-		}
+			// Our TCP client to connect to an ICS server
+			public TcpClient client;
 
-		private NotificationType GetNotificationType(ref int start, int end) {
-			int i = start;
-			while(buffer[i] != '>' && i < end)
-				i++;
-			char[] chrs = new char[i - start];
-			decoder.GetChars(buffer, start, i - start, chrs, 0);
-			string str = new string(chrs);
+			// Once we're connected we get a stream that we can read and write from/to
+			public NetworkStream stream;
+			public StreamReader streamReader;
+			public StreamWriter streamWriter;
 
-			start = i;
 
-			if(notificationMap.ContainsKey(str))
-				return (NotificationType) notificationMap[str];
-			Console.WriteLine("Tag [{0}] not found", str);
-			return NotificationType.None;
-		}
+			byte[]buffer;
+			int start, end;
+			System.Text.Decoder decoder;
 
-		private void ProcessServerNotification (int start,
-							      int end)
-		{
-			NotificationType type = GetNotificationType(ref start, end);
-			start++;
-			switch(type) {
-			case NotificationType.SR:
-				ArrayList list = new ArrayList ();
-				GameAdvertisement.ReadCancellations (buffer,
+			Hashtable notificationMap;
+
+			public ICSClient ()
+			{
+				map = new Hashtable ();
+				ads = new ArrayList ();
+				buffer = new byte[4096];
+				start = end = 0;
+				decoder =
+					System.Text.Encoding.UTF8.
+					GetDecoder ();
+
+				notificationMap = new Hashtable ();
+				notificationMap["sr"] = NotificationType.SR;
+				notificationMap["sc"] = NotificationType.SC;
+				notificationMap["s"] = NotificationType.S;
+				notificationMap["12"] =
+					NotificationType.STYLE12;
+			}
+
+			public bool Start ()
+			{
+				return PostReadRequest ();
+			}
+
+			public void Stop ()
+			{
+				if (pending != null)
+					stream.EndRead (pending);
+			}
+
+			IAsyncResult pending;
+			private bool PostReadRequest ()
+			{
+				if (end == buffer.Length)
+					return false;	// buffer full
+				try
+				{
+					pending =
+						stream.BeginRead (buffer, end,
+								  buffer.
+								  Length -
+								  end,
+								  ReadAsyncCallback,
+								  null);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine (e);
+					return false;
+				}
+
+				return true;
+			}
+
+			private void ReadAsyncCallback (IAsyncResult res)
+			{
+				int nbytes = stream.EndRead (res);
+				end += nbytes;
+				GLib.Idle.Add (ProcessBufferIdleHandler);
+				pending = null;
+			}
+
+			private bool ProcessBufferIdleHandler ()
+			{
+				ProcessBuffer (state !=
+					       SessionState.AUTHENTICATED);
+				return false;
+			}
+
+			private void ProcessBuffer (bool expecting_auth)
+			{
+				for (int i = start; i < end; i++)
+				  {
+					  if (buffer[i] == '\n')
+					    {
+						    if (i > start)
+						      {
+							      ProcessLine
+								      (start,
+								       i -
+								       start);
+						      }
+						    start = i + 1;
+					    }
+					  else if (expecting_auth
+						   && buffer[i] == ':')
+					    {
+						    ProcessLine (start, i - start + 1);	// including the delim
+						    start = i + 1;
+					    }
+				  }
+
+				if (start > 0)
+				  {
+					  for (int i = start, j = 0; i < end;
+					       i++, j++)
+					    {
+						    buffer[j] = buffer[i];
+					    }
+					  end -= start;
+					  start = 0;
+				  }
+
+				PostReadRequest ();
+			}
+
+			private NotificationType GetNotificationType (ref int
+								      start,
+								      int end)
+			{
+				int i = start;
+				while (buffer[i] != '>' && i < end)
+					i++;
+				char[] chrs = new char[i - start];
+				decoder.GetChars (buffer, start, i - start,
+						  chrs, 0);
+				string str = new string (chrs);
+
+				start = i;
+
+				if (notificationMap.ContainsKey (str))
+					return (NotificationType)
+						notificationMap[str];
+				return NotificationType.None;
+			}
+
+			private void ProcessServerNotification (int start,
+								int end)
+			{
+				NotificationType type =
+					GetNotificationType (ref start, end);
+				start++;
+				switch (type)
+				  {
+				  case NotificationType.SR:
+					  ArrayList list = new ArrayList ();
+					  GameAdvertisement.
+						  ReadCancellations (buffer,
 								     start,
 								     end,
 								     list);
-				foreach (int handle in list)
-				{
-					RemoveGameAdvertisement (handle);
-				}
-				break;
-			case NotificationType.S:
+					  foreach (int handle in list)
+					  {
+						  RemoveGameAdvertisement
+							  (handle);
+					  }
+					  break;
+				  case NotificationType.S:
+					  GameAdvertisement ad =
+						  GameAdvertisement.
+						  FromBuffer (buffer, start,
+							      end);
+					  AddGameAdvertisement (ad);
+					  break;
+				  case NotificationType.SC:
+					  ClearGameAdvertisements ();
+					  break;
+				  case NotificationType.STYLE12:
+					  MoveDetails details =
+						  MoveDetails.
+						  FromBuffer (buffer, start,
+							      end);
+					  if (MoveMadeEvent != null)
+						  MoveMadeEvent (this,
+								 new
+								 MoveMadeEventArgs
+								 (details));
+					  break;
+				  }
+			}
+
+			ArrayList ads;
+			Hashtable map;
+
+			private void AddGameAdvertisement (GameAdvertisement
+							   ad)
+			{
+				ads.Add (ad);
+				map[ad.gameHandle] = ad;
+				if (GameAdvertisementAddEvent != null)
+					GameAdvertisementAddEvent (this, ad);
+			}
+
+			private void RemoveGameAdvertisement (int handle)
+			{
 				GameAdvertisement ad =
-					GameAdvertisement.FromBuffer (buffer,
-								      start,
-								      end);
-				AddGameAdvertisement (ad);
-				break;
-			case NotificationType.SC:
-				ClearGameAdvertisements();
-				break;
-			case NotificationType.STYLE12:
-				MoveDetails details = MoveDetails.FromBuffer(buffer, start, end);
-				if(MoveMadeEvent != null)
-					MoveMadeEvent(this, new MoveMadeEventArgs(details));
-				break;
+					(GameAdvertisement) map[handle];
+				if (ad == null)
+				  {
+					  return;
+				  }
+				map.Remove (handle);
+				ads.Remove (ad);
+				if (GameAdvertisementRemoveEvent != null)
+					GameAdvertisementRemoveEvent (this,
+								      ad);
 			}
-		}
 
-		ArrayList ads;
-		Hashtable map;
+			private void ClearGameAdvertisements ()
+			{
+				map.Clear ();
+				if (GameAdvertisementsClearedEvent != null)
+					GameAdvertisementsClearedEvent (this,
+									EventArgs.
+									Empty);
+			}
 
-		private void AddGameAdvertisement (GameAdvertisement ad)
-		{
-			ads.Add (ad);
-			map[ad.gameHandle] = ad;
-			if (GameAdvertisementAddEvent != null)
-				GameAdvertisementAddEvent (this, ad);
-		}
+			private LineType GetLineType (byte[]buffer, int start,
+						      int end)
+			{
+				if (buffer[start] == '{')
+					return LineType.ResultNotification;
 
-		private void RemoveGameAdvertisement (int handle)
-		{
-			GameAdvertisement ad =
-				(GameAdvertisement) map[handle];
-			if (ad == null)
-			  {
-				  return;
-			  }
-			map.Remove (handle);
-			ads.Remove (ad);
-			if (GameAdvertisementRemoveEvent != null)
-				GameAdvertisementRemoveEvent (this, ad);
-		}
+				while (buffer[end - 1] == ' ' && end > start)
+					end--;
+				if (end == start)
+					return LineType.Normal;
 
-		private void ClearGameAdvertisements() {
-			map.Clear();
-			if(GameAdvertisementsClearedEvent != null)
-				GameAdvertisementsClearedEvent(this, EventArgs.Empty);
-		}
+				if (buffer[end - 1] == '%')
+					return LineType.Prompt;
 
-		private LineType GetLineType(byte[] buffer, int start, int end) {
-			while(buffer[end - 1] == ' ' && end > start)
-				end--;
-			if(end == start)
+				if (buffer[end - 1] == ':')
+					return LineType.Talk;
+
+				if (buffer[start] == '<')
+				  {
+					  int i = start + 1;
+					  while (buffer[i] != '>' && i < end)
+						  i++;
+					  return i !=
+						  end ? LineType.
+						  Info : LineType.Normal;
+				  }
+
 				return LineType.Normal;
-
-			if(buffer[end - 1] == '%')
-				return LineType.Prompt;
-			if(buffer[end - 1] == ':')
-				return LineType.Talk;
-			if(buffer[start] == '<') {
-				int i = start + 1;
-				while(buffer[i] != '>' && i < end)
-					i++;
-				return i != end ? LineType.Info : LineType.Normal;
 			}
 
-			return LineType.Normal;
-		}
+			private void ProcessLine (int start, int count)
+			{
+				if (buffer[start + count - 1] == '\r')
+				  {
+					  count--;
+				  }
+				if (buffer[start] == '\r')
+				  {
+					  start++;
+					  count--;
+				  }
+				if (count <= 0)
+					return;
+				char[] chrs = new char[count];
+				decoder.GetChars (buffer, start, count, chrs,
+						  0);
 
-		private void ProcessLine (int start, int count)
-		{
-			if (buffer[start + count - 1] == '\r')
-				count--;
-			if (buffer[start] == '\r')
-			  {
-				  start++;
-				  count--;
-			  }
-			if (count <= 0)
-				return;
-			char[] chrs = new char[count];
-			decoder.GetChars (buffer, start, count, chrs, 0);
-
-			LineType type = GetLineType(buffer, start, start + count);
-			string line = new string (chrs);
-
-			if(LineReceivedEvent != null)
-				LineReceivedEvent(this, new LineReceivedEventArgs(line, type));
-			//Console.WriteLine("[STATE = {0}]: {1}", state, line);
-
-			if (buffer[start] == '<')
-			  {
-				  ProcessServerNotification (start + 1,
+				LineType type = GetLineType (buffer, start,
 							     start + count);
-				  return;
-			  }
 
-			if (line.Equals ("login:"))
-			  {
-				  if (state == SessionState.NONE)
-				    {
-					    streamWriter.WriteLine (user);
-					    streamWriter.Flush ();
-					    state = SessionState.AUTH_REQUEST;
-				    }
-				  else if (state == SessionState.AUTH_REQUEST)
-				    {
-					    if (AuthEvent != null)
-						    AuthEvent (this, false);
-				    }
-			  }
-			else if (line.Equals ("password:"))
-			  {
-				  streamWriter.WriteLine (passwd);
-				  streamWriter.Flush ();
-			  }
-			else if (state == SessionState.AUTH_REQUEST
-				 && line.Trim ().EndsWith ("%"))
-			  {
-				  state = SessionState.AUTHENTICATED;
-				  HandleAuthSuccess ();
-				  if (AuthEvent != null)
-					  AuthEvent (this, true);
-			  }
-		}
+				if (type == LineType.ResultNotification)
+				  {
+					  ResultNotification notification =
+						  ResultNotification.
+						  FromBuffer (buffer,
+							      start + 1,
+							      start + count +
+							      1);
+					  if (ResultNotificationEvent != null)
+						  ResultNotificationEvent
+							  (this,
+							   notification);
+					  return;
+				  }
 
-		private void HandleAuthSuccess ()
-		{
-			string logo = Catalog.GetString("CsBoard (http://csboard.berlios.de)");
-			streamWriter.WriteLine ("iset seekinfo 1");
-			streamWriter.WriteLine ("iset seekremove 1");
-			streamWriter.WriteLine ("set seek 1");
-			streamWriter.WriteLine ("set bell 0");
-			streamWriter.WriteLine ("set style 12");
-			streamWriter.WriteLine (String.Format("set interface {0}", logo));
-			streamWriter.Flush ();
-		}
+				if (LineBufferReceivedEvent != null)
+				  {
+					  LineBufferReceivedEvent (this,
+								   new
+								   LineBufferReceivedEventArgs
+								   (buffer,
+								    start,
+								    start +
+								    count,
+								    type));
+				  }
 
-		public void WriteLine (string str)
-		{
-			streamWriter.WriteLine (str);
-			streamWriter.Flush ();
-		}
+				string line = new string (chrs);
 
-		public void Write (string message)
-		{
-			streamWriter.Write (message);
-			streamWriter.Flush ();
-		}
+				if (LineReceivedEvent != null)
+					LineReceivedEvent (this,
+							   new
+							   LineReceivedEventArgs
+							   (line, type));
 
-		public void Connect ()
-		{
-			try
+				if (buffer[start] == '<')
+				  {
+					  ProcessServerNotification (start +
+								     1,
+								     start +
+								     count);
+					  return;
+				  }
+
+				if (line.Equals ("login:"))
+				  {
+					  if (state == SessionState.NONE)
+					    {
+						    streamWriter.
+							    WriteLine (user);
+						    streamWriter.Flush ();
+						    state = SessionState.
+							    AUTH_REQUEST;
+					    }
+					  else if (state ==
+						   SessionState.AUTH_REQUEST)
+					    {
+						    if (AuthEvent != null)
+							    AuthEvent (this,
+								       false);
+					    }
+				  }
+				else if (line.Equals ("password:"))
+				  {
+					  streamWriter.WriteLine (passwd);
+					  streamWriter.Flush ();
+				  }
+				else if (state == SessionState.AUTH_REQUEST
+					 && line.Trim ().EndsWith ("%"))
+				  {
+					  state = SessionState.AUTHENTICATED;
+					  HandleAuthSuccess ();
+					  if (AuthEvent != null)
+						  AuthEvent (this, true);
+				  }
+			}
+
+			private void HandleAuthSuccess ()
 			{
-				client = new TcpClient (server,
-							int.Parse (port));
-				stream = client.GetStream ();
-				streamWriter = new StreamWriter (stream);
-				streamReader = new StreamReader (stream);
-			} catch
+				string logo =
+					Catalog.
+					GetString
+					("CsBoard (http://csboard.berlios.de)");
+				streamWriter.WriteLine ("iset seekinfo 1");
+				streamWriter.WriteLine ("iset seekremove 1");
+				streamWriter.WriteLine ("set seek 1");
+				streamWriter.WriteLine ("set bell 0");
+				streamWriter.WriteLine ("set style 12");
+				streamWriter.WriteLine (String.
+							Format
+							("set interface {0}",
+							 logo));
+				streamWriter.Flush ();
+			}
+
+			public void WriteLine (string str)
 			{
-				throw new ApplicationException (String.
-								Format
-								(Catalog.
-								 GetString
-								 ("Can't connect to {0} port {1}"),
-								 server,
-								 port));
+				streamWriter.WriteLine (str);
+				streamWriter.Flush ();
+			}
+
+			public void Write (string message)
+			{
+				streamWriter.Write (message);
+				streamWriter.Flush ();
+			}
+
+			public void Connect ()
+			{
+				try
+				{
+					client = new TcpClient (server,
+								int.
+								Parse (port));
+					stream = client.GetStream ();
+					streamWriter =
+						new StreamWriter (stream);
+					streamReader =
+						new StreamReader (stream);
+				} catch
+				{
+					throw new
+						ApplicationException (String.
+								      Format
+								      (Catalog.
+								       GetString
+								       ("Can't connect to {0} port {1}"),
+								       server,
+								       port));
+				}
+
 			}
 
 		}
-
-	}
 	}
 }

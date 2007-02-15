@@ -17,56 +17,129 @@
 
 using System;
 
-namespace CsBoard {
-	namespace ICS {
-	public class ParserException:Exception
+namespace CsBoard
+{
+	namespace ICS
 	{
-		public ParserException (string str):base (str)
+		public class ParserException:Exception
 		{
+			public ParserException (string str):base (str)
+			{
+			}
 		}
-	}
 
-	public class ParserUtils {
-
-		public static void SkipWhitespace (byte[]buffer, ref int idx,
-					    int end)
+		public class ParserUtils
 		{
-			while (buffer[idx] == ' ' && idx < end)
+
+			public static void SkipWhitespace (byte[]buffer,
+							   ref int idx,
+							   int end)
+			{
+				while (buffer[idx] == ' ' && idx < end)
+					idx++;
+			}
+
+			public static void ReadNameValue (byte[]buffer,
+							  ref int idx,
+							  int end,
+							  out string name,
+							  out string val)
+			{
+				ReadWord (buffer, '=', ref idx, end,
+					  out name);
 				idx++;
-		}
+				ReadWord (buffer, ' ', ref idx, end, out val);
+			}
 
-		public static void ReadNameValue (byte[]buffer, ref int idx, int end,
-					   out string name, out string val)
-		{
-			ReadWord (buffer, '=', ref idx, end, out name);
-			idx++;
-			ReadWord (buffer, ' ', ref idx, end, out val);
-		}
+			public static void ReadWord (byte[]buffer, char delim,
+						     ref int idx, int end,
+						     out string word)
+			{
+				System.Text.Decoder decoder =
+					System.Text.Encoding.UTF8.
+					GetDecoder ();
+				for (int i = idx; i < end; i++)
+				  {
+					  if (buffer[i] == delim)
+					    {
+						    char[] chrs =
+							    new char[i - idx];
+						    decoder.GetChars (buffer,
+								      idx,
+								      i - idx,
+								      chrs,
+								      0);
+						    word = new string (chrs);
+						    idx = i;
+						    return;
+					    }
+				  }
 
-		public static void ReadWord (byte[]buffer, char delim, ref int idx,
-				      int end, out string word)
-		{
-			System.Text.Decoder decoder =
-				System.Text.Encoding.UTF8.GetDecoder ();
-			for (int i = idx; i < end; i++)
-			  {
-				  if (buffer[i] == delim)
-				    {
-					    char[] chrs = new char[i - idx];
-					    decoder.GetChars (buffer, idx,
-							      i - idx, chrs,
-							      0);
-					    word = new string (chrs);
-					    idx = i;
-					    return;
-				    }
-			  }
+				char[] chars = new char[end - idx];
+				decoder.GetChars (buffer, idx, end - idx,
+						  chars, 0);
+				word = new string (chars);
+				idx = end;
+			}
 
-			char[] chars = new char[end - idx];
-			decoder.GetChars (buffer, idx, end - idx, chars, 0);
-			word = new string (chars);
-			idx = end;
+			public static string GetNextToken (byte[]buffer,
+							   ref int start,
+							   int end)
+			{
+				return GetNextToken (buffer, ' ', ref start,
+						     end);
+			}
+
+			public static string GetNextToken (byte[]buffer,
+							   char delim,
+							   ref int start,
+							   int end)
+			{
+				ParserUtils.SkipWhitespace (buffer, ref start,
+							    end);
+				string token;
+				ParserUtils.ReadWord (buffer, delim,
+						      ref start, end,
+						      out token);
+				//Console.WriteLine("NEXTTOKEN: {0}", token);
+				return token;
+			}
+
+			public static int ParseMoveTime (string str,
+							 out bool
+							 inMilliseconds)
+			{
+				int idx = str.IndexOf ('.');
+				int millisecs = 0;
+				int factor = 1;
+
+				if (idx >= 0)
+				  {
+					  millisecs =
+						  Int32.Parse (str.
+							       Substring (idx
+									  +
+									  1));
+					  str = str.Substring (0, idx);
+					  inMilliseconds = true;
+					  factor = 1000;
+				  }
+				else
+					inMilliseconds = false;
+
+				string[]toks = str.Split (':');
+				int time = 0;
+				for (int i = 0; i < toks.Length; i++)
+				  {
+					  time *= 60;
+					  int val = Int32.Parse (toks[i]);
+					  val *= factor;
+					  time += val;
+				  }
+				time += millisecs;
+
+				return time;
+			}
 		}
-	}
 	}
 }
