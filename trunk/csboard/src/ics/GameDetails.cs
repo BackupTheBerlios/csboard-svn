@@ -39,19 +39,17 @@ namespace CsBoard
 		public class GameDetails
 		{
 			bool exam;
-			string white;
-			string black;
+			public string white;
+			public string black;
 			int whiteRating;
 			int blackRating;
 
-			public string gameType;
-
+			bool privateGame;
 			public bool PrivateGame
 			{
 				get
 				{
-					return (gameType.Length > 2)
-						&& gameType[0] == 'p';
+					return privateGame;
 				}
 			}
 
@@ -59,7 +57,7 @@ namespace CsBoard
 			{
 				get
 				{
-					switch (GameCategory)
+					switch (gameCategory)
 					  {
 					  case GameCategory.Blitz:
 						  return "Blitz";
@@ -87,29 +85,23 @@ namespace CsBoard
 							  CrazyHouse:return
 							  "CrazyHouse";
 					  }
-					return "Unknown category(" +
-						gameType + ")";
+					return String.Format("Unknown category ({0})", (char) gameCategory);
 				}
 			}
 
-			public GameCategory GameCategory
-			{
-				get
-				{
-					return (GameCategory) ((gameType.
-								Length >
-								1) ?
-							       gameType[0] :
-							       's');
+			GameCategory gameCategory;
+			public GameCategory GameCategory {
+				get {
+					return gameCategory;
 				}
 			}
 
+			bool rated;
 			public bool Rated
 			{
 				get
 				{
-					return gameType[gameType.Length -
-							1] == 'r';
+					return rated;
 				}
 			}
 
@@ -196,15 +188,22 @@ namespace CsBoard
 				token = ParserUtils.GetNextToken (buffer, '[', ref start, end);	// go to [
 				start++;
 
+/*
 				details.gameType =
 					ParserUtils.GetNextToken (buffer,
 								  ref start,
 								  end);
+*/
+				details.privateGame = buffer[start++] == 'p';
+				details.gameCategory = (GameCategory) buffer[start++];
+				details.rated = buffer[start++] == 'r';
+				
 				details.initial_time =
 					Int32.Parse (ParserUtils.
 						     GetNextToken (buffer,
 								   ref start,
 								   end));
+
 				token = ParserUtils.GetNextToken (buffer, ']',
 								  ref start,
 								  end);
@@ -225,9 +224,9 @@ namespace CsBoard
 								 inMilliseconds);
 					  details.whites_remaining_time_str =
 						  token;
-					  ParserUtils.GetNextToken (buffer,
-								    ref start,
-								    end);
+
+					  ParserUtils.GotoThisChar(buffer, '-', ref start, end);
+					  start++;
 					  token = ParserUtils.
 						  GetNextToken (buffer,
 								ref start,
