@@ -35,6 +35,7 @@ namespace CsBoard
 		{
 			NONE,
 			AUTH_REQUEST,
+			PASSWORD_SENT,
 			AUTH_REJECTED,
 			AUTHENTICATED
 		};
@@ -137,6 +138,7 @@ namespace CsBoard
 								args);
 
 		public delegate void GameInfoEventHandler(object o, GameInfo info);
+		public delegate void ConnectionErrorEventHandler(object o, string reason);
 
 		public enum LineType
 		{
@@ -190,9 +192,23 @@ namespace CsBoard
 
 			public string server = "www.freechess.org";
 			public string port = "5000";
-			public string user = "";
+			string user = "";
 			public string assigned_name;	// assigned for guest login
 			public string passwd = "";
+			bool guestLogin = false;
+
+			public string User {
+				set {
+					user = value;
+					if(user.Equals("guest"))
+						guestLogin = true;
+					else
+						guestLogin = false;
+				}
+				get {
+					return assigned_name == null ? user : assigned_name;
+				}
+			}
 
 			public event GameAdvertisementAddEventHandler
 				GameAdvertisementAddEvent;
@@ -208,6 +224,7 @@ namespace CsBoard
 			public event ResultNotificationEventHandler
 				ResultNotificationEvent;
 			public event GameInfoEventHandler GameInfoEvent;
+			public event ConnectionErrorEventHandler ConnectionErrorEvent;
 
 			SessionState state = SessionState.NONE;
 
@@ -263,8 +280,10 @@ namespace CsBoard
 			IAsyncResult pending;
 			private bool PostReadRequest ()
 			{
-				if (end == buffer.Length)
-					return false;	// buffer full
+				if (end == buffer.Length) {
+					FireConnectionErrorEvent("Internal error. Buffer full");
+					return false;	// buffer full. but this should not happen
+				}
 				try
 				{
 					pending =
@@ -277,16 +296,28 @@ namespace CsBoard
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine (e);
+					FireConnectionErrorEvent(e.ToString());
 					return false;
 				}
 
 				return true;
 			}
 
+			// This can get triggered from async result which may not be in the
+			// glib context. so add an idle handler
+			private void FireConnectionErrorEvent(string reason) {
+				GLib.Idle.Add(delegate () {
+					if(ConnectionErrorEvent != null)
+						ConnectionErrorEvent(this, reason);
+					
+					return false;
+				});
+			}
+
 			private void ReadAsyncCallback (IAsyncResult res)
 			{
 				int nbytes = stream.EndRead (res);
+
 				end += nbytes;
 				GLib.Idle.Add (ProcessBufferIdleHandler);
 				pending = null;
@@ -388,7 +419,6 @@ namespace CsBoard
 					  ClearGameAdvertisements ();
 					  break;
 				  case NotificationType.STYLE12:
-					  try {
 					  MoveDetails details =
 						  MoveDetails.
 						  FromBuffer (buffer, start,
@@ -398,12 +428,6 @@ namespace CsBoard
 								 new
 								 MoveMadeEventArgs
 								 (details));
-					  }
-					  catch(Exception e) {
-						  Console.WriteLine("{0}:\n{1}",
-								    System.Text.Encoding.ASCII.GetString(buffer, start, end - start),
-								    e);
-					  }
 					  break;
 				  case NotificationType.GAMEINFO:
 					  GameInfo info = GameInfo.FromBuffer(buffer, start, end);
@@ -455,7 +479,7 @@ namespace CsBoard
 				if (buffer[start] == '{')
 					return LineType.ResultNotification;
 
-				while (buffer[end - 1] == ' ' && end > start)
+				while (end > start && buffer[end - 1] == ' ')
 					end--;
 				if (end == start)
 					return LineType.Normal;
@@ -479,8 +503,7 @@ namespace CsBoard
 				return LineType.Normal;
 			}
 
-			private void ProcessLine (int start, int count)
-			{
+			private void ProcessLine(int start, int count) {
 				if (buffer[start + count - 1] == '\r')
 				  {
 					  count--;
@@ -492,6 +515,17 @@ namespace CsBoard
 				  }
 				if (count <= 0)
 					return;
+				try {
+					__ProcessLine(start, count);
+				}
+				catch(Exception e) {
+					Console.WriteLine("[LINE:] [{0}]", System.Text.Encoding.ASCII.GetString(buffer, start, count));
+					Console.WriteLine(e);
+				}
+			}
+
+			private void __ProcessLine (int start, int count)
+			{
 				char[] chrs = new char[count];
 				decoder.GetChars (buffer, start, count, chrs,
 						  0);
@@ -561,12 +595,16 @@ namespace CsBoard
 								       false);
 					    }
 				  }
-				else if (line.Equals ("password:"))
+				else if (state == SessionState.AUTH_REQUEST && (line.Equals ("password:") || (guestLogin && line.EndsWith(":"))))
 				  {
+					  if(guestLogin) {
+						  assigned_name = GetAssignedGuestName(buffer, start, start + count);
+					  }
 					  streamWriter.WriteLine (passwd);
 					  streamWriter.Flush ();
+					  state = SessionState.PASSWORD_SENT;
 				  }
-				else if (state == SessionState.AUTH_REQUEST
+				else if (state == SessionState.PASSWORD_SENT
 					 && line.Trim ().EndsWith ("%"))
 				  {
 					  state = SessionState.AUTHENTICATED;
@@ -574,6 +612,23 @@ namespace CsBoard
 					  if (AuthEvent != null)
 						  AuthEvent (this, true);
 				  }
+			}
+
+			private static string GetAssignedGuestName(byte[] buffer, int start, int end) {
+				int i = end - 1;
+				while(i > start && buffer[i] != '"')
+					i--;
+				if(i == start)
+					return null;
+
+				int end_offset = i;
+				i--;
+				while(i > start && buffer[i] != '"')
+					i--;
+				if(i == start)
+					return null;
+				i++;
+				return System.Text.Encoding.ASCII.GetString(buffer, i, end_offset - i);
 			}
 
 			private void HandleAuthSuccess ()

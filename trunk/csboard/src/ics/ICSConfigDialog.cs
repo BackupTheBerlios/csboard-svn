@@ -41,7 +41,7 @@ namespace CsBoard
 
 				serverNameEntry.Text = client.server;
 				portEntry.Text = client.port;
-				usernameEntry.Text = client.user;
+				usernameEntry.Text = client.User;
 			}
 
 			public ResponseType Run ()
@@ -53,7 +53,7 @@ namespace CsBoard
 				  client.server =
 					serverNameEntry.Text.Trim ();
 				  client.port = portEntry.Text.Trim ();
-				  client.user = usernameEntry.Text.Trim ();
+				  client.User = usernameEntry.Text.Trim ();
 				  client.passwd = passwordEntry.Text;	// Dont Trim!
 				  icsConfigDialog.Hide ();
 

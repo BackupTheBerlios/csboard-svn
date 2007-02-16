@@ -126,7 +126,7 @@ namespace CsBoard
 						  if (args[i].
 						      Equals ("--user"))
 						    {
-							    client.user =
+							    client.User =
 								    args[i +
 									 1];
 						    }
@@ -166,7 +166,7 @@ namespace CsBoard
 								      GetString
 								      ("ICS: {0}@{1}:{2}"),
 								      client.
-								      user,
+								      User,
 								      client.
 								      server,
 								      client.
@@ -183,8 +183,26 @@ namespace CsBoard
 								  ("Current Games")));
 				adWin.Show ();
 
+				client.AuthEvent += OnAuth;
+				client.ConnectionErrorEvent += OnConnectionError;
+
 				client.Connect ();
 				client.Start ();
+			}
+
+			private void OnAuth(object o, bool successful) {
+				if(successful) {
+					adWin.Title = String.Format (Catalog.GetString("ICS: {0}@{1}:{2}"),client.User,client.server,client.port);
+					return;
+				}
+
+				// TODO: show error/relogin
+			}
+
+			private void OnConnectionError(object o, string reason) {
+				client.Stop();
+				Console.WriteLine(reason);
+				// show error
 			}
 
 			static void Popup (string str)
