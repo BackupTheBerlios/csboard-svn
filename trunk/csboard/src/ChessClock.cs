@@ -164,25 +164,33 @@ namespace CsBoard
 
 		public void Update ()
 		{
+			StringBuilder buffer = new StringBuilder ();
+			buffer.Append ("<big><big><big>");
+
 			long secs =
 				(countdown ? remaining_msecs : elapsed_time) /
 				1000;
+
+			if(secs < 0) {
+				buffer.Append("-");
+				secs = -secs;
+			}
+
 			long mins = secs / 60;
 			long hrs = mins / 60;
 
 			secs %= 60;
 			mins %= 60;
 
-			StringBuilder buffer = new StringBuilder ();
-			buffer.Append ("<big><big><big>");
 			if (hrs > 0)
 			  {
 				  buffer.Append (String.
-						 Format ("{0:2}:", hrs));
+						 Format ("{0:D2}:", hrs));
 			  }
 			buffer.Append (String.
 				       Format ("{0:D2}:{1:D2}", mins, secs));
 			buffer.Append ("</big></big></big>");
+
 			base.Markup = buffer.ToString ();
 		}
 

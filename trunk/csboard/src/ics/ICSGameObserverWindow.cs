@@ -57,7 +57,6 @@ namespace CsBoard
 			public ObservingGamePage(ICSGameObserverWindow win, MoveDetails details) : base() {
 				this.win = win;
 				gameId = details.gameNumber;
-				gameId = details.gameNumber;
 
 				board = new CairoViewerBoard (details.pos);
 				gameWidget = new ChessGameWidget (board);
@@ -96,6 +95,8 @@ namespace CsBoard
 				PackStart(gameWidget);
 
 				closeButton.Clicked += OnCloseButtonClicked;
+
+				Update(details);
 				ShowAll();
 			}
 
