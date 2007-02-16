@@ -197,7 +197,9 @@ namespace CsBoard
 								buffer.
 								Length);
 				details.PrintTimeInfo ();
-				(new ICSGameObserverWindow (details)).Show ();
+				ICSGameObserverWindow win = new ICSGameObserverWindow (null);
+				win.Update(details);
+				win.Show ();
 			}
 
 			static void Test ()

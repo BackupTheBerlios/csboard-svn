@@ -388,6 +388,7 @@ namespace CsBoard
 					  ClearGameAdvertisements ();
 					  break;
 				  case NotificationType.STYLE12:
+					  try {
 					  MoveDetails details =
 						  MoveDetails.
 						  FromBuffer (buffer, start,
@@ -397,6 +398,12 @@ namespace CsBoard
 								 new
 								 MoveMadeEventArgs
 								 (details));
+					  }
+					  catch(Exception e) {
+						  Console.WriteLine("{0}:\n{1}",
+								    System.Text.Encoding.ASCII.GetString(buffer, start, end - start),
+								    e);
+					  }
 					  break;
 				  case NotificationType.GAMEINFO:
 					  GameInfo info = GameInfo.FromBuffer(buffer, start, end);
