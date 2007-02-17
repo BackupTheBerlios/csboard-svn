@@ -60,9 +60,10 @@ namespace CsBoard
 
 		ChessGameWidget chessGameWidget;
 
+		Chess.Game.ChessGamePlayer player;
+
 		public ChessWindow (string filename)
 		{
-
 			string engine = App.session.Engine;
 
 			/* try { */
@@ -220,6 +221,7 @@ namespace CsBoard
 			whitesTurn = true;
 			nmoves = 0;
 
+			boardWidget.Reset();
 			chessGameWidget.whiteClock.Reset (5 * 60, 0);
 			chessGameWidget.blackClock.Reset (5 * 60, 0);
 			UpdateGameDetails ();
@@ -584,8 +586,9 @@ namespace CsBoard
 				  md.Dispose ();
 
 			  }
-			else
+			else {
 				UpdateAfterMove ();
+			}
 		}
 
 		public void on_board_start_move (string pos)

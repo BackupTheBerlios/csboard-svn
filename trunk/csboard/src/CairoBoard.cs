@@ -294,42 +294,14 @@ namespace CsBoard
 
 		protected virtual void DrawLastMove (Cairo.Context cairo)
 		{
-
-			if (lastMove == null)
-				return;
-
-			int i = -1, j = -1;
-			string letters = "abcdefgh";
-			string numbers = "87654321";
-
-			int k = lastMove.Length - 2;
-			while (k >= 0)
-			  {
-				  i = letters.IndexOf (lastMove[k]);
-				  j = numbers.IndexOf (lastMove[k + 1]);
-				  if (i >= 0 && j >= 0)
-					  break;
-				  k--;
-			  }
-
-			if (i == -1 || j == -1)
-				return;
-
-			if (side)
-			  {
-				  i = 7 - i;
-				  j = 7 - j;
-			  }
-
-			int x = start_x + i * (space + size);
-			int y = start_y + j * (space + size);
-
-			cairo.Color = new Cairo.Color (0, 0, 0);
-			cairo.SetDash (new double[]
-				       {
-				       2, 2}, 0);
-			cairo.Rectangle (x + 2, y + 2, size - 4, size - 4);
-			cairo.Stroke ();
+			int x1, y1, x2, y2;
+			GetCoordinates (SrcRank, SrcFile, out x1,
+					out y1);
+			GetCoordinates (DestRank, DestFile, out x2,
+					out y2);
+			// gc.RgbFgColor = new Gdk.Color (128, 128, 240);
+			if(info.stage == MoveStage.Clear || info.stage == MoveStage.Done)
+				DrawArrow (cairo, x1, y1, x2, y2, size, true);
 		}
 
 		private void DrawDrag (Cairo.Context cairo)
@@ -630,12 +602,45 @@ namespace CsBoard
 					  int dest_rank, int dest_file,
 					  char promotion_type)
 		{
-			info.start.x = src_file;	// file from left
-			info.start.y = 7 - src_rank;
-			info.end.x = dest_file;
-			info.end.y = 7 - dest_rank;
+			SrcFile = src_file;	// file from left
+			SrcRank = src_rank;
+			DestFile = dest_file;
+			DestRank = dest_rank;
 			info.stage = MoveStage.Done;
 			Move (true);
+		}
+
+		int SrcRank {
+			get {
+				return 7 - info.start.y;
+			}
+			set {
+				info.start.y = 7 - value;
+			}
+		}
+		int SrcFile {
+			get {
+				return info.start.x;
+			}
+			set {
+				info.start.x = value;
+			}
+		}
+		int DestRank {
+			get {
+				return 7 - info.end.y;
+			}
+			set {
+				info.end.y = 7 - value;
+			}
+		}
+		int DestFile {
+			get {
+				return info.end.x;
+			}
+			set {
+				info.end.x = value;
+			}
 		}
 
 		public void SetPosition (ArrayList pos)
@@ -694,6 +699,170 @@ namespace CsBoard
 			QueueDraw ();
 
 			return !task_finished;
+		}
+
+		public void SetMoveInfo (int sr, int sf, int dr,
+					 int df)
+		{
+			SrcRank = sr;
+			SrcFile = sf;
+			DestRank = dr;
+			DestFile = df;
+		}
+
+		public void GetCoordinates (int rank, int file,
+					    out int x, out int y)
+		{
+			if (side)
+			  {
+				  rank = 7 - rank;
+				  file = 7 - file;
+			  }
+			//White
+			x = start_x + file * (space + size) +
+				size / 2;
+			y = start_y + (7 - rank) * (space + size) +
+				size / 2;
+		}
+
+		public void Reset ()
+		{
+				info.start.x = info.start.y = info.end.x = info.end.y =
+					0;
+		}
+
+		/* This will draw an arrow from the source point to the destination.
+		 * The caller has to resolve the centers of the source and destination squares
+		 * and pass them to this.
+		 * Instead of drawing the arrow to the center of the destination (which can
+		 * overlap with the piece at the destination), the arrow will be drawn in
+		 * such a way that only a limited portion of it will be inside the square.
+		 * The horizontal lines of the arrow needs to be perpendicular to the direction
+		 * of the arrow. To compute the points which are equidistant and at a distance 'alpha'
+		 * from a given point (x,y), the following formula is used:
+		 * (x + sin * alpha, y - cos * alpha) and (x - sin * alpha, y + cos * alpha)
+		 * The sin and cos are the values for the slope of the arrow.
+		 * GetPerpendicularCoords is used to get these values.
+		 * Another formula is used to find a point on the arrow at a distance 'dist' from a
+		 * point (x, y) in the reverse direction. This is used in drawing the edge of the arrow.
+		 * The formula used is:
+		 * (x - dist * cos, y - dist * sin)
+		 */
+		public static void DrawArrow (Cairo.Context cairo,
+					      int x1,
+					      int y1, int x2, int y2,
+					      int size, bool filled)
+		{
+			double len =
+				Math.Sqrt ((y2 - y1) * (y2 - y1) +
+					   (x2 - x1) * (x2 - x1));
+			double sin = (y2 - y1) / len;
+			double cos = (x2 - x1) / len;
+			
+			int alpha = size / 4;
+			
+			double line_portion = 0.75 * size / 2;
+			// the tip now touches the end of the square.
+			// computing it like this takes care of the direction
+			// from which the arrow is coming!
+			Gdk.Point tip = new Gdk.Point ((int) Math.
+						       Round (x2 -
+							      line_portion
+							      * cos),
+						       (int) Math.
+						       Round (y2 -
+							      line_portion
+							      * sin));
+			x2 = tip.X;
+			y2 = tip.Y;
+			
+			Gdk.Point[]a = new Gdk.Point[2];
+			GetPerpendicularCoords (x1, y1, sin, cos,
+						alpha, out a[0],
+						out a[1]);
+			
+			// This is the point where the arrow will start.
+			// We need to draw a rectangle from the above point to this.
+			// And the a triangle to the final dest.
+			double factor = 1.5;
+			Gdk.Point p =
+				new Gdk.Point ((int) Math.
+					       Round (x2 -
+						      factor * alpha *
+						      cos),
+					       (int) Math.Round (y2 -
+								 factor
+								 *
+								 alpha
+								 *
+								 sin));
+			
+			
+			Gdk.Point[]b = new Gdk.Point[2];
+			GetPerpendicularCoords (p.X, p.Y, sin, cos,
+						alpha, out b[0],
+						out b[1]);
+			Gdk.Point c, d;
+			GetPerpendicularCoords (p.X, p.Y, sin, cos,
+						3 * alpha, out c,
+						out d);
+			
+			Gdk.Point[]points = new Gdk.Point[]
+			{
+				a[0], a[1],
+				b[1], d, tip, c, b[0], a[0]};
+			Cairo.Color color =
+				new Cairo.Color (0.5, 0.5, 0.8, 0.5);
+			cairo.Color = color;
+			double orig = cairo.LineWidth;
+			double fraction = 5;
+			if (alpha > fraction)
+				cairo.LineWidth = alpha / fraction;
+			
+			for (int i = 0; i < points.Length; i++)
+			  {
+				  if (i == 0)
+					  cairo.MoveTo (points[i].X,
+							points[i].Y);
+				  if (i == points.Length - 1)
+					  cairo.LineTo (points[0].X,
+							points[0].Y);
+				  else
+					  cairo.LineTo (points[i + 1].
+							X,
+							points[i +
+							       1].Y);
+			  }
+			cairo.FillPreserve ();
+			color.A = 0.8;
+			cairo.Color = color;
+			cairo.Stroke ();
+			cairo.LineWidth = orig;
+		}
+		
+		private static void GetPerpendicularCoords (int x,
+							    int y,
+							    double
+							    sin,
+							    double
+							    cos,
+							    int width,
+							    out Gdk.
+							    Point p1,
+							    out Gdk.
+							    Point p2)
+		{
+			int alpha = width / 2;
+			p1 = new Gdk.Point ((int) Math.
+					    Round (x + (alpha * sin)),
+					    (int) Math.Round (y -
+							      (alpha *
+							       cos)));
+			p2 = new Gdk.Point ((int) Math.
+					    Round (x - (alpha * sin)),
+					    (int) Math.Round (y +
+							      (alpha *
+							       cos)));
 		}
 	}
 }

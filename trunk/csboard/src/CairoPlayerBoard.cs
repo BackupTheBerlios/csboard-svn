@@ -22,12 +22,14 @@ namespace CsBoard {
         using Gtk;
         using Gdk;
 
+/*
 	public delegate void StartMoveHintHandler (string position);
+*/
 
-        public class PlayerBoard : Board {
+        public class CairoPlayerBoard : CairoBoard {
                 public event StartMoveHintHandler StartMoveHintEvent;
 
-                public PlayerBoard (ArrayList pos) : base (pos) {
+                public CairoPlayerBoard (ArrayList pos) : base (pos) {
                         Events = EventMask.ButtonPressMask 
                                 | EventMask.ButtonReleaseMask 
                                 | EventMask.PointerMotionHintMask 
@@ -274,8 +276,5 @@ namespace CsBoard {
 
                         return true;
                 }
-
-		public void Reset() {
-		}
         }
 }

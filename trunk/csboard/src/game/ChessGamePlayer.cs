@@ -1077,6 +1077,17 @@ namespace Chess
 				return list;
 			}
 
+			public static bool IsDefaultPosition(ArrayList list) {
+				ArrayList deflist = GetDefaultPosition();
+				if(deflist.Count != list.Count)
+					return false;
+				int i;
+				for(i = 0; i < deflist.Count; i++)
+					if(!deflist[i].Equals(list[i]))
+						return false;
+				return true;
+			}
+
 			public static ChessGamePlayer CreateFromFEN (string
 								     fen)
 			{

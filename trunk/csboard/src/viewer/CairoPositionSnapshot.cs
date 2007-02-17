@@ -421,7 +421,7 @@ namespace CsBoard
 				GetCoords (rank2, file2, out x2, out y2);
 
 				cairo.Color = arrow_color;
-				CairoViewerBoard.DrawArrow (cairo,
+				CairoBoard.DrawArrow (cairo,
 							    x1 + (size / 2),
 							    y1 + (size / 2),
 							    x2 + (size / 2),

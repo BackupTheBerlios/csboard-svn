@@ -71,6 +71,7 @@ SOURCE = \
 	$(top_srcdir)/src/Board.cs \
 	$(top_srcdir)/src/FigureManager.cs \
 	$(top_srcdir)/src/CairoBoard.cs \
+	$(top_srcdir)/src/CairoPlayerBoard.cs \
 	$(top_srcdir)/src/PlayerBoard.cs \
 	$(top_srcdir)/src/Figure.cs \
 	$(top_srcdir)/src/GnuChess.cs \
