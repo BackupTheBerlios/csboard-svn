@@ -146,6 +146,7 @@ namespace CsBoard
 			Talk,	// server talk
 			Info,	// <starts with>
 			Prompt,	// ends with %
+			Block,
 			ResultNotification
 		}
 
@@ -187,9 +188,203 @@ namespace CsBoard
 			GAMEINFO
 		}
 
+		public enum BlockCode {
+			BlockStart = 21,
+			BlockSeparator = 22,
+			BlockEnd = 23,
+			BlockPoseStart = 24,
+			BlockPoseEnd = 25
+		}
+
+		public enum CommandCode {
+			BLK_NULL = 0,
+			BLK_GAME_MOVE = 1,
+			BLK_ABORT = 10,
+			BLK_ACCEPT = 11,
+			BLK_ADDLIST = 12,
+			BLK_ADJOURN = 13,
+			BLK_ALLOBSERVERS = 14,
+			BLK_ASSESS = 15,
+			BLK_BACKWARD = 16,
+			BLK_BELL = 17,
+			BLK_BEST = 18,
+			BLK_BNAME = 19,
+			BLK_BOARDS = 20,
+			BLK_BSETUP = 21,
+			BLK_BUGWHO = 22,
+			BLK_CBEST = 23,
+			BLK_CLEARMESSAGES = 24,
+			BLK_CLRSQUARE = 25,
+			BLK_CONVERT_BCF = 26,
+			BLK_CONVERT_ELO = 27,
+			BLK_CONVERT_USCF = 28,
+			BLK_COPYGAME = 29,
+			BLK_CRANK = 30,
+			BLK_CSHOUT = 31,
+			BLK_DATE = 32,
+			BLK_DECLINE = 33,
+			BLK_DRAW = 34,
+			BLK_ECO = 35,
+			BLK_EXAMINE = 36,
+			BLK_FINGER = 37,
+			BLK_FLAG = 38,
+			BLK_FLIP = 39,
+			BLK_FMESSAGE = 40,
+			BLK_FOLLOW = 41,
+			BLK_FORWARD = 42,
+			BLK_GAMES = 43,
+			BLK_GETGI = 44,
+			BLK_GETPI = 45,
+			BLK_GINFO = 46,
+			BLK_GOBOARD = 47,
+			BLK_HANDLES = 48,
+			BLK_HBEST = 49,
+			BLK_HELP = 50,
+			BLK_HISTORY = 51,
+			BLK_HRANK = 52,
+			BLK_INCHANNEL = 53,
+			BLK_INDEX = 54,
+			BLK_INFO = 55,
+			BLK_ISET = 56,
+			BLK_IT = 57,
+			BLK_IVARIABLES = 58,
+			BLK_JKILL = 59,
+			BLK_JOURNAL = 60,
+			BLK_JSAVE = 61,
+			BLK_KIBITZ = 62,
+			BLK_LIMITS = 63,
+			BLK_LINE = 64,
+			BLK_LLOGONS = 65,
+			BLK_LOGONS = 66,
+			BLK_MAILHELP = 67,
+			BLK_MAILMESS = 68,
+			BLK_MAILMOVES = 69,
+			BLK_MAILOLDMOVES = 70,
+			BLK_MAILSOURCE = 71,
+			BLK_MAILSTORED = 72,
+			BLK_MATCH = 73,
+			BLK_MESSAGES = 74,
+			BLK_MEXAMINE = 75,
+			BLK_MORETIME = 76,
+			BLK_MOVES = 77,
+			BLK_NEWS = 78,
+			BLK_NEXT = 79,
+			BLK_OBSERVE = 80,
+			BLK_OLDMOVES = 81,
+			BLK_OLDSTORED = 82,
+			BLK_OPEN = 83,
+			BLK_PARTNER = 84,
+			BLK_PASSWORD = 85,
+			BLK_PAUSE = 86,
+			BLK_PENDING = 87,
+			BLK_PFOLLOW = 88,
+			BLK_POBSERVE = 89,
+			BLK_PREFRESH = 90,
+			BLK_PRIMARY = 91,
+			BLK_PROMOTE = 92,
+			BLK_PSTAT = 93,
+			BLK_PTELL = 94,
+			BLK_PTIME = 95,
+			BLK_QTELL = 96,
+			BLK_QUIT = 97,
+			BLK_RANK = 98,
+			BLK_RCOPYGAME = 99,
+			BLK_RFOLLOW = 100,
+			BLK_REFRESH = 101,
+			BLK_REMATCH = 102,
+			BLK_RESIGN = 103,
+			BLK_RESUME = 104,
+			BLK_REVERT = 105,
+			BLK_ROBSERVE = 106,
+			BLK_SAY = 107,
+			BLK_SERVERS = 108,
+			BLK_SET = 109,
+			BLK_SHOUT = 110,
+			BLK_SHOWLIST = 111,
+			BLK_SIMABORT = 112,
+			BLK_SIMALLABORT = 113,
+			BLK_SIMADJOURN = 114,
+			BLK_SIMALLADJOURN = 115,
+			BLK_SIMGAMES = 116,
+			BLK_SIMMATCH = 117,
+			BLK_SIMNEXT = 118,
+			BLK_SIMOBSERVE = 119,
+			BLK_SIMOPEN = 120,
+			BLK_SIMPASS = 121,
+			BLK_SIMPREV = 122,
+			BLK_SMOVES = 123,
+			BLK_SMPOSITION = 124,
+			BLK_SPOSITION = 125,
+			BLK_STATISTICS = 126,
+			BLK_STORED = 127,
+			BLK_STYLE = 128,
+			BLK_SUBLIST = 129,
+			BLK_SWITCH = 130,
+			BLK_TAKEBACK = 131,
+			BLK_TELL = 132,
+			BLK_TIME = 133,
+			BLK_TOMOVE = 134,
+			BLK_TOURNSET = 135,
+			BLK_UNALIAS = 136,
+			BLK_UNEXAMINE = 137,
+			BLK_UNOBSERVE = 138,
+			BLK_UNPAUSE = 139,
+			BLK_UPTIME = 140,
+			BLK_USCF = 141,
+			BLK_USTAT = 142,
+			BLK_VARIABLES = 143,
+			BLK_WHENSHUT = 144,
+			BLK_WHISPER = 145,
+			BLK_WHO = 146,
+			BLK_WITHDRAW = 147,
+			BLK_WNAME = 148,
+			BLK_XKIBITZ = 149,
+			BLK_XTELL = 150,
+			BLK_XWHISPER = 151,
+			BLK_ZNOTIFY = 152,
+			BLK_REPLY = 153,
+			BLK_SUMMON = 154,
+			BLK_SEEK = 155,
+			BLK_UNSEEK = 156,
+			BLK_SOUGHT = 157,
+			BLK_PLAY = 158,
+			BLK_ALIAS = 159,
+			BLK_NEWBIES = 160,
+			BLK_SR = 161,
+			BLK_CA = 162,
+			BLK_TM = 163,
+			BLK_GETGAME = 164,
+			BLK_CCNEWSE = 165,
+			BLK_CCNEWSF = 166,
+			BLK_CCNEWSI = 167,
+			BLK_CCNEWSP = 168,
+			BLK_CCNEWST = 169,
+			BLK_CSNEWSE = 170,
+			BLK_CSNEWSF = 171,
+			BLK_CSNEWSI = 172,
+			BLK_CSNEWSP = 173,
+			BLK_CSNEWST = 174,
+			BLK_CTNEWSE = 175,
+			BLK_CTNEWSF = 176,
+			BLK_CTNEWSI = 177,
+			BLK_CTNEWSP = 178,
+			BLK_CTNEWST = 179,
+			BLK_CNEWS = 180,
+			BLK_SNEWS = 181,
+			BLK_TNEWS = 182,
+			BLK_RMATCH = 183,
+			BLK_RSTAT = 184,
+			BLK_CRSTAT = 185,
+			BLK_HRSTAT = 186,
+			BLK_GSTAT = 187
+		}
+
+		public delegate void BlockCodeEventHandler(object o, BlockCode code);
+		public delegate void CommandIdentifierEventHandler(object o, string commandIdentifier);
+		public delegate void CommandCodeEventHandler(object o, CommandCode commandCode);
+
 		public class ICSClient
 		{
-
 			public string server = "www.freechess.org";
 			public string port = "5000";
 			string user = "";
@@ -226,6 +421,10 @@ namespace CsBoard
 			public event GameInfoEventHandler GameInfoEvent;
 			public event ConnectionErrorEventHandler ConnectionErrorEvent;
 
+			public event BlockCodeEventHandler BlockCodeEvent;
+			public event CommandIdentifierEventHandler CommandIdentifierEvent;
+			public event CommandCodeEventHandler CommandCodeEvent;
+
 			SessionState state = SessionState.NONE;
 
 			// This is a separate thread which runs continually while connected 
@@ -242,20 +441,30 @@ namespace CsBoard
 
 
 			byte[]buffer;
-			int start, end;
+			int m_start, m_end;
 			System.Text.Decoder decoder;
+			System.Text.Encoding encoding;
 
 			Hashtable notificationMap;
+			int blockCount;
+			CommandSender commandSender;
+			public CommandSender CommandSender {
+				get {
+					return commandSender;
+				}
+			}
 
 			public ICSClient ()
 			{
+				commandSender = new CommandSender(this);
 				map = new Hashtable ();
 				ads = new ArrayList ();
 				buffer = new byte[4096];
-				start = end = 0;
+				m_start = m_end = 0;
 				decoder =
 					System.Text.Encoding.UTF8.
 					GetDecoder ();
+				encoding = System.Text.Encoding.ASCII;
 
 				notificationMap = new Hashtable ();
 				notificationMap["sr"] = NotificationType.SR;
@@ -280,17 +489,17 @@ namespace CsBoard
 			IAsyncResult pending;
 			private bool PostReadRequest ()
 			{
-				if (end == buffer.Length) {
+				if (m_end == buffer.Length) {
 					FireConnectionErrorEvent("Internal error. Buffer full");
 					return false;	// buffer full. but this should not happen
 				}
 				try
 				{
 					pending =
-						stream.BeginRead (buffer, end,
+						stream.BeginRead (buffer, m_end,
 								  buffer.
 								  Length -
-								  end,
+								  m_end,
 								  ReadAsyncCallback,
 								  null);
 				}
@@ -318,7 +527,7 @@ namespace CsBoard
 			{
 				int nbytes = stream.EndRead (res);
 
-				end += nbytes;
+				m_end += nbytes;
 				GLib.Idle.Add (ProcessBufferIdleHandler);
 				pending = null;
 			}
@@ -332,36 +541,36 @@ namespace CsBoard
 
 			private void ProcessBuffer (bool expecting_auth)
 			{
-				for (int i = start; i < end; i++)
+				for (int i = m_start; i < m_end; i++)
 				  {
 					  if (buffer[i] == '\n')
 					    {
-						    if (i > start)
+						    if (i > m_start)
 						      {
 							      ProcessLine
-								      (start,
+								      (m_start,
 								       i -
-								       start);
+								       m_start);
 						      }
-						    start = i + 1;
+						    m_start = i + 1;
 					    }
 					  else if (expecting_auth
 						   && buffer[i] == ':')
 					    {
-						    ProcessLine (start, i - start + 1);	// including the delim
-						    start = i + 1;
+						    ProcessLine (m_start, i - m_start + 1);	// including the delim
+						    m_start = i + 1;
 					    }
 				  }
 
-				if (start > 0)
+				if (m_start > 0)
 				  {
-					  for (int i = start, j = 0; i < end;
+					  for (int i = m_start, j = 0; i < m_end;
 					       i++, j++)
 					    {
 						    buffer[j] = buffer[i];
 					    }
-					  end -= start;
-					  start = 0;
+					  m_end -= m_start;
+					  m_start = 0;
 				  }
 
 				PostReadRequest ();
@@ -375,10 +584,7 @@ namespace CsBoard
 				while (buffer[i] != '>' && i < end)
 					i++;
 				char[] chrs = new char[i - start];
-				decoder.GetChars (buffer, start, i - start,
-						  chrs, 0);
-				string str = new string (chrs);
-
+				string str = encoding.GetString(buffer, start, i - start);
 				start = i;
 
 				if (notificationMap.ContainsKey (str))
@@ -476,6 +682,9 @@ namespace CsBoard
 			private LineType GetLineType (byte[]buffer, int start,
 						      int end)
 			{
+				if(IsBlockChar(buffer[start])) {
+					return LineType.Block;
+				}
 				if (buffer[start] == '{')
 					return LineType.ResultNotification;
 
@@ -483,9 +692,12 @@ namespace CsBoard
 					end--;
 				if (end == start)
 					return LineType.Normal;
-
-				if (buffer[end - 1] == '%')
-					return LineType.Prompt;
+				for(int i = start; i < end; i++) {
+					if (buffer[i] == '%')
+						return LineType.Prompt;
+					if(Char.IsWhiteSpace((char) buffer[i]))
+						break;
+				}
 
 				if (buffer[end - 1] == ':')
 					return LineType.Talk;
@@ -519,19 +731,34 @@ namespace CsBoard
 					__ProcessLine(start, count);
 				}
 				catch(Exception e) {
-					Console.WriteLine("[LINE:] [{0}]", System.Text.Encoding.ASCII.GetString(buffer, start, count));
+					Console.WriteLine("Exception@[LINE:] [{0}]", System.Text.Encoding.ASCII.GetString(buffer, start, count));
 					Console.WriteLine(e);
 				}
 			}
 
+			private static bool GotoBlockStart(byte[] buffer, ref int start, ref int count) {
+				int idx = start;
+				ParserUtils.GotoThisChar(buffer, (char) BlockCode.BlockStart, ref idx, start + count);
+				if(idx == start + count)
+					return false;
+				count -= idx - start;
+				start = idx;
+				return true;
+			}
+
 			private void __ProcessLine (int start, int count)
 			{
-				char[] chrs = new char[count];
-				decoder.GetChars (buffer, start, count, chrs,
-						  0);
-
 				LineType type = GetLineType (buffer, start,
 							     start + count);
+
+				if((type == LineType.Prompt && GotoBlockStart(buffer, ref start, ref count)) ||
+				   (type == LineType.Block && buffer[start] == (byte) BlockCode.BlockStart)) {
+					blockCount++;
+				}
+
+				if(blockCount > 0) {
+					HandleBlock(buffer, start, start + count);
+				}
 
 				if (type == LineType.ResultNotification)
 				  {
@@ -560,7 +787,7 @@ namespace CsBoard
 								    type));
 				  }
 
-				string line = new string (chrs);
+				string line = encoding.GetString(buffer, start, count);
 
 				if (LineReceivedEvent != null)
 					LineReceivedEvent (this,
@@ -614,6 +841,43 @@ namespace CsBoard
 				  }
 			}
 
+			private void HandleBlock(byte[] buffer, int start, int end) {
+				if(buffer[start] == (byte) BlockCode.BlockStart) {
+					if(BlockCodeEvent != null)
+						BlockCodeEvent(this, BlockCode.BlockStart);
+					start++;
+					if(blockCount == 1) {
+						char commandIdentifier = (char) buffer[start++];
+						if(CommandIdentifierEvent != null)
+							CommandIdentifierEvent(this, commandIdentifier.ToString());
+						int i = ++start;
+						while(buffer[i] != (byte) BlockCode.BlockSeparator)
+							i++;
+						string codestr = encoding.GetString(buffer, start, i - start);
+						CommandCode commandCode = (CommandCode) Int32.Parse(codestr);
+						if(CommandCodeEvent != null)
+							CommandCodeEvent(this, commandCode);
+						start = i + 1;
+					}
+				}
+
+				for(int i = start; i < end; i++) {
+					if(!IsBlockChar(buffer[i]))
+					   continue;
+					if(buffer[i] == (byte) BlockCode.BlockEnd)
+						blockCount--;
+					if(BlockCodeEvent != null)
+						BlockCodeEvent(this, (BlockCode) buffer[i]);
+				}
+			}
+
+			private bool IsBlockChar(byte val) {
+				BlockCode code = (BlockCode) val;
+				return code == BlockCode.BlockStart || code == BlockCode.BlockEnd ||
+					code == BlockCode.BlockSeparator || code == BlockCode.BlockPoseStart ||
+					code == BlockCode.BlockPoseEnd;
+			}
+
 			private static string GetAssignedGuestName(byte[] buffer, int start, int end) {
 				int i = end - 1;
 				while(i > start && buffer[i] != '"')
@@ -647,6 +911,7 @@ namespace CsBoard
 							Format
 							("set interface {0}",
 							 logo));
+				streamWriter.WriteLine ("iset block 1");
 				streamWriter.Flush ();
 			}
 

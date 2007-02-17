@@ -60,6 +60,7 @@ ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/GameDetails.cs \
 	$(top_srcdir)/src/ics/GameInfo.cs \
 	$(top_srcdir)/src/ics/ObservableGamesWidget.cs \
+	$(top_srcdir)/src/ics/CommandSender.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs
 
 SOURCE = \

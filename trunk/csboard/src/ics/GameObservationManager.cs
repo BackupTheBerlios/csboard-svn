@@ -31,8 +31,7 @@ namespace CsBoard
 		{
 			ICSClient client;
 			Hashtable gameInfos;
-			bool expecting_results;
-			bool first_result;
+			int commandId;
 
 			ICSGameObserverWindow win;
 
@@ -41,75 +40,58 @@ namespace CsBoard
 
 			public void ObserveGame (int gameid)
 			{
-				client.WriteLine ("observe " + gameid);
+				client.CommandSender.SendCommand ("observe " + gameid);
 			}
 
 			public GameObservationManager (ICSClient client)
 			{
-				expecting_results = false;
 				gameInfos = new Hashtable();
 				this.client = client;
 				client.MoveMadeEvent += OnMoveMade;
 				client.ResultNotificationEvent +=
 					OnResultNotification;
 				client.GameInfoEvent += OnGameInfo;
+				commandId = -1;
 			}
 
 			public void GetGames ()
 			{
-				if (expecting_results)
+				if(commandId != -1)
 					return;
-				client.WriteLine ("games");
-				client.LineBufferReceivedEvent +=
-					OnLineBufferReceived;
-				expecting_results = true;
-				first_result = false;
+				client.CommandSender.CommandResponseLineEvent += OnCommandResponseLineEvent;
+				client.CommandSender.CommandCompletedEvent += OnCommandCompletedEvent;
+				commandId = client.CommandSender.SendCommand ("games");
 			}
 
-			private void OnLineBufferReceived (object o,
-							   LineBufferReceivedEventArgs
-							   args)
-			{
-				if (!expecting_results)
+			private void OnCommandCompletedEvent(object o, int commandId) {
+				if(this.commandId < 0)
 					return;
+				if(this.commandId == commandId) {
+					client.CommandSender.CommandResponseLineEvent -= OnCommandResponseLineEvent;
+					client.CommandSender.CommandCompletedEvent -= OnCommandCompletedEvent;
+					this.commandId = -1;
+				}
+			}
+
+			private void OnCommandResponseLineEvent(object o, CommandResponseLineEventArgs args) {
 				try
 				{
 					ProcessGameDetails (args);
-					first_result = true;
 				}
 				catch (Exception e)
 				{
-					if (first_result)
-						RequestDone ();
+					//Console.WriteLine(e);
 				}
-			}
-
-			private void RequestDone ()
-			{
-				client.LineBufferReceivedEvent -=
-					OnLineBufferReceived;
-				expecting_results = false;
-				first_result = false;
 			}
 
 			private void
 				ProcessGameDetails
-				(LineBufferReceivedEventArgs args)
+				(CommandResponseLineEventArgs args)
 			{
-				if (first_result
-				    && args.LineType == LineType.Prompt)
-				  {
-					  RequestDone ();
-					  return;
-				  }
-
-				if (args.LineType != LineType.Normal)
-					return;
-
 				GameDetails details =
-					GameDetails.FromBuffer (args.Buffer,
-								args.Start,
-								args.End);
+					GameDetails.FromBuffer (args.buffer,
+								args.start,
+								args.end);
 				if (ObservableGameEvent != null)
 				  {
 					  ObservableGameEvent (this, details);
@@ -151,7 +133,7 @@ namespace CsBoard
 
 			private void OnDelete (object o, EventArgs args)
 			{
-				client.WriteLine("unobserve"); // unobserve all!
+				client.CommandSender.SendCommand("unobserve"); // unobserve all!
 				win = null;
 			}
 

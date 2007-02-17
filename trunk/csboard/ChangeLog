@@ -1,5 +1,22 @@
 2007-02-16 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
+	added file
+
+	* src/ics/CommandSender.cs
+
+	modified files
+
+	* src/ics/GameObservationManager.cs
+	* src/ics/ICSClient.cs
+	* src/ics/ICSGameObserverWindow.cs
+	* src/ics/ICSConfigDialog.cs
+	* Makefile.am
+
+	adds block command feature for receiving command responses
+	gives more information while parsing command responses
+	
+2007-02-16 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
 	modified files
 
 	* src/ics/GameObservationManager.cs

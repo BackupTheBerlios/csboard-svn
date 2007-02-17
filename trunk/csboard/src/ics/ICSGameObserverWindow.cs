@@ -38,8 +38,7 @@ namespace CsBoard
 			{
 				get
 				{
-					return gameId;
-				}
+					return gameId;				}
 			}
 
 			public Widget Widget {
@@ -261,7 +260,7 @@ namespace CsBoard
 				gamesStore.Remove(ref iter);
 
 				if(page.NeedsUnobserve)
-					client.WriteLine("unobserve " + page.GameId);
+					client.CommandSender.SendCommand("unobserve " + page.GameId);
 				gamesBook.RemovePage(num);
 				currentGames.Remove(page.GameId);
 				AdjustCursorForCurrentPage();

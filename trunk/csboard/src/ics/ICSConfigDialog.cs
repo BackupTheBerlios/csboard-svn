@@ -28,6 +28,7 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.Dialog icsConfigDialog;
 			[Glade.Widget] private Gtk.Entry serverNameEntry,
 				portEntry, usernameEntry, passwordEntry;
+			[Glade.Widget] private Gtk.CheckButton guestLoginCheckButton;
 
 			public ICSConfigDialog (ICSClient client)
 			{
@@ -39,9 +40,26 @@ namespace CsBoard
 						      null);
 				xml.Autoconnect (this);
 
+				guestLoginCheckButton.Active = true;
+				SetGuestLogin(guestLoginCheckButton.Active);
+				guestLoginCheckButton.Toggled += delegate (object o, EventArgs args) {
+					SetGuestLogin(guestLoginCheckButton.Active);
+				};
 				serverNameEntry.Text = client.server;
 				portEntry.Text = client.port;
 				usernameEntry.Text = client.User;
+			}
+
+			private void SetGuestLogin(bool status) {
+				if(status) {
+					client.User = "guest";
+					usernameEntry.Sensitive = false;
+					passwordEntry.Sensitive = false;
+				}
+				else {
+					usernameEntry.Sensitive = true;
+					passwordEntry.Sensitive = true;
+				}
 			}
 
 			public ResponseType Run ()
