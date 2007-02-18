@@ -73,7 +73,7 @@ namespace CsBoard
 				if (cmd.Length == 0)
 					return;
 
-				  client.WriteLine (cmd);
+				  client.CommandSender.SendCommand (cmd);
 				  AddLineToBuffer (cmd);
 			}
 

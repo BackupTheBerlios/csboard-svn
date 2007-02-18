@@ -566,7 +566,6 @@ namespace CsBoard
 
 		public void on_board_move (string move)
 		{
-
 			if (!control.MakeMove (move))
 			  {
 

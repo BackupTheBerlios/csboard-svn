@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace CsBoard {
 	namespace ICS {
@@ -16,10 +17,25 @@ namespace CsBoard {
 		}
 	}
 
-	public delegate void CommandResponseLineEventHandler(object o, CommandResponseLineEventArgs args);
-	public delegate void CommandCompletedEventHandler(object o, int commandId);
+	public interface IAsyncCommandResponseListener {
+		void CommandResponseLine(int cmd, byte[] buffer, int start, int end);
+		void CommandCodeReceived(int cmd, CommandCode code);
+		void CommandCompleted(int cmd);
+	}
 
-	public class CommandSender {
+	public class SimpleCommandResponseListener : IAsyncCommandResponseListener {
+		string response;
+		public void CommandResponseLine(int id, byte[] buffer, int start, int end) {
+		}
+
+		public void CommandCodeReceived(int id, CommandCode code) {
+		}
+
+		public void CommandCompleted(int id) {
+		}
+	}
+
+ 	public class CommandSender {
 		ICSClient client;
 		int commandId;
 		int pending;
@@ -28,10 +44,10 @@ namespace CsBoard {
 		const int MAX_COMMANDS = 9;
 		int blockCount;
 
-		public event CommandResponseLineEventHandler CommandResponseLineEvent;
-		public event CommandCompletedEventHandler CommandCompletedEvent;
+		Hashtable slots;
 
 		public CommandSender(ICSClient client) {
+			slots = new Hashtable();
 			this.client = client;
 			commandId = 1;
 			currentCommand = -1;
@@ -50,6 +66,10 @@ namespace CsBoard {
 
 		private void OnCommandCodeEvent(object o, CommandCode code) {
 			// TODO: do some verification. there might be some error messages
+			IAsyncCommandResponseListener listener = slots[currentCommand] as IAsyncCommandResponseListener;
+			if(listener != null)
+				listener.CommandCodeReceived(currentCommand, code);
+			
 		}
 
 		private void OnBlockCodeEvent(object o, BlockCode code) {
@@ -61,22 +81,21 @@ namespace CsBoard {
 				blockCount--;
 				if(blockCount > 0)
 					return;
-				if(CommandCompletedEvent != null)
-					CommandCompletedEvent(this, currentCommand);
-				currentCommand = -1;
+				IAsyncCommandResponseListener listener = slots[currentCommand] as IAsyncCommandResponseListener;
+				if(listener != null)
+					listener.CommandCompleted(currentCommand);
 				pending--;
+				currentCommand = -1;
 			}
 		}
 
 		private void OnLineBufferReceivedEvent(object o, LineBufferReceivedEventArgs args) {
 			if(currentCommand < 0)
 				return;
-			if(CommandResponseLineEvent != null) {
-				CommandResponseLineEvent(this, new CommandResponseLineEventArgs(currentCommand,
-												args.Buffer,
-												args.Start,
-												args.End));
-			}
+			IAsyncCommandResponseListener listener = slots[currentCommand] as IAsyncCommandResponseListener;
+			if(listener == null)
+				return;
+			listener.CommandResponseLine(currentCommand, args.Buffer, args.Start, args.End);
 		}
 
 		private int NextCommandId() {
@@ -87,10 +106,15 @@ namespace CsBoard {
 		}
 
 		public int SendCommand(string str) {
+			return SendCommand(str, new SimpleCommandResponseListener());
+		}
+
+		public int SendCommand(string str, IAsyncCommandResponseListener listener) {
 			if(pending > MAX_COMMANDS)
 				return -1;
 			int cmd = NextCommandId();
 			pending++;
+			slots[cmd] = listener;
 			client.WriteLine(String.Format("{0} {1}", cmd, str));
 			return cmd;
 		}

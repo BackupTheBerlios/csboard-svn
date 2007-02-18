@@ -31,20 +31,7 @@ namespace CsBoard
 		public class CairoViewerBoard:CairoBoard
 		{
 			int src_rank, src_file, dest_rank, dest_file;
-			bool showMove = true;
 			bool firstTime = true;
-
-			public bool ShowMove
-			{
-				get
-				{
-					return showMove;
-				}
-				set
-				{
-					showMove = value;
-				}
-			}
 
 			public CairoViewerBoard (ArrayList pos):base (pos)
 			{

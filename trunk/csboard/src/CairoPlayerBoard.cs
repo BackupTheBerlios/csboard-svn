@@ -253,7 +253,8 @@ namespace CsBoard {
                         string pos = string.Format ("{0}{1}",
                                                      letter[i],
                                                      8 - j);
-		        StartMoveHintEvent (pos);
+			if(StartMoveHintEvent != null)
+				StartMoveHintEvent (pos);
 		}
 		
                 private bool GetPoint (int x, int y, ref Point p) {

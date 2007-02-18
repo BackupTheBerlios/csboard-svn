@@ -27,7 +27,7 @@ namespace CsBoard
 								 GameDetails
 								 gd);
 
-		public class GameObservationManager
+		public class GameObservationManager : IAsyncCommandResponseListener
 		{
 			ICSClient client;
 			Hashtable gameInfos;
@@ -58,25 +58,20 @@ namespace CsBoard
 			{
 				if(commandId != -1)
 					return;
-				client.CommandSender.CommandResponseLineEvent += OnCommandResponseLineEvent;
-				client.CommandSender.CommandCompletedEvent += OnCommandCompletedEvent;
-				commandId = client.CommandSender.SendCommand ("games /blsu");
+				commandId = client.CommandSender.SendCommand ("games /blsu", this);
 			}
 
-			private void OnCommandCompletedEvent(object o, int commandId) {
-				if(this.commandId < 0)
-					return;
-				if(this.commandId == commandId) {
-					client.CommandSender.CommandResponseLineEvent -= OnCommandResponseLineEvent;
-					client.CommandSender.CommandCompletedEvent -= OnCommandCompletedEvent;
-					this.commandId = -1;
-				}
-			}
-
-			private void OnCommandResponseLineEvent(object o, CommandResponseLineEventArgs args) {
+			public void CommandResponseLine(int id, byte[] buffer, int start, int end) {
 				try
 				{
-					ProcessGameDetails (args);
+					GameDetails details =
+						GameDetails.FromBuffer (buffer,
+									start,
+									end);
+					if (ObservableGameEvent != null)
+					{
+						ObservableGameEvent (this, details);
+					}
 				}
 				catch (Exception e)
 				{
@@ -84,18 +79,10 @@ namespace CsBoard
 				}
 			}
 
-			private void
-				ProcessGameDetails
-				(CommandResponseLineEventArgs args)
-			{
-				GameDetails details =
-					GameDetails.FromBuffer (args.buffer,
-								args.start,
-								args.end);
-				if (ObservableGameEvent != null)
-				  {
-					  ObservableGameEvent (this, details);
-				  }
+			public void CommandCodeReceived(int id, CommandCode code) {
+			}
+
+			public void CommandCompleted(int id) {
 			}
 
 			private void OnMoveMade (object o,
@@ -105,7 +92,9 @@ namespace CsBoard
 
 				if (details.relation != Relation.IamObserving
 				    && details.relation !=
-				    Relation.IamObservingGameBeingObserved)
+				    Relation.IamObservingGameBeingObserved
+				    && details.relation != Relation.IamPlayingAndMyMove
+				    && details.relation != Relation.IamPlayingAndMyOppsMove)
 					return;
 
 				if(win != null) {

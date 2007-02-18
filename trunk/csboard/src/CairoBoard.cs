@@ -87,7 +87,7 @@ namespace CsBoard
 		public string lastMove = null;
 		public string moveHint = null;
 
-		public bool highLightMove = false;
+		public bool highLightMove = true;
 		public bool showCoords = false;
 		public bool showMoveHint = false;
 		public bool showAnimations = false;

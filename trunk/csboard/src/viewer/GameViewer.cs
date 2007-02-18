@@ -428,7 +428,7 @@ namespace CsBoard
 
 				gamesListWidget.Tree.RowActivated +=
 					OnRowActivated;
-				boardWidget.ShowMove =
+				boardWidget.highLightMove =
 					App.session.HighLightMove;
 				highlightMoveMenuItem.Active =
 					App.session.HighLightMove;
@@ -686,7 +686,7 @@ namespace CsBoard
 								      EventArgs
 								      args)
 			{
-				boardWidget.ShowMove =
+				boardWidget.highLightMove =
 					highlightMoveMenuItem.Active;
 				App.session.HighLightMove =
 					highlightMoveMenuItem.Active;

@@ -103,6 +103,7 @@ namespace CsBoard
 				  PackStart (infoLabel, false, true, 4);
 				  PackStart (win, true, true, 4);
 
+				  adList.RowActivated += OnRowActivated;
 				  SetSizeRequest (600, 400);
 				  ShowAll ();
 			}
@@ -186,6 +187,18 @@ namespace CsBoard
 
 			public void OnAuthEvent (object o, bool success)
 			{
+			}
+
+			private void OnRowActivated (object o,
+						     RowActivatedArgs args)
+			{
+				TreeIter iter;
+				TreeView tree = o as TreeView;
+				adList.Model.GetIter (out iter, args.Path);
+				int gameId = (int) tree.Model.GetValue (iter, 0);
+				if(gameId > 0) {
+					client.CommandSender.SendCommand("play " + gameId);
+				}
 			}
 		}
 	}

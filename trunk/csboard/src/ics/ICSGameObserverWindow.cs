@@ -25,7 +25,7 @@ namespace CsBoard
 {
 	namespace ICS
 	{
-		public class ObservingGamePage : VBox {
+		public class ObservingGamePage : VBox, IAsyncCommandResponseListener {
 			int gameId;
 			bool needsUnobserve = true;
 			public bool NeedsUnobserve {
@@ -38,7 +38,8 @@ namespace CsBoard
 			{
 				get
 				{
-					return gameId;				}
+					return gameId;
+				}
 			}
 
 			public Widget Widget {
@@ -48,20 +49,43 @@ namespace CsBoard
 			}
 
 			ChessGameWidget gameWidget;
-			CairoViewerBoard board;
+			CairoBoard board;
 			string white, black;
 			ICSGameObserverWindow win;
 			Label resultLabel;
+
+			MoveDetails lastMove;
+
+			public void CommandResponseLine(int id, byte[] buffer, int start, int end) {
+				board.SetPosition (lastMove.pos);
+				SetMoveInfo (board, lastMove);
+				board.QueueDraw ();
+			}
+
+			public void CommandCodeReceived(int id, CommandCode code) {
+			}
+
+			public void CommandCompleted(int id) {
+			}
 
 			public ObservingGamePage(ICSGameObserverWindow win, MoveDetails details) : base() {
 				this.win = win;
 				gameId = details.gameNumber;
 
-				board = new CairoViewerBoard (details.pos);
+				bool isMyGame = details.relation == Relation.IamPlayingAndMyMove ||
+					details.relation == Relation.IamPlayingAndMyOppsMove;
+
+				if(isMyGame) {
+					board = new CairoPlayerBoard(details.pos);
+					board.MoveEvent += OnMoveEvent;
+				}
+				else
+					board = new CairoViewerBoard (details.pos);
 				gameWidget = new ChessGameWidget (board);
 
 				gameWidget.WhiteAtBottom =
 					!details.blackAtBottom;
+				board.side = details.blackAtBottom;
 				gameWidget.whiteClock.Configure (details.
 								 initial_time
 								 * 60,
@@ -99,6 +123,10 @@ namespace CsBoard
 				ShowAll();
 			}
 
+			private void OnMoveEvent(string move) {
+				win.Client.CommandSender.SendCommand(move, this);
+			}
+
 			public void StopClocks() {
 				gameWidget.whiteClock.Stop();
 				gameWidget.blackClock.Stop();
@@ -111,7 +139,7 @@ namespace CsBoard
 			}
 
 			public void Update(MoveDetails details) {
-
+				lastMove = details;
 				SetMoveInfo (board, details);
 				board.SetPosition (details.pos);
 				board.QueueDraw ();
@@ -150,7 +178,7 @@ namespace CsBoard
 				gameWidget.blackClock.Stop ();
 			}
 
-			private static void SetMoveInfo (CairoViewerBoard
+			private static void SetMoveInfo (CairoBoard
 							 board,
 							 MoveDetails details)
 			{
@@ -195,6 +223,12 @@ namespace CsBoard
 			HPaned split;
 			TreeView gamesList;
 			ListStore gamesStore;
+
+			public ICSClient Client {
+				get {
+					return client;
+				}
+			}
 
 			public ICSGameObserverWindow (ICSClient client):base (Catalog.GetString("Observed games"))
 			{

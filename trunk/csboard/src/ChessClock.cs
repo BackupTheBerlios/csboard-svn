@@ -137,6 +137,7 @@ namespace CsBoard
 				GLib.Source.Remove (timeoutHandle);
 			Calculate ();
 			started = false;
+			remaining_msecs += increment * 1000;
 			Update ();
 		}
 
@@ -159,7 +160,6 @@ namespace CsBoard
 				  FireTimeoutEvent ();
 				  return;
 			  }
-			remaining_msecs += increment * 1000;
 		}
 
 		public void Update ()
