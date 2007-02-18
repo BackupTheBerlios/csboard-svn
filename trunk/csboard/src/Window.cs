@@ -62,10 +62,13 @@ namespace CsBoard
 
 		Chess.Game.ChessGamePlayer player;
 
-		public ChessWindow (string filename)
+		public ChessWindow (string filename) : this(null, filename)
 		{
-			string engine = App.session.Engine;
+		}
 
+		public ChessWindow(string engine, string filename) {
+			if(engine == null)
+				engine = App.session.Engine;
 			/* try { */
 
 			if (engine.LastIndexOf ("crafty ") >= 0)

@@ -26,8 +26,6 @@ namespace CsBoard
 		public class ICSDetailsWindow:Window
 		{
 			ICSClient client;
-			GameAdvertisements ads;
-			ICSShell shell;
 
 			Notebook book;
 
@@ -46,17 +44,6 @@ namespace CsBoard
 				this.client = client;
 				Add (book);
 				book.ShowTabs = true;
-				ads = new GameAdvertisements (client);
-				book.AppendPage (ads,
-						 new Label (Catalog.
-							    GetString
-							    ("Game Advertisements")));
-
-				shell = new ICSShell (client);
-				book.AppendPage (shell,
-						 new Label (Catalog.
-							    GetString
-							    ("Shell")));
 
 				DeleteEvent +=
 					delegate (object o,

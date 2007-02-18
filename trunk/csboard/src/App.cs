@@ -101,14 +101,14 @@ namespace CsBoard
 			if (args.Length > 0 && args[0].Equals ("-viewer"))
 				StartViewer (args);
 			else if (args.Length > 0 && args[0].Equals ("-player"))
-				StartPlayer (args);
+				StartPlayer (null, args);
 			else
 				StartApp (args);
 			Application.Run ();
 			return 0;
 		}
 
-		public static int StartPlayer (string[]args)
+		public static int StartPlayer (string engine, string[]args)
 		{
 			Catalog.Init (Config.packageName,
 				      Config.prefix + "/share/locale");
@@ -122,7 +122,7 @@ namespace CsBoard
 				  {
 					  filename = args[0];
 				  }
-				new ChessWindow (filename);
+				new ChessWindow (engine, filename);
 			}
 			catch (System.Exception e)
 			{
@@ -168,7 +168,7 @@ namespace CsBoard
 
 		class CsApp {
 			string[] args;
-			[Glade.Widget] private Gtk.Button startPlayerButton, startViewerButton;
+			[Glade.Widget] private Gtk.Button startPlayerButton, startViewerButton, icsPlayerButton;
 			[Glade.Widget] private Gtk.Window csAppWindow;
 			public CsApp(string[] args) {
 				this.args = args;
@@ -177,6 +177,7 @@ namespace CsBoard
 
 				startPlayerButton.Clicked += OnButtonClicked;
 				startViewerButton.Clicked += OnButtonClicked;
+				icsPlayerButton.Clicked += OnButtonClicked;
 
 				csAppWindow.DeleteEvent += delegate (object o, DeleteEventArgs e)
 				{
@@ -187,7 +188,10 @@ namespace CsBoard
 			private void OnButtonClicked(object o, EventArgs evargs) {
 				csAppWindow.Hide();
 				if(o.Equals(startPlayerButton)) {
-					App.StartPlayer(args);
+					App.StartPlayer(null, args);
+				}
+				else if(o.Equals(icsPlayerButton)) {
+					App.StartPlayer("ICS", args);
 				}
 				else {
 					App.StartViewer(args);

@@ -97,6 +97,9 @@ namespace CsBoard
 			ICSDetailsWindow adWin;
 			GameObservationManager obManager;
 			ObservableGamesWidget observableGames;
+			GameAdvertisements ads;
+			ICSShell shell;
+
 
 			public ICS (string command)
 			{
@@ -177,11 +180,25 @@ namespace CsBoard
 
 				observableGames =
 					new ObservableGamesWidget (obManager);
+
+				ads = new GameAdvertisements (client);
+				adWin.Book.AppendPage (ads,
+						 new Label (Catalog.
+							    GetString
+							    ("Game Advertisements")));
+
 				adWin.Book.AppendPage (observableGames,
 						       new Label (Catalog.
 								  GetString
 								  ("Current Games")));
 				adWin.Show ();
+
+				shell = new ICSShell (client);
+				adWin.Book.AppendPage (shell,
+						 new Label (Catalog.
+							    GetString
+							    ("Shell")));
+
 
 				client.AuthEvent += OnAuth;
 				client.ConnectionErrorEvent += OnConnectionError;
