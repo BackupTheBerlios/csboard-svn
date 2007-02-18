@@ -139,25 +139,31 @@ namespace CsBoard
 								    GameAdvertisement
 								    ad)
 			{
-				TreeIter iter;
-				bool found = false;
+				ngames--;
+				if (ad.rated)
+					nrated--;
+				RemoveAdvertisement(ad.gameHandle);
+				UpdateInfoLabel ();
+			}
 
-				for (bool ret = store.GetIterFirst (out iter);
-				     ret; ret = store.IterNext (ref iter))
-				  {
-					  int gameHandle =
-						  (int) store.
-						  GetValue (iter, 0);
-					  if (gameHandle != ad.gameHandle)
-						  continue;
+			int gameHandleToBeRemoved;
 
-					  store.Remove (ref iter);
-					  ngames--;
-					  if (ad.rated)
-						  nrated--;
-					  UpdateInfoLabel ();
-					  break;
-				  }
+			private bool TreeModelForeach(TreeModel model, TreePath path, TreeIter iter) {
+				if(model.IterHasChild(iter)) {
+					return false;
+				}
+				int gameHandle = (int) store.GetValue(iter, 0);
+				if(gameHandle != gameHandleToBeRemoved) {
+					return false;
+				}
+				// remove it
+				store.Remove(ref iter);
+				return true;
+			}
+
+			private void RemoveAdvertisement(int gameHandle) {
+				gameHandleToBeRemoved = gameHandle;
+				store.Foreach(TreeModelForeach);
 			}
 
 			private void UpdateInfoLabel ()
