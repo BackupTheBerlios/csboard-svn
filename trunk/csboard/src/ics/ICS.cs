@@ -190,7 +190,7 @@ namespace CsBoard
 				adWin.Book.AppendPage (observableGames,
 						       new Label (Catalog.
 								  GetString
-								  ("Current Games")));
+								  ("Observe Games")));
 				adWin.Show ();
 
 				shell = new ICSShell (client);
