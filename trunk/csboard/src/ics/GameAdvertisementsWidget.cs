@@ -59,9 +59,11 @@ namespace CsBoard
 				client.AuthEvent += OnAuthEvent;
 
 				store = new TreeStore (typeof(int),
-						       typeof(Gdk.Pixbuf),
-						       typeof (string),
-						       typeof (string)
+						       typeof(Gdk.Pixbuf), // computer?
+						       typeof (string), // details
+						       typeof (string), // rating
+						       typeof (string), // timing
+						       typeof (string) // category
 					);
 				  adList.Model = store;
 				  adList.HeadersVisible = true;
@@ -91,6 +93,9 @@ namespace CsBoard
 						       CellRendererText (),
 						       "text", 3);
 
+				  adList.AppendColumn(Catalog.GetString("Timing"), new CellRendererText(), "markup", 4);
+				  adList.AppendColumn(Catalog.GetString("Category"), new CellRendererText(), "text", 5);
+
 				ScrolledWindow win = new ScrolledWindow ();
 				  win.HscrollbarPolicy =
 					win.VscrollbarPolicy =
@@ -117,7 +122,9 @@ namespace CsBoard
 					ad.gameHandle,
 					ad.IsComputer ? ComputerPixbuf : null,
 					ad.ToPango(),
-					ad.rating.ToString());
+					ad.rating.ToString(),
+					String.Format("<b>{0}  +{1}</b>", ad.time_limit, ad.time_increment),
+					ad.category);
 				ngames++;
 				if (ad.rated)
 					nrated++;
