@@ -191,7 +191,6 @@ namespace CsBoard
 						       new Label (Catalog.
 								  GetString
 								  ("Observe Games")));
-				adWin.Show ();
 
 				shell = new ICSShell (client);
 				adWin.Book.AppendPage (shell,
@@ -203,13 +202,21 @@ namespace CsBoard
 				client.AuthEvent += OnAuth;
 				client.ConnectionErrorEvent += OnConnectionError;
 
-				client.Connect ();
-				client.Start ();
+				GLib.Idle.Add(delegate() {
+					client.Connect ();
+					client.Start ();
+					return false;
+				});
+
+				adWin.Resize(500, 500);
+				adWin.Book.Sensitive = false;
+				adWin.Show ();
 			}
 
 			private void OnAuth(object o, bool successful) {
 				if(successful) {
 					adWin.Title = String.Format (Catalog.GetString("ICS: {0}@{1}:{2}"),client.User,client.server,client.port);
+					adWin.Book.Sensitive = true;
 					return;
 				}
 

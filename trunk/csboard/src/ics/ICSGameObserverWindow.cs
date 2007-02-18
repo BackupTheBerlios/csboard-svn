@@ -25,9 +25,78 @@ namespace CsBoard
 {
 	namespace ICS
 	{
-		public class ObservingGamePage : VBox, IAsyncCommandResponseListener {
-			int gameId;
-			bool needsUnobserve = true;
+
+		public class PlayerPage : ObservingGamePage, IAsyncCommandResponseListener {
+			Button drawButton, resignButton, adjournButton, abortButton, takebackButton;
+
+			public PlayerPage(ICSGameObserverWindow win, MoveDetails details) : base(win, details) {
+				HButtonBox box = new HButtonBox();
+
+				drawButton = new Button(Catalog.GetString("Draw"));
+				resignButton = new Button(Catalog.GetString("Resign"));
+				abortButton = new Button(Catalog.GetString("Abort"));
+				adjournButton = new Button(Catalog.GetString("Adjourn"));
+				takebackButton = new Button(Catalog.GetString("Takeback"));
+
+				drawButton.Clicked += OnClicked;
+				resignButton.Clicked += OnClicked;
+				abortButton.Clicked += OnClicked;
+				adjournButton.Clicked += OnClicked;
+				takebackButton.Clicked += OnClicked;
+
+				box.LayoutStyle = ButtonBoxStyle.Start;
+				box.PackStart(drawButton, false, false, 2);
+				box.PackStart(resignButton, false, false, 2);
+				box.PackStart(abortButton, false, false, 2);
+				box.PackStart(adjournButton, false, false, 2);
+				box.PackStart(takebackButton, false, false, 2);
+				box.ShowAll();
+				PackStart(box, false, true, 2);
+			}
+
+			private void OnClicked(object o, EventArgs args) {
+				string cmd;
+				if(o.Equals(resignButton))
+					cmd = "resign";
+				else if(o.Equals(drawButton))
+					cmd = "draw";
+				else if(o.Equals(abortButton))
+					cmd = "abort";
+				else if(o.Equals(adjournButton))
+					cmd = "adjourn";
+				else if(o.Equals(takebackButton))
+					cmd = "takeback";
+				else
+					return;
+				win.Client.CommandSender.SendCommand(cmd);
+			}
+
+			protected override void InitGameWidget(MoveDetails details) {
+				board = new CairoPlayerBoard(details.pos);
+				board.MoveEvent += OnMoveEvent;
+				gameWidget = new ChessGameWidget (board);
+			}
+
+			private void OnMoveEvent(string move) {
+				win.Client.CommandSender.SendCommand(move, this);
+			}
+
+			public void CommandResponseLine(int id, byte[] buffer, int start, int end) {
+				board.SetPosition (lastMove.pos);
+				SetMoveInfo (board, lastMove);
+				board.QueueDraw ();
+			}
+
+			public void CommandCodeReceived(int id, CommandCode code) {
+			}
+
+			public void CommandCompleted(int id) {
+			}
+		}
+
+		public class ObservingGamePage : VBox {
+			protected int gameId;
+			protected bool needsUnobserve = true;
 			public bool NeedsUnobserve {
 				get {
 					return needsUnobserve;
@@ -48,40 +117,24 @@ namespace CsBoard
 				}
 			}
 
-			ChessGameWidget gameWidget;
-			CairoBoard board;
-			string white, black;
-			ICSGameObserverWindow win;
-			Label resultLabel;
+			protected ChessGameWidget gameWidget;
+			protected CairoBoard board;
+			protected string white, black;
+			protected ICSGameObserverWindow win;
+			protected Label resultLabel;
 
-			MoveDetails lastMove;
+			protected MoveDetails lastMove;
 
-			public void CommandResponseLine(int id, byte[] buffer, int start, int end) {
-				board.SetPosition (lastMove.pos);
-				SetMoveInfo (board, lastMove);
-				board.QueueDraw ();
-			}
-
-			public void CommandCodeReceived(int id, CommandCode code) {
-			}
-
-			public void CommandCompleted(int id) {
+			public static bool IsMyGame(Relation relation) {
+				return relation == Relation.IamPlayingAndMyMove ||
+					relation == Relation.IamPlayingAndMyOppsMove;
 			}
 
 			public ObservingGamePage(ICSGameObserverWindow win, MoveDetails details) : base() {
 				this.win = win;
 				gameId = details.gameNumber;
 
-				bool isMyGame = details.relation == Relation.IamPlayingAndMyMove ||
-					details.relation == Relation.IamPlayingAndMyOppsMove;
-
-				if(isMyGame) {
-					board = new CairoPlayerBoard(details.pos);
-					board.MoveEvent += OnMoveEvent;
-				}
-				else
-					board = new CairoViewerBoard (details.pos);
-				gameWidget = new ChessGameWidget (board);
+				InitGameWidget(details);
 
 				gameWidget.WhiteAtBottom =
 					!details.blackAtBottom;
@@ -123,8 +176,9 @@ namespace CsBoard
 				ShowAll();
 			}
 
-			private void OnMoveEvent(string move) {
-				win.Client.CommandSender.SendCommand(move, this);
+			protected virtual void InitGameWidget(MoveDetails details) {
+				board = new CairoViewerBoard (details.pos);
+				gameWidget = new ChessGameWidget (board);
 			}
 
 			public void StopClocks() {
@@ -178,7 +232,7 @@ namespace CsBoard
 				gameWidget.blackClock.Stop ();
 			}
 
-			private static void SetMoveInfo (CairoBoard
+			protected static void SetMoveInfo (CairoBoard
 							 board,
 							 MoveDetails details)
 			{
@@ -275,7 +329,12 @@ namespace CsBoard
 				gamesStore.AppendValues(title, // markup
 							title);
 
-				ObservingGamePage info = new ObservingGamePage(this, details);
+				ObservingGamePage info;
+				if(ObservingGamePage.IsMyGame(details.relation))
+					info = new PlayerPage(this, details);
+				else
+					info = new ObservingGamePage(this, details);
+
 				currentGames[details.gameNumber] = info;
 
 				Label label = new Label(title);
