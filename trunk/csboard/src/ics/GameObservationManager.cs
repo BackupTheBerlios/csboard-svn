@@ -60,7 +60,7 @@ namespace CsBoard
 					return;
 				client.CommandSender.CommandResponseLineEvent += OnCommandResponseLineEvent;
 				client.CommandSender.CommandCompletedEvent += OnCommandCompletedEvent;
-				commandId = client.CommandSender.SendCommand ("games");
+				commandId = client.CommandSender.SendCommand ("games /blsu");
 			}
 
 			private void OnCommandCompletedEvent(object o, int commandId) {

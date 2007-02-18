@@ -30,7 +30,7 @@ namespace CsBoard
 		{
 			private Gtk.TreeView adList;
 
-			ListStore store;
+			TreeStore store;
 
 			ICSClient client;
 			Label infoLabel;
@@ -39,6 +39,8 @@ namespace CsBoard
 
 			static Pixbuf ComputerPixbuf =
 				Gdk.Pixbuf.LoadFromResource ("computer.png");
+
+			TreeIter ratedGamesIter, unratedGamesIter;
 
 			public GameAdvertisements (ICSClient client)
 			{
@@ -56,39 +58,38 @@ namespace CsBoard
 					OnGameAdvertisementsCleared;
 				client.AuthEvent += OnAuthEvent;
 
-				store = new ListStore (typeof (object),
-						       typeof (int));
+				store = new TreeStore (typeof(int),
+						       typeof(Gdk.Pixbuf),
+						       typeof (string),
+						       typeof (string)
+					);
 				  adList.Model = store;
 				  adList.HeadersVisible = true;
 				  adList.HeadersClickable = true;
+
+				  AddParentIters();
 
 				TreeViewColumn col = new TreeViewColumn ();
 
 				CellRendererPixbuf title_renderer =
 					new CellRendererPixbuf ();
-				  title_renderer.Yalign = 0;
-				  col.PackStart (title_renderer, false);
-				  col.SetCellDataFunc (title_renderer,
-						       new
-						       TreeCellDataFunc
-						       (GameTitleCellDataFunc));
-
+				title_renderer.Yalign = 0;
+				col.PackStart (title_renderer, false);
+				col.SetAttributes (title_renderer, "pixbuf", 1);
+				
 				CellRendererText renderer =
 					new CellRendererText ();
-				  renderer.Yalign = 0;
-				  col.Title = Catalog.GetString ("Games");
-				  col.PackStart (renderer, false);
-				  col.SetCellDataFunc (renderer,
-						       new
-						       TreeCellDataFunc
-						       (GamesCellDataFunc));
+				renderer.Yalign = 0;
+				col.Title = Catalog.GetString ("Games");
+				col.PackStart (renderer, false);
+				col.SetAttributes (renderer, "markup", 2);
 
 				  adList.AppendColumn (col);
 				  adList.AppendColumn (Catalog.
 						       GetString ("Rating"),
 						       new
 						       CellRendererText (),
-						       "text", 1);
+						       "text", 3);
 
 				ScrolledWindow win = new ScrolledWindow ();
 				  win.HscrollbarPolicy =
@@ -106,41 +107,16 @@ namespace CsBoard
 				  ShowAll ();
 			}
 
-			protected void GamesCellDataFunc (TreeViewColumn col,
-							  CellRenderer r,
-							  TreeModel model,
-							  TreeIter iter)
-			{
-				CellRendererText renderer =
-					(CellRendererText) r;
-				GameAdvertisement ad =
-					(GameAdvertisement) model.
-					GetValue (iter, 0);
-				  renderer.Markup = ad.ToPango ();
-			}
-
-			protected void GameTitleCellDataFunc (TreeViewColumn
-							      col,
-							      CellRenderer r,
-							      TreeModel model,
-							      TreeIter iter)
-			{
-				CellRendererPixbuf renderer =
-					(CellRendererPixbuf) r;
-				GameAdvertisement ad =
-					(GameAdvertisement) model.
-					GetValue (iter, 0);
-				if (ad.IsComputer)
-					  renderer.Pixbuf = ComputerPixbuf;
-				else
-					  renderer.Pixbuf = null;
-			}
-
 			public void OnGameAdvertisementAddEvent (object o,
 								 GameAdvertisement
 								 ad)
 			{
-				store.AppendValues (ad, ad.rating);
+				store.AppendValues (
+					ad.rated ? ratedGamesIter : unratedGamesIter,
+					ad.gameHandle,
+					ad.IsComputer ? ComputerPixbuf : null,
+					ad.ToPango(),
+					ad.rating.ToString());
 				ngames++;
 				if (ad.rated)
 					nrated++;
@@ -155,6 +131,7 @@ namespace CsBoard
 				ngames = 0;
 				nrated = 0;
 				UpdateInfoLabel ();
+				AddParentIters();
 			}
 
 			public void OnGameAdvertisementRemoveEvent (object o,
@@ -167,18 +144,18 @@ namespace CsBoard
 				for (bool ret = store.GetIterFirst (out iter);
 				     ret; ret = store.IterNext (ref iter))
 				  {
-					  GameAdvertisement a =
-						  (GameAdvertisement) store.
+					  int gameHandle =
+						  (int) store.
 						  GetValue (iter, 0);
-					  if (a.gameHandle == ad.gameHandle)
-					    {
-						    store.Remove (ref iter);
-						    ngames--;
-						    if (ad.rated)
-							    nrated--;
-						    UpdateInfoLabel ();
-						    break;
-					    }
+					  if (gameHandle != ad.gameHandle)
+						  continue;
+
+					  store.Remove (ref iter);
+					  ngames--;
+					  if (ad.rated)
+						  nrated--;
+					  UpdateInfoLabel ();
+					  break;
 				  }
 			}
 
@@ -192,6 +169,19 @@ namespace CsBoard
 						("Total game seeks"), ngames,
 						Catalog.GetString ("Rated"),
 						nrated);
+			}
+
+			private void AddParentIters() {
+				ratedGamesIter = store.AppendValues(0,
+								    null,
+								    String.Format("<b>{0}</b>",
+										  Catalog.GetString("Rated")),
+								    "");
+				unratedGamesIter = store.AppendValues(0,
+								      null,
+								      String.Format("<b>{0}</b>",
+										    Catalog.GetString("Unrated Games")),
+								      "");
 			}
 
 			public void OnAuthEvent (object o, bool success)
