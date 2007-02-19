@@ -83,6 +83,7 @@ namespace CsBoard
 			}
 
 			public void CommandCompleted(int id) {
+				commandId = -1;
 			}
 
 			private void OnMoveMade (object o,
