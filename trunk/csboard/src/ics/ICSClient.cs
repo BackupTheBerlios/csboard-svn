@@ -410,8 +410,9 @@ namespace CsBoard
 					user = value;
 					if (user.Equals ("guest"))
 						guestLogin = true;
-					else
+					else {
 						guestLogin = false;
+					}
 				}
 				get
 				{
@@ -517,8 +518,16 @@ namespace CsBoard
 
 			public void Stop ()
 			{
-				if (pending != null)
-					stream.EndRead (pending);
+				client.Close();
+				client = null;
+				stream = null;
+				streamReader = null;
+				streamWriter = null;
+				user = "";
+				assigned_name = null;
+				m_start = m_end = 0;
+				blockCount = 0;
+				state = SessionState.NONE;
 			}
 
 			IAsyncResult pending;
@@ -531,6 +540,7 @@ namespace CsBoard
 								    ("Internal error. Buffer full"));
 					  return false;	// buffer full. but this should not happen
 				  }
+
 				try
 				{
 					pending =
@@ -570,6 +580,9 @@ namespace CsBoard
 
 			private void ReadAsyncCallback (IAsyncResult res)
 			{
+				if(stream == null) {
+					return;
+				}
 				try
 				{
 					int nbytes = stream.EndRead (res);

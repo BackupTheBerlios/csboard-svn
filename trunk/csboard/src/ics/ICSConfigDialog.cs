@@ -73,12 +73,12 @@ namespace CsBoard
 			{
 				ResponseType ret =
 					(ResponseType) icsConfigDialog.Run ();
-				if (ret != ResponseType.Ok)
-					return ret;
-				client.server = serverNameEntry.Text.Trim ();
-				client.port = portEntry.Text.Trim ();
-				client.User = usernameEntry.Text.Trim ();
-				client.passwd = passwordEntry.Text;	// Dont Trim!
+				if (ret == ResponseType.Ok) {
+					client.server = serverNameEntry.Text.Trim ();
+					client.port = portEntry.Text.Trim ();
+					client.User = usernameEntry.Text.Trim ();
+					client.passwd = passwordEntry.Text;	// Dont Trim!
+				}
 				icsConfigDialog.Hide ();
 
 				return ret;

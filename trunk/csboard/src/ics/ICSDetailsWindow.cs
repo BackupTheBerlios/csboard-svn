@@ -29,6 +29,7 @@ namespace CsBoard
 
 			[Glade.Widget] Window icsWindow;
 			[Glade.Widget] Frame frame;
+			[Glade.Widget] Gtk.MenuItem connectMenuItem, disconnectMenuItem;
 
 			Notebook book;
 			public Notebook Book
@@ -76,11 +77,86 @@ namespace CsBoard
 				int width = App.session.ICSWinWidth;
 				int height = App.session.ICSWinHeight;
 				icsWindow.Resize (width, height);
+
+				client.AuthEvent += OnAuth;
+				client.ConnectionErrorEvent +=
+					OnConnectionError;
+
+				GLib.Idle.Add (delegate ()
+					       {
+					       Authenticate (); return false;}
+				);
+
+				book.Sensitive = false;
+				disconnectMenuItem.Sensitive = false;
+				icsWindow.Show ();
+			}
+
+			private void OnAuth (object o, bool successful)
+			{
+				if (successful)
+				  {
+					  disconnectMenuItem.Sensitive = true;
+					  icsWindow.Title =
+						  String.Format (Catalog.
+								 GetString
+								 ("ICS: {0}@{1}:{2}"),
+								 client.User,
+								 client.
+								 server,
+								 client.port);
+					  book.Sensitive = true;
+					  return;
+				  }
+
+				// on auth failure, reauthenticate
+				Authenticate ();
+			}
+
+			private void Authenticate ()
+			{
+				connectMenuItem.Sensitive = false;
+				book.Sensitive = false;
+				ICSConfigDialog dlg =
+					new ICSConfigDialog (client);
+				if (dlg.Run () == ResponseType.Ok)
+				  {
+					  client.Start ();
+				  }
+				else
+					connectMenuItem.Sensitive = true;
+
+			}
+
+			private void OnConnectionError (object o,
+							string reason)
+			{
+				client.Stop ();
+				// show error
+				MessageDialog md =
+					new MessageDialog (icsWindow,
+							   DialogFlags.
+							   DestroyWithParent,
+							   MessageType.Error,
+							   ButtonsType.Close,
+							   String.
+							   Format
+							   ("<b>{0}</b>",
+							    reason));
+
+				md.Run ();
+				md.Hide ();
+				md.Dispose ();
 			}
 
 			protected void on_quit_activate (object o,
 							 EventArgs args)
 			{
+				int width, height;
+				icsWindow.GetSize(out width, out height);
+				App.session.ICSWinWidth = width;
+				App.session.ICSWinHeight = height;
+
 				Application.Quit ();
 			}
 
@@ -95,6 +171,17 @@ namespace CsBoard
 								 args)
 			{
 				ChessWindow.ShowEngineChooser ();
+			}
+
+			protected void on_connect_activate(object o, EventArgs args) {
+				Authenticate();
+			}
+
+			protected void on_disconnect_activate(object o, EventArgs args) {
+				disconnectMenuItem.Sensitive = false;
+				book.Sensitive = false;
+				connectMenuItem.Sensitive = true;
+				client.Stop();
 			}
 		}
 	}
