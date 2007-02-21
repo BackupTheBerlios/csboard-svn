@@ -250,6 +250,70 @@ namespace CsBoard
 			}
 		}
 
+		public int ICSGamesWinSplitPanePosition
+		{
+			get
+			{
+				int pos = (int) gconfClient.
+					Get
+					("/apps/csboard/icsgames/split_pane_position");
+				if(pos > ICSGamesWinWidth / 2)
+					pos = ICSGamesWinWidth / 2;
+				return pos;
+			}
+			set
+			{
+				gconfClient.
+					Set
+					("/apps/csboard/icsgames/split_pane_position",
+					 value);
+			}
+		}
+
+		public int ICSWinWidth {
+			get {
+				return (int) gconfClient.
+					Get ("/apps/csboard/icswin/width");
+			}
+			set {
+				gconfClient.
+					Set ("/apps/csboard/icswin/width", value);
+			}
+		}
+
+		public int ICSWinHeight {
+			get {
+				return (int) gconfClient.
+					Get ("/apps/csboard/icswin/height");
+			}
+
+			set {
+				gconfClient.Set("/apps/csboard/icswin/height", value);
+			}
+		}
+
+		public int ICSGamesWinWidth {
+			get {
+				return (int) gconfClient.
+					Get ("/apps/csboard/icswin/width");
+			}
+			set {
+				gconfClient.
+					Set ("/apps/csboard/icswin/width", value);
+			}
+		}
+
+		public int ICSGamesWinHeight {
+			get {
+				return (int) gconfClient.
+					Get ("/apps/csboard/icswin/height");
+			}
+
+			set {
+				gconfClient.Set("/apps/csboard/icswin/height", value);
+			}
+		}
+
 		private void SessionChanged (object obj,
 					     GConf.NotifyEventArgs args)
 		{

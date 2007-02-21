@@ -58,33 +58,33 @@ namespace CsBoard
 					OnGameAdvertisementsCleared;
 				client.AuthEvent += OnAuthEvent;
 
-				store = new TreeStore (typeof(int),
-						       typeof(Gdk.Pixbuf), // computer?
-						       typeof (string), // details
-						       typeof (string), // rating
-						       typeof (string), // timing
-						       typeof (string) // category
+				store = new TreeStore (typeof (int), typeof (Gdk.Pixbuf),	// computer?
+						       typeof (string),	// details
+						       typeof (string),	// rating
+						       typeof (string),	// timing
+						       typeof (string)	// category
 					);
 				  adList.Model = store;
 				  adList.HeadersVisible = true;
 				  adList.HeadersClickable = true;
 
-				  AddParentIters();
+				  AddParentIters ();
 
 				TreeViewColumn col = new TreeViewColumn ();
 
 				CellRendererPixbuf title_renderer =
 					new CellRendererPixbuf ();
-				title_renderer.Yalign = 0;
-				col.PackStart (title_renderer, false);
-				col.SetAttributes (title_renderer, "pixbuf", 1);
-				
+				  title_renderer.Yalign = 0;
+				  col.PackStart (title_renderer, false);
+				  col.SetAttributes (title_renderer, "pixbuf",
+						     1);
+
 				CellRendererText renderer =
 					new CellRendererText ();
-				renderer.Yalign = 0;
-				col.Title = Catalog.GetString ("Games");
-				col.PackStart (renderer, false);
-				col.SetAttributes (renderer, "markup", 2);
+				  renderer.Yalign = 0;
+				  col.Title = Catalog.GetString ("Games");
+				  col.PackStart (renderer, false);
+				  col.SetAttributes (renderer, "markup", 2);
 
 				  adList.AppendColumn (col);
 				  adList.AppendColumn (Catalog.
@@ -93,8 +93,16 @@ namespace CsBoard
 						       CellRendererText (),
 						       "text", 3);
 
-				  adList.AppendColumn(Catalog.GetString("Timing"), new CellRendererText(), "markup", 4);
-				  adList.AppendColumn(Catalog.GetString("Category"), new CellRendererText(), "text", 5);
+				  adList.AppendColumn (Catalog.
+						       GetString ("Timing"),
+						       new
+						       CellRendererText (),
+						       "markup", 4);
+				  adList.AppendColumn (Catalog.
+						       GetString ("Category"),
+						       new
+						       CellRendererText (),
+						       "text", 5);
 
 				ScrolledWindow win = new ScrolledWindow ();
 				  win.HscrollbarPolicy =
@@ -117,14 +125,21 @@ namespace CsBoard
 								 GameAdvertisement
 								 ad)
 			{
-				store.AppendValues (
-					ad.rated ? ratedGamesIter : unratedGamesIter,
-					ad.gameHandle,
-					ad.IsComputer ? ComputerPixbuf : null,
-					ad.ToPango(),
-					ad.rating.ToString(),
-					String.Format("<b>{0}  +{1}</b>", ad.time_limit, ad.time_increment),
-					ad.category);
+				store.AppendValues (ad.
+						    rated ? ratedGamesIter :
+						    unratedGamesIter,
+						    ad.gameHandle,
+						    ad.
+						    IsComputer ?
+						    ComputerPixbuf : null,
+						    ad.ToPango (),
+						    ad.rating.ToString (),
+						    String.
+						    Format
+						    ("<b>{0}  +{1}</b>",
+						     ad.time_limit,
+						     ad.time_increment),
+						    ad.category);
 				ngames++;
 				if (ad.rated)
 					nrated++;
@@ -139,7 +154,7 @@ namespace CsBoard
 				ngames = 0;
 				nrated = 0;
 				UpdateInfoLabel ();
-				AddParentIters();
+				AddParentIters ();
 			}
 
 			public void OnGameAdvertisementRemoveEvent (object o,
@@ -149,28 +164,35 @@ namespace CsBoard
 				ngames--;
 				if (ad.rated)
 					nrated--;
-				RemoveAdvertisement(ad.gameHandle);
+				RemoveAdvertisement (ad.gameHandle);
 				UpdateInfoLabel ();
 			}
 
 			int gameHandleToBeRemoved;
 
-			private bool TreeModelForeach(TreeModel model, TreePath path, TreeIter iter) {
-				if(model.IterHasChild(iter)) {
-					return false;
-				}
-				int gameHandle = (int) store.GetValue(iter, 0);
-				if(gameHandle != gameHandleToBeRemoved) {
-					return false;
-				}
+			private bool TreeModelForeach (TreeModel model,
+						       TreePath path,
+						       TreeIter iter)
+			{
+				if (model.IterHasChild (iter))
+				  {
+					  return false;
+				  }
+				int gameHandle =
+					(int) store.GetValue (iter, 0);
+				if (gameHandle != gameHandleToBeRemoved)
+				  {
+					  return false;
+				  }
 				// remove it
-				store.Remove(ref iter);
+				store.Remove (ref iter);
 				return true;
 			}
 
-			private void RemoveAdvertisement(int gameHandle) {
+			private void RemoveAdvertisement (int gameHandle)
+			{
 				gameHandleToBeRemoved = gameHandle;
-				store.Foreach(TreeModelForeach);
+				store.Foreach (TreeModelForeach);
 			}
 
 			private void UpdateInfoLabel ()
@@ -185,17 +207,26 @@ namespace CsBoard
 						nrated);
 			}
 
-			private void AddParentIters() {
-				ratedGamesIter = store.AppendValues(0,
-								    null,
-								    String.Format("<b>{0}</b>",
-										  Catalog.GetString("Rated")),
-								    "");
-				unratedGamesIter = store.AppendValues(0,
-								      null,
-								      String.Format("<b>{0}</b>",
-										    Catalog.GetString("Unrated Games")),
-								      "");
+			private void AddParentIters ()
+			{
+				ratedGamesIter = store.AppendValues (0,
+								     null,
+								     String.
+								     Format
+								     ("<b>{0}</b>",
+								      Catalog.
+								      GetString
+								      ("Rated")),
+								     "");
+				unratedGamesIter =
+					store.AppendValues (0, null,
+							    String.
+							    Format
+							    ("<b>{0}</b>",
+							     Catalog.
+							     GetString
+							     ("Unrated Games")),
+							    "");
 			}
 
 			public void OnAuthEvent (object o, bool success)
@@ -208,10 +239,14 @@ namespace CsBoard
 				TreeIter iter;
 				TreeView tree = o as TreeView;
 				adList.Model.GetIter (out iter, args.Path);
-				int gameId = (int) tree.Model.GetValue (iter, 0);
-				if(gameId > 0) {
-					client.CommandSender.SendCommand("play " + gameId);
-				}
+				int gameId =
+					(int) tree.Model.GetValue (iter, 0);
+				if (gameId > 0)
+				  {
+					  client.CommandSender.
+						  SendCommand ("play " +
+							       gameId);
+				  }
 			}
 		}
 	}

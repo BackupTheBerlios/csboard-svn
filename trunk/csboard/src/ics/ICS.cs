@@ -33,68 +33,11 @@ namespace CsBoard
 
 		using CsBoard;
 
-		public class ICS:IControl
+		public class ICS
 		{
-
-			public event ControlBusyHandler BusyEvent
-			{
-				add
-				{
-				}
-				remove
-				{
-				}
-			}
-			public event ControlWaitHandler WaitEvent
-			{
-				add
-				{
-				}
-				remove
-				{
-				}
-			}
-			public event ControlPositionChangedHandler
-				PositionChangedEvent
-			{
-				add
-				{
-				}
-				remove
-				{
-				}
-			}
-			public event ControlGameOverHandler GameOverEvent
-			{
-				add
-				{
-				}
-				remove
-				{
-				}
-			}
-			public event ControlSwitchSideHandler SwitchSideEvent
-			{
-				add
-				{
-				}
-				remove
-				{
-				}
-			}
-			public event ControlHintHandler HintEvent
-			{
-				add
-				{
-				}
-				remove
-				{
-				}
-			}
-
 			private ICSClient client;
 
-			ICSDetailsWindow adWin;
+			ICSDetailsWindow icsWin;
 			GameObservationManager obManager;
 			ObservableGamesWidget observableGames;
 			GameAdvertisements ads;
@@ -150,30 +93,15 @@ namespace CsBoard
 								      ("Can't parse command line"));
 				}
 
-				//Test();
-
-				ICSConfigDialog dlg =
-					new ICSConfigDialog (client);
-				if (dlg.Run () != ResponseType.Ok)
-				  {
-					  throw new
-						  ApplicationException
-						  (Catalog.
-						   GetString
-						   ("No details to connect"));
-				  }
-
-				adWin = new ICSDetailsWindow (client,
-							      String.
-							      Format (Catalog.
-								      GetString
-								      ("ICS: {0}@{1}:{2}"),
-								      client.
-								      User,
-								      client.
-								      server,
-								      client.
-								      port));
+				icsWin = new ICSDetailsWindow (client,
+							       String.
+							       Format
+							       (Catalog.
+								GetString
+								("ICS: {0}@{1}:{2}"),
+								client.User,
+								client.server,
+								client.port));
 
 				obManager =
 					new GameObservationManager (client);
@@ -182,51 +110,87 @@ namespace CsBoard
 					new ObservableGamesWidget (obManager);
 
 				ads = new GameAdvertisements (client);
-				adWin.Book.AppendPage (ads,
-						 new Label (Catalog.
-							    GetString
-							    ("Game Advertisements")));
+				icsWin.Book.AppendPage (ads,
+							new Label (Catalog.
+								   GetString
+								   ("Game Advertisements")));
 
-				adWin.Book.AppendPage (observableGames,
-						       new Label (Catalog.
-								  GetString
-								  ("Observe Games")));
+				icsWin.Book.AppendPage (observableGames,
+							new Label (Catalog.
+								   GetString
+								   ("Observe Games")));
 
 				shell = new ICSShell (client);
-				adWin.Book.AppendPage (shell,
-						 new Label (Catalog.
-							    GetString
-							    ("Shell")));
+				icsWin.Book.AppendPage (shell,
+							new Label (Catalog.
+								   GetString
+								   ("Shell")));
 
 
 				client.AuthEvent += OnAuth;
-				client.ConnectionErrorEvent += OnConnectionError;
+				client.ConnectionErrorEvent +=
+					OnConnectionError;
 
-				GLib.Idle.Add(delegate() {
-					client.Connect ();
-					client.Start ();
-					return false;
-				});
+				GLib.Idle.Add (delegate ()
+					       {
+					       Authenticate (); return false;}
+				);
 
-				adWin.Resize(500, 500);
-				adWin.Book.Sensitive = false;
-				adWin.Show ();
+				icsWin.Book.Sensitive = false;
+				icsWin.Window.Show ();
 			}
 
-			private void OnAuth(object o, bool successful) {
-				if(successful) {
-					adWin.Title = String.Format (Catalog.GetString("ICS: {0}@{1}:{2}"),client.User,client.server,client.port);
-					adWin.Book.Sensitive = true;
-					return;
-				}
+			private void OnAuth (object o, bool successful)
+			{
+				if (successful)
+				  {
+					  icsWin.Window.Title =
+						  String.Format (Catalog.
+								 GetString
+								 ("ICS: {0}@{1}:{2}"),
+								 client.User,
+								 client.
+								 server,
+								 client.port);
+					  icsWin.Book.Sensitive = true;
+					  return;
+				  }
 
-				// TODO: show error/relogin
+				// on auth failure, reauthenticate
+				Authenticate ();
 			}
 
-			private void OnConnectionError(object o, string reason) {
-				client.Stop();
-				Console.WriteLine(reason);
+			private void Authenticate ()
+			{
+				ICSConfigDialog dlg =
+					new ICSConfigDialog (client);
+				if (dlg.Run () != ResponseType.Ok)
+				  {
+					  Application.Quit ();
+				  }
+				client.Start ();
+			}
+
+			private void OnConnectionError (object o,
+							string reason)
+			{
+				client.Stop ();
+				Console.WriteLine (reason);
 				// show error
+				MessageDialog md =
+					new MessageDialog (icsWin.Window,
+							   DialogFlags.
+							   DestroyWithParent,
+							   MessageType.Error,
+							   ButtonsType.Close,
+							   String.
+							   Format
+							   ("<b>{0}</b>",
+							    reason));
+
+				md.Run ();
+				md.Hide ();
+				md.Dispose ();
 			}
 
 			static void Popup (string str)
@@ -239,8 +203,9 @@ namespace CsBoard
 								buffer.
 								Length);
 				details.PrintTimeInfo ();
-				ICSGameObserverWindow win = new ICSGameObserverWindow (null);
-				win.Update(details);
+				ICSGameObserverWindow win =
+					new ICSGameObserverWindow (null);
+				win.Update (details);
 				win.Show ();
 			}
 
@@ -257,78 +222,6 @@ namespace CsBoard
 
 			public void Shutdown ()
 			{
-			}
-
-			public ArrayList GetPosition ()
-			{
-				ArrayList result = new ArrayList ();
-
-				result.Add ("");
-				result.Add ("");
-
-				result.Add (". . . . . . . . .");
-				result.Add (". . . . . . . . .");
-				result.Add (". . . . . . . . .");
-				result.Add (". . . . . . . . .");
-				result.Add (". . . . . . . . .");
-				result.Add (". . . . . . . . .");
-				result.Add (". . . . . . . . .");
-				result.Add (". . . . . . . . .");
-
-				return result;
-			}
-
-
-			public void NewGame ()
-			{
-				SeekDialog sd = new SeekDialog (client);
-				sd.SeekNewGame ();
-			}
-
-
-			public bool MakeMove (string move)
-			{
-				return false;
-			}
-
-
-			public void SaveGame (string filename)
-			{
-				return;
-			}
-
-			public void OpenGame (string filename)
-			{
-				return;
-			}
-
-			public void SetLevel (Level l)
-			{
-			}
-
-			public void Undo ()
-			{
-
-			}
-
-			public void SwitchSide ()
-			{
-			}
-
-			public void Hint ()
-			{
-			}
-
-			public ArrayList Book ()
-			{
-				ArrayList result = new ArrayList ();
-
-				return result;
-			}
-
-			public string PossibleMoves (string pos)
-			{
-				return "";
 			}
 		}
 	}

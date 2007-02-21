@@ -45,6 +45,7 @@ namespace CsBoard
 			TreeModelFilter filter;
 			TreeIter ratedGamesIter;
 			TreeIter unratedGamesIter;
+			TreeIter examGamesIter;
 
 			public ObservableGamesWidget (GameObservationManager
 						      observer)
@@ -57,20 +58,33 @@ namespace CsBoard
 				observer.ObservableGameEvent +=
 					OnObservableGameEvent;
 
-				store = new TreeStore (typeof (string), // used for filtering
-						       typeof(int), // gameid
-						       typeof(string), // markup
-						       typeof(string), // 
-						       typeof(string));
+				store = new TreeStore (typeof (string),	// used for filtering
+						       typeof (int),	// gameid
+						       typeof (string),	// markup
+						       typeof (string),	// 
+						       typeof (string));
 
-				AddParentIters();
+				  AddParentIters ();
 
-				gamesView.HeadersVisible = true;
-				gamesView.HeadersClickable = true;
+				  gamesView.HeadersVisible = true;
+				  gamesView.HeadersClickable = true;
 
-				gamesView.AppendColumn(Catalog.GetString("Games"), new CellRendererText(), "markup", 2);
-				gamesView.AppendColumn(Catalog.GetString("Time"), new CellRendererText(), "markup", 3);
-				gamesView.AppendColumn(Catalog.GetString("Category"), new CellRendererText(), "markup", 4);
+				  gamesView.AppendColumn (Catalog.
+							  GetString ("Games"),
+							  new
+							  CellRendererText (),
+							  "markup", 2);
+				  gamesView.AppendColumn (Catalog.
+							  GetString ("Time"),
+							  new
+							  CellRendererText (),
+							  "markup", 3);
+				  gamesView.AppendColumn (Catalog.
+							  GetString
+							  ("Category"),
+							  new
+							  CellRendererText (),
+							  "markup", 4);
 
 				ScrolledWindow win = new ScrolledWindow ();
 				  win.HscrollbarPolicy =
@@ -80,16 +94,16 @@ namespace CsBoard
 
 				  UpdateInfoLabel ();
 
-				filterEntry = new Entry();
-				filterEntry.Changed += OnFilter;
+				  filterEntry = new Entry ();
+				  filterEntry.Changed += OnFilter;
 
-				filter = new TreeModelFilter(store, null);
-				filter.VisibleFunc = FilterFunc;
-				gamesView.Model = filter;
+				  filter = new TreeModelFilter (store, null);
+				  filter.VisibleFunc = FilterFunc;
+				  gamesView.Model = filter;
 
 				  infoLabel.UseMarkup = true;
 				  PackStart (infoLabel, false, true, 4);
-				  PackStart(filterEntry, false, true, 4);
+				  PackStart (filterEntry, false, true, 4);
 				  PackStart (win, true, true, 4);
 
 				Button refreshButton =
@@ -109,37 +123,56 @@ namespace CsBoard
 				  ShowAll ();
 			}
 
-			private void AddParentIters() {
-				ratedGamesIter = store.AppendValues("",
-								    0,
-								    String.Format("<b>{0}</b>",
-										  Catalog.GetString("Rated Games")),
-								    "",
-								    "");
-				unratedGamesIter = store.AppendValues("",
-								      0,
-								      String.Format("<b>{0}</b>",
-										    Catalog.GetString("Unrated Games")),
-								      "",
-								      "");
+			private void AddParentIters ()
+			{
+				ratedGamesIter = store.AppendValues ("",
+								     0,
+								     String.
+								     Format
+								     ("<b>{0}</b>",
+								      Catalog.
+								      GetString
+								      ("Rated Games")),
+								     "", "");
+				unratedGamesIter =
+					store.AppendValues ("", 0,
+							    String.
+							    Format
+							    ("<b>{0}</b>",
+							     Catalog.
+							     GetString
+							     ("Unrated Games")),
+							    "", "");
+				examGamesIter =
+					store.AppendValues ("", 0,
+							    String.
+							    Format
+							    ("<b>{0}</b>",
+							     Catalog.
+							     GetString
+							     ("Examined Games")),
+							    "", "");
 			}
 
-			private void OnFilter(object o, EventArgs args) {
-				filter.Refilter();
+			private void OnFilter (object o, EventArgs args)
+			{
+				filter.Refilter ();
 			}
 
 			protected bool FilterFunc (TreeModel model,
-						   TreeIter iter) {
-				if(model.IterHasChild(iter))
+						   TreeIter iter)
+			{
+				if (model.IterHasChild (iter))
 					return true;
 
-				string filterstr = filterEntry.Text.Trim();
-				if(filterstr.Length == 0)
+				string filterstr = filterEntry.Text.Trim ();
+				if (filterstr.Length == 0)
 					return true;
 
-				string str = model.GetValue(iter, 0) as string;
-				
-				if(str.IndexOf(filterstr.ToLower()) >= 0)
+				string str =
+					model.GetValue (iter, 0) as string;
+
+				if (str.IndexOf (filterstr.ToLower ()) >= 0)
 					return true;
 
 				return false;
@@ -151,8 +184,9 @@ namespace CsBoard
 				TreeIter iter;
 				TreeView tree = o as TreeView;
 				tree.Model.GetIter (out iter, args.Path);
-				int gameId = (int) tree.Model.GetValue (iter, 1);
-				if(gameId > 0)
+				int gameId =
+					(int) tree.Model.GetValue (iter, 1);
+				if (gameId > 0)
 					obManager.ObserveGame (gameId);
 			}
 
@@ -175,29 +209,27 @@ namespace CsBoard
 					  return;
 				  }
 				ngames++;
-				string filter_string = String.Format("{0} {1}", details.white, details.black);
-				filter_string = filter_string.ToLower();
+				string filter_string =
+					String.Format ("{0} {1}",
+						       details.white,
+						       details.black);
+				filter_string = filter_string.ToLower ();
 
 				UpdateInfoLabel ();
+				TreeIter iter =
+					details.
+					Examined ? examGamesIter : details.
+					Rated ? ratedGamesIter :
+					unratedGamesIter;
 
-				if(details.Rated) {
-					store.AppendValues (
-						ratedGamesIter,
-						filter_string,
-						details.gameId,
-						details.ToPango(),
-						details.TimeDetailsAsMarkup(),
-						details.CategoryStr);
-				}
-				else {
-					store.AppendValues (
-						unratedGamesIter,
-						filter_string,
-						details.gameId,
-						details.ToPango(),
-						details.TimeDetailsAsMarkup(),
-						details.CategoryStr);
-				}
+				store.AppendValues (iter,
+						    filter_string,
+						    details.gameId,
+						    details.
+						    ToPango (),
+						    details.
+						    TimeDetailsAsMarkup
+						    (), details.CategoryStr);
 			}
 
 			public void Clear ()
@@ -206,7 +238,7 @@ namespace CsBoard
 				store.Clear ();
 				UpdateInfoLabel ();
 				filterEntry.Text = "";
-				AddParentIters();
+				AddParentIters ();
 			}
 		}
 	}

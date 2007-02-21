@@ -28,7 +28,8 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.Dialog icsConfigDialog;
 			[Glade.Widget] private Gtk.Entry serverNameEntry,
 				portEntry, usernameEntry, passwordEntry;
-			[Glade.Widget] private Gtk.CheckButton guestLoginCheckButton;
+			[Glade.Widget] private Gtk.
+				CheckButton guestLoginCheckButton;
 
 			public ICSConfigDialog (ICSClient client)
 			{
@@ -41,25 +42,31 @@ namespace CsBoard
 				xml.Autoconnect (this);
 
 				guestLoginCheckButton.Active = true;
-				SetGuestLogin(guestLoginCheckButton.Active);
-				guestLoginCheckButton.Toggled += delegate (object o, EventArgs args) {
-					SetGuestLogin(guestLoginCheckButton.Active);
+				SetGuestLogin (guestLoginCheckButton.Active);
+				guestLoginCheckButton.Toggled +=
+					delegate (object o, EventArgs args)
+				{
+					SetGuestLogin (guestLoginCheckButton.
+						       Active);
 				};
-				serverNameEntry.Text = client.server;
-				portEntry.Text = client.port;
-				usernameEntry.Text = client.User;
+				  serverNameEntry.Text = client.server;
+				  portEntry.Text = client.port;
+				  usernameEntry.Text = client.User;
 			}
 
-			private void SetGuestLogin(bool status) {
-				if(status) {
-					client.User = "guest";
-					usernameEntry.Sensitive = false;
-					passwordEntry.Sensitive = false;
-				}
-				else {
-					usernameEntry.Sensitive = true;
-					passwordEntry.Sensitive = true;
-				}
+			private void SetGuestLogin (bool status)
+			{
+				if (status)
+				  {
+					  client.User = "guest";
+					  usernameEntry.Sensitive = false;
+					  passwordEntry.Sensitive = false;
+				  }
+				else
+				  {
+					  usernameEntry.Sensitive = true;
+					  passwordEntry.Sensitive = true;
+				  }
 			}
 
 			public ResponseType Run ()
@@ -67,18 +74,17 @@ namespace CsBoard
 				ResponseType ret =
 					(ResponseType) icsConfigDialog.Run ();
 				if (ret != ResponseType.Ok)
-					  return ret;
-				  client.server =
-					serverNameEntry.Text.Trim ();
-				  client.port = portEntry.Text.Trim ();
-				  client.User = usernameEntry.Text.Trim ();
-				  client.passwd = passwordEntry.Text;	// Dont Trim!
-				  icsConfigDialog.Hide ();
+					return ret;
+				client.server = serverNameEntry.Text.Trim ();
+				client.port = portEntry.Text.Trim ();
+				client.User = usernameEntry.Text.Trim ();
+				client.passwd = passwordEntry.Text;	// Dont Trim!
+				icsConfigDialog.Hide ();
 
-				  return ret;
+				return ret;
 			}
 
-			 ~ICSConfigDialog ()
+			~ICSConfigDialog ()
 			{
 				icsConfigDialog.Dispose ();
 			}

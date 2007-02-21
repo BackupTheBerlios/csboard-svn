@@ -83,10 +83,6 @@ namespace CsBoard
 			  {
 				  control = new GnuChess (engine);
 			  }
-			else if (engine.LastIndexOf ("ICS") >= 0)
-			  {
-				  control = new CsBoard.ICS.ICS (engine);
-			  }
 			else
 			  {
 				  MessageDialog md =
@@ -500,6 +496,10 @@ namespace CsBoard
 
 		public void on_about_activate (System.Object b, EventArgs e)
 		{
+			ShowAboutDialog(csboardWindow);
+		}
+
+		public static void ShowAboutDialog(Gtk.Window win) {
 			AboutDialog ad = new AboutDialog ();
 
 			ad.Name = "CsBoard";
@@ -517,7 +517,7 @@ namespace CsBoard
 						"/share/pixmaps/csboard.png");
 			ad.Website = "http://csboard.berlios.de";
 
-			ad.TransientFor = csboardWindow;
+			ad.TransientFor = win;
 
 			ad.Run ();
 			ad.Hide ();
@@ -694,6 +694,10 @@ namespace CsBoard
 		protected void on_edit_engine_activate (object o,
 							EventArgs args)
 		{
+			ShowEngineChooser();
+		}
+
+		public static void ShowEngineChooser() {
 			string engine =
 				EngineChooser.ChooseEngine (App.session.
 							    Engine);

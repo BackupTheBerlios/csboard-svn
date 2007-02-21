@@ -30,15 +30,14 @@ namespace CsBoard
 	{
 		public class CairoViewerBoard:CairoBoard
 		{
-			int src_rank, src_file, dest_rank, dest_file;
-			bool firstTime = true;
+//			bool firstTime = true;
 
 			public CairoViewerBoard (ArrayList pos):base (pos)
 			{
 				highLightMove = true;
 				position.AskForPromotion = false;
 			}
-
+/*
 		
 			protected override bool OnConfigureEvent (Gdk.
 								  EventConfigure
@@ -57,6 +56,7 @@ namespace CsBoard
 				}
 				return base.OnConfigureEvent (evnt);
 			}
+*/
 		}
 	}
 }

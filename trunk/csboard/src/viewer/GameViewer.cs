@@ -413,7 +413,7 @@ namespace CsBoard
 				whiteLabel.Yalign = 0;	// top
 				chessBoardBox.PackStart (blackLabel, false,
 							 false, 2);
-				chessBoardBox.PackStart (boardWidget, false,
+				chessBoardBox.PackStart (boardWidget, true,
 							 true, 2);
 				chessBoardBox.PackStart (whiteLabel, false,
 							 false, 2);

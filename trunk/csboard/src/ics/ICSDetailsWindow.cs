@@ -23,12 +23,14 @@ namespace CsBoard
 {
 	namespace ICS
 	{
-		public class ICSDetailsWindow:Window
+		public class ICSDetailsWindow
 		{
 			ICSClient client;
 
-			Notebook book;
+			[Glade.Widget] Window icsWindow;
+			[Glade.Widget] Frame frame;
 
+			Notebook book;
 			public Notebook Book
 			{
 				get
@@ -36,23 +38,63 @@ namespace CsBoard
 					return book;
 				}
 			}
+			public Window Window
+			{
+				get
+				{
+					return icsWindow;
+				}
+			}
 
 			public ICSDetailsWindow (ICSClient client,
-						 string title):base (title)
+						 string title)
 			{
-				book = new Notebook ();
 				this.client = client;
-				Add (book);
-				book.ShowTabs = true;
+				Glade.XML xml =
+					Glade.XML.
+					FromAssembly ("csboard.glade",
+						      "icsWindow", null);
+				xml.Autoconnect (this);
+				book = new Notebook ();
+				book.Show ();
 
-				DeleteEvent +=
+				frame.Add (book);
+				icsWindow.Title = title;
+
+				icsWindow.DeleteEvent +=
 					delegate (object o,
 						  DeleteEventArgs args)
 				{
-					args.RetVal = true;
+					int width, height;
+					  icsWindow.GetSize (out width,
+							     out height);
+					  App.session.ICSWinWidth = width;
+					  App.session.ICSWinHeight = height;
+					  Application.Quit ();
 				};
 
-				  ShowAll ();
+				int width = App.session.ICSWinWidth;
+				int height = App.session.ICSWinHeight;
+				icsWindow.Resize (width, height);
+			}
+
+			protected void on_quit_activate (object o,
+							 EventArgs args)
+			{
+				Application.Quit ();
+			}
+
+			protected void on_about_activate (object o,
+							  EventArgs args)
+			{
+				ChessWindow.ShowAboutDialog (icsWindow);
+			}
+
+			protected void on_edit_engines_activate (object o,
+								 EventArgs
+								 args)
+			{
+				ChessWindow.ShowEngineChooser ();
 			}
 		}
 	}

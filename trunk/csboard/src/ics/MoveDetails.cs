@@ -78,6 +78,14 @@ namespace CsBoard
 		{
 			public ArrayList pos;
 
+			public bool WhiteMoved
+			{
+				get
+				{
+					return !whiteToMove;
+				}
+			}
+
 			public bool whiteToMove;
 			public int doublePushFile;
 			public bool whiteCanCastleShort;
@@ -130,8 +138,8 @@ namespace CsBoard
 							    buffer[start++];
 						    if (ch == '-')
 							    ch = '.';
-						      buf.Append (ch);
-						      buf.Append (' ');
+						    buf.Append (ch);
+						    buf.Append (' ');
 					    }
 					  details.pos.Add (buf.ToString ());
 				  }

@@ -35,15 +35,21 @@ namespace CsBoard
 							   ref int idx,
 							   int end)
 			{
-				SkipThisChar(buffer, ' ', ref idx, end);
+				SkipThisChar (buffer, ' ', ref idx, end);
 			}
 
-			public static void SkipThisChar(byte[] buffer, char ch, ref int idx, int end) {
+			public static void SkipThisChar (byte[]buffer,
+							 char ch, ref int idx,
+							 int end)
+			{
 				while (buffer[idx] == ch && idx < end)
 					idx++;
 			}
 
-			public static void GotoThisChar(byte[] buffer, char ch, ref int idx, int end) {
+			public static void GotoThisChar (byte[]buffer,
+							 char ch, ref int idx,
+							 int end)
+			{
 				while (buffer[idx] != ch && idx < end)
 					idx++;
 			}

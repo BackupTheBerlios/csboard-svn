@@ -1,3 +1,31 @@
+2007-02-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* data/csboard.schemas.in
+	* resource/csboard.glade
+	* src/App.cs
+	* src/Session.cs
+	* src/Window.cs
+	* src/ics/CommandSender.cs
+	* src/ics/GameAdvertisement.cs
+	* src/ics/GameAdvertisementsWidget.cs
+	* src/ics/GameDetails.cs
+	* src/ics/GameInfo.cs
+	* src/ics/GameObservationManager.cs
+	* src/ics/ICS.cs
+	* src/ics/ICSClient.cs
+	* src/ics/ICSConfigDialog.cs
+	* src/ics/ICSDetailsWindow.cs
+	* src/ics/ICSGameObserverWindow.cs
+	* src/ics/MoveDetails.cs
+	* src/ics/ObservableGamesWidget.cs
+	* src/ics/ParserUtils.cs
+	* src/viewer/CairoViewerBoard.cs
+	* src/viewer/GameViewer.cs
+
+	more ui improvements
+
 2007-02-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

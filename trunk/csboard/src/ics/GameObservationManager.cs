@@ -27,7 +27,8 @@ namespace CsBoard
 								 GameDetails
 								 gd);
 
-		public class GameObservationManager : IAsyncCommandResponseListener
+		public class
+			GameObservationManager:IAsyncCommandResponseListener
 		{
 			ICSClient client;
 			Hashtable gameInfos;
@@ -40,12 +41,13 @@ namespace CsBoard
 
 			public void ObserveGame (int gameid)
 			{
-				client.CommandSender.SendCommand ("observe " + gameid);
+				client.CommandSender.SendCommand ("observe " +
+								  gameid);
 			}
 
 			public GameObservationManager (ICSClient client)
 			{
-				gameInfos = new Hashtable();
+				gameInfos = new Hashtable ();
 				this.client = client;
 				client.MoveMadeEvent += OnMoveMade;
 				client.ResultNotificationEvent +=
@@ -56,22 +58,28 @@ namespace CsBoard
 
 			public void GetGames ()
 			{
-				if(commandId != -1)
+				if (commandId != -1)
 					return;
-				commandId = client.CommandSender.SendCommand ("games /blsu", this);
+				commandId =
+					client.CommandSender.
+					SendCommand ("games /blsu", this);
 			}
 
-			public void CommandResponseLine(int id, byte[] buffer, int start, int end) {
+			public void CommandResponseLine (int id, byte[]buffer,
+							 int start, int end)
+			{
 				try
 				{
 					GameDetails details =
-						GameDetails.FromBuffer (buffer,
-									start,
-									end);
+						GameDetails.
+						FromBuffer (buffer,
+							    start,
+							    end);
 					if (ObservableGameEvent != null)
-					{
-						ObservableGameEvent (this, details);
-					}
+					  {
+						  ObservableGameEvent (this,
+								       details);
+					  }
 				}
 				catch (Exception e)
 				{
@@ -79,10 +87,13 @@ namespace CsBoard
 				}
 			}
 
-			public void CommandCodeReceived(int id, CommandCode code) {
+			public void CommandCodeReceived (int id,
+							 CommandCode code)
+			{
 			}
 
-			public void CommandCompleted(int id) {
+			public void CommandCompleted (int id)
+			{
 				commandId = -1;
 			}
 
@@ -94,36 +105,57 @@ namespace CsBoard
 				if (details.relation != Relation.IamObserving
 				    && details.relation !=
 				    Relation.IamObservingGameBeingObserved
-				    && details.relation != Relation.IamPlayingAndMyMove
-				    && details.relation != Relation.IamPlayingAndMyOppsMove)
+				    && details.relation !=
+				    Relation.IamPlayingAndMyMove
+				    && details.relation !=
+				    Relation.IamPlayingAndMyOppsMove)
 					return;
 
-				if(win != null) {
-					win.Update(details);
-					return;
-				}
-				win = new ICSGameObserverWindow(client);
-				win.Update(details);
+				if (win != null)
+				  {
+					  win.Update (details);
+					  return;
+				  }
+				win = new ICSGameObserverWindow (client);
+				win.Update (details);
 
-				if(gameInfos.ContainsKey(details.gameNumber)) {
-					GameInfo info = (GameInfo) gameInfos[details.gameNumber];
-					gameInfos.Remove(details.gameNumber);
-					win.Update(info);
-				}
+				if (gameInfos.
+				    ContainsKey (details.gameNumber))
+				  {
+					  GameInfo info =
+						  (GameInfo)
+						  gameInfos[details.
+							    gameNumber];
+					  gameInfos.Remove (details.
+							    gameNumber);
+					  win.Update (info);
+				  }
 
 				win.DeleteEvent += OnDelete;
-				win.Resize (600, 400);
+				win.Resize (App.session.ICSGamesWinWidth,
+					    App.session.ICSGamesWinHeight);
+				win.SplitPane.Position =
+					App.session.
+					ICSGamesWinSplitPanePosition;
+
 				win.Show ();
 			}
 
-			private void OnGameInfo(object o, GameInfo info) {
-				if (win == null || !win.Update(info))
+			private void OnGameInfo (object o, GameInfo info)
+			{
+				if (win == null || !win.Update (info))
 					gameInfos[info.gameId] = info;
 			}
 
 			private void OnDelete (object o, EventArgs args)
 			{
-				client.CommandSender.SendCommand("unobserve"); // unobserve all!
+				client.CommandSender.SendCommand ("unobserve");	// unobserve all!
+				int width, height;
+				win.GetSize (out width, out height);
+				App.session.ICSGamesWinWidth = width;
+				App.session.ICSGamesWinHeight = height;
+				App.session.ICSGamesWinSplitPanePosition =
+					win.SplitPane.Position;
 				win = null;
 			}
 

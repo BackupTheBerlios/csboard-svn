@@ -122,7 +122,12 @@ namespace CsBoard
 				  {
 					  filename = args[0];
 				  }
-				new ChessWindow (engine, filename);
+				if(engine == null)
+					engine = App.session.Engine;
+				if(engine.StartsWith("ICS"))
+					new CsBoard.ICS.ICS(engine);
+				else
+					new ChessWindow (engine, filename);
 			}
 			catch (System.Exception e)
 			{

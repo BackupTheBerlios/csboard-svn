@@ -205,17 +205,31 @@ namespace CsBoard
 					buffer.Append (String.
 						       Format
 						       ("<span color=\"#202080\">"));
-				buffer.Append (String.Format("<b>{0}</b>\n",username));
-				buffer.Append (String.Format("<i>Color</i>: {0}, ",
-						color ==
-						'?' ? Catalog.GetString("Any") : color ==
-						'w' ? Catalog.GetString("White") : Catalog.GetString("Black")));
 				buffer.Append (String.
-					       Format
-					       (Catalog.GetString("<i>Acceptance</i>: {0}, <i>Formula</i>: {1}"),
-						automatic ? Catalog.GetString("Automatic") :
-						Catalog.GetString("Manual"),
-						formula ? Catalog.GetString("yes") : Catalog.GetString("no")));
+					       Format ("<b>{0}</b>\n",
+						       username));
+				buffer.Append (String.
+					       Format ("<i>Color</i>: {0}, ",
+						       color ==
+						       '?' ? Catalog.
+						       GetString ("Any") :
+						       color ==
+						       'w' ? Catalog.
+						       GetString ("White") :
+						       Catalog.
+						       GetString ("Black")));
+				buffer.Append (String.
+					       Format (Catalog.
+						       GetString
+						       ("<i>Acceptance</i>: {0}, <i>Formula</i>: {1}"),
+						       automatic ? Catalog.
+						       GetString ("Automatic")
+						       : Catalog.
+						       GetString ("Manual"),
+						       formula ? Catalog.
+						       GetString ("yes") :
+						       Catalog.
+						       GetString ("no")));
 				if (rated)
 					buffer.Append ("</span>");
 

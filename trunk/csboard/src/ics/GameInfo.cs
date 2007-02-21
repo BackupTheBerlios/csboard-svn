@@ -40,111 +40,174 @@ http://www.freechess.org/Help/HelpFiles/iv_gameinfo.html
 
 using System;
 
-namespace CsBoard {
-	namespace ICS {
-	public class GameInfo {
-		public int gameId; // number
-		public bool privateGame; // 1/0
-		public string gameType; // blitz
-		public bool rated;  // 1/0
+namespace CsBoard
+{
+	namespace ICS
+	{
+		public class GameInfo
+		{
+			public int gameId;	// number
+			public bool privateGame;	// 1/0
+			public string gameType;	// blitz
+			public bool rated;	// 1/0
 
-		// u=
-		public bool whiteRegistered; // 1/0
-		public bool blackRegistered; // 1/0
+			// u=
+			public bool whiteRegistered;	// 1/0
+			public bool blackRegistered;	// 1/0
 
-		// it
-		public int initialWhiteTime; // number
-		public int initialBlackTime; // number
+			// it
+			public int initialWhiteTime;	// number
+			public int initialBlackTime;	// number
 
-		// i
-		public int whiteIncrement; // number
-		public int blackIncrement; // number
+			// i
+			public int whiteIncrement;	// number
+			public int blackIncrement;	// number
 
-		public int partners_game_number; // may have meaning for simuls
+			public int partners_game_number;	// may have meaning for simuls
 
-		// rt=
-		public int whitesRating;
-		public char whitesRatingChar;
+			// rt=
+			public int whitesRating;
+			public char whitesRatingChar;
 
-		// rt=
-		public int blacksRating;
-		public char blacksRatingChar;
+			// rt=
+			public int blacksRating;
+			public char blacksRatingChar;
 
-		// ts=
-		public bool whiteUsesTimeseal;
-		public bool blackUsesTimeseal;
+			// ts=
+			public bool whiteUsesTimeseal;
+			public bool blackUsesTimeseal;
 
-		// <g1> 1 p=0 t=blitz r=1 u=1,1 it=5,5 i=8,8 pt=0 rt=1586E,2100  ts=1,0
-		public static GameInfo FromBuffer(byte[] buffer, int start, int end) {
-			GameInfo info = new GameInfo();
-			string name;
-			string token;
+			// <g1> 1 p=0 t=blitz r=1 u=1,1 it=5,5 i=8,8 pt=0 rt=1586E,2100  ts=1,0
+			public static GameInfo FromBuffer (byte[]buffer,
+							   int start, int end)
+			{
+				GameInfo info = new GameInfo ();
+				string name;
+				string token;
 
-			info.gameId = Int32.Parse(ParserUtils.GetNextToken(buffer, ref start, end));
+				  info.gameId =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   ref start,
+								   end));
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			info.privateGame = buffer[start] == '0';
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  info.privateGame = buffer[start] == '0';
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			ParserUtils.ReadWord(buffer, ' ', ref start, end, out info.gameType);
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  ParserUtils.ReadWord (buffer, ' ',
+							ref start, end,
+							out info.gameType);
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			info.rated = buffer[0] == '1';
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  info.rated = buffer[0] == '1';
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			info.whiteRegistered = buffer[start] == '1';
-			start += 2;
-			info.blackRegistered = buffer[start] == '1';
-			start++;
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  info.whiteRegistered = buffer[start] == '1';
+				  start += 2;
+				  info.blackRegistered = buffer[start] == '1';
+				  start++;
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			info.initialWhiteTime = Int32.Parse(ParserUtils.GetNextToken(buffer, ',', ref start, end));
-			start++;
-			info.initialBlackTime = Int32.Parse(ParserUtils.GetNextToken(buffer, ref start, end));
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  info.initialWhiteTime =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   ',',
+								   ref start,
+								   end));
+				  start++;
+				  info.initialBlackTime =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   ref start,
+								   end));
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			info.whiteIncrement = Int32.Parse(ParserUtils.GetNextToken(buffer, ',', ref start, end));
-			start++;
-			info.blackIncrement = Int32.Parse(ParserUtils.GetNextToken(buffer, ref start, end));
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  info.whiteIncrement =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   ',',
+								   ref start,
+								   end));
+				  start++;
+				  info.blackIncrement =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   ref start,
+								   end));
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			info.partners_game_number = Int32.Parse(ParserUtils.GetNextToken(buffer, ref start, end));
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  info.partners_game_number =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   ref start,
+								   end));
 
-			string rating_str;
-			int len;
+				string rating_str;
+				int len;
 
-			ParserUtils.GotoThisChar(buffer, '=', ref start, end);
-			start++;
-			rating_str = ParserUtils.GetNextToken(buffer, ',', ref start, end);
-			start++;
-			len = rating_str.Length;
-			if(!Char.IsDigit(rating_str[len - 1])) {
-				info.whitesRatingChar = rating_str[len - 1];
-				info.whitesRating = Int32.Parse(rating_str.Substring(0, len - 1));
+				  ParserUtils.GotoThisChar (buffer, '=',
+							    ref start, end);
+				  start++;
+				  rating_str =
+					ParserUtils.GetNextToken (buffer, ',',
+								  ref start,
+								  end);
+				  start++;
+				  len = rating_str.Length;
+				if (!Char.IsDigit (rating_str[len - 1]))
+				  {
+					  info.whitesRatingChar =
+						  rating_str[len - 1];
+					  info.whitesRating =
+						  Int32.Parse (rating_str.
+							       Substring (0,
+									  len
+									  -
+									  1));
+				  }
+				else
+					  info.whitesRating =
+						Int32.Parse (rating_str);
+
+				  rating_str =
+					ParserUtils.GetNextToken (buffer,
+								  ref start,
+								  end);
+				  start++;
+				  len = rating_str.Length;
+
+				if (!Char.IsDigit (rating_str[len - 1]))
+				  {
+					  info.blacksRatingChar =
+						  rating_str[len - 1];
+					  info.blacksRating =
+						  Int32.Parse (rating_str.
+							       Substring (0,
+									  len
+									  -
+									  1));
+				  }
+				else
+					  info.blacksRating =
+						Int32.Parse (rating_str);
+
+				  return info;
 			}
-			else
-				info.whitesRating = Int32.Parse(rating_str);
-
-			rating_str = ParserUtils.GetNextToken(buffer, ref start, end);
-			start++;
-			len = rating_str.Length;
-
-			if(!Char.IsDigit(rating_str[len - 1])) {
-				info.blacksRatingChar = rating_str[len - 1];
-				info.blacksRating = Int32.Parse(rating_str.Substring(0, len - 1));
-			}
-			else
-				info.blacksRating = Int32.Parse(rating_str);
-
-			return info;
 		}
-	}
 	}
 }

@@ -39,6 +39,13 @@ namespace CsBoard
 		public class GameDetails
 		{
 			bool exam;
+			public bool Examined
+			{
+				get
+				{
+					return exam;
+				}
+			}
 			public string white;
 			public string black;
 			int whiteRating;
@@ -85,13 +92,18 @@ namespace CsBoard
 							  CrazyHouse:return
 							  "CrazyHouse";
 					  }
-					return String.Format("Unknown category ({0})", (char) gameCategory);
+					return String.
+						Format
+						("Unknown category ({0})",
+						 (char) gameCategory);
 				}
 			}
 
 			GameCategory gameCategory;
-			public GameCategory GameCategory {
-				get {
+			public GameCategory GameCategory
+			{
+				get
+				{
 					return gameCategory;
 				}
 			}
@@ -195,9 +207,10 @@ namespace CsBoard
 								  end);
 */
 				details.privateGame = buffer[start++] == 'p';
-				details.gameCategory = (GameCategory) buffer[start++];
+				details.gameCategory =
+					(GameCategory) buffer[start++];
 				details.rated = buffer[start++] == 'r';
-				
+
 				details.initial_time =
 					Int32.Parse (ParserUtils.
 						     GetNextToken (buffer,
@@ -225,7 +238,10 @@ namespace CsBoard
 					  details.whites_remaining_time_str =
 						  token;
 
-					  ParserUtils.GotoThisChar(buffer, '-', ref start, end);
+					  ParserUtils.GotoThisChar (buffer,
+								    '-',
+								    ref start,
+								    end);
 					  start++;
 					  token = ParserUtils.
 						  GetNextToken (buffer,

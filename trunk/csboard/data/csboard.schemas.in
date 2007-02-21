@@ -81,6 +81,67 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/csboard/icswin/width</key>
+      <applyto>/apps/csboard/icswin/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>ICS window width</short>
+	<long>ICS window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/icswin/height</key>
+      <applyto>/apps/csboard/icswin/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>500</default>
+      <locale name="C">
+	<short>ICS window height</short>
+	<long>ICS window height</long>
+      </locale>
+    </schema>
+
+
+    <schema>
+      <key>/schemas/apps/csboard/icsgames/width</key>
+      <applyto>/apps/csboard/icsgames/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>500</default>
+      <locale name="C">
+	<short>ICS games window width</short>
+	<long>ICS games window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/icsgames/height</key>
+      <applyto>/apps/csboard/icsgames/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>600</default>
+      <locale name="C">
+	<short>ICS games window height</short>
+	<long>ICS games window height</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/icsgames/split_pane_position</key>
+      <applyto>/apps/csboard/icsgames/split_pane_position</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>150</default>
+      <locale name="C">
+	<short>Split pane position</short>
+	<long>Split pane position</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/csboard/session/show_coords</key>
       <applyto>/apps/csboard/session/show_coords</applyto>
       <owner>csboard</owner>

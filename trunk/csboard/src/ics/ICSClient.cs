@@ -35,6 +35,7 @@ namespace CsBoard
 		{
 			NONE,
 			AUTH_REQUEST,
+			REAUTH,
 			PASSWORD_SENT,
 			AUTH_REJECTED,
 			AUTHENTICATED
@@ -137,8 +138,11 @@ namespace CsBoard
 								LineBufferReceivedEventArgs
 								args);
 
-		public delegate void GameInfoEventHandler(object o, GameInfo info);
-		public delegate void ConnectionErrorEventHandler(object o, string reason);
+		public delegate void GameInfoEventHandler (object o,
+							   GameInfo info);
+		public delegate void ConnectionErrorEventHandler (object o,
+								  string
+								  reason);
 
 		public enum LineType
 		{
@@ -188,7 +192,8 @@ namespace CsBoard
 			GAMEINFO
 		}
 
-		public enum BlockCode {
+		public enum BlockCode
+		{
 			BlockStart = 21,
 			BlockSeparator = 22,
 			BlockEnd = 23,
@@ -196,7 +201,8 @@ namespace CsBoard
 			BlockPoseEnd = 25
 		}
 
-		public enum CommandCode {
+		public enum CommandCode
+		{
 			BLK_NULL = 0,
 			BLK_GAME_MOVE = 1,
 			BLK_ABORT = 10,
@@ -379,9 +385,14 @@ namespace CsBoard
 			BLK_GSTAT = 187
 		}
 
-		public delegate void BlockCodeEventHandler(object o, BlockCode code);
-		public delegate void CommandIdentifierEventHandler(object o, string commandIdentifier);
-		public delegate void CommandCodeEventHandler(object o, CommandCode commandCode);
+		public delegate void BlockCodeEventHandler (object o,
+							    BlockCode code);
+		public delegate void CommandIdentifierEventHandler (object o,
+								    string
+								    commandIdentifier);
+		public delegate void CommandCodeEventHandler (object o,
+							      CommandCode
+							      commandCode);
 
 		public class ICSClient
 		{
@@ -392,16 +403,20 @@ namespace CsBoard
 			public string passwd = "";
 			bool guestLogin = false;
 
-			public string User {
-				set {
+			public string User
+			{
+				set
+				{
 					user = value;
-					if(user.Equals("guest"))
+					if (user.Equals ("guest"))
 						guestLogin = true;
 					else
 						guestLogin = false;
 				}
-				get {
-					return assigned_name == null ? user : assigned_name;
+				get
+				{
+					return assigned_name ==
+						null ? user : assigned_name;
 				}
 			}
 
@@ -419,10 +434,12 @@ namespace CsBoard
 			public event ResultNotificationEventHandler
 				ResultNotificationEvent;
 			public event GameInfoEventHandler GameInfoEvent;
-			public event ConnectionErrorEventHandler ConnectionErrorEvent;
+			public event ConnectionErrorEventHandler
+				ConnectionErrorEvent;
 
 			public event BlockCodeEventHandler BlockCodeEvent;
-			public event CommandIdentifierEventHandler CommandIdentifierEvent;
+			public event CommandIdentifierEventHandler
+				CommandIdentifierEvent;
 			public event CommandCodeEventHandler CommandCodeEvent;
 
 			SessionState state = SessionState.NONE;
@@ -448,15 +465,17 @@ namespace CsBoard
 			Hashtable notificationMap;
 			int blockCount;
 			CommandSender commandSender;
-			public CommandSender CommandSender {
-				get {
+			public CommandSender CommandSender
+			{
+				get
+				{
 					return commandSender;
 				}
 			}
 
 			public ICSClient ()
 			{
-				commandSender = new CommandSender(this);
+				commandSender = new CommandSender (this);
 				map = new Hashtable ();
 				ads = new ArrayList ();
 				buffer = new byte[4096];
@@ -472,12 +491,28 @@ namespace CsBoard
 				notificationMap["s"] = NotificationType.S;
 				notificationMap["12"] =
 					NotificationType.STYLE12;
-				notificationMap["g1"] = NotificationType.GAMEINFO;
+				notificationMap["g1"] =
+					NotificationType.GAMEINFO;
 			}
 
 			public bool Start ()
 			{
-				return PostReadRequest ();
+				if (client == null)
+				  {
+					  Connect ();
+					  return PostReadRequest ();
+				  }
+
+				// For reauth, no need to post a read request
+				// this method will be called with the new auth details
+				// so, just resume the auth process (from "login:")
+				if (state == SessionState.REAUTH)
+				  {
+					  streamWriter.WriteLine (user);
+					  streamWriter.Flush ();
+					  state = SessionState.AUTH_REQUEST;
+				  }
+				return true;
 			}
 
 			public void Stop ()
@@ -489,14 +524,18 @@ namespace CsBoard
 			IAsyncResult pending;
 			private bool PostReadRequest ()
 			{
-				if (m_end == buffer.Length) {
-					FireConnectionErrorEvent("Internal error. Buffer full");
-					return false;	// buffer full. but this should not happen
-				}
+				if (m_end == buffer.Length)
+				  {
+					  FireConnectionErrorEvent (Catalog.
+								    GetString
+								    ("Internal error. Buffer full"));
+					  return false;	// buffer full. but this should not happen
+				  }
 				try
 				{
 					pending =
-						stream.BeginRead (buffer, m_end,
+						stream.BeginRead (buffer,
+								  m_end,
 								  buffer.
 								  Length -
 								  m_end,
@@ -505,7 +544,9 @@ namespace CsBoard
 				}
 				catch (Exception e)
 				{
-					FireConnectionErrorEvent(e.ToString());
+					FireConnectionErrorEvent (e.
+								  ToString
+								  ());
 					return false;
 				}
 
@@ -514,33 +555,58 @@ namespace CsBoard
 
 			// This can get triggered from async result which may not be in the
 			// glib context. so add an idle handler
-			private void FireConnectionErrorEvent(string reason) {
-				GLib.Idle.Add(delegate () {
-					if(ConnectionErrorEvent != null)
-						ConnectionErrorEvent(this, reason);
-					
-					return false;
-				});
+			private void FireConnectionErrorEvent (string reason)
+			{
+				state = SessionState.NONE;
+				GLib.Idle.Add (delegate ()
+					       {
+					       if (ConnectionErrorEvent !=
+						   null)
+					       ConnectionErrorEvent (this,
+								     reason);
+					       return false;}
+				);
 			}
 
 			private void ReadAsyncCallback (IAsyncResult res)
 			{
-				int nbytes = stream.EndRead (res);
+				try
+				{
+					int nbytes = stream.EndRead (res);
 
-				m_end += nbytes;
+					if (nbytes <= 0)
+					  {
+						  FireConnectionErrorEvent
+							  (Catalog.
+							   GetString
+							   ("Connection closed!"));
+						  return;
+					  }
+
+					m_end += nbytes;
+					pending = null;
+				}
+				catch (Exception e)
+				{
+					FireConnectionErrorEvent (e.
+								  ToString
+								  ());
+					return;
+				}
+
 				GLib.Idle.Add (ProcessBufferIdleHandler);
-				pending = null;
 			}
 
 			private bool ProcessBufferIdleHandler ()
 			{
-				ProcessBuffer (state !=
-					       SessionState.AUTHENTICATED);
+				ProcessBuffer ();
 				return false;
 			}
 
-			private void ProcessBuffer (bool expecting_auth)
+			private void ProcessBuffer ()
 			{
+				bool expecting_auth =
+					state != SessionState.AUTHENTICATED;
 				for (int i = m_start; i < m_end; i++)
 				  {
 					  if (buffer[i] == '\n')
@@ -564,8 +630,8 @@ namespace CsBoard
 
 				if (m_start > 0)
 				  {
-					  for (int i = m_start, j = 0; i < m_end;
-					       i++, j++)
+					  for (int i = m_start, j = 0;
+					       i < m_end; i++, j++)
 					    {
 						    buffer[j] = buffer[i];
 					    }
@@ -584,7 +650,9 @@ namespace CsBoard
 				while (buffer[i] != '>' && i < end)
 					i++;
 				char[] chrs = new char[i - start];
-				string str = encoding.GetString(buffer, start, i - start);
+				string str =
+					encoding.GetString (buffer, start,
+							    i - start);
 				start = i;
 
 				if (notificationMap.ContainsKey (str))
@@ -636,9 +704,12 @@ namespace CsBoard
 								 (details));
 					  break;
 				  case NotificationType.GAMEINFO:
-					  GameInfo info = GameInfo.FromBuffer(buffer, start, end);
-					  if(GameInfoEvent != null)
-						  GameInfoEvent(this, info);
+					  GameInfo info =
+						  GameInfo.FromBuffer (buffer,
+								       start,
+								       end);
+					  if (GameInfoEvent != null)
+						  GameInfoEvent (this, info);
 					  break;
 				  }
 			}
@@ -682,9 +753,10 @@ namespace CsBoard
 			private LineType GetLineType (byte[]buffer, int start,
 						      int end)
 			{
-				if(IsBlockChar(buffer[start])) {
-					return LineType.Block;
-				}
+				if (IsBlockChar (buffer[start]))
+				  {
+					  return LineType.Block;
+				  }
 				if (buffer[start] == '{')
 					return LineType.ResultNotification;
 
@@ -692,12 +764,14 @@ namespace CsBoard
 					end--;
 				if (end == start)
 					return LineType.Normal;
-				for(int i = start; i < end; i++) {
-					if (buffer[i] == '%')
-						return LineType.Prompt;
-					if(Char.IsWhiteSpace((char) buffer[i]))
-						break;
-				}
+				for (int i = start; i < end; i++)
+				  {
+					  if (buffer[i] == '%')
+						  return LineType.Prompt;
+					  if (Char.
+					      IsWhiteSpace ((char) buffer[i]))
+						  break;
+				  }
 
 				if (buffer[end - 1] == ':')
 					return LineType.Talk;
@@ -715,7 +789,8 @@ namespace CsBoard
 				return LineType.Normal;
 			}
 
-			private void ProcessLine(int start, int count) {
+			private void ProcessLine (int start, int count)
+			{
 				if (buffer[start + count - 1] == '\r')
 				  {
 					  count--;
@@ -727,19 +802,31 @@ namespace CsBoard
 				  }
 				if (count <= 0)
 					return;
-				try {
-					__ProcessLine(start, count);
+				try
+				{
+					__ProcessLine (start, count);
 				}
-				catch(Exception e) {
-					Console.WriteLine("Exception@[LINE:] [{0}]", System.Text.Encoding.ASCII.GetString(buffer, start, count));
-					Console.WriteLine(e);
+				catch (Exception e)
+				{
+					Console.WriteLine
+						("Exception@[LINE:] [{0}]",
+						 System.Text.Encoding.ASCII.
+						 GetString (buffer, start,
+							    count));
+					Console.WriteLine (e);
 				}
 			}
 
-			private static bool GotoBlockStart(byte[] buffer, ref int start, ref int count) {
+			private static bool GotoBlockStart (byte[]buffer,
+							    ref int start,
+							    ref int count)
+			{
 				int idx = start;
-				ParserUtils.GotoThisChar(buffer, (char) BlockCode.BlockStart, ref idx, start + count);
-				if(idx == start + count)
+				ParserUtils.GotoThisChar (buffer,
+							  (char) BlockCode.
+							  BlockStart, ref idx,
+							  start + count);
+				if (idx == start + count)
 					return false;
 				count -= idx - start;
 				start = idx;
@@ -751,14 +838,21 @@ namespace CsBoard
 				LineType type = GetLineType (buffer, start,
 							     start + count);
 
-				if((type == LineType.Prompt && GotoBlockStart(buffer, ref start, ref count)) ||
-				   (type == LineType.Block && buffer[start] == (byte) BlockCode.BlockStart)) {
-					blockCount++;
-				}
+				if ((type == LineType.Prompt
+				     && GotoBlockStart (buffer, ref start,
+							ref count))
+				    || (type == LineType.Block
+					&& buffer[start] ==
+					(byte) BlockCode.BlockStart))
+				  {
+					  blockCount++;
+				  }
 
-				if(blockCount > 0) {
-					HandleBlock(buffer, start, start + count);
-				}
+				if (blockCount > 0)
+				  {
+					  HandleBlock (buffer, start,
+						       start + count);
+				  }
 
 				if (type == LineType.ResultNotification)
 				  {
@@ -787,7 +881,9 @@ namespace CsBoard
 								    type));
 				  }
 
-				string line = encoding.GetString(buffer, start, count);
+				string line =
+					encoding.GetString (buffer, start,
+							    count);
 
 				if (LineReceivedEvent != null)
 					LineReceivedEvent (this,
@@ -815,18 +911,29 @@ namespace CsBoard
 							    AUTH_REQUEST;
 					    }
 					  else if (state ==
-						   SessionState.AUTH_REQUEST)
+						   SessionState.AUTH_REQUEST
+						   || state ==
+						   SessionState.PASSWORD_SENT)
 					    {
+						    state = SessionState.
+							    REAUTH;
 						    if (AuthEvent != null)
 							    AuthEvent (this,
 								       false);
 					    }
 				  }
-				else if (state == SessionState.AUTH_REQUEST && (line.Equals ("password:") || (guestLogin && line.EndsWith(":"))))
+				else if (state == SessionState.AUTH_REQUEST
+					 && (line.Equals ("password:")
+					     || (guestLogin
+						 && line.EndsWith (":"))))
 				  {
-					  if(guestLogin) {
-						  assigned_name = GetAssignedGuestName(buffer, start, start + count);
-					  }
+					  if (guestLogin)
+					    {
+						    assigned_name =
+							    GetAssignedGuestName
+							    (buffer, start,
+							     start + count);
+					    }
 					  streamWriter.WriteLine (passwd);
 					  streamWriter.Flush ();
 					  state = SessionState.PASSWORD_SENT;
@@ -841,58 +948,96 @@ namespace CsBoard
 				  }
 			}
 
-			private void HandleBlock(byte[] buffer, int start, int end) {
-				if(buffer[start] == (byte) BlockCode.BlockStart) {
-					if(BlockCodeEvent != null)
-						BlockCodeEvent(this, BlockCode.BlockStart);
-					start++;
-					if(blockCount == 1) {
-						char commandIdentifier = (char) buffer[start++];
-						if(CommandIdentifierEvent != null)
-							CommandIdentifierEvent(this, commandIdentifier.ToString());
-						int i = ++start;
-						while(buffer[i] != (byte) BlockCode.BlockSeparator)
-							i++;
-						string codestr = encoding.GetString(buffer, start, i - start);
-						CommandCode commandCode = (CommandCode) Int32.Parse(codestr);
-						if(CommandCodeEvent != null)
-							CommandCodeEvent(this, commandCode);
-						start = i + 1;
-					}
-				}
+			private void HandleBlock (byte[]buffer, int start,
+						  int end)
+			{
+				if (buffer[start] ==
+				    (byte) BlockCode.BlockStart)
+				  {
+					  if (BlockCodeEvent != null)
+						  BlockCodeEvent (this,
+								  BlockCode.
+								  BlockStart);
+					  start++;
+					  if (blockCount == 1)
+					    {
+						    char commandIdentifier =
+							    (char)
+							    buffer[start++];
+						    if (CommandIdentifierEvent
+							!= null)
+							    CommandIdentifierEvent
+								    (this,
+								     commandIdentifier.
+								     ToString
+								     ());
+						    int i = ++start;
+						    while (buffer[i] !=
+							   (byte) BlockCode.
+							   BlockSeparator)
+							    i++;
+						    string codestr =
+							    encoding.
+							    GetString (buffer,
+								       start,
+								       i -
+								       start);
+						    CommandCode commandCode =
+							    (CommandCode)
+							    Int32.
+							    Parse (codestr);
+						    if (CommandCodeEvent !=
+							null)
+							    CommandCodeEvent
+								    (this,
+								     commandCode);
+						    start = i + 1;
+					    }
+				  }
 
-				for(int i = start; i < end; i++) {
-					if(!IsBlockChar(buffer[i]))
-					   continue;
-					if(buffer[i] == (byte) BlockCode.BlockEnd)
-						blockCount--;
-					if(BlockCodeEvent != null)
-						BlockCodeEvent(this, (BlockCode) buffer[i]);
-				}
+				for (int i = start; i < end; i++)
+				  {
+					  if (!IsBlockChar (buffer[i]))
+						  continue;
+					  if (buffer[i] ==
+					      (byte) BlockCode.BlockEnd)
+						  blockCount--;
+					  if (BlockCodeEvent != null)
+						  BlockCodeEvent (this,
+								  (BlockCode)
+								  buffer[i]);
+				  }
 			}
 
-			private bool IsBlockChar(byte val) {
+			private bool IsBlockChar (byte val)
+			{
 				BlockCode code = (BlockCode) val;
-				return code == BlockCode.BlockStart || code == BlockCode.BlockEnd ||
-					code == BlockCode.BlockSeparator || code == BlockCode.BlockPoseStart ||
-					code == BlockCode.BlockPoseEnd;
+				return code == BlockCode.BlockStart
+					|| code == BlockCode.BlockEnd
+					|| code == BlockCode.BlockSeparator
+					|| code == BlockCode.BlockPoseStart
+					|| code == BlockCode.BlockPoseEnd;
 			}
 
-			private static string GetAssignedGuestName(byte[] buffer, int start, int end) {
+			private static string
+				GetAssignedGuestName (byte[]buffer, int start,
+						      int end)
+			{
 				int i = end - 1;
-				while(i > start && buffer[i] != '"')
+				while (i > start && buffer[i] != '"')
 					i--;
-				if(i == start)
+				if (i == start)
 					return null;
 
 				int end_offset = i;
 				i--;
-				while(i > start && buffer[i] != '"')
+				while (i > start && buffer[i] != '"')
 					i--;
-				if(i == start)
+				if (i == start)
 					return null;
 				i++;
-				return System.Text.Encoding.ASCII.GetString(buffer, i, end_offset - i);
+				return System.Text.Encoding.ASCII.
+					GetString (buffer, i, end_offset - i);
 			}
 
 			private void HandleAuthSuccess ()
@@ -927,7 +1072,7 @@ namespace CsBoard
 				streamWriter.Flush ();
 			}
 
-			public void Connect ()
+			private void Connect ()
 			{
 				try
 				{
@@ -941,14 +1086,13 @@ namespace CsBoard
 						new StreamReader (stream);
 				} catch
 				{
-					throw new
-						ApplicationException (String.
-								      Format
-								      (Catalog.
-								       GetString
-								       ("Can't connect to {0} port {1}"),
-								       server,
-								       port));
+					FireConnectionErrorEvent (String.
+								  Format
+								  (Catalog.
+								   GetString
+								   ("Can't connect to {0} port {1}"),
+								   server,
+								   port));
 				}
 
 			}
