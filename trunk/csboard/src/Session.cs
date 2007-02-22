@@ -295,22 +295,22 @@ namespace CsBoard
 		public int ICSGamesWinWidth {
 			get {
 				return (int) gconfClient.
-					Get ("/apps/csboard/icswin/width");
+					Get ("/apps/csboard/icsgames/width");
 			}
 			set {
 				gconfClient.
-					Set ("/apps/csboard/icswin/width", value);
+					Set ("/apps/csboard/icsgames/width", value);
 			}
 		}
 
 		public int ICSGamesWinHeight {
 			get {
 				return (int) gconfClient.
-					Get ("/apps/csboard/icswin/height");
+					Get ("/apps/csboard/icsgames/height");
 			}
 
 			set {
-				gconfClient.Set("/apps/csboard/icswin/height", value);
+				gconfClient.Set("/apps/csboard/icsgames/height", value);
 			}
 		}
 
