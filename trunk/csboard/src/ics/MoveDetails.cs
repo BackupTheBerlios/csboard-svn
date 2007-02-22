@@ -139,7 +139,8 @@ namespace CsBoard
 						    if (ch == '-')
 							    ch = '.';
 						    buf.Append (ch);
-						    buf.Append (' ');
+						    if(j != 7)
+							    buf.Append (' ');
 					    }
 					  details.pos.Add (buf.ToString ());
 				  }
