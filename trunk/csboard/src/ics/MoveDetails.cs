@@ -280,13 +280,13 @@ namespace CsBoard
 						     whiteToMove ? "white" :
 						     "black",
 						     details.
-						     whiteCanCastleShort,
+						     whiteCanCastleShort ? 'K' : ' ',
 						     details.
-						     whiteCanCastleLong,
+						     whiteCanCastleLong ? 'Q' : ' ',
 						     details.
-						     blackCanCastleShort,
+						     blackCanCastleShort ? 'k' : ' ',
 						     details.
-						     blackCanCastleLong));
+						     blackCanCastleLong ? 'q' : ' '));
 				details.pos.Insert (0, "");
 
 				return details;
