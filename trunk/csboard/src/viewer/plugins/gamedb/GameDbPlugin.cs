@@ -120,12 +120,12 @@ namespace CsBoard
 				viewer.AddToFileMenu (saveItem);
 				viewer.AddToViewMenu (openDbItem);
 
-				viewer.ChessGameWidget.HTML.
+				viewer.ChessGameWidget.Widget.
 					ButtonPressEvent +=
 					new
 					ButtonPressEventHandler
 					(OnButtonPressEvent);
-				viewer.ChessGameWidget.HTML.PopupMenu +=
+				viewer.ChessGameWidget.Widget.PopupMenu +=
 					new PopupMenuHandler (PopupMenuCb);
 
 				GameViewer.GameDb = GameDb.Instance;

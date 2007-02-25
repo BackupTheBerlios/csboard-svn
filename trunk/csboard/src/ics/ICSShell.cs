@@ -99,14 +99,15 @@ namespace CsBoard
 					  TextIter startIter =
 						  buffer.StartIter;
 					  TextIter endIter =
-						  startIter.Copy ();
+						  startIter;
 					  if (!endIter.ForwardToLineEnd ())
 						  break;
 					  buffer.Delete (startIter, endIter);
 				  }
 
-				buffer.Insert (buffer.EndIter, line);
-				buffer.Insert (buffer.EndIter, "\n");
+				TextIter iter = buffer.EndIter;
+				buffer.Insert (ref iter, line);
+				buffer.Insert (ref iter, "\n");
 				textView.ScrollToIter (buffer.EndIter, 0,
 						       false, 0, 0);
 			}

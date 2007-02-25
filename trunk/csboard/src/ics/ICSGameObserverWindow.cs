@@ -77,8 +77,11 @@ namespace CsBoard
 			private void OnClicked (object o, EventArgs args)
 			{
 				string cmd;
-				if (o.Equals (resignButton))
-					  cmd = "resign";
+				if (o.Equals (resignButton)) {
+					if(!AskForConfirmation(win, Catalog.GetString("Do you really want to resign?")))
+						return;
+					cmd = "resign";
+				}
 				else if (o.Equals (drawButton))
 					  cmd = "draw";
 				else if (o.Equals (abortButton))
@@ -90,6 +93,24 @@ namespace CsBoard
 				else
 					  return;
 				  win.Client.CommandSender.SendCommand (cmd);
+			}
+
+			private static bool AskForConfirmation(Window win, string text) {
+				MessageDialog md =
+					new MessageDialog (win,
+							   DialogFlags.
+							   DestroyWithParent,
+							   MessageType.Question,
+							   ButtonsType.YesNo,
+							   String.
+							   Format
+							   ("<b>{0}</b>",
+							    text));
+
+				int res = md.Run ();
+				md.Hide ();
+				md.Dispose ();
+				return res == (int) ResponseType.Yes;
 			}
 
 			protected override void InitGameWidget (MoveDetails
