@@ -74,6 +74,15 @@ namespace CsBoard
 				  PackStart (box, false, true, 2);
 			}
 
+			public override void Update(MoveDetails details) {
+				if(details.relation == Relation.IamPlayingAndMyMove)
+					board.Sensitive = true;
+				else if(details.relation == Relation.IamPlayingAndMyOppsMove)
+					board.Sensitive = false;
+
+				base.Update(details);
+			}
+
 			private void OnClicked (object o, EventArgs args)
 			{
 				string cmd;
@@ -123,6 +132,13 @@ namespace CsBoard
 
 			private void OnMoveEvent (string move)
 			{
+				if(move.Length == 5 && !Char.IsDigit(move[4])) {
+					// promotion case. insert '='
+					char lastchar = move[4];
+					if(lastchar == 'K' || lastchar == 'k')
+						lastchar = 'N';
+					move = move.Substring(0, 4) + '=' + lastchar;
+				}
 				win.Client.CommandSender.SendCommand (move,
 								      this);
 			}
@@ -261,7 +277,7 @@ namespace CsBoard
 				win.Remove (this);
 			}
 
-			public void Update (MoveDetails details)
+			public virtual void Update (MoveDetails details)
 			{
 				lastMove = details;
 				SetMoveInfo (board, details);
@@ -327,6 +343,7 @@ namespace CsBoard
 				needsUnobserve = false;
 				gameWidget.whiteClock.Stop ();
 				gameWidget.blackClock.Stop ();
+				board.Sensitive = false;
 			}
 
 			protected void SetMoveInfo (CairoBoard
