@@ -46,20 +46,34 @@ namespace CsBoard
 				tree.Model = gamesStore;
 			}
 
-			public void UpdateGame(PGNChessGame game, PGNChessGame replace) {
-				UpdateGameInModel(game, replace, gamesStore);
+			public void UpdateGame (PGNChessGame game,
+						PGNChessGame replace)
+			{
+				UpdateGameInModel (game, replace, gamesStore);
 			}
 
-			private static bool UpdateGameInModel(PGNChessGame game, PGNChessGame replace, TreeModel model) {
+			private static bool UpdateGameInModel (PGNChessGame
+							       game,
+							       PGNChessGame
+							       replace,
+							       TreeModel
+							       model)
+			{
 				TreeIter iter;
 				bool ret;
-				for(ret = model.GetIterFirst(out iter); ret; ret = model.IterNext(ref iter)) {
-					PGNChessGame g = (PGNChessGame) model.GetValue(iter, 0);
-					if(g.Equals(game)) {
-						model.SetValue(iter, 0, replace);
-						return true;
-					}
-				}
+				for (ret = model.GetIterFirst (out iter); ret;
+				     ret = model.IterNext (ref iter))
+				  {
+					  PGNChessGame g =
+						  (PGNChessGame) model.
+						  GetValue (iter, 0);
+					  if (g.Equals (game))
+					    {
+						    model.SetValue (iter, 0,
+								    replace);
+						    return true;
+					    }
+				  }
 
 				return false;
 			}
@@ -73,24 +87,24 @@ namespace CsBoard
 
 				TreeViewColumn col;
 
-				  col = new TreeViewColumn ();
-				  idx_renderer = new CellRendererText ();
-				  idx_renderer.Yalign = 0;
-				  info_renderer = new CellRendererText ();
-				  col.Title = Catalog.GetString ("Games");
-				  col.PackStart (idx_renderer, false);
-				  col.SetCellDataFunc (idx_renderer,
-						       new
-						       TreeCellDataFunc
-						       (IdxCellDataFunc));
-				  col.PackStart (info_renderer, true);
-				  col.SetCellDataFunc (info_renderer,
-						       new
-						       TreeCellDataFunc
-						       (InfoCellDataFunc));
-				  col.Resizable = false;
-				  col.Expand = true;
-				  tree.AppendColumn (col);
+				col = new TreeViewColumn ();
+				idx_renderer = new CellRendererText ();
+				idx_renderer.Yalign = 0;
+				info_renderer = new CellRendererText ();
+				col.Title = Catalog.GetString ("Games");
+				col.PackStart (idx_renderer, false);
+				col.SetCellDataFunc (idx_renderer,
+						     new
+						     TreeCellDataFunc
+						     (IdxCellDataFunc));
+				col.PackStart (info_renderer, true);
+				col.SetCellDataFunc (info_renderer,
+						     new
+						     TreeCellDataFunc
+						     (InfoCellDataFunc));
+				col.Resizable = false;
+				col.Expand = true;
+				tree.AppendColumn (col);
 			}
 
 			protected void IdxCellDataFunc (TreeViewColumn col,
@@ -132,7 +146,7 @@ namespace CsBoard
 				filter = new TreeModelFilter (gamesStore,
 							      null);
 				filter.VisibleFunc = SearchFilterFunc;
-				searchEntry.Activated += OnSearch;
+				searchEntry.Changed += OnSearch;
 			}
 
 			protected bool SearchFilterFunc (TreeModel model,
@@ -225,12 +239,15 @@ namespace CsBoard
 				ShowAll ();
 			}
 
-			public void UpdateGame(PGNChessGame game, PGNChessGame replace) {
-				gamesList.UpdateGame(game, replace);
+			public void UpdateGame (PGNChessGame game,
+						PGNChessGame replace)
+			{
+				gamesList.UpdateGame (game, replace);
 			}
 
-			public void SetGames (ArrayList g) {
-				gamesList.Update(g);
+			public void SetGames (ArrayList g)
+			{
+				gamesList.Update (g);
 			}
 		}
 	}

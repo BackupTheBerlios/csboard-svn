@@ -410,9 +410,10 @@ namespace CsBoard
 					user = value;
 					if (user.Equals ("guest"))
 						guestLogin = true;
-					else {
-						guestLogin = false;
-					}
+					else
+					  {
+						  guestLogin = false;
+					  }
 				}
 				get
 				{
@@ -518,7 +519,8 @@ namespace CsBoard
 
 			public void Stop ()
 			{
-				client.Close();
+				if (client != null)
+					client.Close ();
 				client = null;
 				stream = null;
 				streamReader = null;
@@ -580,9 +582,10 @@ namespace CsBoard
 
 			private void ReadAsyncCallback (IAsyncResult res)
 			{
-				if(stream == null) {
-					return;
-				}
+				if (stream == null)
+				  {
+					  return;
+				  }
 				try
 				{
 					int nbytes = stream.EndRead (res);

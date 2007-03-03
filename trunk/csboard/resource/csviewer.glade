@@ -89,13 +89,13 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="edit1">
+	    <widget class="GtkMenuItem" id="edit2">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Edit</property>
 	      <property name="use_underline">True</property>
 
 	      <child>
-		<widget class="GtkMenu" id="edit1_menu">
+		<widget class="GtkMenu" id="edit2_menu">
 
 		  <child>
 		    <widget class="GtkMenuItem" id="move_comment1">
@@ -155,6 +155,7 @@
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_About</property>
 		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_about_activated" last_modification_time="Sat, 03 Mar 2007 18:16:42 GMT"/>
 		    </widget>
 		  </child>
 		</widget>

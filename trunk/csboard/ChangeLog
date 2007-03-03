@@ -3,6 +3,23 @@
 	modified files
 
 	* configure.in
+	* src/ics/ICSClient.cs
+	* src/ics/ObservableGamesWidget.cs
+	* src/viewer/ChessGameView.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GamesListWidget.cs
+	* src/viewer/plugins/gamedb/GameDb.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* resource/csboard.glade
+	* resource/csviewer.glade
+
+	more ui changes
+	
+2007-02-24 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* configure.in
 	* src/viewer/ChessGameView.cs
 	* src/ics/ICSShell.cs
 	* src/ics/ICSGameObserverWindow.cs

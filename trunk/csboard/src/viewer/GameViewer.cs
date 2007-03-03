@@ -32,7 +32,8 @@ namespace CsBoard
 		using Gtk;
 		using Gdk;
 
-		public delegate void CurrentGameChangedEvent(object o, EventArgs args);
+		public delegate void GameLoadedEventHandler (object o,
+							     EventArgs args);
 		public interface IEcoDb
 		{
 			string GetOpeningName (string econame);
@@ -40,7 +41,9 @@ namespace CsBoard
 
 		public interface IGameDb
 		{
-			void SaveGameDetails (ChessGame game, out ChessGame updated, bool overrite);
+			void SaveGameDetails (ChessGame game,
+					      out ChessGame updated,
+					      bool overrite);
 			bool GetGameDetails (ChessGame game,
 					     out ChessGame details);
 		}
@@ -296,15 +299,18 @@ namespace CsBoard
 				  }
 			}
 
-			public event CurrentGameChangedEvent CurrentGameChanged;
+			public event GameLoadedEventHandler GameLoadedEvent;
 
-			public ChessGame CurrentGame {
-				get {
+			public ChessGame CurrentGame
+			{
+				get
+				{
 					return currentGame;
 				}
-				set {
+				set
+				{
 					currentGame = value;
-					SelectGame(currentGame);
+					SelectGame (currentGame);
 				}
 			}
 
@@ -312,23 +318,28 @@ namespace CsBoard
 
 			private void SelectGame (ChessGame game)
 			{
-				gameSession.Set(game);
-
-				if(CurrentGameChanged != null)
-					CurrentGameChanged(this, EventArgs.Empty);
+				gameSession.Set (game);
 
 				boardWidget.Reset ();
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
 				whiteLabel.Markup =
-					GetMarkupForTitle(game.GetTagValue ("White",
-									    "White"));
+					GetMarkupForTitle (game.
+							   GetTagValue
+							   ("White",
+							    "White"));
 				blackLabel.Markup =
-					GetMarkupForTitle(game.GetTagValue ("Black",
-									    "Black"));
+					GetMarkupForTitle (game.
+							   GetTagValue
+							   ("Black",
+							    "Black"));
 				moveNumberLabel.Text = "";
 				nagCommentLabel.Text = "";
 				pgnDetailsBook.Page = GAME_DETAILS_PAGE;
+
+				if (GameLoadedEvent != null)
+					GameLoadedEvent (this,
+							 EventArgs.Empty);
 			}
 
 			/* This replaces the current game with the new game!
@@ -338,17 +349,20 @@ namespace CsBoard
 			 * game but a subclass of it.
 			 */
 
-			public void UpdateCurrentGame(ChessGame game) {
-				UpdateGame(currentGame, game);
+			public void UpdateCurrentGame (ChessGame game)
+			{
+				UpdateGame (currentGame, game);
 			}
 
-			public void UpdateGame(ChessGame curgame, ChessGame game) {
-				int idx = games.IndexOf(curgame);
-				games.RemoveAt(idx);
-				games.Insert(idx, game);
+			public void UpdateGame (ChessGame curgame,
+						ChessGame game)
+			{
+				int idx = games.IndexOf (curgame);
+				games.RemoveAt (idx);
+				games.Insert (idx, game);
 				// TODO: fire an event
 				// Replace it in the stores
-				gamesListWidget.UpdateGame(curgame, game);
+				gamesListWidget.UpdateGame (curgame, game);
 			}
 
 			ArrayList games;
@@ -370,6 +384,14 @@ namespace CsBoard
 				}
 			}
 
+			public VBox ChessGameDetailsBox
+			{
+				get
+				{
+					return chessGameDetailsBox;
+				}
+			}
+
 			public static void CreateInstance ()
 			{
 				viewer = new GameViewer ();
@@ -386,7 +408,9 @@ namespace CsBoard
 
 				// FIXME: Use libglade to create toolbar                  
 
-				App.session.SetupViewerGeometry (gameViewerWindow);
+				App.session.
+					SetupViewerGeometry
+					(gameViewerWindow);
 				initialDirForFileChooser =
 					App.session.CurrentFolder;
 
@@ -400,11 +424,13 @@ namespace CsBoard
 				//boardWidget.WidthRequest = 400;
 				//boardWidget.HeightRequest = 400;
 				whiteLabel =
-					new Gtk.Label (GetMarkupForTitle(Catalog.GetString("White")));
+					new Gtk.
+					Label (GetMarkupForTitle
+					       (Catalog.GetString ("White")));
 				blackLabel =
-					new Gtk.Label (GetMarkupForTitle(Catalog.
-						       GetString
-						       ("Black")));
+					new Gtk.
+					Label (GetMarkupForTitle
+					       (Catalog.GetString ("Black")));
 				whiteLabel.UseMarkup = true;
 				blackLabel.UseMarkup = true;
 				whiteLabel.Show ();
@@ -437,15 +463,19 @@ namespace CsBoard
 
 				int pos = App.session.ViewerSplitPanePosition;
 				int height = App.session.ViewerHeight;
-				if(pos > height)
+				if (pos > height)
 					pos = height / 2;
 				gamesSplitPane.Position = pos;
 				gameViewerWindow.Show ();
 				gameSession = new GameSession ();
 			}
 
-			private static string GetMarkupForTitle(string str) {
-				return String.Format("<big><big><big><b>{0}</b></big></big></big>", str);
+			private static string GetMarkupForTitle (string str)
+			{
+				return String.
+					Format
+					("<big><big><big><b>{0}</b></big></big></big>",
+					 str);
 			}
 
 			public void Load (string resource)
@@ -505,7 +535,8 @@ namespace CsBoard
 			public void on_quit_activate (System.Object b,
 						      EventArgs e)
 			{
-				App.session.SaveViewerGeometry (gameViewerWindow);
+				App.session.
+					SaveViewerGeometry (gameViewerWindow);
 				App.session.CurrentFolder =
 					initialDirForFileChooser;
 				App.session.ViewerSplitPanePosition =
@@ -529,6 +560,13 @@ namespace CsBoard
 						 ("Operation failed"));
 
 				UpdateMoveDetails (false);
+			}
+
+			protected void on_about_activated (object o,
+							   EventArgs args)
+			{
+				ChessWindow.
+					ShowAboutDialog (gameViewerWindow);
 			}
 
 			public void on_prev_clicked (System.Object o,
@@ -856,8 +894,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();
@@ -873,9 +910,12 @@ namespace CsBoard
 				else
 				  {
 					  ChessGame dbgame;
-					  if (!GameViewer.GameDb.GetGameDetails (game, out dbgame)) {	// not found in the db
-						  dbgame = game;
-					  }
+					  if (!GameViewer.GameDb.
+					      GetGameDetails (game,
+							      out dbgame))
+					    {	// not found in the db
+						    dbgame = game;
+					    }
 					  games.Add (dbgame);
 				  }
 

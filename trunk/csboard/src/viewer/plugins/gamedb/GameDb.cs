@@ -31,7 +31,7 @@ namespace CsBoard
 {
 	namespace Viewer
 	{
-		public class GameDb : IGameDb
+		public class GameDb:IGameDb
 		{
 			ObjectContainer db;
 
@@ -123,26 +123,35 @@ namespace CsBoard
 				db = Db4o.OpenFile (dbfile);
 			}
 
-			public void AddGame (ChessGame game, out PGNGameDetails updated)
+			public void AddGame (ChessGame game,
+					     out PGNGameDetails updated)
 			{
-				AddGame (game, GameRating.Unknown, out updated);
+				AddGame (game, GameRating.Unknown,
+					 out updated);
 			}
 
 			public void AddGame (ChessGame game,
-					     GameRating rating, out PGNGameDetails updated)
+					     GameRating rating,
+					     out PGNGameDetails updated)
+			{
+				FindOrCreateGame (game, out updated);
+				if (updated.Rating != rating)
+				  {
+					  updated.Rating = rating;
+					  SaveGame (updated);
+				  }
+			}
+
+			public bool FindOrCreateGame (ChessGame game,
+						      out PGNGameDetails
+						      updated)
 			{
 				PGNGameDetails info;
-				if(game is PGNGameDetails)
+				if (game is PGNGameDetails)
 					info = (PGNGameDetails) game;
 				else
 					info = new PGNGameDetails (game);
-				info.Rating = rating;
 
-				AddGame (info, out updated);
-			}
-
-			public void AddGame (PGNGameDetails info, out PGNGameDetails updated)
-			{
 				PGNGameDetails existing;
 				if (!FindGame (info, out existing))
 				  {
@@ -150,15 +159,16 @@ namespace CsBoard
 					  db.Set (info);
 					  Config.Instance.Save ();
 					  updated = info;
-					  return;
+					  return true;	// created
 				  }
 
 				updated = existing;
-				// Game found
-				if (existing.Rating == info.Rating)
-					return;
-				existing.Rating = info.Rating;
-				db.Set (existing);
+				return false;
+			}
+
+			public void SaveGame (PGNGameDetails info)
+			{
+				db.Set (info);
 			}
 
 			public Config LoadConfig ()
@@ -309,24 +319,29 @@ namespace CsBoard
 				  }
 			}
 
-			public void SaveGameDetails (ChessGame game, out ChessGame updated, bool overrite) {
-				if(!(game is PGNGameDetails))
-					game = new PGNGameDetails(game);
+			public void SaveGameDetails (ChessGame game,
+						     out ChessGame updated,
+						     bool overrite)
+			{
+				if (!(game is PGNGameDetails))
+					game = new PGNGameDetails (game);
 				PGNGameDetails updatedgame;
-				AddGame(game, out updatedgame); // this will check for duplicates
+				AddGame (game, out updatedgame);	// this will check for duplicates
 				updated = updatedgame;
 			}
 
 			public bool GetGameDetails (ChessGame game,
-					     out ChessGame details) {
+						    out ChessGame details)
+			{
 				PGNGameDetails gamedetails;
-				if(!(game is PGNGameDetails))
-					gamedetails = new PGNGameDetails(game);
+				if (!(game is PGNGameDetails))
+					gamedetails =
+						new PGNGameDetails (game);
 				else
 					gamedetails = (PGNGameDetails) game;
 
 				PGNGameDetails dbgame;
-				bool ret = FindGame(gamedetails, out dbgame);
+				bool ret = FindGame (gamedetails, out dbgame);
 				details = dbgame;
 				return ret;
 			}
@@ -336,8 +351,9 @@ namespace CsBoard
 				db.Close ();
 			}
 
-			public void Commit() {
-				db.Commit();
+			public void Commit ()
+			{
+				db.Commit ();
 			}
 		}
 

@@ -28,6 +28,7 @@ namespace CsBoard
 	{
 		public class ObservableGamesWidget:VBox
 		{
+			int x;
 			private Gtk.TreeView gamesView;
 
 			TreeStore store;

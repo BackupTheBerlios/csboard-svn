@@ -35,6 +35,7 @@ namespace CsBoard
 			  Gtk.MenuItem saveItem, openDbItem;
 
 			ProgressDialog dlg;
+			GameEditor editor;
 
 			public GameDBPlugin ():base ("gamedb",
 						     Catalog.
@@ -92,20 +93,27 @@ namespace CsBoard
 				double totalgames = games.Count;
 				int ngames = 0;
 				// Dont use 'foreach' since the list is going to change
-				for(int i = 0; i < games.Count; i++) {
-					ChessGame game = (ChessGame) games[i];
-					PGNGameDetails updated;
-					if(!(game is PGNGameDetails)) {
-						GameDb.Instance.AddGame (game, out updated);
-						viewer.UpdateGame(game, updated);
-					}
-					
-					ngames++;
-					dlg.UpdateProgress (ngames /
-							    totalgames);
-				}
-				if(ngames > 0)
-					GameDb.Instance.Commit();
+				for (int i = 0; i < games.Count; i++)
+				  {
+					  ChessGame game =
+						  (ChessGame) games[i];
+					  PGNGameDetails updated;
+					  if (!(game is PGNGameDetails))
+					    {
+						    GameDb.Instance.
+							    AddGame (game,
+								     out
+								     updated);
+						    viewer.UpdateGame (game,
+								       updated);
+					    }
+
+					  ngames++;
+					  dlg.UpdateProgress (ngames /
+							      totalgames);
+				  }
+				if (ngames > 0)
+					GameDb.Instance.Commit ();
 
 				dlg.Respond (ResponseType.Ok);
 				return false;
@@ -117,16 +125,14 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
+				editor = new GameEditor (viewer);
+				viewer.ChessGameDetailsBox.PackStart (editor,
+								      false,
+								      true,
+								      2);
+
 				viewer.AddToFileMenu (saveItem);
 				viewer.AddToViewMenu (openDbItem);
-
-				viewer.ChessGameWidget.Widget.
-					ButtonPressEvent +=
-					new
-					ButtonPressEventHandler
-					(OnButtonPressEvent);
-				viewer.ChessGameWidget.Widget.PopupMenu +=
-					new PopupMenuHandler (PopupMenuCb);
 
 				GameViewer.GameDb = GameDb.Instance;
 				return true;
@@ -134,97 +140,149 @@ namespace CsBoard
 
 			public override bool Shutdown ()
 			{
+				viewer.ChessGameDetailsBox.Remove (editor);
 				viewer.RemoveFromViewMenu (saveItem);
 				viewer.RemoveFromViewMenu (openDbItem);
 				return true;
 			}
-
-			private void PopupMenuCb (object o,
-						  PopupMenuArgs args)
-			{
-				Menu menu = new RatingPopup (viewer);
-				menu.ShowAll ();
-				menu.Popup ();
-			}
-
-			[GLib.ConnectBefore]
-				public void OnButtonPressEvent (object o,
-								ButtonPressEventArgs
-								args)
-			{
-				if (args.Event.Button != 3)
-					return;
-				Menu menu = new RatingPopup (viewer);
-				menu.ShowAll ();
-				menu.Popup ();
-			}
 		}
 
-		class RatingPopup:Gtk.Menu
+		class GameEditor:HBox
 		{
-			GameViewer viewer;
-			Hashtable map;
 
-			public RatingPopup (GameViewer viewer)
+			GameViewer viewer;
+			ComboBox combo;
+			ComboBoxEntry tagsCombo;
+			ListStore tagsStore;
+			Button save;
+			  GameRating[] ratings;
+
+			public GameEditor (GameViewer viewer):base ()
 			{
 				this.viewer = viewer;
-				map = new Hashtable ();
-				CheckMenuItem[] ratingItems =
+				viewer.GameLoadedEvent += OnGameLoaded;
+				combo = new ComboBox (new string[]
+						      {
+						      Catalog.
+						      GetString
+						      ("Not interested"),
+						      Catalog.
+						      GetString
+						      ("Average Game"),
+						      Catalog.
+						      GetString ("Good Game"),
+						      Catalog.
+						      GetString
+						      ("Excellent Game"),
+						      Catalog.
+						      GetString ("Must Have")}
+				);
+				save = new Button (Stock.Save);
+				save.Sensitive = false;
+				save.Clicked += OnSave;
+				combo.Changed +=
+					delegate (object o, EventArgs args)
 				{
-				new CheckMenuItem (Catalog.
-							   GetString
-							   ("Not interested")),
-						new
-						CheckMenuItem
-						(Catalog.
-							 GetString
-							 ("Average Game")),
-						new
-						CheckMenuItem
-						(Catalog.
-							 GetString
-							 ("Good Game")),
-						new
-						CheckMenuItem
-						(Catalog.
-							 GetString
-							 ("Excellent Game")),
-						new
-						CheckMenuItem
-						(Catalog.
-							 GetString
-							 ("Must Have"))};
-				GameRating[]ratings =
+					save.Sensitive = true;
+				};
+
+				ratings = new GameRating[]
 				{
 				GameRating.Ignore,
 						GameRating.Average,
 						GameRating.Good,
 						GameRating.Excellent,
 						GameRating.MustHave};
+				tagsStore = new ListStore (typeof (string));
+				tagsCombo = new ComboBoxEntry (tagsStore, 0);
+				tagsCombo.Entry.Activated +=
+					OnTagsComboActivated;
 
-				int i = 0;
-				foreach (CheckMenuItem item in ratingItems)
-				{
-					Append (item);
-					item.Activated += OnRatingActivated;
-					map[item] = ratings[i++];
-					item.Show ();
-				}
+				PackStart (new
+					   Label (Catalog.
+						  GetString ("My Rating")),
+					   false, false, 2);
+				PackStart (combo, false, false, 2);
+				PackStart (tagsCombo, false, false, 2);
+				PackStart (save, false, false, 2);
+
+				ShowAll ();
 			}
 
-			private void OnRatingActivated (object o,
-							EventArgs args)
+			private void OnGameLoaded (object o, EventArgs args)
 			{
-				GameRating rating = (GameRating) map[o];
+				combo.Active = -1;
+				PGNGameDetails details =
+					viewer.CurrentGame as PGNGameDetails;
+				if (details != null
+				    && details.Rating != GameRating.Unknown)
+					combo.Active =
+						details.Rating ==
+						GameRating.
+						Ignore ? 0 : (int) details.
+						Rating;
+				UpdateTagDetails (details);
+				save.Sensitive = false;
+			}
+
+			private void UpdateTagDetails (PGNGameDetails details)
+			{
+				tagsStore.Clear ();
+				if (details == null)
+					return;
+				if (details.Tags != null)
+				  {
+					  foreach (string tag in details.Tags)
+					  {
+						  tagsStore.
+							  AppendValues (tag);
+					  }
+				  }
+			}
+
+			private void OnTagsComboActivated (object o,
+							   EventArgs args)
+			{
+				string str = tagsCombo.Entry.Text.Trim ();
+				if (str.Length > 0)
+				  {
+					  tagsStore.AppendValues (str);
+					  save.Sensitive = true;
+				  }
+				tagsCombo.Entry.Text = "";
+			}
+
+			private void OnSave (object o, EventArgs args)
+			{
+				save.Sensitive = false;
 				ChessGame game = viewer.CurrentGame;
 				if (game == null)
 					return;
 				PGNGameDetails updated;
-				GameDb.Instance.AddGame (game, rating, out updated);
-				GameDb.Instance.Commit();
-				viewer.UpdateCurrentGame(updated);
+				bool newobj =
+					GameDb.Instance.
+					FindOrCreateGame (game, out updated);
+				if (combo.Active >= 0)
+					updated.Rating =
+						ratings[combo.Active];
+				tagsCombo.Model.
+					Foreach (delegate
+						 (TreeModel model,
+						  TreePath path,
+						  TreeIter iter)
+						 {
+						 string tag =
+						 (string) model.
+						 GetValue (iter, 0);
+						 updated.AddTag (tag);
+						 return false;}
+				);
+				if (newobj)
+					viewer.UpdateCurrentGame (updated);
+				GameDb.Instance.SaveGame (updated);
+				UpdateTagDetails (updated);
+				GameDb.Instance.Commit ();
 			}
 		}
-
 	}
 }
