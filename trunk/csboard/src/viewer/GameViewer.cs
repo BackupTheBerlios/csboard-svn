@@ -51,6 +51,7 @@ namespace CsBoard
 		public class GameViewer
 		{
 			[Glade.Widget] private Gtk.Window gameViewerWindow;
+			[Glade.Widget] private Gtk.Toolbar toolbar;
 			[Glade.Widget] private Gtk.VBox chessBoardBox;
 			[Glade.Widget] private Gtk.VBox chessGameDetailsBox;
 			[Glade.Widget] private Gtk.HPaned gamesSplitPane;
@@ -75,6 +76,14 @@ namespace CsBoard
 			private CairoViewerBoard boardWidget;
 			GameSession gameSession;
 
+			public Toolbar Toolbar
+			{
+				get
+				{
+					return toolbar;
+				}
+			}
+
 			public ChessGameWidget ChessGameWidget
 			{
 				get
@@ -91,6 +100,7 @@ namespace CsBoard
 					return gamesListWidget;
 				}
 			}
+
 			GamesListWidget gamesListWidget;
 
 			const int ALL_GAMES_PAGE = 1;
@@ -894,7 +904,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

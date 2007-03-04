@@ -1,3 +1,12 @@
+2007-03-05 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* resource/csviewer.glade
+	* src/viewer/GameViewer.cs
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+
 2007-03-04 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

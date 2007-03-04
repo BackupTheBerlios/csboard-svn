@@ -47,13 +47,13 @@ namespace CsBoard
 			{
 				saveItem = new MenuItem (Catalog.
 							 GetString
-							 ("Add Games to Database"));
+							 ("Add Games to _Database"));
 				saveItem.Activated += on_add_to_db_activate;
 				saveItem.Show ();
 
 				openDbItem = new MenuItem (Catalog.
 							   GetString
-							   ("Games Database"));
+							   ("Games _Database"));
 				openDbItem.Activated +=
 					on_open_games_db_activate;
 				openDbItem.Show ();
@@ -68,9 +68,19 @@ namespace CsBoard
 				  br.Window.Show ();
 			}
 
+			AddToDbDialog dbDlg;
 			private void on_add_to_db_activate (object
 							    o, EventArgs args)
 			{
+				dbDlg = new AddToDbDialog (viewer.Window);
+				if (dbDlg.Run () != (int) ResponseType.Ok)
+				  {
+					  dbDlg.Hide ();
+					  dbDlg.Dispose ();
+					  return;
+				  }
+
+				dbDlg.Hide ();
 				dlg = new ProgressDialog (viewer.Window,
 							  Catalog.
 							  GetString
@@ -80,6 +90,8 @@ namespace CsBoard
 				dlg.Hide ();
 				dlg.Dispose ();
 				dlg = null;
+				dbDlg.Dispose ();
+				dbDlg = null;
 			}
 
 			private bool AddGamesIdleHandler ()
@@ -92,6 +104,20 @@ namespace CsBoard
 				  }
 				double totalgames = games.Count;
 				int ngames = 0;
+				GameCollection collection = null;
+				string[]tags = dbDlg.Tags;
+				if (dbDlg.AddCollection
+				    && dbDlg.CollectionTitle != null)
+				  {
+					  collection =
+						  new GameCollection (dbDlg.
+								      CollectionTitle,
+								      dbDlg.
+								      Description,
+								      new
+								      ArrayList
+								      ());
+				  }
 				// Dont use 'foreach' since the list is going to change
 				for (int i = 0; i < games.Count; i++)
 				  {
@@ -101,17 +127,32 @@ namespace CsBoard
 					  if (!(game is PGNGameDetails))
 					    {
 						    GameDb.Instance.
-							    AddGame (game,
-								     out
-								     updated);
-						    viewer.UpdateGame (game,
-								       updated);
+							    FindOrCreateGame
+							    (game,
+							     out updated);
 					    }
+					  else
+						  updated =
+							  game as
+							  PGNGameDetails;
+
+					  foreach (string tag in tags)
+					  {
+						  updated.AddTag (tag);
+					  }
+					  if (collection != null)
+						  collection.
+							  AddGame (updated);
+					  GameDb.Instance.DB.Set (updated);
+					  viewer.UpdateGame (game, updated);
 
 					  ngames++;
 					  dlg.UpdateProgress (ngames /
 							      totalgames);
 				  }
+				if (collection != null)
+					GameDb.Instance.DB.Set (collection);
+
 				if (ngames > 0)
 					GameDb.Instance.Commit ();
 
@@ -144,6 +185,175 @@ namespace CsBoard
 				viewer.RemoveFromViewMenu (saveItem);
 				viewer.RemoveFromViewMenu (openDbItem);
 				return true;
+			}
+		}
+
+		class AddToDbDialog:Dialog
+		{
+			public Entry tagsEntry, collectionEntry;
+			public TextView description;
+			CheckButton addCollectionToggle;
+
+			public bool AddCollection
+			{
+				get
+				{
+					return addCollectionToggle.Active;
+				}
+			}
+
+			public string CollectionTitle
+			{
+				get
+				{
+					string title =
+						collectionEntry.Text.Trim ();
+					  return title.Length ==
+						0 ? null : title;
+				}
+			}
+
+			public string Description
+			{
+				get
+				{
+					return description.Buffer.Text;
+				}
+			}
+
+			public string[] Tags
+			{
+				get
+				{
+					string tagstr =
+						tagsEntry.Text.Trim ();
+					if (tagstr.Length == 0)
+						return new string[]
+					  {
+					  };
+					System.Text.StringBuilder buf =
+						new System.Text.
+						StringBuilder ();
+					foreach (char ch in tagstr)
+					{
+						if (ch == ' ')
+							continue;
+						buf.Append (ch);
+					}
+					return buf.ToString ().Split (',');
+				}
+			}
+
+			public AddToDbDialog (Window parent):base (Catalog.
+								   GetString
+								   ("Add games to database"),
+								   parent,
+								   DialogFlags.
+								   Modal,
+								   Stock.
+								   Cancel,
+								   ResponseType.
+								   Cancel,
+								   Stock.Ok,
+								   ResponseType.
+								   Ok)
+			{
+				tagsEntry = new Entry ();
+
+				Label label;
+				uint row = 0;
+				Table table = new Table (3, 2, false);
+				table.RowSpacing = table.ColumnSpacing = 4;
+
+				label = new Label ();
+				label.Markup =
+					Catalog.GetString ("<b>Tags</b>");
+				label.Xalign = 0;
+				table.Attach (label, 0, 1, row, row + 1);
+				table.Attach (tagsEntry, 1, 2, row, row + 1);
+
+				row++;
+				label = new Label ();
+				label.Markup =
+					Catalog.
+					GetString
+					("<i><small>Comma separated list of tags</small></i>");
+				label.Xalign = 0;
+				table.Attach (label, 0, 2, row, row + 1);
+
+				row++;
+				table.Attach (GetCollectionDetailsFrame (), 0,
+					      2, row, row + 1);
+				table.ShowAll ();
+				VBox.PackStart (table, true, true, 2);
+			}
+
+			private Frame GetCollectionDetailsFrame ()
+			{
+				collectionEntry = new Entry ();
+				ScrolledWindow scroll = new ScrolledWindow ();
+				scroll.HscrollbarPolicy = PolicyType.Never;
+				scroll.VscrollbarPolicy =
+					PolicyType.Automatic;
+
+				description = new TextView ();
+				description.WrapMode = WrapMode.Word;
+				scroll.Add (description);
+
+				addCollectionToggle =
+					new CheckButton (Catalog.
+							 GetString
+							 ("Create a collection"));
+				addCollectionToggle.Toggled += OnToggled;
+				addCollectionToggle.Active = false;
+				addCollectionToggle.Toggle ();
+
+				Frame frame = new Frame ();
+				Table table = new Table (4, 2, false);
+				Label label;
+				uint row = 0;
+
+				table.RowSpacing = table.ColumnSpacing = 4;
+
+				table.Attach (addCollectionToggle, 0, 2, row,
+					      row + 1);
+
+				row++;
+				label = new Label ();
+				label.Markup =
+					Catalog.GetString ("<b>Title</b>");
+				label.Xalign = 0;
+				table.Attach (label, 0, 1, row, row + 1);
+				table.Attach (collectionEntry, 1, 2, row,
+					      row + 1);
+				row++;
+				label = new Label ();
+				label.Xalign = 0;
+				label.Markup =
+					Catalog.
+					GetString
+					("<i><small>Create a collection with this title</small></i>");
+				table.Attach (label, 0, 2, row, row + 1);
+
+				label = new Label ();
+				label.Markup =
+					Catalog.
+					GetString ("<b>Description</b>");
+				label.Xalign = 0;
+				row++;
+				table.Attach (label, 0, 2, row, row + 1);
+
+				row++;
+				table.Attach (scroll, 0, 2, row, row + 1);
+				frame.Add (table);
+				return frame;
+			}
+
+			private void OnToggled (object o, EventArgs args)
+			{
+				collectionEntry.Sensitive =
+					description.Sensitive =
+					addCollectionToggle.Active;
 			}
 		}
 
@@ -275,7 +485,8 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;}
+						 return false;
+						 }
 				);
 				if (newobj)
 					viewer.UpdateCurrentGame (updated);

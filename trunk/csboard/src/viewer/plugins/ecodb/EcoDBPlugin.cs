@@ -45,7 +45,7 @@ namespace CsBoard
 			{
 				item = new MenuItem (Catalog.
 						     GetString
-						     ("Opening Browser"));
+						     ("_Opening Browser"));
 				item.Activated +=
 					on_view_opening_browser_activate;
 				item.Show ();
@@ -236,7 +236,8 @@ namespace CsBoard
 			{
 				ChessGamePlayer player =
 					ChessGamePlayer.CreatePlayer ();
-				foreach (string move in moves) {
+				foreach (string move in moves)
+				{
 					player.Move (move);
 				}
 				int r1, f1, r2, f2;
