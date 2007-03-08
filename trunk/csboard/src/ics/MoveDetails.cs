@@ -110,9 +110,9 @@ namespace CsBoard
 			public bool blackAtBottom;
 			public bool inMilliseconds;
 
-			private MoveDetails ()
+			public MoveDetails (ArrayList pos)
 			{
-				pos = new ArrayList ();
+				this.pos = pos;
 			}
 
 			// <12> r-r---k- ---nqpp- --p-pnp- b-Pp---- ---P-P-- --N-P-P- --QB--BP RR----K- B -1 0 0 0 0 4 134 GMPopov GMAkopian 0 120 0 34 34 3060 352 19 R/f1-b1 (14:29) Rfb1 0 0 0
@@ -120,7 +120,7 @@ namespace CsBoard
 							      int start,
 							      int end)
 			{
-				MoveDetails details = new MoveDetails ();
+				MoveDetails details = new MoveDetails (new ArrayList());
 
 				// <12> rnbqkb-r pppppppp -----n-- -------- ---P---- -------- PPP-PPPP RNBQKBNR
 				for (int i = 0; i < 8; i++)

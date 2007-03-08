@@ -1,3 +1,22 @@
+2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	added files
+
+	* src/ics/ChessMovesWidget.cs
+	* src/ics/MovesGetter.cs
+	* src/ics/ObservingGamePage.cs
+	* src/ics/PlayerPage.cs
+
+	modified files
+
+	* Makefile.am
+	* src/game/ChessGamePlayer.cs
+	* src/ics/CommandSender.cs
+	* src/ics/ICSGameObserverWindow.cs
+	* src/ics/MoveDetails.cs
+
+	adds a feature to browse the moves of observed games
+	
 2007-03-05 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

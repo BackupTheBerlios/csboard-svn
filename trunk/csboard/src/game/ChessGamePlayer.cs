@@ -460,14 +460,21 @@ namespace Chess
 				normalized_str = str;
 			}
 
-			public bool Move (string str)
+			public bool Move(string str) {
+				string detailed_notation;
+				return Move(str, out detailed_notation);
+			}
+
+			public bool Move (string str, out string detailed_notation)
 			{
 				NormalizeMove (str, out str);
 				bool result = false;
+				detailed_notation = null;
 				if (str.IndexOf ("-") > 0)
 				  {
 					  if (str.Equals ("o-o"))
 					    {
+						    int rank = turn == ColorType.WHITE ? 1 : 8;
 						    result = castle (turn ==
 								     ColorType.
 								     WHITE ?
@@ -476,9 +483,11 @@ namespace Chess
 								     turn,
 								     CastleType.
 								     SHORT_CASTLE);
+						    detailed_notation = String.Format("K/e{0}-g{0}", rank);
 					    }
 					  else if (str.Equals ("o-o-o"))
 					    {
+						    int rank = turn == ColorType.WHITE ? 1 : 8;
 						    result = castle (turn ==
 								     ColorType.
 								     WHITE ?
@@ -487,6 +496,7 @@ namespace Chess
 								     turn,
 								     CastleType.
 								     LONG_CASTLE);
+						    detailed_notation = String.Format("K/e{0}-c{0}", rank);
 					    }
 
 					  return result;
@@ -515,6 +525,14 @@ namespace Chess
 				if (src_rank == -1 || src_file == -1)
 					return false;
 
+				char pieceTypeStr = pieceType == PieceType.PAWN ? 'P' :
+				  Char.ToUpper(str[0]);
+				detailed_notation = String.Format("{0}/{1}{2}-{3}{4}",
+								  pieceTypeStr,
+								  (char) ('a' + src_file),
+								  (char) ('1' + src_rank),
+								  (char) ('a' + dest_file),
+								  (char) ('1' + dest_rank));
 				return move (src_rank, src_file, dest_rank,
 					     dest_file, promotion_type);
 			}
@@ -567,6 +585,12 @@ namespace Chess
 				get
 				{
 					return turn;
+				}
+			}
+
+			public bool WhiteToMove {
+				get {
+					return turn == ColorType.WHITE;
 				}
 			}
 
