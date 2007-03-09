@@ -129,33 +129,6 @@ namespace CsBoard
 
 			}
 
-			static void Popup (string str)
-			{
-				byte[]buffer =
-					System.Text.Encoding.ASCII.
-					GetBytes (str);
-				MoveDetails details =
-					MoveDetails.FromBuffer (buffer, 4,
-								buffer.
-								Length);
-				details.PrintTimeInfo ();
-				ICSGameObserverWindow win =
-					new ICSGameObserverWindow (null);
-				win.Update (details);
-				win.Show ();
-			}
-
-			static void Test ()
-			{
-				string str =
-					"<12> r-r---k- ---nqpp- --p-pnp- b-Pp---- ---P-P-- --N-P-P- --QB--BP RR----K- B -1 0 0 0 0 4 134 GMPopov GMAkopian 0 120 0 34 34 3060 522 19 R/f1-b1 (14:29) Rfb1 0 1 0";
-				str = "<12> r-r---k- ---nqpp- --p-pnp- b-Pp---- ---P-P-- --N-P-P- --QB--BP RR----K- B -1 0 0 0 0 4 134 GMPopov GMAkopian 0 120 0 34 34 3060 352 19 R/f1-b1 (14:29) Rfb1 0 0 0\n\n";
-				Popup (str);
-				str = "<12> rnbqkb-r pppppppp -----n-- -------- ---P---- -------- PPP-PPPP RNBQKBNR W -1 1 1 1 1 1 65 GuestSDSP uvsravikiran -1 3 0 39 39 180000 180000 2 N/g8-f6 (0:00.000) Nf6 1 1 0";
-				Popup (str);
-
-			}
-
 			public void Shutdown ()
 			{
 			}

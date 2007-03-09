@@ -101,14 +101,14 @@ namespace CsBoard
 			const string MOVENUMBER_TAG = "movenumber_tag";
 			const string MOVE_TAG = "move_tag";
 
-			TextTag normalTag;
-			TextTag headingTag;
-			TextTag boldTag;
-			TextTag gametagnameTag;
-			TextTag highlightedTag;
-			TextTag commentTag;
-			TextTag movenumberTag;
-			TextTag moveTag;
+			protected TextTag normalTag;
+			protected TextTag headingTag;
+			protected TextTag boldTag;
+			protected TextTag gametagnameTag;
+			protected TextTag highlightedTag;
+			protected TextTag commentTag;
+			protected TextTag movenumberTag;
+			protected TextTag moveTag;
 
 			Hashtable marks;
 			Hashtable tag_links;

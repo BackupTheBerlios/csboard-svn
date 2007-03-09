@@ -74,47 +74,58 @@ namespace CsBoard
 				  PackStart (box, false, true, 2);
 			}
 
-			public override void Update(MoveDetails details) {
-				if(details.relation == Relation.IamPlayingAndMyMove)
+			public override void Update (MoveDetails details)
+			{
+				if (details.relation ==
+				    Relation.IamPlayingAndMyMove)
 					board.Sensitive = true;
-				else if(details.relation == Relation.IamPlayingAndMyOppsMove)
+				else if (details.relation ==
+					 Relation.IamPlayingAndMyOppsMove)
 					board.Sensitive = false;
 
-				base.Update(details);
+				base.Update (details);
 			}
 
 			private void OnClicked (object o, EventArgs args)
 			{
 				string cmd;
-				if (o.Equals (resignButton)) {
-					if(!AskForConfirmation(win, Catalog.GetString("Do you really want to resign?")))
-						return;
-					cmd = "resign";
-				}
+				if (o.Equals (resignButton))
+				  {
+					  if (!AskForConfirmation
+					      (win,
+					       Catalog.
+					       GetString
+					       ("Do you really want to resign?")))
+						  return;
+					  cmd = "resign";
+				  }
 				else if (o.Equals (drawButton))
 					  cmd = "draw";
 				else if (o.Equals (abortButton))
-					  cmd = "abort";
+					cmd = "abort";
 				else if (o.Equals (adjournButton))
-					  cmd = "adjourn";
+					cmd = "adjourn";
 				else if (o.Equals (takebackButton))
-					  cmd = "takeback";
+					cmd = "takeback";
 				else
-					  return;
-				  win.Client.CommandSender.SendCommand (cmd);
+					return;
+				win.Client.CommandSender.SendCommand (cmd);
 			}
 
-			private static bool AskForConfirmation(Window win, string text) {
-				MessageDialog md =
-					new MessageDialog (win,
-							   DialogFlags.
-							   DestroyWithParent,
-							   MessageType.Question,
-							   ButtonsType.YesNo,
-							   String.
-							   Format
-							   ("<b>{0}</b>",
-							    text));
+			private static bool AskForConfirmation (Window win,
+								string text)
+			{
+				MessageDialog md = new MessageDialog (win,
+								      DialogFlags.
+								      DestroyWithParent,
+								      MessageType.
+								      Question,
+								      ButtonsType.
+								      YesNo,
+								      String.
+								      Format
+								      ("<b>{0}</b>",
+								       text));
 
 				int res = md.Run ();
 				md.Hide ();
@@ -132,13 +143,18 @@ namespace CsBoard
 
 			private void OnMoveEvent (string move)
 			{
-				if(move.Length == 5 && !Char.IsDigit(move[4])) {
-					// promotion case. insert '='
-					char lastchar = move[4];
-					if(lastchar == 'K' || lastchar == 'k')
-						lastchar = 'N';
-					move = move.Substring(0, 4) + '=' + lastchar;
-				}
+				if (move.Length == 5
+				    && !Char.IsDigit (move[4]))
+				  {
+					  // promotion case. insert '='
+					  char lastchar = move[4];
+					  if (lastchar == 'K'
+					      || lastchar == 'k')
+						  lastchar = 'N';
+					  move = move.Substring (0,
+								 4) + '=' +
+						  lastchar;
+				  }
 				win.Client.CommandSender.SendCommand (move,
 								      this);
 			}

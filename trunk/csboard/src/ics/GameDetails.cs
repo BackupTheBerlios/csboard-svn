@@ -119,16 +119,16 @@ namespace CsBoard
 
 			int initial_time;
 			int increment;
-			int whites_remaining_time;
-			int blacks_remaining_time;
+			public int whites_remaining_time;
+			public int blacks_remaining_time;
 
-			int whites_material_strength;
-			int blacks_material_strength;
+			public int whites_material_strength;
+			public int blacks_material_strength;
 
 			bool whiteToMove;
 			int moveNumber;
 			public int gameId;
-			bool inMilliseconds;
+			protected bool inMilliseconds;
 
 			string whites_remaining_time_str;
 			string blacks_remaining_time_str;

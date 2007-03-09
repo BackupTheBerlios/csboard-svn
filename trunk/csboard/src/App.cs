@@ -92,6 +92,7 @@ namespace CsBoard
 
 		public static int StartApp(string[] args) {
 			CsApp app = new CsApp(args);
+			app.csAppWindow.Show();
 			return 0;
 		}
 
@@ -174,7 +175,7 @@ namespace CsBoard
 		class CsApp {
 			string[] args;
 			[Glade.Widget] private Gtk.Button startPlayerButton, startViewerButton, icsPlayerButton;
-			[Glade.Widget] private Gtk.Window csAppWindow;
+			[Glade.Widget] public Gtk.Window csAppWindow;
 			public CsApp(string[] args) {
 				this.args = args;
 				Glade.XML xml = Glade.XML.FromAssembly("csboard.glade", "csAppWindow", null);

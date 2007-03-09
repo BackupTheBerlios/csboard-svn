@@ -82,9 +82,6 @@ namespace CsBoard
 							   int start, int end)
 			{
 				GameInfo info = new GameInfo ();
-				string name;
-				string token;
-
 				  info.gameId =
 					Int32.Parse (ParserUtils.
 						     GetNextToken (buffer,

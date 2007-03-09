@@ -102,7 +102,7 @@ namespace CsBoard
 						  startIter;
 					  if (!endIter.ForwardToLineEnd ())
 						  break;
-					  buffer.Delete (startIter, endIter);
+					  buffer.Delete (ref startIter, ref endIter);
 				  }
 
 				TextIter iter = buffer.EndIter;

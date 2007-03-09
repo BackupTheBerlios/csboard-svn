@@ -39,10 +39,11 @@ namespace CsBoard
 
 		public class PGNGameDetails:ChessGame
 		{
-			int nmoves;
-			string white;
-			string black;
-			string result;
+			// used for indexing
+			protected int nmoves;
+			protected string white;
+			protected string black;
+			protected string result;
 
 			  string[] tags;
 			public string[] Tags

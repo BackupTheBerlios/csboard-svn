@@ -461,7 +461,6 @@ namespace CsBoard
 
 			byte[]buffer;
 			int m_start, m_end;
-			System.Text.Decoder decoder;
 			System.Text.Encoding encoding;
 
 			Hashtable notificationMap;
@@ -482,9 +481,6 @@ namespace CsBoard
 				ads = new ArrayList ();
 				buffer = new byte[4096];
 				m_start = m_end = 0;
-				decoder =
-					System.Text.Encoding.UTF8.
-					GetDecoder ();
 				encoding = System.Text.Encoding.ASCII;
 
 				notificationMap = new Hashtable ();
@@ -532,7 +528,7 @@ namespace CsBoard
 				state = SessionState.NONE;
 			}
 
-			IAsyncResult pending;
+			protected IAsyncResult pending;
 			private bool PostReadRequest ()
 			{
 				if (m_end == buffer.Length)
@@ -665,7 +661,6 @@ namespace CsBoard
 				int i = start;
 				while (buffer[i] != '>' && i < end)
 					i++;
-				char[] chrs = new char[i - start];
 				string str =
 					encoding.GetString (buffer, start,
 							    i - start);

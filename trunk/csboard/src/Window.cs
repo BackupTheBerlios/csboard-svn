@@ -60,8 +60,6 @@ namespace CsBoard
 
 		ChessGameWidget chessGameWidget;
 
-		Chess.Game.ChessGamePlayer player;
-
 		public ChessWindow (string filename) : this(null, filename)
 		{
 		}

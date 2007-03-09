@@ -61,6 +61,8 @@ namespace CsBoard
 			protected ChessMovesWidget movesWidget;
 
 			protected MoveDetails lastMove;
+			protected Button firstButton, prevButton, nextButton,
+				lastButton;
 
 			public static bool IsMyGame (Relation relation)
 			{
@@ -78,7 +80,7 @@ namespace CsBoard
 
 				InitGameWidget (details);
 
-				movesWidget = new ChessMovesWidget();
+				movesWidget = new ChessMovesWidget ();
 				movesWidget.CursorChanged += OnCursorChanged;
 
 				gameWidget.WhiteAtBottom =
@@ -104,7 +106,7 @@ namespace CsBoard
 
 				gameWidget.Show ();
 				board.Show ();
-				movesWidget.Show();
+				movesWidget.Show ();
 
 				HBox box = new HBox ();
 				Button closeButton = new Button ("");
@@ -118,13 +120,19 @@ namespace CsBoard
 
 				PackStart (box, false, true, 2);
 
-				box = new HBox();
-				box.PackStart(gameWidget, true, true, 2);
-				ScrolledWindow scroll = new ScrolledWindow();
+				box = new HBox ();
+				ScrolledWindow scroll = new ScrolledWindow ();
 				scroll.HscrollbarPolicy = PolicyType.Never;
-				scroll.VscrollbarPolicy = PolicyType.Automatic;
-				scroll.Add(movesWidget);
-				box.PackStart(scroll, false, true, 2);
+				scroll.VscrollbarPolicy =
+					PolicyType.Automatic;
+				scroll.Add (movesWidget);
+
+				VBox movesBox = new VBox ();
+				movesBox.PackStart (scroll, true, true, 2);
+				AddGameNavigationButtons (movesBox);
+
+				box.PackStart (gameWidget, true, true, 2);
+				box.PackStart (movesBox, false, true, 2);
 				PackStart (box, true, true, 2);
 
 				closeButton.Clicked += OnCloseButtonClicked;
@@ -133,8 +141,66 @@ namespace CsBoard
 				ShowAll ();
 			}
 
-			public void OnGetMoves(ArrayList moves, int id) {
-			  movesWidget.Prepend(moves);
+			private void AddGameNavigationButtons (VBox box)
+			{
+				firstButton = new Button ();
+				firstButton.Clicked += OnClicked;
+				firstButton.Image =
+					new Image (Stock.GotoFirst,
+						   IconSize.Button);
+				prevButton = new Button ();
+				prevButton.Clicked += OnClicked;
+				prevButton.Image =
+					new Image (Stock.GoBack,
+						   IconSize.Button);
+				nextButton = new Button ();
+				nextButton.Clicked += OnClicked;
+				nextButton.Image =
+					new Image (Stock.GoForward,
+						   IconSize.Button);
+				lastButton = new Button ();
+				lastButton.Clicked += OnClicked;
+				lastButton.Image =
+					new Image (Stock.GotoLast,
+						   IconSize.Button);
+
+				HBox hbox = new HBox ();
+				hbox.PackStart (firstButton, false, false, 2);
+				hbox.PackStart (prevButton, false, false, 2);
+				hbox.PackStart (nextButton, false, false, 2);
+				hbox.PackStart (lastButton, false, false, 2);
+
+				Alignment align =
+					new Alignment (0.5f, 1, 1, 0);
+				align.Add (hbox);
+				box.PackStart (align, false, true, 2);
+			}
+
+			private void OnClicked (object obj, EventArgs args)
+			{
+				MoveDetails details;
+				if (obj.Equals (prevButton))
+					details = movesWidget.PrevMove ();
+				else if (obj.Equals (nextButton))
+					details = movesWidget.NextMove ();
+				else if (obj.Equals (firstButton))
+					details = movesWidget.FirstMove ();
+				else if (obj.Equals (lastButton))
+					details = movesWidget.LastMove ();
+				else
+					details = null;
+
+				if (details == null)
+					return;
+
+				SetMoveInfo (board, details);
+				board.SetPosition (details.pos);
+				board.QueueDraw ();
+			}
+
+			public void OnGetMoves (ArrayList moves, int id)
+			{
+				movesWidget.Prepend (moves);
 			}
 
 			protected virtual void InitGameWidget (MoveDetails
@@ -158,20 +224,24 @@ namespace CsBoard
 				win.Remove (this);
 			}
 
-			private void OnCursorChanged(object o, EventArgs args) {
-			  MoveDetails details = movesWidget.GetMoveDetailsForCursor();
-			  if(details == null)
-			    return;
+			private void OnCursorChanged (object o,
+						      EventArgs args)
+			{
+				MoveDetails details =
+					movesWidget.
+					GetMoveDetailsForCursor ();
+				if (details == null)
+					return;
 
-			  SetMoveInfo (board, details);
-			  board.SetPosition (details.pos);
-			  board.QueueDraw ();
+				SetMoveInfo (board, details);
+				board.SetPosition (details.pos);
+				board.QueueDraw ();
 			}
 
 			public virtual void Update (MoveDetails details)
 			{
 				lastMove = details;
-				UpdateTitleLabelForMove(board, details);
+				UpdateTitleLabelForMove (board, details);
 				SetMoveInfo (board, details);
 				board.SetPosition (details.pos);
 				board.QueueDraw ();
@@ -194,7 +264,7 @@ namespace CsBoard
 					  gameWidget.whiteClock.Stop ();
 					  gameWidget.blackClock.Start ();
 				  }
-				movesWidget.Add(details);
+				movesWidget.Add (details);
 			}
 
 			public void Update (GameInfo info)
@@ -241,7 +311,8 @@ namespace CsBoard
 
 			protected void UpdateTitleLabelForMove (CairoBoard
 								board,
-								MoveDetails details)
+								MoveDetails
+								details)
 			{
 				string notation = details.verbose_notation;
 				if (notation.Equals ("none"))
@@ -257,7 +328,8 @@ namespace CsBoard
 					resultLabel.Markup =
 						String.
 						Format ("<b>{0}... {1}</b>",
-							details.movenumber - 1,
+							details.movenumber -
+							1,
 							details.
 							pretty_notation);
 			}

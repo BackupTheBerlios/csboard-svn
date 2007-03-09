@@ -369,7 +369,7 @@ namespace CsBoard
 				GameDb.Instance.DB.Commit ();
 			}
 
-			private void OnSearchButtonClicked (object o,
+			protected void OnSearchButtonClicked (object o,
 							    EventArgs args)
 			{
 				HandleSearch ();
@@ -381,7 +381,7 @@ namespace CsBoard
 				LoadSelectedGames ();
 			}
 
-			void OnLoadGamesButtonClicked (object obj,
+			protected void OnLoadGamesButtonClicked (object obj,
 						       EventArgs args)
 			{
 				LoadSelectedGames ();

@@ -262,7 +262,6 @@ namespace CsBoard
 			public static GameAdvertisement
 				FromBuffer (byte[]buffer, int start, int end)
 			{
-				int tokbegin, tokend;
 				ParserUtils.SkipWhitespace (buffer, ref start,
 							    end);
 				GameAdvertisement ad =

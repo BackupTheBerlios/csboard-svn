@@ -28,7 +28,6 @@ namespace CsBoard
 	{
 		public class ObservableGamesWidget:VBox
 		{
-			int x;
 			private Gtk.TreeView gamesView;
 
 			TreeStore store;
@@ -38,7 +37,7 @@ namespace CsBoard
 
 			GameObservationManager obManager;
 
-			static Pixbuf ComputerPixbuf =
+			static protected Pixbuf ComputerPixbuf =
 				Gdk.Pixbuf.LoadFromResource ("computer.png");
 
 			Entry filterEntry;
