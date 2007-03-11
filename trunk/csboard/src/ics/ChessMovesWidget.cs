@@ -35,12 +35,19 @@ namespace CsBoard
 			const int WHITE_MOVE_DETAILS_COL = 3;
 			const int BLACK_MOVE_DETAILS_COL = 4;
 			bool blacksMoveNext;
+			bool autoAppend;
+			public bool AutoAppend {
+				get {
+					return autoAppend;
+				}
+			}
 
 			public ChessMovesWidget ():base ()
 			{
 				first_move_number = -1;
 				last_row = last_col = -1;
 				blacksMoveNext = false;
+				autoAppend = true;
 				store = new ListStore (typeof (int),
 						       typeof (string),
 						       typeof (string),
@@ -76,6 +83,7 @@ namespace CsBoard
 				  }
 
 				SetHighlighted (iter, row, col);
+				autoAppend = IsLastMove(row, col);
 			}
 
 			private void ClearHighlighting ()
@@ -99,6 +107,17 @@ namespace CsBoard
 				store.SetValue (lastiter, idx,
 						GetMove (details));
 				last_col = last_row = -1;
+			}
+
+			private bool IsLastMove(int row, int col) {
+			  if(row != total_rows - 1)
+			    return false;
+			  if(blacksMoveNext && col != WHITE_MOVE_COL)
+			    return false;
+			  if(!blacksMoveNext && col != BLACK_MOVE_COL)
+			    return false;
+
+			  return true;
 			}
 
 			private void SetHighlighted (TreeIter iter, int row,
@@ -307,16 +326,18 @@ namespace CsBoard
 					  path = new TreePath (new int[]
 							       {
 							       total_rows});
+					  total_rows++;
 				  }
 
-				total_rows++;
+				blacksMoveNext = true;
+				if(!autoAppend)
+					return;
 				SetHighlighted (iter, path.Indices[0],
 						WHITE_MOVE_COL);
 
 				ScrollToCell (path,
 					      GetColumn (WHITE_MOVE_COL),
 					      false, 0, 0);
-				blacksMoveNext = true;
 			}
 
 			private void BlackMove (MoveDetails details)
@@ -332,10 +353,12 @@ namespace CsBoard
 							      (details), null,
 							      details);
 					  store.GetIterFirst (out iter);
-					  SetHighlighted (iter, 0,
-							  BLACK_MOVE_COL);
 					  total_rows++;
 					  blacksMoveNext = false;
+					  if(!autoAppend)
+					  	return;
+					  SetHighlighted (iter, 0,
+							  BLACK_MOVE_COL);
 					  return;
 				  }
 
@@ -352,10 +375,12 @@ namespace CsBoard
 				store.SetValue (iter,
 						BLACK_MOVE_DETAILS_COL,
 						details);
+				blacksMoveNext = false;
+				if(!autoAppend)
+					return;
 				SetHighlighted (iter,
 						path.
 						Indices[0], BLACK_MOVE_COL);
-				blacksMoveNext = false;
 			}
 
 			private bool FindMoveRow (int movenumber,
@@ -462,6 +487,10 @@ namespace CsBoard
 					return null;
 
 				SetHighlighted (iter, row, col);
+				autoAppend = IsLastMove(row, col);
+				ScrollToCell (path,
+					      GetColumn (col),
+					      false, 0, 0);
 				return details;
 			}
 		}

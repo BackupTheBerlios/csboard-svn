@@ -242,9 +242,11 @@ namespace CsBoard
 			{
 				lastMove = details;
 				UpdateTitleLabelForMove (board, details);
-				SetMoveInfo (board, details);
-				board.SetPosition (details.pos);
-				board.QueueDraw ();
+				if(movesWidget.AutoAppend) {
+					SetMoveInfo (board, details);
+					board.SetPosition (details.pos);
+					board.QueueDraw ();
+				}
 
 				int factor =
 					details.inMilliseconds ? 1 : 1000;
