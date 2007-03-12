@@ -36,8 +36,10 @@ namespace CsBoard
 			const int BLACK_MOVE_DETAILS_COL = 4;
 			bool blacksMoveNext;
 			bool autoAppend;
-			public bool AutoAppend {
-				get {
+			public bool AutoAppend
+			{
+				get
+				{
 					return autoAppend;
 				}
 			}
@@ -53,20 +55,20 @@ namespace CsBoard
 						       typeof (string),
 						       typeof (MoveDetails),
 						       typeof (MoveDetails));
-				  Model = store;
+				Model = store;
 
-				  AppendColumn (Catalog.GetString ("No"),
-						new CellRendererText (),
-						"text", 0);
-				  AppendColumn (Catalog.GetString ("White"),
-						new CellRendererText (),
-						"markup", 1);
-				  AppendColumn (Catalog.GetString ("Black"),
-						new CellRendererText (),
-						"markup", 2);
-				  Selection.Mode = SelectionMode.None;
+				AppendColumn (Catalog.GetString ("No"),
+					      new CellRendererText (),
+					      "text", 0);
+				AppendColumn (Catalog.GetString ("White"),
+					      new CellRendererText (),
+					      "markup", 1);
+				AppendColumn (Catalog.GetString ("Black"),
+					      new CellRendererText (),
+					      "markup", 2);
+				Selection.Mode = SelectionMode.None;
 
-				  CursorChanged += OnCursorChanged;
+				CursorChanged += OnCursorChanged;
 			}
 
 			private void OnCursorChanged (object o,
@@ -83,7 +85,7 @@ namespace CsBoard
 				  }
 
 				SetHighlighted (iter, row, col);
-				autoAppend = IsLastMove(row, col);
+				autoAppend = IsLastMove (row, col);
 			}
 
 			private void ClearHighlighting ()
@@ -109,15 +111,16 @@ namespace CsBoard
 				last_col = last_row = -1;
 			}
 
-			private bool IsLastMove(int row, int col) {
-			  if(row != total_rows - 1)
-			    return false;
-			  if(blacksMoveNext && col != WHITE_MOVE_COL)
-			    return false;
-			  if(!blacksMoveNext && col != BLACK_MOVE_COL)
-			    return false;
+			private bool IsLastMove (int row, int col)
+			{
+				if (row != total_rows - 1)
+					return false;
+				if (blacksMoveNext && col != WHITE_MOVE_COL)
+					return false;
+				if (!blacksMoveNext && col != BLACK_MOVE_COL)
+					return false;
 
-			  return true;
+				return true;
 			}
 
 			private void SetHighlighted (TreeIter iter, int row,
@@ -293,11 +296,15 @@ namespace CsBoard
 					i++;
 				}
 
-				ScrollToCell (new TreePath (new int[]
-							    {
-							    total_rows - 1}),
-					      GetColumn (WHITE_MOVE_COL),
-					      false, 0, 0);
+				if (total_rows > 0)
+					ScrollToCell (new TreePath (new int[]
+								    {
+								    total_rows
+								    - 1}
+						      ),
+						      GetColumn
+						      (WHITE_MOVE_COL), false,
+						      0, 0);
 			}
 
 			private void WhiteMove (MoveDetails details)
@@ -330,7 +337,7 @@ namespace CsBoard
 				  }
 
 				blacksMoveNext = true;
-				if(!autoAppend)
+				if (!autoAppend)
 					return;
 				SetHighlighted (iter, path.Indices[0],
 						WHITE_MOVE_COL);
@@ -355,8 +362,8 @@ namespace CsBoard
 					  store.GetIterFirst (out iter);
 					  total_rows++;
 					  blacksMoveNext = false;
-					  if(!autoAppend)
-					  	return;
+					  if (!autoAppend)
+						  return;
 					  SetHighlighted (iter, 0,
 							  BLACK_MOVE_COL);
 					  return;
@@ -376,7 +383,7 @@ namespace CsBoard
 						BLACK_MOVE_DETAILS_COL,
 						details);
 				blacksMoveNext = false;
-				if(!autoAppend)
+				if (!autoAppend)
 					return;
 				SetHighlighted (iter,
 						path.
@@ -487,10 +494,9 @@ namespace CsBoard
 					return null;
 
 				SetHighlighted (iter, row, col);
-				autoAppend = IsLastMove(row, col);
+				autoAppend = IsLastMove (row, col);
 				ScrollToCell (path,
-					      GetColumn (col),
-					      false, 0, 0);
+					      GetColumn (col), false, 0, 0);
 				return details;
 			}
 		}

@@ -29,6 +29,7 @@ namespace CsBoard
 		{
 			Graph graph;
 			Label infoLabel;
+			  Gtk.Image image;
 			ICSClient client;
 			Hashtable categories;
 			public GameAdvertisementGraph (ICSClient c)
@@ -56,9 +57,15 @@ namespace CsBoard
 					OnGameAdvertisementsCleared;
 				SetSizeRequest (600, 400);
 
+				image = new Gtk.Image ();
 				PackStart (graph, true, true, 4);
-				PackStart (infoLabel, false, true, 4);
-				ShowAll ();
+
+				HBox box = new HBox ();
+				  box.PackStart (image, false, false, 4);
+				  box.PackStart (infoLabel, true, true, 4);
+
+				  PackStart (box, false, true, 4);
+				  ShowAll ();
 			}
 
 			public void OnGameAdvertisementAddEvent (object o,
@@ -96,6 +103,12 @@ namespace CsBoard
 						(info as
 						 GameAdvertisementInfo).
 						Markup;
+				if (info != null && info.Computer)
+					image.Pixbuf =
+						GameAdvertisements.
+						ComputerPixbuf;
+				else
+					image.Pixbuf = null;
 			}
 
 			public void OnGameClicked (object o, IGameInfo info)

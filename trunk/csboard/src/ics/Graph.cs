@@ -187,9 +187,9 @@ namespace CsBoard
 			{
 				if (point.x < 0 || point.y < 0)
 					return;
-				int size = point_size - 2 * inter_point_gap;
-				int x = start_x + point.x + inter_point_gap;
-				int y = start_y - point.y - inter_point_gap;
+				int size = point_size - inter_point_gap;
+				int x = start_x + point.x;
+				int y = start_y - point.y;
 
 				if (point.info.Rated)
 				  {
@@ -246,8 +246,9 @@ namespace CsBoard
 						  continue;
 					  points_within_area++;
 					  GraphPoint matching;
-					  if (!MatchingPoint
-					      (x1, y1, out matching))
+					  if (!OverlappingPoint
+					      (x1, y1, point_size,
+					       out matching))
 					    {
 						    // found a free slot!
 						    x = x1;
@@ -266,8 +267,9 @@ namespace CsBoard
 						  continue;
 					  points_within_area++;
 					  GraphPoint matching;
-					  if (!MatchingPoint
-					      (x1, y1, out matching))
+					  if (!OverlappingPoint
+					      (x1, y1, point_size,
+					       out matching))
 					    {
 						    // found a free slot!
 						    x = x1;
@@ -287,8 +289,9 @@ namespace CsBoard
 						  continue;
 					  points_within_area++;
 					  GraphPoint matching;
-					  if (!MatchingPoint
-					      (x1, y1, out matching))
+					  if (!OverlappingPoint
+					      (x1, y1, point_size,
+					       out matching))
 					    {
 						    // found a free slot!
 						    x = x1;
@@ -308,8 +311,9 @@ namespace CsBoard
 						  continue;
 					  points_within_area++;
 					  GraphPoint matching;
-					  if (!MatchingPoint
-					      (x1, y1, out matching))
+					  if (!OverlappingPoint
+					      (x1, y1, point_size,
+					       out matching))
 					    {
 						    // found a free slot!
 						    x = x1;
@@ -340,8 +344,9 @@ namespace CsBoard
 				  {
 					  GraphPoint matching =
 						  GraphPoint.Zero;
-					  if (!MatchingPoint
-					      (x, y, out matching))
+					  if (!OverlappingPoint
+					      (x, y, point_size,
+					       out matching))
 						  return;
 				  }
 
@@ -362,38 +367,77 @@ namespace CsBoard
 				  }
 			}
 
-			bool PointInsideRect (int x1, int y1, int x2, int y2)
+			bool PointInsideRect (int x1, int y1, int x2, int y2,
+					      int width,
+					      bool compare_downwards)
 			{
-				if (x1 >= x2 && x1 < x2 + point_size &&
-				    y1 >= y2 && y1 < y2 + point_size)
-					return true;
+				if (compare_downwards)
+				  {
+					  // This is when (x2, y2) is the top left corner
+					  if (x1 >= x2 && x1 < x2 + width &&
+					      y1 >= (y2 - width) && y1 < y2)
+						  return true;
+				  }
+				else
+				  {
+					  // This is when (x2, y2) is the bottom left corner
+					  if (x1 >= x2 && x1 < x2 + width &&
+					      y1 >= y2 && y1 < y2 + width)
+						  return true;
+				  }
 				return false;
 			}
 
-			bool IsOverlapping (int x1, int y1, int x2, int y2)
+			bool PointInsideRect (int x1, int y1, int x2, int y2,
+					      int width)
 			{
-				if (PointInsideRect (x1, y1, x2, y2))
+				return PointInsideRect (x1, y1, x2, y2, width,
+							false);
+			}
+
+			bool IsOverlapping (int x1, int y1, int width, int x2,
+					    int y2)
+			{
+				if (PointInsideRect (x1, y1, x2, y2, width))
 					return true;
 				if (PointInsideRect
-				    (x1, y1 + point_size, x2, y2))
+				    (x1, y1 + point_size, x2, y2, width))
 					return true;
 				if (PointInsideRect
-				    (x1 + point_size, y1, x2, y2))
+				    (x1 + point_size, y1, x2, y2, width))
 					return true;
 				if (PointInsideRect
 				    (x1 + point_size, y1 + point_size, x2,
-				     y2))
+				     y2, width))
 					return true;
 				return false;
 			}
 
-			bool MatchingPoint (int x, int y,
-					    out GraphPoint matching)
+			bool OverlappingPoint (int x, int y, int width,
+					       out GraphPoint matching)
 			{
 				foreach (GraphPoint point in points)
 				{
 					if (IsOverlapping
-					    (x, y, point.x, point.y))
+					    (x, y, width, point.x, point.y))
+					  {
+						  matching = point;
+						  return true;
+					  }
+				}
+
+				matching = GraphPoint.Zero;
+				return false;
+			}
+
+			bool MatchingPoint (int x, int y, int width,
+					    out GraphPoint matching)
+			{
+				foreach (GraphPoint point in points)
+				{
+					if (PointInsideRect
+					    (x, y, point.x, point.y, width,
+					     true))
 					  {
 						  matching = point;
 						  return true;
@@ -685,7 +729,9 @@ namespace CsBoard
 						      (int) evt.Y, out x,
 						      out y);
 				GraphPoint matching;
-				if (MatchingPoint (x, y, out matching))
+				if (MatchingPoint
+				    (x, y, point_size - inter_point_gap,
+				     out matching))
 				  {
 					  if (GameClickedEvent != null)
 						  GameClickedEvent (this,
@@ -698,10 +744,10 @@ namespace CsBoard
 					     MotionNotifyEventArgs args)
 			{
 				int x, y;
+				int px, py;
 
-				ConvertToGraphCoords ((int) args.Event.X,
-						      (int) args.Event.Y,
-						      out x, out y);
+				GetPointer (out px, out py);
+				ConvertToGraphCoords (px, py, out x, out y);
 				SetCursorIfAppropriate (x, y);
 			}
 
@@ -721,7 +767,10 @@ namespace CsBoard
 			{
 				bool hover = false;
 				GraphPoint matching;
-				hover = MatchingPoint (x, y, out matching);
+				hover = MatchingPoint (x, y,
+						       point_size -
+						       inter_point_gap,
+						       out matching);
 				if (hover == hoveringOverPoint)
 					return;
 

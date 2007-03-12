@@ -37,7 +37,7 @@ namespace CsBoard
 			int ngames;
 			int nrated;
 
-			static Pixbuf ComputerPixbuf =
+			public static Pixbuf ComputerPixbuf =
 				Gdk.Pixbuf.LoadFromResource ("computer.png");
 
 			TreeIter ratedGamesIter, unratedGamesIter;
