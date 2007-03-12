@@ -107,7 +107,7 @@ namespace CsBoard
 				  Label tipLabel = new Label();
 				  tipLabel.Xalign = 0;
 				  tipLabel.Xpad = 4;
-				  tipLabel.Markup = String.Format("<small><small><i>{0}</i></small></small>",
+				  tipLabel.Markup = String.Format("<small><i>{0}</i></small>",
 								  Catalog.GetString("Press the refresh button to get an updated list of games.\nDouble click on a game to observe it."));
 				  PackStart(tipLabel, false, true, 4);
 				  PackStart (filterEntry, false, true, 4);
