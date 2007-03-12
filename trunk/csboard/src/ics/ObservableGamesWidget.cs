@@ -271,7 +271,7 @@ namespace CsBoard
 			}
 
 			private void GetIter(GameDetails details, out TreeIter iter, out bool needs_expansion) {
-				int x = details.Examined ? 2 : details.Rated ? 1 : 2;
+				int x = details.Examined ? 2 : details.Rated ? 0 : 1;
 				int y;
 				switch(details.GameCategory) {
 					case GameCategory.Blitz:
