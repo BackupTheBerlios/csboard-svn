@@ -68,7 +68,7 @@ namespace CsBoard
 						  ParseLine (id, buffer,
 							     start, end);
 					  }
-					  catch (Exception e)
+					  catch (Exception)
 					  {
 					  }
 					  return;

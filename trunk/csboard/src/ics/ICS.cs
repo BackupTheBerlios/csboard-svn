@@ -42,7 +42,7 @@ namespace CsBoard
 			ObservableGamesWidget observableGames;
 			GameAdvertisements ads;
 			ICSShell shell;
-
+			GameAdvertisementGraph graph;
 
 			public ICS (string command)
 			{
@@ -109,16 +109,21 @@ namespace CsBoard
 				observableGames =
 					new ObservableGamesWidget (obManager);
 
+				graph = new GameAdvertisementGraph (client);
+				icsWin.Book.AppendPage (graph,
+							new Label (Catalog.
+								   GetString
+								   ("Seek Graph")));
 				ads = new GameAdvertisements (client);
 				icsWin.Book.AppendPage (ads,
 							new Label (Catalog.
 								   GetString
-								   ("Game Advertisements")));
+								   ("Game Seeks")));
 
 				icsWin.Book.AppendPage (observableGames,
 							new Label (Catalog.
 								   GetString
-								   ("Observe Games")));
+								   ("Watch Games")));
 
 				shell = new ICSShell (client);
 				icsWin.Book.AppendPage (shell,

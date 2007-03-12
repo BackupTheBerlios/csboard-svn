@@ -149,6 +149,21 @@ namespace CsBoard
 				}
 			}
 
+			public string RatingStr
+			{
+				get
+				{
+					if (rating == 0)
+						return "XXXX";
+					return (IsProvisional
+						|| IsEstimated) ? (rating.
+								   ToString ()
+								   +
+								   rating_char)
+						: rating.ToString ();
+				}
+			}
+
 			public override string ToString ()
 			{
 				StringBuilder buffer = new StringBuilder ();

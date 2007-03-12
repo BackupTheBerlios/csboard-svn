@@ -2,6 +2,22 @@
 
 	added files
 
+	* src/ics/Graph.cs
+	* src/ics/GameAdvertisementGraph.cs
+
+	modified files
+
+	* src/ics/GameAdvertisement.cs
+	* src/ics/GameObservationManager.cs
+	* src/ics/ICS.cs
+	* src/ics/MovesGetter.cs
+
+	added a seek graph that shows the available game seeks
+	
+2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	added files
+
 	* src/ics/ChessMovesWidget.cs
 	* src/ics/MovesGetter.cs
 	* src/ics/ObservingGamePage.cs

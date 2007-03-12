@@ -65,6 +65,8 @@ ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/MovesGetter.cs \
 	$(top_srcdir)/src/ics/ObservingGamePage.cs \
 	$(top_srcdir)/src/ics/PlayerPage.cs \
+	$(top_srcdir)/src/ics/Graph.cs \
+	$(top_srcdir)/src/ics/GameAdvertisementGraph.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs
 
 SOURCE = \

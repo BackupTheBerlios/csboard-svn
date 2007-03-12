@@ -81,7 +81,7 @@ namespace CsBoard
 								       details);
 					  }
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					//Console.WriteLine(e);
 				}
