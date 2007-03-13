@@ -65,15 +65,31 @@ namespace CsBoard
 
 			ArrayList modifiedGames;
 
+			const int ANY_IDX = 0;
+			const int WHITE_IDX = 1;
+			const int BLACK_IDX = 2;
+
+			const int RATING_AVERAGE = 1;
+			const int RATING_GOOD = 2;
+			const int RATING_EXCELLENT = 3;
+			const int RATING_MUST_HAVE = 4;
+
+			const int MATCH_EQUALS = 1;
+			const int MATCH_ABOVE = 2;
+			const int MATCH_BELOW = 3;
+
 			public GameDbBrowser ()
 			{
 				modifiedGames = new ArrayList ();
 
 				ratingMap = new Hashtable ();
-				ratingMap["Average"] = GameRating.Average;
-				ratingMap["Good"] = GameRating.Good;
-				ratingMap["Excellent"] = GameRating.Excellent;
-				ratingMap["Must Have"] = GameRating.MustHave;
+				ratingMap[RATING_AVERAGE] =
+					GameRating.Average;
+				ratingMap[RATING_GOOD] = GameRating.Good;
+				ratingMap[RATING_EXCELLENT] =
+					GameRating.Excellent;
+				ratingMap[RATING_MUST_HAVE] =
+					GameRating.MustHave;
 
 				Glade.XML xml =
 					Glade.XML.
@@ -370,7 +386,7 @@ namespace CsBoard
 			}
 
 			protected void OnSearchButtonClicked (object o,
-							    EventArgs args)
+							      EventArgs args)
 			{
 				HandleSearch ();
 			}
@@ -382,7 +398,8 @@ namespace CsBoard
 			}
 
 			protected void OnLoadGamesButtonClicked (object obj,
-						       EventArgs args)
+								 EventArgs
+								 args)
 			{
 				LoadSelectedGames ();
 			}
@@ -432,9 +449,8 @@ namespace CsBoard
 				query.Constrain (typeof (PGNGameDetails));
 				if (search.Length > 0)
 				  {
-					  string color =
-						  colorOption.ActiveText;
-					  if (color.Equals ("Any"))
+					  int idx = colorOption.Active;
+					  if (idx == ANY_IDX)
 					    {
 						    Query white =
 							    query.
@@ -458,7 +474,7 @@ namespace CsBoard
 							    Or
 							    (blackConstraint);
 					    }
-					  if (color.Equals ("White"))
+					  if (idx == WHITE_IDX)
 					    {
 						    Query white =
 							    query.
@@ -466,7 +482,7 @@ namespace CsBoard
 						    white.Constrain (search).
 							    Like ();
 					    }
-					  else if (color.Equals ("Black"))
+					  else if (idx == BLACK_IDX)
 					    {
 						    Query black =
 							    query.
@@ -484,16 +500,15 @@ namespace CsBoard
 					  int rating =
 						  (int)
 						  ratingMap[ratingChoice.
-							    ActiveText];
-					  switch (ratingMatchOption.
-						  ActiveText)
+							    Active];
+					  switch (ratingMatchOption.Active)
 					    {
-					    case "Equals":
+					    case MATCH_EQUALS:
 						    query.Descend ("rating").
 							    Constrain
 							    (rating).Equal ();
 						    break;
-					    case "Above":
+					    case MATCH_ABOVE:
 						    Query q1 =
 							    query.
 							    Descend
@@ -503,7 +518,7 @@ namespace CsBoard
 							    Greater ();
 						    q1.OrderDescending ();
 						    break;
-					    case "Below":
+					    case MATCH_BELOW:
 						    Query q2 =
 							    query.
 							    Descend

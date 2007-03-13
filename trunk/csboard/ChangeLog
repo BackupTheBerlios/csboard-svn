@@ -1,5 +1,15 @@
 2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
+	modified files
+
+	* po/POTFILES.in
+	* po/te.po
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+
+	updated the translations
+	
+2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
 	added files
 
 	* src/ics/Graph.cs
