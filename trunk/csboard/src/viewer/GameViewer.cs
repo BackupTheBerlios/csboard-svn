@@ -404,7 +404,12 @@ namespace CsBoard
 
 			public static void CreateInstance ()
 			{
+				if(viewer != null) {
+					viewer.gameViewerWindow.Show();
+					return;
+				}
 				viewer = new GameViewer ();
+				CsBoard.Plugin.PluginManager.Instance.StartPlugins ();
 			}
 
 			private GameViewer ()
@@ -418,11 +423,11 @@ namespace CsBoard
 
 				// FIXME: Use libglade to create toolbar                  
 
-				App.session.
+				App.Session.
 					SetupViewerGeometry
 					(gameViewerWindow);
 				initialDirForFileChooser =
-					App.session.CurrentFolder;
+					App.Session.CurrentFolder;
 
 				gameLoaders = new ArrayList ();
 				exporters = new ArrayList ();
@@ -465,14 +470,14 @@ namespace CsBoard
 				gamesListWidget.Tree.RowActivated +=
 					OnRowActivated;
 				boardWidget.highLightMove =
-					App.session.HighLightMove;
+					App.Session.HighLightMove;
 				highlightMoveMenuItem.Active =
-					App.session.HighLightMove;
+					App.Session.HighLightMove;
 				gamesListBox.PackStart (gamesListWidget, true,
 							true, 0);
 
-				int pos = App.session.ViewerSplitPanePosition;
-				int height = App.session.ViewerHeight;
+				int pos = App.Session.ViewerSplitPanePosition;
+				int height = App.Session.ViewerHeight;
 				if (pos > height)
 					pos = height / 2;
 				gamesSplitPane.Position = pos;
@@ -540,18 +545,22 @@ namespace CsBoard
 							    DeleteEventArgs e)
 			{
 				on_quit_activate (b, e);
+				// dont delete the window
+				e.RetVal = true;
 			}
 
 			public void on_quit_activate (System.Object b,
 						      EventArgs e)
 			{
-				App.session.
+				App.Session.
 					SaveViewerGeometry (gameViewerWindow);
-				App.session.CurrentFolder =
+				App.Session.CurrentFolder =
 					initialDirForFileChooser;
-				App.session.ViewerSplitPanePosition =
+				App.Session.ViewerSplitPanePosition =
 					gamesSplitPane.Position;
-				Gtk.Application.Quit ();
+				//CsBoard.Plugin.PluginManager.Instance.ClosePlugins ();
+				gameViewerWindow.Hide();
+				App.Close();
 			}
 
 			public void on_first_clicked (System.Object o,
@@ -570,6 +579,18 @@ namespace CsBoard
 						 ("Operation failed"));
 
 				UpdateMoveDetails (false);
+			}
+
+			public void on_player_clicked (System.Object o,
+						     EventArgs e)
+			{
+				App.StartPlayer(null);
+			}
+
+			public void on_icsplayer_clicked (System.Object o,
+						     EventArgs e)
+			{
+				App.StartICSPlayer();
 			}
 
 			protected void on_about_activated (object o,
@@ -736,7 +757,7 @@ namespace CsBoard
 			{
 				boardWidget.highLightMove =
 					highlightMoveMenuItem.Active;
-				App.session.HighLightMove =
+				App.Session.HighLightMove =
 					highlightMoveMenuItem.Active;
 				boardWidget.QueueDraw ();
 			}

@@ -21,7 +21,8 @@ GAMEDB_CSFILES = 				\
 	$(srcdir)/GamesCollectionDialog.cs	\
 	$(srcdir)/GameDbPlugin.cs
 
-GAMEDB_RESOURCES =				\
+GAMEDB_RESOURCES =					\
+	-resource:$(srcdir)/dbicon.png,dbicon.png	\
 	-resource:$(srcdir)/gamedb.glade
 
 $(GAMEDB_TARGET): $(GAMEDB_CSFILES) $(top_builddir)/csboard.exe $(srcdir)/gamedb.glade

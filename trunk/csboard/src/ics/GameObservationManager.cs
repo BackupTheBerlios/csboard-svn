@@ -132,10 +132,10 @@ namespace CsBoard
 				  }
 
 				win.DeleteEvent += OnDelete;
-				win.Resize (App.session.ICSGamesWinWidth,
-					    App.session.ICSGamesWinHeight);
+				win.Resize (App.Session.ICSGamesWinWidth,
+					    App.Session.ICSGamesWinHeight);
 				win.SplitPane.Position =
-					App.session.
+					App.Session.
 					ICSGamesWinSplitPanePosition;
 
 				win.Show ();
@@ -152,9 +152,9 @@ namespace CsBoard
 				client.CommandSender.SendCommand ("unobserve");	// unobserve all!
 				int width, height;
 				win.GetSize (out width, out height);
-				App.session.ICSGamesWinWidth = width;
-				App.session.ICSGamesWinHeight = height;
-				App.session.ICSGamesWinSplitPanePosition =
+				App.Session.ICSGamesWinWidth = width;
+				App.Session.ICSGamesWinHeight = height;
+				App.Session.ICSGamesWinSplitPanePosition =
 					win.SplitPane.Position;
 				win = null;
 			}

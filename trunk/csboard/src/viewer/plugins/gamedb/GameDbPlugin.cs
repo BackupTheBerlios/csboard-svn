@@ -32,7 +32,8 @@ namespace CsBoard
 		public class GameDBPlugin:CsPlugin
 		{
 			GameViewer viewer;
-			  Gtk.MenuItem saveItem, openDbItem;
+			Gtk.MenuItem saveItem, openDbItem;
+			ToolButton dbToolButton;
 
 			ProgressDialog dlg;
 			GameEditor editor;
@@ -54,6 +55,7 @@ namespace CsBoard
 				openDbItem = new MenuItem (Catalog.
 							   GetString
 							   ("Games _Database"));
+
 				openDbItem.Activated +=
 					on_open_games_db_activate;
 				openDbItem.Show ();
@@ -175,6 +177,13 @@ namespace CsBoard
 				viewer.AddToFileMenu (saveItem);
 				viewer.AddToViewMenu (openDbItem);
 
+				Image img = new Image(new IconSet(Gdk.Pixbuf.LoadFromResource("dbicon.png")), viewer.Toolbar.IconSize);
+				img.Show();
+				dbToolButton = new ToolButton(img, Catalog.GetString("Games DB"));
+				dbToolButton.Clicked += on_open_games_db_activate;
+				dbToolButton.Show();
+				viewer.Toolbar.Insert(dbToolButton, viewer.Toolbar.NItems);
+
 				GameViewer.GameDb = GameDb.Instance;
 				return true;
 			}
@@ -184,6 +193,7 @@ namespace CsBoard
 				viewer.ChessGameDetailsBox.Remove (editor);
 				viewer.RemoveFromViewMenu (saveItem);
 				viewer.RemoveFromViewMenu (openDbItem);
+				viewer.Toolbar.Remove(dbToolButton);
 				return true;
 			}
 		}

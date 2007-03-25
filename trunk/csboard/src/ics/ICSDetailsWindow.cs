@@ -69,13 +69,13 @@ namespace CsBoard
 					int width, height;
 					  icsWindow.GetSize (out width,
 							     out height);
-					  App.session.ICSWinWidth = width;
-					  App.session.ICSWinHeight = height;
-					  Application.Quit ();
+					  App.Session.ICSWinWidth = width;
+					  App.Session.ICSWinHeight = height;
+					  App.Close();
 				};
 
-				int width = App.session.ICSWinWidth;
-				int height = App.session.ICSWinHeight;
+				int width = App.Session.ICSWinWidth;
+				int height = App.Session.ICSWinHeight;
 				icsWindow.Resize (width, height);
 
 				client.AuthEvent += OnAuth;
@@ -154,10 +154,11 @@ namespace CsBoard
 			{
 				int width, height;
 				icsWindow.GetSize(out width, out height);
-				App.session.ICSWinWidth = width;
-				App.session.ICSWinHeight = height;
-
-				Application.Quit ();
+				App.Session.ICSWinWidth = width;
+				App.Session.ICSWinHeight = height;
+				icsWindow.Hide();
+				icsWindow.Dispose();
+				App.Close();
 			}
 
 			protected void on_about_activate (object o,
@@ -182,6 +183,16 @@ namespace CsBoard
 				book.Sensitive = false;
 				connectMenuItem.Sensitive = true;
 				client.Stop();
+			}
+
+			public void on_viewer_clicked (System.Object b, EventArgs e)
+			{
+			  App.StartViewer(null);
+			}
+
+			public void on_player_clicked (System.Object b, EventArgs e)
+			{
+			  App.StartPlayer(null);
 			}
 		}
 	}

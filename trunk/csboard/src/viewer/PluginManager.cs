@@ -55,6 +55,7 @@ namespace CsBoard
 			Type pluginType;
 			CsPlugin plugin;
 			bool loaded;
+			bool initialized;
 
 			public Type PluginType
 			{
@@ -87,11 +88,24 @@ namespace CsBoard
 				}
 			}
 
+			public bool Initialized
+			{
+				get
+				{
+					return initialized;
+				}
+				set
+				{
+					initialized = value;
+				}
+			}
+
 			public PluginInfo (Type t)
 			{
 				pluginType = t;
 				plugin = null;
 				loaded = false;
+				initialized = false;
 			}
 		}
 
@@ -137,16 +151,28 @@ namespace CsBoard
 				  {
 					  PluginInfo info =
 						  (PluginInfo) plugins[i];
-					  if (info.Loaded)
-						  continue;
-					  CsPlugin plugin =
-						  (CsPlugin) Activator.
-						  CreateInstance (info.
-								  PluginType);
-					  info.Plugin = plugin;
-					  info.Loaded = plugin.Initialize ();
+					  if (!info.Loaded) {
+					    CsPlugin plugin =
+					      (CsPlugin) Activator.
+					      CreateInstance (info.
+							      PluginType);
+					    info.Plugin = plugin;
+					  }
+
+					  if(!info.Initialized)
+					    info.Initialized = info.Plugin.Initialize ();
 					  plugins[i] = info;
 				  }
+			}
+
+			public void ClosePlugins() {
+			  for(int i = 0; i < plugins.Count; i++) {
+			    PluginInfo info = (PluginInfo) plugins[i];
+			    if(!info.Loaded || !info.Initialized)
+			      continue;
+			    info.Plugin.Shutdown();
+			    info.Initialized = false;
+			  }
 			}
 
 			ArrayList GetPlugins ()

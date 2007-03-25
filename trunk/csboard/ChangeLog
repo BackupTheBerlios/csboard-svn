@@ -2,6 +2,25 @@
 
 	modified files
 
+	* resource/csboard.glade
+	* resource/csviewer.glade
+	* src/App.cs
+	* src/Window.cs
+	* src/ics/GameObservationManager.cs
+	* src/ics/ICSDetailsWindow.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/PluginManager.cs
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
+	* src/viewer/plugins/ecodb/Makefile.am
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/gamedb/Makefile.am
+
+	added a toolbar
+	
+2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
 	* po/POTFILES.in
 	* po/te.po
 	* src/viewer/plugins/gamedb/GameDbBrowser.cs

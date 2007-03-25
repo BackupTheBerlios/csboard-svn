@@ -66,7 +66,7 @@ namespace CsBoard
 
 		public ChessWindow(string engine, string filename) {
 			if(engine == null)
-				engine = App.session.Engine;
+				engine = App.Session.Engine;
 			/* try { */
 
 			if (engine.LastIndexOf ("crafty ") >= 0)
@@ -132,7 +132,7 @@ namespace CsBoard
 
 			// FIXME: Use libglade to create toolbar                        
 
-			App.session.SetupGeometry (csboardWindow);
+			App.Session.SetupGeometry (csboardWindow);
 			csboardWindow.Show ();
 
 			control.WaitEvent +=
@@ -171,15 +171,15 @@ namespace CsBoard
 
 			SetupLevel ();
 
-			boardWidget.showCoords = App.session.ShowCoords;
-			boardWidget.highLightMove = App.session.HighLightMove;
+			boardWidget.showCoords = App.Session.ShowCoords;
+			boardWidget.highLightMove = App.Session.HighLightMove;
 			boardWidget.showAnimations =
-				App.session.showAnimations;
+				App.Session.showAnimations;
 
-			show_coords.Active = App.session.ShowCoords;
-			last_move.Active = App.session.HighLightMove;
-			possible_moves.Active = App.session.PossibleMoves;
-			animate.Active = App.session.showAnimations;
+			show_coords.Active = App.Session.ShowCoords;
+			last_move.Active = App.Session.HighLightMove;
+			possible_moves.Active = App.Session.PossibleMoves;
+			animate.Active = App.Session.showAnimations;
 
 
 			boardWidget.MoveEvent +=
@@ -190,7 +190,7 @@ namespace CsBoard
 				StartMoveHintHandler (on_board_start_move);
 
 			if (filename == null)
-				control.OpenGame (App.session.Filename);
+				control.OpenGame (App.Session.Filename);
 			else
 				control.OpenGame (filename);
 
@@ -204,9 +204,21 @@ namespace CsBoard
 
 		public void on_quit_activate (System.Object b, EventArgs e)
 		{
-			App.session.SaveGeometry (csboardWindow);
+			App.Session.SaveGeometry (csboardWindow);
 			control.Shutdown ();
-			Application.Quit ();
+			csboardWindow.Hide();
+			csboardWindow.Dispose();
+			App.Close();
+		}
+
+		public void on_viewer_clicked (System.Object b, EventArgs e)
+		{
+		  App.StartViewer(null);
+		}
+
+		public void on_icsplayer_clicked (System.Object b, EventArgs e)
+		{
+		  App.StartICSPlayer();
 		}
 
 		public void on_new_activate (System.Object b, EventArgs e)
@@ -223,7 +235,7 @@ namespace CsBoard
 			chessGameWidget.blackClock.Reset (5 * 60, 0);
 			UpdateGameDetails ();
 
-			control.SaveGame (App.session.Filename);
+			control.SaveGame (App.Session.Filename);
 		}
 
 		private void UpdateGameDetails ()
@@ -261,7 +273,7 @@ namespace CsBoard
 			if (fd.Run () == (int) ResponseType.Ok)
 			  {
 				  control.OpenGame (fd.Filename);
-				  control.SaveGame (App.session.Filename);
+				  control.SaveGame (App.Session.Filename);
 			  }
 			fd.Hide ();
 			fd.Dispose ();
@@ -332,7 +344,7 @@ namespace CsBoard
 
 		public void on_redo_activate (System.Object b, EventArgs e)
 		{
-			control.OpenGame (App.session.Filename);
+			control.OpenGame (App.Session.Filename);
 		}
 
 		public void on_switch_side_activate (System.Object b,
@@ -438,14 +450,14 @@ namespace CsBoard
 			if (advanced.Active)
 				level = Level.Advanced;
 
-			App.session.level = level;
+			App.Session.level = level;
 			control.SetLevel (level);
 		}
 
 		public void on_last_move_activate (System.Object b,
 						   EventArgs e)
 		{
-			App.session.HighLightMove = last_move.Active;
+			App.Session.HighLightMove = last_move.Active;
 			boardWidget.highLightMove = last_move.Active;
 			boardWidget.QueueDraw ();
 		}
@@ -453,7 +465,7 @@ namespace CsBoard
 		public void on_possible_moves_activate (System.Object b,
 							EventArgs e)
 		{
-			App.session.PossibleMoves = possible_moves.Active;
+			App.Session.PossibleMoves = possible_moves.Active;
 			boardWidget.showMoveHint = possible_moves.Active;
 			boardWidget.QueueDraw ();
 		}
@@ -461,13 +473,13 @@ namespace CsBoard
 		public void on_animate_activate (System.Object b, EventArgs e)
 		{
 			boardWidget.showAnimations = animate.Active;
-			App.session.showAnimations = animate.Active;
+			App.Session.showAnimations = animate.Active;
 		}
 
 		public void on_show_coords_activate (System.Object b,
 						     EventArgs e)
 		{
-			App.session.ShowCoords = show_coords.Active;
+			App.Session.ShowCoords = show_coords.Active;
 			boardWidget.showCoords = show_coords.Active;
 			boardWidget.QueueDraw ();
 		}
@@ -530,7 +542,7 @@ namespace CsBoard
 			if (move != null)
 			  {
 				  statusbar.Push (moveStatusbarId, move);
-				  control.SaveGame (App.session.Filename);
+				  control.SaveGame (App.Session.Filename);
 				  boardWidget.lastMove = move;
 				  boardWidget.QueueDraw ();
 			  }
@@ -669,7 +681,7 @@ namespace CsBoard
 		private void SetupLevel ()
 		{
 
-			Level level = App.session.level;
+			Level level = App.Session.level;
 			control.SetLevel (level);
 			switch (level)
 			  {
@@ -697,10 +709,10 @@ namespace CsBoard
 
 		public static void ShowEngineChooser() {
 			string engine =
-				EngineChooser.ChooseEngine (App.session.
+				EngineChooser.ChooseEngine (App.Session.
 							    Engine);
 			if (engine != null)
-				App.session.Engine = engine;
+				App.Session.Engine = engine;
 		}
 	}
 

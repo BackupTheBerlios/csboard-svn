@@ -24,186 +24,120 @@ namespace CsBoard
 	using Mono.Unix;
 	public class App
 	{
+		private static int appCount = 0;
 
-		public static Session session;
-
-		public static int StartViewer (string[]args)
-		{
-			Catalog.Init (Config.packageName,
-				      Config.prefix + "/share/locale");
-
-			try
-			{
-				session = new Session ();
-				GameViewer.CreateInstance ();
-				CsBoard.Plugin.PluginManager.Instance.
-					StartPlugins ();
-				if (args.Length > 1)
-					GameViewer.Instance.Load (args[1]);
-			}
-			catch (ApplicationException)
-			{
-				return 1;
-			}
-			catch (System.Exception e)
-			{
-
-				try
-				{
-					MessageDialog md =
-						new MessageDialog (null,
-								   DialogFlags.
-								   DestroyWithParent,
-								   MessageType.
-								   Error,
-								   ButtonsType.
-								   Close,
-								   Catalog.
-								   GetString
-								   ("<b>Unexpected exception occured</b>\n\n")
-								   +
-								   GLib.
-								   Markup.
-								   EscapeText
-								   (e.
-								    ToString
-								    ()) +
-								   "\n" +
-								   Catalog.
-								   GetString
-								   ("Please send this bug report to\n")
-								   +
-								   "Nickolay V. Shmyrev  &lt;nshmyrev@yandex.ru&gt;\n");
-					md.Run ();
-					md.Hide ();
-					md.Dispose ();
-
-				}
-				catch
-				{
-
-					throw e;
-
-				}
-			}
-
-			return 0;
+		public static void Close() {
+		  appCount--;
+		  if(appCount <= 0) {
+		    Application.Quit();
+		  }
 		}
 
-		public static int StartApp(string[] args) {
-			CsApp app = new CsApp(args);
-			app.csAppWindow.Show();
-			return 0;
+		private static Session session;
+		public static Session Session {
+		  get {
+		    if(session == null)
+		      session = new Session();
+		    return session;
+		  }
 		}
 
+		public static bool StartApp(string[] args) {
+		  try {
+		    if (args.Length > 0 && args[0].Equals ("-viewer"))
+		      StartViewer (args.Length > 1 ? args[1] : null);
+		    else {
+		      string engine = App.Session.Engine;
+		      if(engine != null && engine.StartsWith("ICS"))
+			StartICSPlayer();
+		      else
+			StartPlayer (args.Length > 1 ? args[1] : null);
+		    }
+		  }
+		  catch (ApplicationException)
+		  {
+		    return false;
+		  }
+		  catch (System.Exception e)
+		  {
+		    try
+		    {
+		      MessageDialog md =
+			new MessageDialog (null,
+					   DialogFlags.
+					   DestroyWithParent,
+					   MessageType.
+					   Error,
+					   ButtonsType.
+					   Close,
+					   Catalog.
+					   GetString
+					   ("<b>Unexpected exception occured</b>\n\n")
+					   +
+					   GLib.
+					   Markup.
+					   EscapeText
+					   (e.
+					    ToString
+					    ()) +
+					   "\n" +
+					   Catalog.
+					   GetString
+					   ("Please send this bug report to\n")
+					   +
+					   "Nickolay V. Shmyrev  &lt;nshmyrev@yandex.ru&gt;\n");
+		      md.Run ();
+		      md.Hide ();
+		      md.Dispose ();
+			    
+		    }
+		    catch
+		    {
+			    
+		      throw e;
+			    
+		    }
+		    return false;
+		  }
+			
+		  return true;
+		}
+		
 		public static int Main (string[]args)
 		{
 			Application.Init ();
-			if (args.Length > 0 && args[0].Equals ("-viewer"))
-				StartViewer (args);
-			else if (args.Length > 0 && args[0].Equals ("-player"))
-				StartPlayer (null, args);
-			else
-				StartApp (args);
-			Application.Run ();
-			return 0;
-		}
-
-		public static int StartPlayer (string engine, string[]args)
-		{
 			Catalog.Init (Config.packageName,
 				      Config.prefix + "/share/locale");
 
-			try
-			{
-				session = new Session ();
-				string filename = null;
-				if (args.Length == 1
-				    && System.IO.File.Exists (args[0]))
-				  {
-					  filename = args[0];
-				  }
-				if(engine == null)
-					engine = App.session.Engine;
-				if(engine.StartsWith("ICS"))
-					new CsBoard.ICS.ICS(engine);
-				else
-					new ChessWindow (engine, filename);
-			}
-			catch (System.Exception e)
-			{
-				try
-				{
-					MessageDialog md =
-						new MessageDialog (null,
-								   DialogFlags.
-								   DestroyWithParent,
-								   MessageType.
-								   Error,
-								   ButtonsType.
-								   Close,
-								   Catalog.
-								   GetString
-								   ("<b>Unexpected exception occured</b>\n\n")
-								   +
-								   GLib.
-								   Markup.
-								   EscapeText
-								   (e.
-								    ToString
-								    ()) +
-								   "\n" +
-								   Catalog.
-								   GetString
-								   ("Please send this bug report to\n")
-								   +
-								   "Nickolay V. Shmyrev  &lt;nshmyrev@yandex.ru&gt;\n");
-					md.Run ();
-					md.Hide ();
-					md.Dispose ();
-
-				}
-				catch
-				{
-					throw e;
-				}
-			}
-
+			if(StartApp(args))
+			  Application.Run ();
 			return 0;
 		}
 
-		class CsApp {
-			string[] args;
-			[Glade.Widget] private Gtk.Button startPlayerButton, startViewerButton, icsPlayerButton;
-			[Glade.Widget] public Gtk.Window csAppWindow;
-			public CsApp(string[] args) {
-				this.args = args;
-				Glade.XML xml = Glade.XML.FromAssembly("csboard.glade", "csAppWindow", null);
-				xml.Autoconnect(this);
+		public static void StartICSPlayer ()
+		{
+			string engine = App.Session.Engine;
+			if(engine != null && !engine.StartsWith("ICS"))
+				engine = "ICS ";
 
-				startPlayerButton.Clicked += OnButtonClicked;
-				startViewerButton.Clicked += OnButtonClicked;
-				icsPlayerButton.Clicked += OnButtonClicked;
+			new CsBoard.ICS.ICS(engine);
+			appCount++;
+		}
 
-				csAppWindow.DeleteEvent += delegate (object o, DeleteEventArgs e)
-				{
-					Application.Quit();
-				};
-			}
+		public static void StartPlayer (string filename)
+		{
+		  new ChessWindow (App.Session.Engine, filename);
+		  appCount++;
+		}
 
-			private void OnButtonClicked(object o, EventArgs evargs) {
-				csAppWindow.Hide();
-				if(o.Equals(startPlayerButton)) {
-					App.StartPlayer(null, args);
-				}
-				else if(o.Equals(icsPlayerButton)) {
-					App.StartPlayer("ICS", args);
-				}
-				else {
-					App.StartViewer(args);
-				}
-				csAppWindow.Dispose();
-			}
+		public static void StartViewer (string file)
+		{
+		  bool instance_present = GameViewer.Instance != null;
+		  GameViewer.CreateInstance ();
+		  if (file != null)
+		    GameViewer.Instance.Load (file);
+		  if(!instance_present)
+		    appCount++;
 		}
 	}
 }
