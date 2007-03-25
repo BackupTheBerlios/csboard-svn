@@ -29,7 +29,8 @@ namespace CsBoard
 
 			[Glade.Widget] Window icsWindow;
 			[Glade.Widget] Frame frame;
-			[Glade.Widget] Gtk.MenuItem connectMenuItem, disconnectMenuItem;
+			[Glade.Widget] Gtk.MenuItem connectMenuItem,
+				disconnectMenuItem;
 
 			Notebook book;
 			public Notebook Book
@@ -71,7 +72,7 @@ namespace CsBoard
 							     out height);
 					  App.Session.ICSWinWidth = width;
 					  App.Session.ICSWinHeight = height;
-					  App.Close();
+					  App.Close ();
 				};
 
 				int width = App.Session.ICSWinWidth;
@@ -84,7 +85,9 @@ namespace CsBoard
 
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate (); return false;}
+					       Authenticate ();
+					       return false;
+					       }
 				);
 
 				book.Sensitive = false;
@@ -153,12 +156,12 @@ namespace CsBoard
 							 EventArgs args)
 			{
 				int width, height;
-				icsWindow.GetSize(out width, out height);
+				icsWindow.GetSize (out width, out height);
 				App.Session.ICSWinWidth = width;
 				App.Session.ICSWinHeight = height;
-				icsWindow.Hide();
-				icsWindow.Dispose();
-				App.Close();
+				icsWindow.Hide ();
+				icsWindow.Dispose ();
+				App.Close ();
 			}
 
 			protected void on_about_activate (object o,
@@ -174,25 +177,31 @@ namespace CsBoard
 				ChessWindow.ShowEngineChooser ();
 			}
 
-			protected void on_connect_activate(object o, EventArgs args) {
-				Authenticate();
+			protected void on_connect_activate (object o,
+							    EventArgs args)
+			{
+				Authenticate ();
 			}
 
-			protected void on_disconnect_activate(object o, EventArgs args) {
+			protected void on_disconnect_activate (object o,
+							       EventArgs args)
+			{
 				disconnectMenuItem.Sensitive = false;
 				book.Sensitive = false;
 				connectMenuItem.Sensitive = true;
-				client.Stop();
+				client.Stop ();
 			}
 
-			public void on_viewer_clicked (System.Object b, EventArgs e)
+			public void on_viewer_clicked (System.Object b,
+						       EventArgs e)
 			{
-			  App.StartViewer(null);
+				App.StartViewer (null);
 			}
 
-			public void on_player_clicked (System.Object b, EventArgs e)
+			public void on_player_clicked (System.Object b,
+						       EventArgs e)
 			{
-			  App.StartPlayer(null);
+				App.StartPlayer (null);
 			}
 		}
 	}

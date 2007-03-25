@@ -151,28 +151,36 @@ namespace CsBoard
 				  {
 					  PluginInfo info =
 						  (PluginInfo) plugins[i];
-					  if (!info.Loaded) {
-					    CsPlugin plugin =
-					      (CsPlugin) Activator.
-					      CreateInstance (info.
-							      PluginType);
-					    info.Plugin = plugin;
-					  }
+					  if (!info.Loaded)
+					    {
+						    CsPlugin plugin =
+							    (CsPlugin)
+							    Activator.
+							    CreateInstance
+							    (info.PluginType);
+						    info.Plugin = plugin;
+					    }
 
-					  if(!info.Initialized)
-					    info.Initialized = info.Plugin.Initialize ();
+					  if (!info.Initialized)
+						  info.Initialized =
+							  info.Plugin.
+							  Initialize ();
 					  plugins[i] = info;
 				  }
 			}
 
-			public void ClosePlugins() {
-			  for(int i = 0; i < plugins.Count; i++) {
-			    PluginInfo info = (PluginInfo) plugins[i];
-			    if(!info.Loaded || !info.Initialized)
-			      continue;
-			    info.Plugin.Shutdown();
-			    info.Initialized = false;
-			  }
+			public void ClosePlugins ()
+			{
+				for (int i = 0; i < plugins.Count; i++)
+				  {
+					  PluginInfo info =
+						  (PluginInfo) plugins[i];
+					  if (!info.Loaded
+					      || !info.Initialized)
+						  continue;
+					  info.Plugin.Shutdown ();
+					  info.Initialized = false;
+				  }
 			}
 
 			ArrayList GetPlugins ()
@@ -195,7 +203,9 @@ namespace CsBoard
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine (Catalog.GetString("Exception: \n") +
+					Console.WriteLine (Catalog.
+							   GetString
+							   ("Exception: \n") +
 							   e);
 					return all_plugin_types;
 				}
@@ -219,7 +229,9 @@ namespace CsBoard
 					catch (Exception e)
 					{
 						Console.WriteLine
-							(Catalog.GetString("Failed to load plugin {0}: {1}"),
+							(Catalog.
+							 GetString
+							 ("Failed to load plugin {0}: {1}"),
 							 Path.
 							 GetFileName (file),
 							 e);

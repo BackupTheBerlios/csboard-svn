@@ -19,6 +19,7 @@ namespace CsBoard
 		{
 			GameViewer viewer;
 			MenuItem exportPsMenuItem;
+			ToolButton printToolButton;
 
 			public PGNPrinterPlugin ():base ("pgn-printer",
 							 Catalog.
@@ -28,6 +29,10 @@ namespace CsBoard
 							 GetString
 							 ("Prints PGN games and exports."))
 			{
+				printToolButton =
+					new ToolButton (Gtk.Stock.Print);
+				printToolButton.Clicked += on_print_activate;
+				printToolButton.Show ();
 			}
 
 			public EventHandler OnPrintActivated
@@ -60,6 +65,9 @@ namespace CsBoard
 				  viewer.RegisterExporter (this,
 							   exportPsMenuItem);
 
+				  viewer.Toolbar.Insert (printToolButton,
+							 viewer.Toolbar.
+							 NItems);
 				  return true;
 			}
 

@@ -60,12 +60,13 @@ namespace CsBoard
 
 		ChessGameWidget chessGameWidget;
 
-		public ChessWindow (string filename) : this(null, filename)
+		public ChessWindow (string filename):this (null, filename)
 		{
 		}
 
-		public ChessWindow(string engine, string filename) {
-			if(engine == null)
+		public ChessWindow (string engine, string filename)
+		{
+			if (engine == null)
 				engine = App.Session.Engine;
 			/* try { */
 
@@ -206,19 +207,20 @@ namespace CsBoard
 		{
 			App.Session.SaveGeometry (csboardWindow);
 			control.Shutdown ();
-			csboardWindow.Hide();
-			csboardWindow.Dispose();
-			App.Close();
+			csboardWindow.Hide ();
+			csboardWindow.Dispose ();
+			App.Close ();
 		}
 
 		public void on_viewer_clicked (System.Object b, EventArgs e)
 		{
-		  App.StartViewer(null);
+			App.StartViewer (null);
 		}
 
-		public void on_icsplayer_clicked (System.Object b, EventArgs e)
+		public void on_icsplayer_clicked (System.Object b,
+						  EventArgs e)
 		{
-		  App.StartICSPlayer();
+			App.StartICSPlayer ();
 		}
 
 		public void on_new_activate (System.Object b, EventArgs e)
@@ -230,7 +232,7 @@ namespace CsBoard
 			whitesTurn = true;
 			nmoves = 0;
 
-			boardWidget.Reset();
+			boardWidget.Reset ();
 			chessGameWidget.whiteClock.Reset (5 * 60, 0);
 			chessGameWidget.blackClock.Reset (5 * 60, 0);
 			UpdateGameDetails ();
@@ -506,10 +508,11 @@ namespace CsBoard
 
 		public void on_about_activate (System.Object b, EventArgs e)
 		{
-			ShowAboutDialog(csboardWindow);
+			ShowAboutDialog (csboardWindow);
 		}
 
-		public static void ShowAboutDialog(Gtk.Window win) {
+		public static void ShowAboutDialog (Gtk.Window win)
+		{
 			AboutDialog ad = new AboutDialog ();
 
 			ad.Name = "CsBoard";
@@ -598,9 +601,10 @@ namespace CsBoard
 				  md.Dispose ();
 
 			  }
-			else {
-				UpdateAfterMove ();
-			}
+			else
+			  {
+				  UpdateAfterMove ();
+			  }
 		}
 
 		public void on_board_start_move (string pos)
@@ -704,10 +708,11 @@ namespace CsBoard
 		protected void on_edit_engine_activate (object o,
 							EventArgs args)
 		{
-			ShowEngineChooser();
+			ShowEngineChooser ();
 		}
 
-		public static void ShowEngineChooser() {
+		public static void ShowEngineChooser ()
+		{
 			string engine =
 				EngineChooser.ChooseEngine (App.Session.
 							    Engine);

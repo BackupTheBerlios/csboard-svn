@@ -404,12 +404,14 @@ namespace CsBoard
 
 			public static void CreateInstance ()
 			{
-				if(viewer != null) {
-					viewer.gameViewerWindow.Show();
-					return;
-				}
+				if (viewer != null)
+				  {
+					  viewer.gameViewerWindow.Show ();
+					  return;
+				  }
 				viewer = new GameViewer ();
-				CsBoard.Plugin.PluginManager.Instance.StartPlugins ();
+				CsBoard.Plugin.PluginManager.Instance.
+					StartPlugins ();
 			}
 
 			private GameViewer ()
@@ -559,8 +561,8 @@ namespace CsBoard
 				App.Session.ViewerSplitPanePosition =
 					gamesSplitPane.Position;
 				//CsBoard.Plugin.PluginManager.Instance.ClosePlugins ();
-				gameViewerWindow.Hide();
-				App.Close();
+				gameViewerWindow.Hide ();
+				App.Close ();
 			}
 
 			public void on_first_clicked (System.Object o,
@@ -582,15 +584,15 @@ namespace CsBoard
 			}
 
 			public void on_player_clicked (System.Object o,
-						     EventArgs e)
+						       EventArgs e)
 			{
-				App.StartPlayer(null);
+				App.StartPlayer (null);
 			}
 
 			public void on_icsplayer_clicked (System.Object o,
-						     EventArgs e)
+							  EventArgs e)
 			{
-				App.StartICSPlayer();
+				App.StartICSPlayer ();
 			}
 
 			protected void on_about_activated (object o,
@@ -925,8 +927,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

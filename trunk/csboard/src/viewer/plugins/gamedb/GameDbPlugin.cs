@@ -32,7 +32,7 @@ namespace CsBoard
 		public class GameDBPlugin:CsPlugin
 		{
 			GameViewer viewer;
-			Gtk.MenuItem saveItem, openDbItem;
+			  Gtk.MenuItem saveItem, openDbItem;
 			ToolButton dbToolButton;
 
 			ProgressDialog dlg;
@@ -177,12 +177,23 @@ namespace CsBoard
 				viewer.AddToFileMenu (saveItem);
 				viewer.AddToViewMenu (openDbItem);
 
-				Image img = new Image(new IconSet(Gdk.Pixbuf.LoadFromResource("dbicon.png")), viewer.Toolbar.IconSize);
-				img.Show();
-				dbToolButton = new ToolButton(img, Catalog.GetString("Games DB"));
-				dbToolButton.Clicked += on_open_games_db_activate;
-				dbToolButton.Show();
-				viewer.Toolbar.Insert(dbToolButton, viewer.Toolbar.NItems);
+				Image img =
+					new Image (new
+						   IconSet (Gdk.Pixbuf.
+							    LoadFromResource
+							    ("dbicon.png")),
+						   viewer.Toolbar.IconSize);
+				img.Show ();
+				dbToolButton =
+					new ToolButton (img,
+							Catalog.
+							GetString
+							("Games DB"));
+				dbToolButton.Clicked +=
+					on_open_games_db_activate;
+				dbToolButton.Show ();
+				viewer.Toolbar.Insert (dbToolButton,
+						       viewer.Toolbar.NItems);
 
 				GameViewer.GameDb = GameDb.Instance;
 				return true;
@@ -193,7 +204,7 @@ namespace CsBoard
 				viewer.ChessGameDetailsBox.Remove (editor);
 				viewer.RemoveFromViewMenu (saveItem);
 				viewer.RemoveFromViewMenu (openDbItem);
-				viewer.Toolbar.Remove(dbToolButton);
+				viewer.Toolbar.Remove (dbToolButton);
 				return true;
 			}
 		}
@@ -367,7 +378,7 @@ namespace CsBoard
 			}
 		}
 
-		class GameEditor:HBox
+		class GameEditor:Expander
 		{
 
 			GameViewer viewer;
@@ -377,7 +388,9 @@ namespace CsBoard
 			Button save;
 			  GameRating[] ratings;
 
-			public GameEditor (GameViewer viewer):base ()
+			public GameEditor (GameViewer viewer):base (Catalog.
+								    GetString
+								    ("Rating"))
 			{
 				this.viewer = viewer;
 				viewer.GameLoadedEvent += OnGameLoaded;
@@ -418,13 +431,41 @@ namespace CsBoard
 				tagsCombo.Entry.Activated +=
 					OnTagsComboActivated;
 
-				PackStart (new
-					   Label (Catalog.
-						  GetString ("My Rating")),
-					   false, false, 2);
-				PackStart (combo, false, false, 2);
-				PackStart (tagsCombo, false, false, 2);
-				PackStart (save, false, false, 2);
+				Table table = new Table (3, 2, false);
+				table.RowSpacing = 2;
+				table.ColumnSpacing = 2;
+				uint row = 0, col = 0;
+				Label label =
+					new Label (Catalog.
+						   GetString ("My Rating"));
+				label.Xalign = 0;
+				label.Yalign = 0;
+				table.Attach (label, col, col + 1, row,
+					      row + 1);
+				col++;
+				table.Attach (combo, col, col + 1, row,
+					      row + 1);
+
+				label = new Label (Catalog.
+						   GetString ("Tags"));
+				label.Xalign = 0;
+				label.Yalign = 0;
+				col = 0;
+				row++;
+				table.Attach (label, col, col + 1, row,
+					      row + 1);
+				col++;
+				table.Attach (tagsCombo, col, col + 1, row,
+					      row + 1);
+
+				col = 1;
+				row++;
+				Alignment align = new Alignment (1, 0, 0, 0);
+				align.Add (save);
+				table.Attach (align, col, col + 1, row,
+					      row + 1);
+
+				Add (table);
 
 				ShowAll ();
 			}
@@ -495,8 +536,7 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;
-						 }
+						 return false;}
 				);
 				if (newobj)
 					viewer.UpdateCurrentGame (updated);
