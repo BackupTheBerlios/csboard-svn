@@ -7,165 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csboard 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-17 17:57+0300\n"
-"PO-Revision-Date: 2004-10-20 18:07+0400\n"
+"POT-Creation-Date: 2007-03-31 21:54+0400\n"
+"PO-Revision-Date: 2007-03-21 18:07+0400\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: ../resource/csboard.glade.h:1
-msgid "<b>Available games:</b>"
-msgstr "<b>Доступные игры:</b>"
-
-#: ../resource/csboard.glade.h:2
-msgid "<b>For this position there are moves in a book</b>"
-msgstr "<b>Для этой позиции в книге найдено:</b>"
-
-#: ../resource/csboard.glade.h:3
-msgid "Bishop"
-msgstr "Слон"
-
-#: ../resource/csboard.glade.h:4 ../src/Book.cs:38
-msgid "Book Opening"
-msgstr "Открыть книгу"
-
-#: ../resource/csboard.glade.h:5
-msgid "Game Viewer"
-msgstr "Просмотр игры"
-
-#: ../resource/csboard.glade.h:6
-msgid "Highlight Move"
-msgstr "Подсвечивать ход"
-
-#: ../resource/csboard.glade.h:7
-msgid "Knight"
-msgstr "Конь"
-
-#: ../resource/csboard.glade.h:8
-msgid "Queen"
-msgstr "Ферзь"
-
-#: ../resource/csboard.glade.h:9
-msgid "Rook"
-msgstr "Ладья"
-
-#: ../resource/csboard.glade.h:10
-msgid "Select figure to promote"
-msgstr "Выбирите фигуру"
-
-#: ../resource/csboard.glade.h:11 ../src/ICSSeek.cs:46
-msgid "Start new ICS game"
-msgstr "Начать новую игру на шахматном сервере"
-
-#: ../resource/csboard.glade.h:12
-msgid "Welcome to CS Board"
-msgstr "Добро пожаловать в CS Board"
-
-#: ../resource/csboard.glade.h:13
-msgid "_About"
-msgstr "_О программе"
-
-#: ../resource/csboard.glade.h:14
-msgid "_Action"
-msgstr "_Действия"
-
-#: ../resource/csboard.glade.h:15
-msgid "_Advanced"
-msgstr "_Сильный"
-
-#: ../resource/csboard.glade.h:16
-msgid "_Animate"
-msgstr "_Анимировать"
-
-#: ../resource/csboard.glade.h:17
-msgid "_Beginner"
-msgstr "_Начинающий"
-
-#: ../resource/csboard.glade.h:18
-msgid "_Book"
-msgstr "_Книга"
-
-#: ../resource/csboard.glade.h:19
-msgid "_Contents"
-msgstr "_Содержание"
-
-#: ../resource/csboard.glade.h:20
-msgid "_Coords"
-msgstr "_Координаты"
-
-#: ../resource/csboard.glade.h:21
-msgid "_Expert"
-msgstr "_Эксперт"
-
-#: ../resource/csboard.glade.h:22
-msgid "_Export As"
-msgstr "_Экспорт"
-
-#: ../resource/csboard.glade.h:23
-msgid "_File"
-msgstr "_Файл"
-
-#: ../resource/csboard.glade.h:24
-msgid "_Game"
-msgstr "_Игра"
-
-#: ../resource/csboard.glade.h:25
-msgid "_Help"
-msgstr "_Справка"
-
-#: ../resource/csboard.glade.h:26
-msgid "_Hint"
-msgstr "_Подсказка"
-
-#: ../resource/csboard.glade.h:27
-msgid "_Intermediate"
-msgstr "_Средний"
-
-#: ../resource/csboard.glade.h:28
-msgid "_Last Move"
-msgstr "_Последний ход"
-
-#: ../resource/csboard.glade.h:29
-msgid "_Level"
-msgstr "_Уровень"
-
-#: ../resource/csboard.glade.h:30
-msgid "_New"
-msgstr "_Новая"
-
-#: ../resource/csboard.glade.h:31
-msgid "_Open"
-msgstr "_Открыть"
-
-#: ../resource/csboard.glade.h:32
-msgid "_Possible Moves"
-msgstr "_Возможные ходы"
-
-#: ../resource/csboard.glade.h:33
-msgid "_Quit"
-msgstr "_Выйти"
-
-#: ../resource/csboard.glade.h:34
-msgid "_Redo"
-msgstr "_Возвратить"
-
-#: ../resource/csboard.glade.h:35
-msgid "_Save"
-msgstr "_Сохранить"
-
-#: ../resource/csboard.glade.h:36
-msgid "_Switch Side"
-msgstr "_Переключить сторону"
-
-#: ../resource/csboard.glade.h:37
-msgid "_Undo"
-msgstr "_Отменить"
-
-#: ../resource/csboard.glade.h:38
-msgid "_View"
-msgstr "_Вид"
 
 #: ../data/csboard.desktop.in.h:1
 msgid "CSBoard chess "
@@ -174,14 +22,6 @@ msgstr "Шахматы CSBoard"
 #: ../data/csboard.desktop.in.h:2
 msgid "Play chess with gnuchess engine"
 msgstr "Игра в шахматы с gnuchess"
-
-#: ../data/csviewer.desktop.in.h:1
-msgid "Chess Game Viewer"
-msgstr "Просмотр шахматных партий"
-
-#: ../data/csviewer.desktop.in.h:2
-msgid "View chess games in PGN format"
-msgstr "Просмотр шахматных партий в формате PGN"
 
 #: ../data/csboard.schemas.in.h:1
 msgid "Add nice visual animate effect."
@@ -235,112 +75,332 @@ msgid "Highligh possible moves"
 msgstr "Показывать возможные ходы"
 
 #: ../data/csboard.schemas.in.h:10
+msgid "ICS games window height"
+msgstr "Высота окон игр ICS"
+
+#: ../data/csboard.schemas.in.h:11
+msgid "ICS games window width"
+msgstr "Ширина окон игр ICS"
+
+#: ../data/csboard.schemas.in.h:12
+msgid "ICS window height"
+msgstr "Высота окна ICS"
+
+#: ../data/csboard.schemas.in.h:13
+msgid "ICS window width"
+msgstr "Ширина окна ICS"
+
+#: ../data/csboard.schemas.in.h:14
 msgid "Level of player"
 msgstr "Уровень игрока"
 
-#: ../data/csboard.schemas.in.h:11
+#: ../data/csboard.schemas.in.h:15
 msgid "Saved board window height"
 msgstr "Сохраненная высота окна"
 
-#: ../data/csboard.schemas.in.h:12
+#: ../data/csboard.schemas.in.h:16
 msgid "Saved board window width"
 msgstr "Сохраненная ширина окна"
 
-#: ../data/csboard.schemas.in.h:13
+#: ../data/csboard.schemas.in.h:17
+msgid "Saved game viewer window height"
+msgstr "Сохраненная высота окна приложения просмотра игр"
+
+#: ../data/csboard.schemas.in.h:18
+msgid "Saved viewer window width"
+msgstr "Сохраненная ширина окна приложения просмотра игр"
+
+#: ../data/csboard.schemas.in.h:19
 msgid "Should I highlight all possible moves for newbe."
 msgstr "Показывать возможные ходы для новичков."
 
-#: ../data/csboard.schemas.in.h:14
+#: ../data/csboard.schemas.in.h:20
 msgid "Show Coordinates on Chess Board"
 msgstr "Показывать координаты на доске"
 
-#: ../data/csboard.schemas.in.h:15
+#: ../data/csboard.schemas.in.h:21
 msgid "Show Coords"
 msgstr "Показывать координаты"
 
-#: ../data/csboard.schemas.in.h:16
+#: ../data/csboard.schemas.in.h:22
+msgid "Split pane position"
+msgstr "Позиция разделителя"
+
+#: ../data/csboard.schemas.in.h:23
 msgid "This key adjusts engine strenght"
 msgstr "Это поле изменяет силу игры"
 
-#: ../data/csboard.schemas.in.h:17
+#: ../data/csboard.schemas.in.h:24
+msgid "Viewer window height"
+msgstr "Высота окна просмотра"
+
+#: ../data/csboard.schemas.in.h:25
+msgid "Viewer window width"
+msgstr "Ширина окна просмотра"
+
+#: ../data/csboard.schemas.in.h:26
 msgid "Window height"
 msgstr "Высота окна"
 
-#: ../data/csboard.schemas.in.h:18
+#: ../data/csboard.schemas.in.h:27
 msgid "Window width"
 msgstr "Ширина окна"
 
-#: ../src/App.cs:67 ../src/App.cs:138
+#: ../data/csviewer.desktop.in.h:1
+msgid "Chess Game Viewer"
+msgstr "Просмотр шахматных партий"
+
+#: ../data/csviewer.desktop.in.h:2
+msgid "View chess games in PGN format"
+msgstr "Просмотр шахматных партий в формате PGN"
+
+#: ../resource/csboard.glade.h:1
+msgid "5000"
+msgstr "5000"
+
+#: ../resource/csboard.glade.h:2
+msgid "<b>Available games:</b>"
+msgstr "<b>Доступные игры:</b>"
+
+#: ../resource/csboard.glade.h:3
+msgid "<b>For this position there are moves in a book</b>"
+msgstr "<b>Для этой позиции в книге найдено:</b>"
+
+#: ../resource/csboard.glade.h:4
+msgid "Bishop"
+msgstr "Слон"
+
+#: ../resource/csboard.glade.h:5 ../src/Book.cs:38
+msgid "Book Opening"
+msgstr "Открыть книгу"
+
+#: ../resource/csboard.glade.h:6
+msgid "Choose an engine"
+msgstr "Выберите программу игры"
+
+#: ../resource/csboard.glade.h:7
+msgid "Crafty"
+msgstr "Crafty"
+
+#: ../resource/csboard.glade.h:8
+msgid "Engines"
+msgstr "Программы"
+
+#: ../resource/csboard.glade.h:9
+msgid "GnuChess"
+msgstr "GnuChess"
+
+#: ../resource/csboard.glade.h:10
+msgid "Guest Login"
+msgstr "Гостевой вход"
+
+#: ../resource/csboard.glade.h:11
+msgid "ICS Server Configuration"
+msgstr "Конфигурация сервера ICS"
+
+#: ../resource/csboard.glade.h:12
+msgid "Internet Chess Server"
+msgstr "Сетевой шахматный сервер"
+
+#: ../resource/csboard.glade.h:13
+msgid "Knight"
+msgstr "Конь"
+
+#: ../resource/csboard.glade.h:14
+msgid "Password"
+msgstr "Пароль"
+
+#: ../resource/csboard.glade.h:15
+msgid "Phalanx"
+msgstr "Phalanx"
+
+#: ../resource/csboard.glade.h:16 ../resource/csviewer.glade.h:6
+msgid "Play Online"
+msgstr "Играть в сети"
+
+#: ../resource/csboard.glade.h:17 ../resource/csviewer.glade.h:7
+#: ../src/ics/ICSSeek.cs:92
+msgid "Player"
+msgstr "Игрок"
+
+#: ../resource/csboard.glade.h:18
+msgid "Port"
+msgstr "Порт"
+
+#: ../resource/csboard.glade.h:19
+msgid "Queen"
+msgstr "Ферзь"
+
+#: ../resource/csboard.glade.h:20
+msgid "Rook"
+msgstr "Ладья"
+
+#: ../resource/csboard.glade.h:21
+msgid "Select figure to promote"
+msgstr "Выбирите фигуру"
+
+#: ../resource/csboard.glade.h:22
+msgid "Server"
+msgstr "Сервер"
+
+#: ../resource/csboard.glade.h:23 ../src/ics/ICSSeek.cs:53
+msgid "Start new ICS game"
+msgstr "Начать новую игру на шахматном сервере"
+
+#: ../resource/csboard.glade.h:24
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: ../resource/csboard.glade.h:25
+msgid "Viewer"
+msgstr "Просмотр"
+
+#: ../resource/csboard.glade.h:26
+msgid "Welcome to CS Board"
+msgstr "Добро пожаловать в CS Board"
+
+#: ../resource/csboard.glade.h:27 ../resource/csviewer.glade.h:8
+msgid "_About"
+msgstr "_О программе"
+
+#: ../resource/csboard.glade.h:28
+msgid "_Action"
+msgstr "_Действия"
+
+#: ../resource/csboard.glade.h:29
+msgid "_Advanced"
+msgstr "_Сильный"
+
+#: ../resource/csboard.glade.h:30
+msgid "_Animate"
+msgstr "_Анимировать"
+
+#: ../resource/csboard.glade.h:31
+msgid "_Beginner"
+msgstr "_Начинающий"
+
+#: ../resource/csboard.glade.h:32
+msgid "_Book"
+msgstr "_Книга"
+
+#: ../resource/csboard.glade.h:33
+msgid "_Contents"
+msgstr "_Содержание"
+
+#: ../resource/csboard.glade.h:34
+msgid "_Coords"
+msgstr "_Координаты"
+
+#: ../resource/csboard.glade.h:35 ../resource/csviewer.glade.h:9
+msgid "_Edit"
+msgstr "_Правка"
+
+#: ../resource/csboard.glade.h:36
+msgid "_Edit Engine"
+msgstr "_Правка программы"
+
+#: ../resource/csboard.glade.h:37
+msgid "_Expert"
+msgstr "_Эксперт"
+
+#: ../resource/csboard.glade.h:38 ../resource/csviewer.glade.h:11
+msgid "_File"
+msgstr "_Файл"
+
+#: ../resource/csboard.glade.h:39
+msgid "_Game"
+msgstr "_Игра"
+
+#: ../resource/csboard.glade.h:40 ../resource/csviewer.glade.h:12
+msgid "_Help"
+msgstr "_Справка"
+
+#: ../resource/csboard.glade.h:41
+msgid "_Hint"
+msgstr "_Подсказка"
+
+#: ../resource/csboard.glade.h:42
+msgid "_Intermediate"
+msgstr "_Средний"
+
+#: ../resource/csboard.glade.h:43
+msgid "_Last Move"
+msgstr "_Последний ход"
+
+#: ../resource/csboard.glade.h:44
+msgid "_Level"
+msgstr "_Уровень"
+
+#: ../resource/csboard.glade.h:45
+msgid "_New"
+msgstr "_Новая"
+
+#: ../resource/csboard.glade.h:46
+msgid "_Open"
+msgstr "_Открыть"
+
+#: ../resource/csboard.glade.h:47
+msgid "_Possible Moves"
+msgstr "_Возможные ходы"
+
+#: ../resource/csboard.glade.h:48
+msgid "_Quit"
+msgstr "_Выйти"
+
+#: ../resource/csboard.glade.h:49
+msgid "_Redo"
+msgstr "_Возвратить"
+
+#: ../resource/csboard.glade.h:50
+msgid "_Save"
+msgstr "_Сохранить"
+
+#: ../resource/csboard.glade.h:51
+msgid "_Switch Side"
+msgstr "_Переключить сторону"
+
+#: ../resource/csboard.glade.h:52
+msgid "_Undo"
+msgstr "_Отменить"
+
+#: ../resource/csboard.glade.h:53 ../resource/csviewer.glade.h:13
+msgid "_View"
+msgstr "_Вид"
+
+#: ../resource/csviewer.glade.h:1
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:13
+msgid "All Games"
+msgstr "Все игры"
+
+#: ../resource/csviewer.glade.h:2
+msgid "Current Game"
+msgstr "Текущая игра"
+
+#: ../resource/csviewer.glade.h:3
+msgid "Game Viewer"
+msgstr "Просмотр игры"
+
+#: ../resource/csviewer.glade.h:4
+msgid "Highlight Move"
+msgstr "Подсвечивать ход"
+
+#: ../resource/csviewer.glade.h:5
+msgid "Move Comment"
+msgstr "Переместить комментарий"
+
+#: ../resource/csviewer.glade.h:10
+msgid "_Export As"
+msgstr "_Экспорт"
+
+#: ../src/App.cs:87
 msgid ""
 "<b>Unexpected exception occured</b>\n"
 "\n"
 msgstr "<b>Возникла непредвиденная ошибка</b>\n"
 
-#: ../src/App.cs:78 ../src/App.cs:149
+#: ../src/App.cs:98
 msgid "Please send this bug report to\n"
 msgstr "Пожалуйста, отправьте эту информацию\n"
-
-#: ../src/Window.cs:82
-msgid ""
-"<b>Unknown engine</b>\n"
-"\n"
-"Please check gconf keys of csboard"
-msgstr ""
-"<b>Неизвестная шахматная программа</b>\n"
-"\n"
-"Пожалуйста, проверьте значение настроекcsboard в gconf"
-
-#: ../src/Window.cs:195
-msgid "Open Game"
-msgstr "Открыть файл игры"
-
-#: ../src/Window.cs:210
-msgid "Save Game"
-msgstr "Сохранить игру"
-
-#: ../src/Window.cs:227
-msgid "File "
-msgstr "Файл "
-
-#: ../src/Window.cs:228
-msgid ""
-" already exists\n"
-"\n"
-msgstr ""
-"уже существует\n"
-"\n"
-
-#: ../src/Window.cs:229
-msgid "Do you wish to overwrite it?"
-msgstr "Вы хотите переписать его?"
-
-#: ../src/Window.cs:270
-msgid "There is no book move in this position"
-msgstr "Для этой позиции в книге нет ходов"
-
-#: ../src/Window.cs:311
-msgid "You can move "
-msgstr "Вы можете пойти "
-
-#: ../src/Window.cs:382
-msgid "translator_credits"
-msgstr "Nickolay V. Shmyrev <nshmyrev@yandex.ru>"
-
-#: ../src/Window.cs:425
-msgid "Illegal move"
-msgstr "Некорректный ход"
-
-#: ../src/Window.cs:445 ../src/Window.cs:454
-msgid "Game Over"
-msgstr "Игра закончена"
-
-#: ../src/Window.cs:466
-msgid "Thinking"
-msgstr "Думаю"
-
-#: ../src/Promotion.cs:43
-msgid "Select a figure to promote"
-msgstr "Выбирите фигуру"
 
 #: ../src/Book.cs:65
 msgid "Move"
@@ -362,123 +422,137 @@ msgstr "Поражений"
 msgid "Draws"
 msgstr "Ничьих"
 
-#: ../src/ICSSeek.cs:63
-msgid "Index"
-msgstr "Индекс"
+#: ../src/Promotion.cs:43
+msgid "Select a figure to promote"
+msgstr "Выбирите фигуру"
 
-#: ../src/ICSSeek.cs:64
-msgid "Rating"
-msgstr "Уровень"
+#: ../src/Window.cs:97
+msgid ""
+"<b>Unknown engine</b>\n"
+"\n"
+"Please check gconf keys of csboard"
+msgstr ""
+"<b>Неизвестная шахматная программа</b>\n"
+"\n"
+"Пожалуйста, проверьте значение настроекcsboard в gconf"
 
-#: ../src/ICSSeek.cs:65
-msgid "Player"
-msgstr "Игрок"
+#: ../src/Window.cs:165 ../src/ics/ChessMovesWidget.cs:66
+#: ../src/ics/GameAdvertisement.cs:235 ../src/viewer/GameViewer.cs:450
+msgid "Black"
+msgstr "Чёрные"
 
-#: ../src/ICSSeek.cs:66
-msgid "Time"
-msgstr "Время"
+#: ../src/Window.cs:166 ../src/ics/ChessMovesWidget.cs:63
+#: ../src/ics/GameAdvertisement.cs:233 ../src/viewer/GameViewer.cs:446
+msgid "White"
+msgstr "Белые"
 
-#: ../src/ICSSeek.cs:67
-msgid "Increment"
-msgstr "Увеличение"
+#: ../src/Window.cs:267
+msgid "Open Game"
+msgstr "Открыть файл игры"
 
-#. Translators: This means that player seeks for Rated/Unrated game
-#: ../src/ICSSeek.cs:69
-msgid "R/U"
-msgstr "Учет уровня"
+#: ../src/Window.cs:290
+msgid "Save Game"
+msgstr "Сохранить игру"
 
-#: ../src/ICSSeek.cs:70
-msgid "Type"
-msgstr "Тип"
+#: ../src/Window.cs:315
+msgid "File "
+msgstr "Файл "
 
-#: ../src/ICSSeek.cs:71
-msgid "Color"
-msgstr "Цвет"
+#: ../src/Window.cs:319
+msgid ""
+" already exists\n"
+"\n"
+msgstr ""
+"уже существует\n"
+"\n"
 
-#: ../src/ICSSeek.cs:72
-msgid "Range"
-msgstr "Промежуток"
+#: ../src/Window.cs:322
+msgid "Do you wish to overwrite it?"
+msgstr "Вы хотите переписать его?"
 
-#: ../src/ICSSeek.cs:73
-msgid "Flags"
-msgstr "Флаги"
+#: ../src/Window.cs:376
+msgid "There is no book move in this position"
+msgstr "Для этой позиции в книге нет ходов"
 
-#: ../src/ICS.cs:79
-msgid "Can't parse command line"
-msgstr "Не могу разобрать командную строку"
+#: ../src/Window.cs:426
+msgid "You can move "
+msgstr "Вы можете пойти "
 
-#: ../src/ICSClient.cs:60
-#, csharp-format
-msgid "Can't connect to {0} port {1}"
-msgstr "Не могу соединиться с сервером {0} порт {1}"
+#: ../src/Window.cs:524
+msgid "translator_credits"
+msgstr "Nickolay V. Shmyrev <nshmyrev@yandex.ru>"
 
-#: ../src/game/Pawn.cs:154
-msgid " cannot advance "
-msgstr " не удалось продвинуться "
+#: ../src/Window.cs:598
+msgid "Illegal move"
+msgstr "Некорректный ход"
 
-#: ../src/game/CannotMoveException.cs:26
-msgid "Cannot move: "
-msgstr "Не удалось пойти: "
+#: ../src/Window.cs:625 ../src/Window.cs:640
+msgid "Game Over"
+msgstr "Игра закончена"
 
-#: ../src/game/ChessGamePlayer.cs:205 ../src/game/ChessGamePlayer.cs:265
-#: ../src/game/ChessGamePlayer.cs:274 ../src/game/ChessGamePlayer.cs:534
+#: ../src/Window.cs:654
+msgid "Thinking"
+msgstr "Думаю"
+
+#: ../src/game/ChessGamePlayer.cs:206 ../src/game/ChessGamePlayer.cs:273
+#: ../src/game/ChessGamePlayer.cs:284 ../src/game/ChessGamePlayer.cs:597
 #: ../src/game/InvalidMoveException.cs:28
 msgid "Invalid move "
 msgstr "Некорректный ход "
 
-#: ../src/game/ChessGamePlayer.cs:206
+#: ../src/game/ChessGamePlayer.cs:210
 msgid ". Couldn't find any candidate for this."
 msgstr ". Не удалось найти кандидатов для этого."
 
-#: ../src/game/ChessGamePlayer.cs:227
+#: ../src/game/ChessGamePlayer.cs:233
 msgid "Insufficient chars in move "
 msgstr "Недостаточно символов для хода  "
 
-#: ../src/game/ChessGamePlayer.cs:536
+#: ../src/game/ChessGamePlayer.cs:601
 msgid ". Invalid promotion type: "
 msgstr ". Некорректный тип превращения: "
 
-#: ../src/game/ChessGamePlayer.cs:570
+#: ../src/game/ChessGamePlayer.cs:644
 msgid "Cant castle ("
 msgstr "Нельзя сделать рокировку ("
 
-#: ../src/game/ChessGamePlayer.cs:577
+#: ../src/game/ChessGamePlayer.cs:654
 msgid "King not available "
 msgstr "Король не доступен"
 
-#: ../src/game/ChessGamePlayer.cs:600
+#: ../src/game/ChessGamePlayer.cs:679
 msgid "Rook not available"
 msgstr "Ладья не доступна"
 
-#: ../src/game/ChessGamePlayer.cs:727
+#: ../src/game/ChessGamePlayer.cs:808
 msgid "[ChessGamePlayer] "
 msgstr "[Игрок] "
 
-#: ../src/game/ChessGamePlayer.cs:811
+#: ../src/game/ChessGamePlayer.cs:893
 msgid "Turn: "
 msgstr "Ход: "
 
-#: ../src/game/ChessGamePlayer.cs:814
+#: ../src/game/ChessGamePlayer.cs:896
 msgid "WHITE"
 msgstr "Белые"
 
-#: ../src/game/ChessGamePlayer.cs:815
+#: ../src/game/ChessGamePlayer.cs:898
 msgid "BLACK"
 msgstr "Чёрные"
 
-#: ../src/game/ChessGamePlayer.cs:818
+#: ../src/game/ChessGamePlayer.cs:902
 msgid "Whites:\n"
 msgstr "Белые:\n"
 
-#: ../src/game/ChessGamePlayer.cs:819
+#: ../src/game/ChessGamePlayer.cs:905
 msgid "Blacks:\n"
 msgstr "Чёрные:\n"
 
-#: ../src/game/ChessGamePlayer.cs:965
+#: ../src/game/ChessGamePlayer.cs:1153
 msgid "Invalid number tokens in the FEN position"
 msgstr "Некорректное число элементов в позиции FEN"
 
-#: ../src/game/ChessGamePlayer.cs:1066
+#: ../src/game/ChessGamePlayer.cs:1255
 msgid "Invalid piece type "
 msgstr "Некорректный тип фигуры"
 
@@ -486,160 +560,334 @@ msgstr "Некорректный тип фигуры"
 msgid "\t\tAnother piece of the same color present at the destination ("
 msgstr "\t\tДругая фигура того же цвета находится в этом же положении ("
 
-#: ../src/viewer/ChessGameWidget.cs:111
+#: ../src/game/Pawn.cs:154
+msgid " cannot advance "
+msgstr " не удалось продвинуться "
+
+#: ../src/ics/ChessMovesWidget.cs:60
 msgid "No"
 msgstr "Нет"
 
-#: ../src/viewer/ChessGameWidget.cs:120
-msgid "White"
-msgstr "Белые"
+#: ../src/ics/GameAdvertisement.cs:230
+msgid "Any"
+msgstr "Любой"
 
-#: ../src/viewer/ChessGameWidget.cs:134
-msgid "Black"
-msgstr "Чёрные"
-
-#: ../src/viewer/PGNBufferLoader.cs:26
-msgid "PGN Buffer Loader"
-msgstr "Загрузка игр из PGN"
-
-#: ../src/viewer/PGNBufferLoader.cs:29
-msgid "Loads games from a PGN buffer"
-msgstr "Загрузка игр из буфера PGN"
-
-#: ../src/viewer/PGNBufferLoader.cs:35
-msgid "Open _buffer"
-msgstr "Открыть буфер"
-
-#: ../src/viewer/PGNBufferLoader.cs:84
-msgid "Loading from buffer..."
-msgstr "Загрузка из буфера..."
-
-#: ../src/viewer/PGNBufferLoader.cs:128
-msgid "Showing games from buffer."
-msgstr "Показ игр из буфера."
-
-#: ../src/viewer/PGNBufferLoader.cs:140
-msgid "Enter PGN"
-msgstr "Введите PGN"
-
-#: ../src/viewer/PGNBufferLoader.cs:142 ../src/viewer/GameViewer.cs:562
-#: ../src/viewer/plugins/PGNUrlLoader.cs:144
-msgid "Cancel"
-msgstr "Отменить"
-
-#: ../src/viewer/PGNBufferLoader.cs:144 ../src/viewer/GameViewer.cs:568
-#: ../src/viewer/plugins/PGNUrlLoader.cs:149
-msgid "Open"
-msgstr "Открыть"
-
-#: ../src/viewer/PluginManagerDialog.cs:18
-#: ../src/viewer/PluginManagerDialog.cs:131
-msgid "Plugins"
-msgstr "Расширения"
-
-#: ../src/viewer/PluginManagerDialog.cs:22
-msgid "Close"
-msgstr "Закрыть"
-
-#: ../src/viewer/PluginManagerDialog.cs:74
-msgid "Plugins Details"
-msgstr "Детали расширений"
-
-#: ../src/viewer/PluginManagerDialog.cs:118
-msgid "Plugin Viewer"
-msgstr "Просмотр расширений"
-
-#: ../src/viewer/PluginManagerDialog.cs:119
-msgid "A plugin to show the status of other plugins!"
-msgstr "Расширение для отображения статуса других расширений!"
-
-#: ../src/viewer/PluginManagerDialog.cs:128
-msgid "Tools"
-msgstr "Инструменты"
-
-#: ../src/viewer/GameViewer.cs:250
-msgid "<b>White</b>"
-msgstr "<b>Белые</b>"
-
-#: ../src/viewer/GameViewer.cs:254
-msgid "<b>Black</b>"
-msgstr "<b>Чёрные</b>"
-
-#: ../src/viewer/GameViewer.cs:282
-msgid "<b>Games</b>"
-msgstr "<b>Игры</b>"
-
-#: ../src/viewer/GameViewer.cs:316
-msgid "Save the game as"
-msgstr "Сохранить игру как"
-
-#: ../src/viewer/GameViewer.cs:377
-msgid "Operation failed"
-msgstr "Действие закончилось неудачей"
-
-#: ../src/viewer/GameViewer.cs:413
-msgid "Failed to play to go back"
-msgstr "Не удалось обратить ход"
-
-#: ../src/viewer/GameViewer.cs:461
-msgid "Failed to play the move: "
-msgstr "Не удалось проиграть ход: "
-
-#: ../src/viewer/GameViewer.cs:571
-msgid "Save"
-msgstr "Сохранить"
-
-#: ../src/viewer/GameViewer.cs:681
-msgid "Loading..."
-msgstr "Загрузка..."
-
-#: ../src/viewer/GameViewer.cs:689
-msgid "Parsing the file..."
-msgstr "Разбор файла..."
-
-#: ../src/viewer/GameViewer.cs:712
-msgid "Loaded "
-msgstr "Загружено "
-
-#: ../src/viewer/GameViewer.cs:714
-msgid " games"
-msgstr " игр"
-
-#: ../src/viewer/PluginManager.cs:172 ../src/viewer/PGNFileLoader.cs:85
-msgid "Exception: \n"
-msgstr "Исключение: \n"
-
-#: ../src/viewer/PluginManager.cs:196
+#: ../src/ics/GameAdvertisement.cs:239
 #, csharp-format
-msgid "Failed to load plugin {0}: {1}"
-msgstr "Не удалось загрузить расширение {0}: {1}"
+msgid "<i>Acceptance</i>: {0}, <i>Formula</i>: {1}"
+msgstr "<i>Принятие</i>: {0}, <i>Формула</i>: {1}"
 
-#: ../src/viewer/GamesListWidget.cs:51
-msgid "Filter"
-msgstr "Фильтр"
+#: ../src/ics/GameAdvertisement.cs:241
+msgid "Automatic"
+msgstr "Автоматически"
 
-#: ../src/viewer/GamesListWidget.cs:104
+#: ../src/ics/GameAdvertisement.cs:243
+msgid "Manual"
+msgstr "Вручную"
+
+#: ../src/ics/GameAdvertisement.cs:245
+msgid "yes"
+msgstr "да"
+
+#: ../src/ics/GameAdvertisement.cs:247
+msgid "no"
+msgstr "нет"
+
+#: ../src/ics/GameAdvertisementGraph.cs:194
+msgid "rated"
+msgstr "с рейтингом"
+
+#: ../src/ics/GameAdvertisementGraph.cs:196
+msgid "unrated"
+msgstr "без рейтинга"
+
+#: ../src/ics/GameAdvertisementsWidget.cs:85
+#: ../src/ics/ObservableGamesWidget.cs:72 ../src/viewer/GamesListWidget.cs:94
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:34
 msgid "Games"
 msgstr "Игры"
 
-#: ../src/viewer/GamesListWidget.cs:146
-#, csharp-format
-msgid "<b>{0} vs {1}</b>\n"
-msgstr "<b>{0} против {1}</b>\n"
+#: ../src/ics/GameAdvertisementsWidget.cs:91 ../src/ics/ICSSeek.cs:86
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:39
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:393
+msgid "Rating"
+msgstr "Уровень"
 
-#: ../src/viewer/GamesListWidget.cs:150
-#, csharp-format
-msgid "<small><i>Result</i>: <b>{2}</b> ({3} moves)</small>"
-msgstr "<small><i>Результат</i>: <b>{2}</b> ({3} ходов)</small>"
+#: ../src/ics/GameAdvertisementsWidget.cs:97
+msgid "Timing"
+msgstr "Время"
 
-#: ../src/viewer/GamesListWidget.cs:164
+#: ../src/ics/GameAdvertisementsWidget.cs:102
+#: ../src/ics/ObservableGamesWidget.cs:83
+msgid "Category"
+msgstr "Категории"
+
+#: ../src/ics/GameAdvertisementsWidget.cs:205
+msgid "Total game seeks"
+msgstr "Все ищущие игры"
+
+#: ../src/ics/GameAdvertisementsWidget.cs:206
+#: ../src/ics/GameAdvertisementsWidget.cs:219
+msgid "Rated"
+msgstr "С рейтингом"
+
+#: ../src/ics/GameAdvertisementsWidget.cs:228
+#: ../src/ics/ObservableGamesWidget.cs:172
+msgid "Unrated Games"
+msgstr "Без рейтинга"
+
+#: ../src/ics/ICSClient.cs:538
+msgid "Internal error. Buffer full"
+msgstr "Внутренняя ошибка. Буфер полон"
+
+#: ../src/ics/ICSClient.cs:594
+msgid "Connection closed!"
+msgstr "Соединение закрыто!"
+
+#: ../src/ics/ICSClient.cs:1059
+msgid "CsBoard (http://csboard.berlios.de)"
+msgstr "CsBoard (http://csboard.berlios.de)"
+
+#: ../src/ics/ICSClient.cs:1104
 #, csharp-format
+msgid "Can't connect to {0} port {1}"
+msgstr "Не могу соединиться с сервером {0} порт {1}"
+
+#: ../src/ics/ICS.cs:93
+msgid "Can't parse command line"
+msgstr "Не могу разобрать командную строку"
+
+#: ../src/ics/ICS.cs:101 ../src/ics/ICSDetailsWindow.cs:106
+#, csharp-format
+msgid "ICS: {0}@{1}:{2}"
+msgstr "ICS: {0}@{1}:{2}"
+
+#: ../src/ics/ICS.cs:116
+msgid "Seek Graph"
+msgstr "График поиска"
+
+#: ../src/ics/ICS.cs:121
+msgid "Game Seeks"
+msgstr "Поиск игры"
+
+#: ../src/ics/ICS.cs:126
+msgid "Watch Games"
+msgstr "Наблюдать за игрой"
+
+#: ../src/ics/ICS.cs:132
+msgid "Shell"
+msgstr "Оболочка"
+
+#: ../src/ics/ICSGameObserverWindow.cs:56
+msgid "Observed games"
+msgstr "Наблюдаемые игры"
+
+#: ../src/ics/ICSSeek.cs:80
+msgid "Index"
+msgstr "Индекс"
+
+#: ../src/ics/ICSSeek.cs:98 ../src/ics/ObservableGamesWidget.cs:77
+msgid "Time"
+msgstr "Время"
+
+#: ../src/ics/ICSSeek.cs:104
+msgid "Increment"
+msgstr "Увеличение"
+
+#: ../src/ics/ICSSeek.cs:110
+msgid "R/U"
+msgstr "Учет уровня"
+
+#: ../src/ics/ICSSeek.cs:116
+msgid "Type"
+msgstr "Тип"
+
+#: ../src/ics/ICSSeek.cs:122 ../src/viewer/plugins/gamedb/gamedb.glade.h:23
+msgid "Color"
+msgstr "Цвет"
+
+#: ../src/ics/ICSSeek.cs:128
+msgid "Range"
+msgstr "Промежуток"
+
+#: ../src/ics/ICSSeek.cs:134
+msgid "Flags"
+msgstr "Флаги"
+
+#: ../src/ics/ICSShell.cs:48
+msgid "Send"
+msgstr "Послать"
+
+#: ../src/ics/ObservableGamesWidget.cs:111
 msgid ""
-"\n"
-"<small><i>Event</i>: {0}, <i>Date</i>: {1}</small>"
+"Press the refresh button to get an updated list of games.\n"
+"Double click on a game to observe it."
 msgstr ""
-"\n"
-"<small><i>Событие</i>: {0}, <i>Дата</i>: {1}</small>"
+"Нажмите кнопку для обновления списка игр.\n"
+"Дважды щёлкните по игре для просмотра деталей.."
+
+#: ../src/ics/ObservableGamesWidget.cs:135
+msgid "Blitz"
+msgstr "Блиц"
+
+#: ../src/ics/ObservableGamesWidget.cs:136
+msgid "Standard"
+msgstr "Стандартный"
+
+#: ../src/ics/ObservableGamesWidget.cs:137
+msgid "Lightning"
+msgstr "Облегчённый"
+
+#: ../src/ics/ObservableGamesWidget.cs:138
+msgid "Others"
+msgstr "Другие"
+
+#: ../src/ics/ObservableGamesWidget.cs:160
+msgid "Rated Games"
+msgstr "Игры с рейтингом"
+
+#: ../src/ics/ObservableGamesWidget.cs:184
+msgid "Examined Games"
+msgstr "Изучаемые игры"
+
+#: ../src/ics/ObservableGamesWidget.cs:237
+msgid "Number of games"
+msgstr "Число игр"
+
+#: ../src/ics/PlayerPage.cs:43
+msgid "Draw"
+msgstr "Ничья"
+
+#: ../src/ics/PlayerPage.cs:46
+msgid "Resign"
+msgstr "Сдался"
+
+#: ../src/ics/PlayerPage.cs:49
+msgid "Abort"
+msgstr "Завершить"
+
+#: ../src/ics/PlayerPage.cs:52
+msgid "Adjourn"
+msgstr "Отложить"
+
+#: ../src/ics/PlayerPage.cs:55
+msgid "Takeback"
+msgstr "Взять назад"
+
+#: ../src/ics/PlayerPage.cs:98
+msgid "Do you really want to resign?"
+msgstr "Вы действительно хотите сдаться"
+
+#: ../src/viewer/BufferDialog.cs:35 ../src/viewer/GameViewer.cs:791
+#: ../src/viewer/plugins/urlloader/PGNUrlLoader.cs:143
+msgid "Cancel"
+msgstr "Отменить"
+
+#: ../src/viewer/BufferDialog.cs:37
+msgid "Ok"
+msgstr "Ок"
+
+#: ../src/viewer/ChessGame.cs:40
+msgid "vs"
+msgstr "против"
+
+#: ../src/viewer/ChessGame.cs:42 ../src/viewer/ChessGameView.cs:370
+msgid "Result"
+msgstr "Результат"
+
+#: ../src/viewer/ChessGame.cs:42
+msgid "moves"
+msgstr "ходы"
+
+#: ../src/viewer/ChessGame.cs:51 ../src/viewer/ChessGameView.cs:378
+msgid "Event"
+msgstr "Событие"
+
+#: ../src/viewer/ChessGame.cs:55 ../src/viewer/ChessGameView.cs:374
+msgid "Date"
+msgstr "Дата"
+
+#: ../src/viewer/ChessGameView.cs:382
+msgid "Site"
+msgstr "Сторона"
+
+#: ../src/viewer/ChessGameView.cs:386
+msgid "ECO"
+msgstr "ECO"
+
+#: ../src/viewer/GamesListWidget.cs:222
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:31
+msgid "Filter"
+msgstr "Фильтр"
+
+#: ../src/viewer/GameViewer.cs:517
+msgid "Save the game as"
+msgstr "Сохранить игру как"
+
+#: ../src/viewer/GameViewer.cs:581
+msgid "Operation failed"
+msgstr "Действие закончилось неудачей"
+
+#: ../src/viewer/GameViewer.cs:622
+msgid "Edit current comment"
+msgstr "Правка текущего комментария"
+
+#: ../src/viewer/GameViewer.cs:646
+msgid "Failed to play to go back"
+msgstr "Не удалось обратить ход"
+
+#: ../src/viewer/GameViewer.cs:668
+msgid "Failed to play the move: "
+msgstr "Не удалось проиграть ход: "
+
+#: ../src/viewer/GameViewer.cs:797
+#: ../src/viewer/plugins/urlloader/PGNUrlLoader.cs:148
+msgid "Open"
+msgstr "Открыть"
+
+#: ../src/viewer/GameViewer.cs:800
+msgid "Save"
+msgstr "Сохранить"
+
+#: ../src/viewer/GameViewer.cs:910
+msgid "Loading..."
+msgstr "Загрузка..."
+
+#: ../src/viewer/GameViewer.cs:919
+msgid "Parsing the file..."
+msgstr "Разбор файла..."
+
+#: ../src/viewer/GameViewer.cs:956
+msgid "Loaded "
+msgstr "Загружено "
+
+#: ../src/viewer/GameViewer.cs:958
+msgid " games"
+msgstr " игр"
+
+#: ../src/viewer/PGNBufferLoader.cs:43
+msgid "PGN Buffer Loader"
+msgstr "Загрузка игр из PGN"
+
+#: ../src/viewer/PGNBufferLoader.cs:46
+msgid "Loads games from a PGN buffer"
+msgstr "Загрузка игр из буфера PGN"
+
+#: ../src/viewer/PGNBufferLoader.cs:52
+msgid "Open _buffer"
+msgstr "Открыть буфер"
+
+#: ../src/viewer/PGNBufferLoader.cs:101
+msgid "Loading from buffer..."
+msgstr "Загрузка из буфера..."
+
+#: ../src/viewer/PGNBufferLoader.cs:124
+msgid "Enter PGN"
+msgstr "Введите PGN"
+
+#: ../src/viewer/PGNBufferLoader.cs:148
+msgid "Showing games from buffer."
+msgstr "Показ игр из буфера."
 
 #: ../src/viewer/PGNFileLoader.cs:28
 msgid "PGN File Loader"
@@ -652,6 +900,10 @@ msgstr "Загрузить игры из файла PGN"
 #: ../src/viewer/PGNFileLoader.cs:37
 msgid "_Open File"
 msgstr "Открыть файл"
+
+#: ../src/viewer/PGNFileLoader.cs:85 ../src/viewer/PluginManager.cs:208
+msgid "Exception: \n"
+msgstr "Исключение: \n"
 
 #: ../src/viewer/PGNFileLoader.cs:97
 msgid "PGN Files"
@@ -673,110 +925,375 @@ msgstr "Загружается: "
 msgid "File: "
 msgstr "Файл: "
 
-#: ../src/viewer/ChessGameInfoWidget.cs:49
-msgid "<b>Result</b>"
-msgstr "<b>Результат</b>"
+#: ../src/viewer/PluginManager.cs:234
+#, csharp-format
+msgid "Failed to load plugin {0}: {1}"
+msgstr "Не удалось загрузить расширение {0}: {1}"
 
-#: ../src/viewer/ChessGameInfoWidget.cs:51
-msgid "<b>Date</b>"
-msgstr "<b>Дата</b>"
+#: ../src/viewer/PluginManagerDialog.cs:17
+#: ../src/viewer/PluginManagerDialog.cs:129
+msgid "Plugins"
+msgstr "Расширения"
 
-#: ../src/viewer/ChessGameInfoWidget.cs:53
-msgid "<b>Event</b>"
-msgstr "<b>Событие</b>"
+#: ../src/viewer/PluginManagerDialog.cs:21
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:175
+msgid "Close"
+msgstr "Закрыть"
 
-#: ../src/viewer/ChessGameInfoWidget.cs:55
-msgid "<b>Site</b>"
-msgstr "<b>Сайт</b>"
+#: ../src/viewer/PluginManagerDialog.cs:72
+msgid "Plugins Details"
+msgstr "Детали расширений"
 
-#: ../src/viewer/ChessGameInfoWidget.cs:108
-msgid "Other details"
-msgstr "Другие подробности"
+#: ../src/viewer/PluginManagerDialog.cs:116
+msgid "Plugin Viewer"
+msgstr "Просмотр расширений"
 
-#: ../src/viewer/ChessGameInfoWidget.cs:132
-#: ../src/viewer/plugins/PGNExporter.cs:143
-msgid " vs "
-msgstr " против "
+#: ../src/viewer/PluginManagerDialog.cs:117
+msgid "A plugin to show the status of other plugins!"
+msgstr "Расширение для отображения статуса других расширений!"
 
-#: ../src/viewer/plugins/PrintWrapper.cs:109
-#: ../src/viewer/plugins/PrintWrapper.cs:254
-#: ../src/viewer/plugins/PrintWrapper.cs:300
-#: ../src/viewer/plugins/PrintWrapper.cs:314
-msgid "Page "
-msgstr "Страница "
+#: ../src/viewer/PluginManagerDialog.cs:126
+msgid "Tools"
+msgstr "Инструменты"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:26
-msgid "PGN Printer"
-msgstr "Печать PGN"
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:42
+msgid "ECO Database Plugin"
+msgstr "Расширения доступа к базе ECO"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:27
-msgid "Prints PGN games and exports."
-msgstr "Печатает игры из PGN и экспортирует их."
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:45
+msgid "Provides the ECO database"
+msgstr "Даёт доступ к базе данных ECO"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:47
-msgid "_PS File"
-msgstr "Файл PS"
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:49
+msgid "_Opening Browser"
+msgstr "Обзор _дебютов"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:79
-msgid "Export as a PostScript document to file"
-msgstr "Экспорт как документ формата PostScript"
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:89
+msgid "Openings"
+msgstr "Дебюты"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:86
-msgid "Exporting..."
-msgstr "Экспорт..."
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:154
+#, csharp-format
+msgid "skipping this opening. econame = [{0}], name = [{1}]"
+msgstr "пропуск дебютов. название в базе данных ECO = [{0}], название [{1}]"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:103
-msgid "Print PGN File"
-msgstr "Печать файла PGN"
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:169
+msgid "Opening Browser"
+msgstr "Обзор дебютов"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:114
-msgid "Printing..."
-msgstr "Печать..."
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:187
+msgid "Moves"
+msgstr "Ходы"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:163
-msgid "Now printing..."
-msgstr "Теперь идёт печать..."
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:191
+msgid "Variations"
+msgstr "Вариации"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:167
-msgid "Done."
-msgstr "Сделано."
+#: ../src/viewer/plugins/ecodb/EcoDBPlugin.cs:195
+msgid "Name"
+msgstr "Название"
 
-#: ../src/viewer/plugins/PGNPrinterPlugin.cs:197
-msgid "Print Preview"
-msgstr "Предварительный просмотр"
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:1
+msgid ""
+"\n"
+"Average\n"
+"Good\n"
+"Excellent\n"
+"Must Have"
+msgstr ""
+"\n"
+"Средняя\n"
+"Хорошая\n"
+"Великолепная\n"
+"Необходимо иметь"
 
-#: ../src/viewer/plugins/PGNUrlLoader.cs:28
-msgid "PGN URL Loader"
-msgstr "Загузчик PGN из URL"
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:6
+msgid ""
+"\n"
+"Equals\n"
+"Above\n"
+"Below"
+msgstr ""
+"\n"
+"Равный\n"
+"Больше\n"
+"Меньше"
 
-#: ../src/viewer/plugins/PGNUrlLoader.cs:31
-msgid "Loads games from a PGN file from a url"
-msgstr "Загружает файлы из файла PGN по ресурсу"
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:10
+msgid "Add Selected Games"
+msgstr "Добавить выделенные игры"
 
-#: ../src/viewer/plugins/PGNUrlLoader.cs:37
-msgid "Open _URL"
-msgstr "Открыть URL"
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:11
+msgid "Add selected games to the selected collection"
+msgstr "Добавить выделенные игры в коллекцию"
 
-#: ../src/viewer/plugins/PGNUrlLoader.cs:113
-msgid "URL: "
-msgstr "URL: "
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:12
+msgid "Advanced"
+msgstr "Улучшенный"
 
-#: ../src/viewer/plugins/PGNUrlLoader.cs:138
-msgid "Open URL"
-msgstr "Открыть URL"
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:14
+msgid ""
+"Any\n"
+"White\n"
+"Black"
+msgstr ""
+"Любые\n"
+"Белые\n"
+"Чёрные"
 
-#: ../src/viewer/plugins/PGNExporter.cs:136
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:17
+msgid ""
+"Average\n"
+"Good\n"
+"Excellent\n"
+"Must Have\n"
+"No Rating\n"
+"Ignore"
+msgstr ""
+"Средняя\n"
+"Хорошая\n"
+"Великолепная\n"
+"Необходимо иметь\n"
+"Без рейтинга\n"
+"Игнорировать"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:24
+msgid "Comma separated list of tags"
+msgstr "Список пометок, разделённый запятыми"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:25
+msgid "Delete Collection"
+msgstr "Удалить коллекцию"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:26
+msgid "Delete Tag"
+msgstr "Удалить пометку"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:27
+msgid "Description"
+msgstr "Описание"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:28
+msgid "Edit Collection"
+msgstr "Правка коллекции"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:29
+msgid "Edit Game Details"
+msgstr "Правка деталей игры"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:30
+msgid "Edit Games"
+msgstr "Правка игр"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:32
+msgid "Game Collection"
+msgstr "Коллекция игр"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:33
+msgid "Game Collections"
+msgstr "Коллекции игр"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:35
+msgid "Games Database"
+msgstr "База данных игр"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:36
+msgid "Go"
+msgstr "Вперёд"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:37
+msgid "Load Games"
+msgstr "Загрузить игры"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:38
+msgid "New Collection"
+msgstr "Новая коллекция"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:40
+msgid "Remove Selected Games"
+msgstr "Удалить выделенные игры"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:41
+msgid "Save Modified Games"
+msgstr "Сохранить изменённые игры"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:42
+msgid "Show All"
+msgstr "Показать всё"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:43
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:450
+#: ../src/viewer/plugins/gamedb/PGNGameDetails.cs:252
+msgid "Tags"
+msgstr "Пометки"
+
+#: ../src/viewer/plugins/gamedb/gamedb.glade.h:44
+msgid "Title"
+msgstr "Название"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:44
+msgid "Games Database Plugin"
+msgstr "Расширение базы данных игр"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:47
+msgid "Game database"
+msgstr "База данных игр"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:51
+msgid "Add Games to _Database"
+msgstr "Добавить _игры в базу"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:57
+msgid "Games _Database"
+msgstr "_База данных игр"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:89
+msgid "Saving to database..."
+msgstr "Сохранение базы данных..."
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:191
+msgid "Games DB"
+msgstr "База данных игр"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:270
+msgid "Add games to database"
+msgstr "Добавить игру в базу"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:291
+msgid "<b>Tags</b>"
+msgstr "<b>Пометки</b>"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:301
+msgid "<i><small>Comma separated list of tags</small></i>"
+msgstr "<i><small>Список тэгов, разделённый запятыми</small></i>"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:327
+msgid "Create a collection"
+msgstr "Создать коллекцию"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:345
+msgid "<b>Title</b>"
+msgstr "<b>Название</b>"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:356
+msgid "<i><small>Create a collection with this title</small></i>"
+msgstr "<i><small>Создать коллекцию с названием</small></i>"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:362
+msgid "<b>Description</b>"
+msgstr "<b>Описание</b>"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:401
+msgid "Not interested"
+msgstr "Не интересные"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:404
+msgid "Average Game"
+msgstr "Обычные игры"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:406
+msgid "Good Game"
+msgstr "Хорошие игры"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:409
+msgid "Excellent Game"
+msgstr "Отличные игры"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:411
+msgid "Must Have"
+msgstr "Рекомендуемые"
+
+#: ../src/viewer/plugins/gamedb/GameDbPlugin.cs:440
+msgid "My Rating"
+msgstr "Мой рейтинг"
+
+#: ../src/viewer/plugins/gamedb/PGNGameDetails.cs:250
+msgid "Game Rating"
+msgstr "Рейтинг игры"
+
+#: ../src/viewer/plugins/printer/PGNExporter.cs:137
 msgid "[White]"
 msgstr "[Белые]"
 
-#: ../src/viewer/plugins/PGNExporter.cs:138
+#: ../src/viewer/plugins/printer/PGNExporter.cs:139
 msgid "[Black]"
 msgstr "[Чёрные]"
 
-#: ../src/viewer/plugins/PGNExporter.cs:140
+#: ../src/viewer/plugins/printer/PGNExporter.cs:142
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: ../src/viewer/plugins/PGNExporter.cs:146
+#: ../src/viewer/plugins/printer/PGNExporter.cs:147
+msgid " vs "
+msgstr " против "
+
+#: ../src/viewer/plugins/printer/PGNExporter.cs:151
 msgid "Result: "
 msgstr "Результат: "
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:27
+msgid "PGN Printer"
+msgstr "Печать PGN"
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:30
+msgid "Prints PGN games and exports."
+msgstr "Печатает игры из PGN и экспортирует их."
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:57
+msgid "_PS File"
+msgstr "Файл PS"
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:96
+msgid "Export as a PostScript document to file"
+msgstr "Экспорт как документ формата PostScript"
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:105
+msgid "Exporting..."
+msgstr "Экспорт..."
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:123
+msgid "Print PGN File"
+msgstr "Печать файла PGN"
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:137
+msgid "Printing..."
+msgstr "Печать..."
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:187
+msgid "Now printing..."
+msgstr "Теперь идёт печать..."
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:191
+msgid "Done."
+msgstr "Сделано."
+
+#: ../src/viewer/plugins/printer/PGNPrinterPlugin.cs:223
+msgid "Print Preview"
+msgstr "Предварительный просмотр"
+
+#: ../src/viewer/plugins/printer/PrintWrapper.cs:107
+#: ../src/viewer/plugins/printer/PrintWrapper.cs:252
+#: ../src/viewer/plugins/printer/PrintWrapper.cs:298
+#: ../src/viewer/plugins/printer/PrintWrapper.cs:312
+msgid "Page "
+msgstr "Страница "
+
+#: ../src/viewer/plugins/urlloader/PGNUrlLoader.cs:28
+msgid "PGN URL Loader"
+msgstr "Загузчик PGN из URL"
+
+#: ../src/viewer/plugins/urlloader/PGNUrlLoader.cs:31
+msgid "Loads games from a PGN file from a url"
+msgstr "Загружает файлы из файла PGN по ресурсу"
+
+#: ../src/viewer/plugins/urlloader/PGNUrlLoader.cs:37
+msgid "Open _URL"
+msgstr "Открыть URL"
+
+#: ../src/viewer/plugins/urlloader/PGNUrlLoader.cs:113
+msgid "URL: "
+msgstr "URL: "
+
+#: ../src/viewer/plugins/urlloader/PGNUrlLoader.cs:137
+msgid "Open URL"
+msgstr "Открыть URL"
