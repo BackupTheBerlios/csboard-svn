@@ -84,8 +84,11 @@ namespace CsBoard {
 
                 public void Shutdown () {
                         Put ("exit");
-			proc.Kill();
-			proc.WaitForExit();
+			try {
+			  proc.Kill();
+			  proc.WaitForExit();
+			}catch {
+			}
                 }
 
                 public ArrayList GetPosition () {

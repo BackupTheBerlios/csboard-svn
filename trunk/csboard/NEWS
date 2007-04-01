@@ -1,3 +1,11 @@
+Release 0.8 contains:
+
+* Internet Chess Server (ICS) client
+* You can play on the ICS server, watch other games (especially the games played by Grand Masters live, if there are any tournaments going on)
+* save games into a database and organize them into collections
+* rate games and tag them so that they can be searched easily
+* Encyclopaedia of Chess Openings (ECO) database
+
 Release 0.7 contains:
 
 * New viewer for PGN files (Ravi Kiran U V S), printing, playing

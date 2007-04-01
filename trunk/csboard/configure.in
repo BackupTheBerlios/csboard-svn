@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([csboard], [0.7], [nshmyrev@yandex.ru])
+AC_INIT([csboard], [0.8], [nshmyrev@yandex.ru])
 AM_INIT_AUTOMAKE
 
 #This is a requirement for gettext and future use

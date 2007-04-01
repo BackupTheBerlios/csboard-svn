@@ -60,10 +60,16 @@ namespace CsBoard
 					  if (engine != null
 					      && engine.StartsWith ("ICS"))
 						  StartICSPlayer ();
-					  else
+					  else {
+					    try {
 						  StartPlayer (args.Length >
 							       1 ? args[1] :
 							       null);
+					    }
+					    catch {
+						  StartICSPlayer ();
+					    }
+					  }
 				  }
 			}
 			catch (ApplicationException)
