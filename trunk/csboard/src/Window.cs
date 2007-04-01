@@ -716,8 +716,26 @@ namespace CsBoard
 			string engine =
 				EngineChooser.ChooseEngine (App.Session.
 							    Engine);
-			if (engine != null)
-				App.Session.Engine = engine;
+			try {
+			  App.StartPlayer(engine);
+			  if (engine != null)
+			    App.Session.Engine = engine;
+			}
+			catch {
+			  MessageDialog md =
+			    new MessageDialog (null,
+					       DialogFlags.
+					       DestroyWithParent,
+					       MessageType.
+					       Error,
+					       ButtonsType.
+					       Close, Catalog.GetString(
+									"Unknown engine")
+					       );
+			  md.Run();
+			  md.Hide();
+			  md.Dispose();
+			}
 		}
 	}
 
