@@ -1,10 +1,13 @@
 Release 0.8 contains:
 
+Lot of new features in this release
 * Internet Chess Server (ICS) client
 * You can play on the ICS server, watch other games (especially the games played by Grand Masters live, if there are any tournaments going on)
 * save games into a database and organize them into collections
 * rate games and tag them so that they can be searched easily
 * Encyclopaedia of Chess Openings (ECO) database
+* 'csboard' is the main command to start the app. The viewer can be started with 'csviewer'
+* Screencasts posted on the site http://csboard.berlios.de
 
 Release 0.7 contains:
 
