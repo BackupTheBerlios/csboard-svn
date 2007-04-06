@@ -161,15 +161,17 @@ namespace CsBoard
 				get
 				{
 					if (idx < 0)
-						return null;
+						return game.Comment;
 
 					return move.comment;
 				}
 
 				set
 				{
-					if (idx < 0)
+					if (idx < 0) {
+						game.Comment = value;
 						return;
+					}
 					move.comment = value;
 					game.Moves[idx] = move;
 				}

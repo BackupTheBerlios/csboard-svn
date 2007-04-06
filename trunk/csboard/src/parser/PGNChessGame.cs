@@ -52,6 +52,10 @@ namespace Chess
 				{
 					return comment;
 				}
+				set
+				{
+					comment = value;
+				}
 			}
 
 			public string White
