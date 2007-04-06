@@ -39,9 +39,9 @@ namespace CsBoard
 		public delegate void NthMoveEvent (object o,
 						   MoveEventArgs args);
 
-		public class ChessGameWidget:VBox
+		public class ChessGameView:VBox
 		{
-			GameViewer viewer;
+			ChessGame game;
 			int curMoveIdx;
 
 			public event NthMoveEvent ShowNthMove;
@@ -57,7 +57,7 @@ namespace CsBoard
 
 			Gdk.Cursor handCursor, regularCursor;
 
-			public ChessGameWidget (GameViewer viewer):base ()
+			public ChessGameView ():base ()
 			{
 				handCursor =
 					new Gdk.Cursor (Gdk.CursorType.Hand2);
@@ -67,7 +67,6 @@ namespace CsBoard
 				marks = new Hashtable ();
 				tag_links = new Hashtable ();
 				taglinks = new ArrayList ();
-				this.viewer = viewer;
 				curMoveIdx = -1;
 
 				view = new TextView ();
@@ -85,8 +84,6 @@ namespace CsBoard
 
 				  PackStart (win, true, true, 0);
 				  view.WidthRequest = 150;
-
-				  viewer.GameLoadedEvent += OnGameLoaded;
 
 				  CreateTags ();
 				  ShowAll ();
@@ -117,54 +114,59 @@ namespace CsBoard
 			private void CreateTags ()
 			{
 				TextTag tag;
-				normalTag = tag = new TextTag (NORMAL_TAG);
+				tag = new TextTag (NORMAL_TAG);
 				tag.Style = Pango.Style.Normal;
 				view.Buffer.TagTable.Add (tag);
+				normalTag = tag;
 
-				movenumberTag = tag =
-					new TextTag (MOVENUMBER_TAG);
+				tag = new TextTag (MOVENUMBER_TAG);
 				tag.Weight = Pango.Weight.Bold;
 				tag.Foreground = "#404040";
 				tag.Style = Pango.Style.Normal;
 				view.Buffer.TagTable.Add (tag);
+				movenumberTag = tag;
 
-				moveTag = tag = new TextTag (MOVE_TAG);
+				tag = new TextTag (MOVE_TAG);
 				tag.Style = Pango.Style.Normal;
 				tag.FontDesc =
 					Pango.FontDescription.
 					FromString ("monospace");
 				//tag.Weight = Pango.Weight.Bold;
 				view.Buffer.TagTable.Add (tag);
+				moveTag = tag;
 
-				headingTag = tag = new TextTag (HEADING_TAG);
+				tag = new TextTag (HEADING_TAG);
 				tag.Weight = Pango.Weight.Bold;
 				tag.Foreground = "brown";
 				tag.PixelsBelowLines = 10;
 				tag.Scale = Pango.Scale.XLarge;
 				view.Buffer.TagTable.Add (tag);
+				headingTag = tag;
 
-				boldTag = tag = new TextTag (BOLD_TAG);
+				tag = new TextTag (BOLD_TAG);
 				tag.Weight = Pango.Weight.Bold;
 				view.Buffer.TagTable.Add (tag);
+				boldTag = tag;
 
-				gametagnameTag = tag =
-					new TextTag (GAMETAGNAME_TAG);
+				tag = new TextTag (GAMETAGNAME_TAG);
 				tag.Weight = Pango.Weight.Bold;
 				tag.RightMargin = 20;
 				view.Buffer.TagTable.Add (tag);
+				gametagnameTag = tag;
 
-				highlightedTag = tag =
-					new TextTag (HIGHLIGHTED_TAG);
+				tag = new TextTag (HIGHLIGHTED_TAG);
 				tag.Weight = Pango.Weight.Bold;
 				tag.Scale = Pango.Scale.XLarge;
 				//tag.Foreground = "#803030";
 				view.Buffer.TagTable.Add (tag);
+				highlightedTag = tag;
 
-				commentTag = tag = new TextTag (COMMENT_TAG);
+				tag = new TextTag (COMMENT_TAG);
 				tag.Style = Pango.Style.Italic;
 				tag.PixelsBelowLines = 5;
 				tag.PixelsAboveLines = 5;
 				tag.Foreground = "#303060";
+				commentTag = tag;
 
 				view.Buffer.TagTable.Add (tag);
 			}
@@ -227,13 +229,9 @@ namespace CsBoard
 				//html.JumpToAnchor(idx.ToString());
 			}
 
-			private void OnGameLoaded (object o, EventArgs args)
+			public void SetGame (ChessGame game)
 			{
-				SetGame (viewer.CurrentGame);
-			}
-
-			private void SetGame (ChessGame game)
-			{
+				this.game = game;
 				curMoveIdx = -1;
 				Refresh ();
 			}
@@ -254,10 +252,17 @@ namespace CsBoard
 			private void UpdateGameDetails (TextBuffer buffer,
 							ref TextIter iter)
 			{
-				ChessGame game = viewer.CurrentGame;
 				PrintTitle (buffer, ref iter);
 				if (game == null)
 					return;
+
+				if(game.Comment != null) {
+					buffer.InsertWithTags (ref
+							       iter,
+							       game.Comment,
+							       commentTag);
+					buffer.Insert (ref iter, "\n");
+				}
 
 				int i = 0;
 				int moveno = 1;
@@ -336,7 +341,6 @@ namespace CsBoard
 			private void PrintTitle (TextBuffer buffer,
 						 ref TextIter iter)
 			{
-				ChessGame game = viewer.CurrentGame;
 				if (game == null)
 					return;
 				string title = String.Format ("{0} vs {1}",
@@ -357,7 +361,6 @@ namespace CsBoard
 
 			private Widget GetTagDetailsWidget ()
 			{
-				ChessGame game = viewer.CurrentGame;
 				string eco;
 				GameViewer.GetOpeningName (game.
 							   GetTagValue ("ECO",
@@ -414,9 +417,12 @@ namespace CsBoard
 					object move = tag_links[tag];
 					if (move is int)
 					  {
-						  ShowNthMove (this,
-							       new
-							       MoveEventArgs ((int) move));
+						  if (ShowNthMove != null)
+							  ShowNthMove (this,
+								       new
+								       MoveEventArgs
+								       ((int)
+									move));
 					  }
 				}
 			}
