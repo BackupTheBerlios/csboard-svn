@@ -31,7 +31,7 @@ namespace CsBoard
 		{
 
 			[Glade.Widget] private Gtk.Window gameDbWindow;
-			[Glade.Widget] private Gtk.TreeView searchTreeView;
+			[Glade.Widget] private Gtk.VBox gamesListBox;
 			[Glade.Widget] private Gtk.Entry searchEntry;
 			[Glade.Widget] private Gtk.Entry tagSearchEntry;
 
@@ -54,10 +54,9 @@ namespace CsBoard
 				editGameCollectionButton,
 				deleteGameCollectionButton;
 
-			private Gtk.ListStore searchStore;
 			private Gtk.ListStore gamesCollectionStore;
 
-			GamesList searchGamesList;
+			GamesListWidget searchGamesList;
 
 			Hashtable ratingMap;
 
@@ -100,20 +99,17 @@ namespace CsBoard
 				colorOption.Active = 0;
 				ratingMatchOption.Active = 0;
 
-				searchTreeView.Selection.Mode =
+				searchGamesList = new GamesListWidget ();	// this will add the column and other details
+				searchGamesList.View.SelectionMode =
 					SelectionMode.Multiple;
-				searchGamesList = new GamesList (searchTreeView);	// this will add the column and other details
-
-				searchStore =
-					new
-					ListStore (typeof (PGNGameDetails));
+				gamesListBox.PackStart (searchGamesList, true,
+							true, 2);
 
 				gamesCollectionStore =
 					new
 					ListStore (typeof (string),
 						   typeof (GameCollection));
 
-				searchTreeView.Model = searchStore;
 				gamesCollectionTree.Model =
 					gamesCollectionStore;
 
@@ -155,8 +151,8 @@ namespace CsBoard
 						       (int) Math.Round (0.9 *
 									 height));
 
-				  searchTreeView.RowActivated +=
-					OnRowActivated;
+				  searchGamesList.GameSelectionEvent +=
+					OnGameSelectionEvent;
 			}
 
 			public Window Window
@@ -193,7 +189,8 @@ namespace CsBoard
 				ArrayList list = new ArrayList ();
 				col.LoadGames (list);
 
-				GameViewer.Instance.LoadGames (list);
+				GameViewer.Instance.GameViewerWidget.
+					LoadGames (list);
 				GameViewer.Instance.Window.Present ();
 			}
 
@@ -391,8 +388,7 @@ namespace CsBoard
 				HandleSearch ();
 			}
 
-			void OnRowActivated (object obj,
-					     RowActivatedArgs args)
+			void OnGameSelectionEvent (ChessGame game)
 			{
 				LoadSelectedGames ();
 			}
@@ -409,25 +405,25 @@ namespace CsBoard
 				ArrayList list = new ArrayList ();
 				GetSelectedGames (list);
 
-				GameViewer.Instance.LoadGames (list);
+				GameViewer.Instance.GameViewerWidget.
+					LoadGames (list);
 				GameViewer.Instance.Window.Present ();
 			}
 
 			private void GetSelectedGames (ArrayList list)
 			{
 				TreePath[]selected =
-					searchTreeView.Selection.
-					GetSelectedRows ();
+					searchGamesList.View.SelectedItems;
 				if (selected == null || selected.Length == 0)
 					return;
 				foreach (TreePath path in selected)
 				{
 					TreeIter iter;
-					searchTreeView.Model.
+					searchGamesList.Model.
 						GetIter (out iter, path);
 					PGNGameDetails info =
 						(PGNGameDetails)
-						searchTreeView.Model.
+						searchGamesList.Model.
 						GetValue (iter, 0);
 					list.Add (info);
 				}
@@ -548,7 +544,7 @@ namespace CsBoard
 						  Next ();
 					  list.Add (details);
 				  }
-				searchGamesList.Update (list);
+				searchGamesList.SetGames (list);
 			}
 
 			private void HandleTagSearchOptions (Query query)

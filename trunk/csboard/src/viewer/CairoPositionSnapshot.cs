@@ -422,11 +422,11 @@ namespace CsBoard
 
 				cairo.Color = arrow_color;
 				CairoBoard.DrawArrow (cairo,
-							    x1 + (size / 2),
-							    y1 + (size / 2),
-							    x2 + (size / 2),
-							    y2 + (size / 2),
-							    size, false);
+						      x1 + (size / 2),
+						      y1 + (size / 2),
+						      x2 + (size / 2),
+						      y2 + (size / 2),
+						      size, false);
 			}
 
 			private void GetCoords (int rank, int file, out int x,

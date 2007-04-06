@@ -21,134 +21,171 @@ using System;
 using System.Collections;
 using Mono.Unix;
 
-namespace CsBoard {
-	namespace Viewer {
-	public class GamesEditorDialog {
+namespace CsBoard
+{
+	namespace Viewer
+	{
+		public class GamesEditorDialog
+		{
 
-		[Glade.Widget] private Gtk.ComboBox ratingComboBox;
-		[Glade.Widget] private Gtk.TreeView tagsListView;
-		[Glade.Widget] private Gtk.TreeView gamesListView;
-		[Glade.Widget] private Gtk.HPaned splitPane;
-		[Glade.Widget] private Gtk.Dialog editGamesDialog;
-		[Glade.Widget] private Gtk.Entry addTagEntry;
+			[Glade.Widget] private Gtk.ComboBox ratingComboBox;
+			[Glade.Widget] private Gtk.TreeView tagsListView;
+			[Glade.Widget] private Gtk.VBox gamesListBox;
+			[Glade.Widget] private Gtk.HPaned splitPane;
+			[Glade.Widget] private Gtk.Dialog editGamesDialog;
+			[Glade.Widget] private Gtk.Entry addTagEntry;
 
-		public Dialog Dialog {
-			get {
-				return editGamesDialog;
+			public Dialog Dialog
+			{
+				get
+				{
+					return editGamesDialog;
+				}
 			}
-		}
 
-		public HPaned SplitPane {
-			get {
-				return splitPane;
+			public HPaned SplitPane
+			{
+				get
+				{
+					return splitPane;
+				}
 			}
-		}
 
-		ListStore tagsStore;
+			ListStore tagsStore;
 
-		GamesList gamesList;
+			GamesListWidget gamesListWidget;
 
-		Hashtable ratingMap;
+			Hashtable ratingMap;
 
-		GameRating[] ratingValues;
+			  GameRating[] ratingValues;
 
-		PGNGameDetails selectedGame;
+			PGNGameDetails selectedGame;
 
-		ArrayList modifiedGames;
+			ArrayList modifiedGames;
 
-		public GamesEditorDialog(ArrayList games, ArrayList modifiedGames) {
-			this.modifiedGames = modifiedGames;
+			public GamesEditorDialog (ArrayList games,
+						  ArrayList modifiedGames)
+			{
+				this.modifiedGames = modifiedGames;
 
-			Glade.XML xml = Glade.XML.FromAssembly("gamedb.glade", "editGamesDialog", null);
-			xml.Autoconnect(this);
+				Glade.XML xml =
+					Glade.XML.
+					FromAssembly ("gamedb.glade",
+						      "editGamesDialog",
+						      null);
+				xml.Autoconnect (this);
 
-			ratingMap = new Hashtable();
+				ratingMap = new Hashtable ();
 
-			/* Note: this order should match the order in the glade file */
-			ratingValues = new GameRating[] {
+				/* Note: this order should match the order in the glade file */
+				ratingValues = new GameRating[]
+				{
 				GameRating.Average,
-				GameRating.Good,
-				GameRating.Excellent,
-				GameRating.MustHave,
-				GameRating.Unknown,
-				GameRating.Ignore
-			};
+						GameRating.Good,
+						GameRating.Excellent,
+						GameRating.MustHave,
+						GameRating.Unknown,
+						GameRating.Ignore};
 
-			int i = 0;
-			foreach(GameRating r in ratingValues) {
-				ratingMap[r] = i++;
+				int i = 0;
+				foreach (GameRating r in ratingValues)
+				{
+					ratingMap[r] = i++;
+				}
+
+				tagsStore = new ListStore (typeof (string));
+
+				tagsListView.Model = tagsStore;
+				gamesListWidget = new GamesListWidget ();
+				gamesListBox.Add (gamesListWidget);
+
+				gamesListWidget.SetGames (games);
+
+				tagsListView.
+					AppendColumn (new
+						      TreeViewColumn ("Tags",
+								      new
+								      CellRendererText
+								      (),
+								      "text",
+								      0));
+				gamesListWidget.View.SelectionChanged +=
+					OnMoveCursor;
 			}
 
-			tagsStore = new ListStore(typeof(string));
+			private void OnMoveCursor (object o, EventArgs args)
+			{
+				TreePath path;
+				CellRenderer r;
+				gamesListWidget.View.GetCursor (out path,
+								out r);
 
-			tagsListView.Model = tagsStore;
-			gamesList = new GamesList(gamesListView);
+				TreeIter iter;
+				gamesListWidget.Model.GetIter (out iter,
+							       path);
+				PGNGameDetails info =
+					(PGNGameDetails) gamesListWidget.
+					Model.GetValue (iter, 0);
 
-			gamesList.Update(games);
+				selectedGame = info;
+				RefreshGameInfo ();
+			}
 
-			tagsListView.AppendColumn(new TreeViewColumn("Tags", new CellRendererText(), "text", 0));
-			gamesListView.CursorChanged += OnCursorChanged;
-		}
+			public void RefreshGameInfo ()
+			{
+				if (selectedGame == null)
+					return;
 
-		private void OnCursorChanged(object o, EventArgs args) {
-			TreePath path;
-			TreeViewColumn col;
-			gamesListView.GetCursor(out path, out col);
+				ratingComboBox.Active =
+					(int) ratingMap[selectedGame.Rating];
+				tagsStore.Clear ();
+				if (selectedGame.Tags == null)
+					return;
 
-			TreeIter iter;
-			gamesListView.Model.GetIter(out iter, path);
-			PGNGameDetails info = (PGNGameDetails) gamesListView.Model.GetValue(iter, 0);
+				foreach (string tag in selectedGame.Tags)
+				{
+					tagsStore.AppendValues (tag);
+				}
+			}
 
-			selectedGame = info;
-			RefreshGameInfo();
-		}
+			public void OnDeleteTagClicked (object o,
+							EventArgs args)
+			{
+				if (selectedGame == null)
+					return;
+				TreePath path;
+				TreeViewColumn col;
+				tagsListView.GetCursor (out path, out col);
+				if (path == null)
+					return;
 
-		public void RefreshGameInfo() {
-			if(selectedGame == null)
-				return;
+				TreeIter iter;
+				tagsStore.GetIter (out iter, path);
+				string tag =
+					(string) tagsStore.GetValue (iter, 0);
+				if (selectedGame.RemoveTag (tag))
+					MarkCurrentGameDirty ();
+			}
 
-			ratingComboBox.Active = (int) ratingMap[selectedGame.Rating];
-			tagsStore.Clear();
-			if(selectedGame.Tags == null)
-				return;
+			public void OnAddTagActivated (object o,
+						       EventArgs args)
+			{
+				if (selectedGame == null)
+					return;
+				string tag = addTagEntry.Text.Trim ();
+				if (tag.Length == 0)
+					return;
+				selectedGame.AddTag (tag);
+				addTagEntry.Text = "";
+				MarkCurrentGameDirty ();
+			}
 
-			foreach(string tag in selectedGame.Tags) {
-				tagsStore.AppendValues(tag);
+			void MarkCurrentGameDirty ()
+			{
+				if (!modifiedGames.Contains (selectedGame))
+					modifiedGames.Add (selectedGame);
+				RefreshGameInfo ();
 			}
 		}
-
-		public void OnDeleteTagClicked(object o, EventArgs args) {
-			if(selectedGame == null)
-				return;
-			TreePath path;
-			TreeViewColumn col;
-			tagsListView.GetCursor(out path, out col);
-			if(path == null)
-				return;
-
-			TreeIter iter;
-			tagsStore.GetIter(out iter, path);
-			string tag = (string) tagsStore.GetValue(iter, 0);
-			if(selectedGame.RemoveTag(tag))
-				MarkCurrentGameDirty();
-		}
-
-		public void OnAddTagActivated(object o, EventArgs args) {
-			if(selectedGame == null)
-				return;
-			string tag = addTagEntry.Text.Trim();
-			if(tag.Length == 0)
-				return;
-			selectedGame.AddTag(tag);
-			addTagEntry.Text = "";
-			MarkCurrentGameDirty();
-		}
-
-		void MarkCurrentGameDirty() {
-			if(!modifiedGames.Contains(selectedGame))
-				modifiedGames.Add(selectedGame);
-			RefreshGameInfo();
-		}
-	}
 	}
 }

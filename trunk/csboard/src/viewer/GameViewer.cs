@@ -32,8 +32,6 @@ namespace CsBoard
 		using Gtk;
 		using Gdk;
 
-		public delegate void GameLoadedEventHandler (object o,
-							     EventArgs args);
 		public interface IEcoDb
 		{
 			string GetOpeningName (string econame);
@@ -52,10 +50,6 @@ namespace CsBoard
 		{
 			[Glade.Widget] private Gtk.Window gameViewerWindow;
 			[Glade.Widget] private Gtk.Toolbar toolbar;
-			[Glade.Widget] private Gtk.VBox chessBoardBox;
-			[Glade.Widget] private Gtk.VBox chessGameDetailsBox;
-			[Glade.Widget] private Gtk.HPaned gamesSplitPane;
-			[Glade.Widget] private Gtk.VBox gamesListBox;
 			[Glade.Widget] private Gtk.Statusbar statusBar;
 			[Glade.Widget] private Gtk.MenuItem fileMenuItem;
 			[Glade.Widget] private Gtk.
@@ -68,13 +62,9 @@ namespace CsBoard
 			[Glade.Widget] private Gtk.
 				CheckMenuItem highlightMoveMenuItem;
 			[Glade.Widget] private Gtk.MenuItem viewMenuItem;
-			[Glade.Widget] private Gtk.Notebook pgnDetailsBook;
-			private Gtk.Label whiteLabel, blackLabel;
-			[Glade.Widget] private Gtk.Label nagCommentLabel;
-			[Glade.Widget] private Gtk.Label moveNumberLabel;
+			[Glade.Widget] private Gtk.VBox gameViewerBox;
 
-			private CairoViewerBoard boardWidget;
-			GameSession gameSession;
+			private GameViewerWidget gameViewerWidget;
 
 			public Toolbar Toolbar
 			{
@@ -84,27 +74,23 @@ namespace CsBoard
 				}
 			}
 
-			public ChessGameWidget ChessGameWidget
+			public ChessGameView ChessGameView
 			{
 				get
 				{
-					return gameWidget;
+					return gameViewerWidget.
+						ChessGameWidget.NotationView;
 				}
 			}
-			ChessGameWidget gameWidget;
 
-			public GamesListWidget GamesListWidget
+			public SearchableGamesListWidget GamesListWidget
 			{
 				get
 				{
-					return gamesListWidget;
+					return gameViewerWidget.
+						GamesListWidget;
 				}
 			}
-
-			GamesListWidget gamesListWidget;
-
-			const int ALL_GAMES_PAGE = 1;
-			const int GAME_DETAILS_PAGE = 0;
 
 			string initialDirForFileChooser = null;
 
@@ -160,6 +146,48 @@ namespace CsBoard
 				{
 					return gameDb;
 				}
+			}
+
+			public static void CreateInstance ()
+			{
+				if (viewer != null)
+				  {
+					  viewer.gameViewerWindow.Show ();
+					  return;
+				  }
+				viewer = new GameViewer ();
+				CsBoard.Plugin.PluginManager.Instance.
+					StartPlugins ();
+			}
+
+			private GameViewer ()
+			{
+				Glade.XML gXML =
+					Glade.XML.
+					FromAssembly ("csviewer.glade",
+						      "gameViewerWindow",
+						      null);
+				gXML.Autoconnect (this);
+
+				// FIXME: Use libglade to create toolbar                  
+
+				App.Session.
+					SetupViewerGeometry
+					(gameViewerWindow);
+				initialDirForFileChooser =
+					App.Session.CurrentFolder;
+
+				gameLoaders = new ArrayList ();
+				exporters = new ArrayList ();
+
+				gameViewerWidget = new GameViewerWidget ();
+
+				gameViewerBox.PackStart (gameViewerWidget,
+							 true, true, 2);
+
+				highlightMoveMenuItem.Active =
+					App.Session.HighLightMove;
+				gameViewerWindow.Show ();
 			}
 
 			public static void GetOpeningName (string eco,
@@ -294,93 +322,15 @@ namespace CsBoard
 			{
 				GameLoader loader =
 					new GameLoader (this, reader);
-				if (loader.Games == null)
-					return;
-				LoadGames (loader.Games);
+				gameViewerWidget.LoadGames (loader.Games);
 			}
 
-			public void LoadGames (ArrayList games)
-			{
-				this.games = games;
-				gamesListWidget.SetGames (games);
-				if (games.Count > 0)
-				  {
-					  CurrentGame = (ChessGame) games[0];
-				  }
-			}
 
-			public event GameLoadedEventHandler GameLoadedEvent;
-
-			public ChessGame CurrentGame
+			public GameViewerWidget GameViewerWidget
 			{
 				get
 				{
-					return currentGame;
-				}
-				set
-				{
-					currentGame = value;
-					SelectGame (currentGame);
-				}
-			}
-
-			private ChessGame currentGame;
-
-			private void SelectGame (ChessGame game)
-			{
-				gameSession.Set (game);
-
-				boardWidget.Reset ();
-				boardWidget.SetPosition (gameSession.player.
-							 GetPosition ());
-				whiteLabel.Markup =
-					GetMarkupForTitle (game.
-							   GetTagValue
-							   ("White",
-							    "White"));
-				blackLabel.Markup =
-					GetMarkupForTitle (game.
-							   GetTagValue
-							   ("Black",
-							    "Black"));
-				moveNumberLabel.Text = "";
-				nagCommentLabel.Text = "";
-				pgnDetailsBook.Page = GAME_DETAILS_PAGE;
-
-				if (GameLoadedEvent != null)
-					GameLoadedEvent (this,
-							 EventArgs.Empty);
-			}
-
-			/* This replaces the current game with the new game!
-			 * This needs to replace the object in the list and also
-			 * from the tree views (including the filter)
-			 * The game is assumed to be an exact copy of the existing
-			 * game but a subclass of it.
-			 */
-
-			public void UpdateCurrentGame (ChessGame game)
-			{
-				UpdateGame (currentGame, game);
-			}
-
-			public void UpdateGame (ChessGame curgame,
-						ChessGame game)
-			{
-				int idx = games.IndexOf (curgame);
-				games.RemoveAt (idx);
-				games.Insert (idx, game);
-				// TODO: fire an event
-				// Replace it in the stores
-				gamesListWidget.UpdateGame (curgame, game);
-			}
-
-			ArrayList games;
-			public ArrayList Games
-			{
-				get
-				{
-					return games;
+					return gameViewerWidget;
 				}
 			}
 
@@ -398,101 +348,10 @@ namespace CsBoard
 			{
 				get
 				{
-					return chessGameDetailsBox;
+					return gameViewerWidget.
+						ChessGameWidget.
+						ChessGameDetailsBox;
 				}
-			}
-
-			public static void CreateInstance ()
-			{
-				if (viewer != null)
-				  {
-					  viewer.gameViewerWindow.Show ();
-					  return;
-				  }
-				viewer = new GameViewer ();
-				CsBoard.Plugin.PluginManager.Instance.
-					StartPlugins ();
-			}
-
-			private GameViewer ()
-			{
-				Glade.XML gXML =
-					Glade.XML.
-					FromAssembly ("csviewer.glade",
-						      "gameViewerWindow",
-						      null);
-				gXML.Autoconnect (this);
-
-				// FIXME: Use libglade to create toolbar                  
-
-				App.Session.
-					SetupViewerGeometry
-					(gameViewerWindow);
-				initialDirForFileChooser =
-					App.Session.CurrentFolder;
-
-				gameLoaders = new ArrayList ();
-				exporters = new ArrayList ();
-
-				boardWidget =
-					new CairoViewerBoard (ChessGamePlayer.
-							      GetDefaultPosition
-							      ());
-				//boardWidget.WidthRequest = 400;
-				//boardWidget.HeightRequest = 400;
-				whiteLabel =
-					new Gtk.
-					Label (GetMarkupForTitle
-					       (Catalog.GetString ("White")));
-				blackLabel =
-					new Gtk.
-					Label (GetMarkupForTitle
-					       (Catalog.GetString ("Black")));
-				whiteLabel.UseMarkup = true;
-				blackLabel.UseMarkup = true;
-				whiteLabel.Show ();
-				blackLabel.Show ();
-				blackLabel.Yalign = 1;	// bottom
-				whiteLabel.Yalign = 0;	// top
-				chessBoardBox.PackStart (blackLabel, false,
-							 false, 2);
-				chessBoardBox.PackStart (boardWidget, true,
-							 true, 2);
-				chessBoardBox.PackStart (whiteLabel, false,
-							 false, 2);
-				boardWidget.Show ();
-
-				gameWidget = new ChessGameWidget (this);
-				gameWidget.ShowNthMove += OnShowNthMoveEvent;
-				chessGameDetailsBox.PackStart (gameWidget,
-							       true, true, 4);
-
-				gamesListWidget = new GamesListWidget ();
-
-				gamesListWidget.Tree.RowActivated +=
-					OnRowActivated;
-				boardWidget.highLightMove =
-					App.Session.HighLightMove;
-				highlightMoveMenuItem.Active =
-					App.Session.HighLightMove;
-				gamesListBox.PackStart (gamesListWidget, true,
-							true, 0);
-
-				int pos = App.Session.ViewerSplitPanePosition;
-				int height = App.Session.ViewerHeight;
-				if (pos > height)
-					pos = height / 2;
-				gamesSplitPane.Position = pos;
-				gameViewerWindow.Show ();
-				gameSession = new GameSession ();
-			}
-
-			private static string GetMarkupForTitle (string str)
-			{
-				return String.
-					Format
-					("<big><big><big><b>{0}</b></big></big></big>",
-					 str);
 			}
 
 			public void Load (string resource)
@@ -509,6 +368,7 @@ namespace CsBoard
 			public void on_save_as_activate (System.Object b,
 							 EventArgs e)
 			{
+				ArrayList games = gameViewerWidget.Games;
 				if (games == null || games.Count == 0)
 					return;
 				string file = AskForFile (gameViewerWindow,
@@ -527,22 +387,6 @@ namespace CsBoard
 				writer.Close ();
 			}
 
-			private void Reset ()
-			{
-				boardWidget.Reset ();
-				gameSession.Reset ();	// reset session
-
-				gameWidget.SetMoveIndex (gameSession.
-							 CurrentMoveIdx);
-				boardWidget.lastMove =
-					gameSession.CurrentMove;
-				moveNumberLabel.Text = "";
-				nagCommentLabel.Text = "";
-
-				boardWidget.SetPosition (gameSession.player.
-							 GetPosition ());
-			}
-
 			public void on_window_delete_event (System.Object b,
 							    DeleteEventArgs e)
 			{
@@ -559,34 +403,37 @@ namespace CsBoard
 				App.Session.CurrentFolder =
 					initialDirForFileChooser;
 				App.Session.ViewerSplitPanePosition =
-					gamesSplitPane.Position;
+					gameViewerWidget.ChessGameWidget.
+					SplitPane.Position;
 				//CsBoard.Plugin.PluginManager.Instance.ClosePlugins ();
 				gameViewerWindow.Hide ();
 				App.Close ();
 			}
 
-			public void on_first_clicked (System.Object o,
-						      EventArgs e)
-			{
-				Reset ();
-			}
-
-			public void on_last_clicked (System.Object o,
-						     EventArgs e)
-			{
-				if (!gameSession.PlayTillTheEnd ())
-					Console.WriteLine
-						(Catalog.
-						 GetString
-						 ("Operation failed"));
-
-				UpdateMoveDetails (false);
-			}
-
 			public void on_player_clicked (System.Object o,
 						       EventArgs e)
 			{
-				App.StartPlayer (null);
+				try
+				{
+					App.StartPlayer (null);
+				}
+				catch
+				{
+					MessageDialog md =
+						new MessageDialog (null,
+								   DialogFlags.
+								   DestroyWithParent,
+								   MessageType.
+								   Error,
+								   ButtonsType.
+								   Close,
+								   Catalog.
+								   GetString
+								   ("Unknown engine"));
+					md.Run ();
+					md.Hide ();
+					md.Dispose ();
+				}
 			}
 
 			public void on_icsplayer_clicked (System.Object o,
@@ -602,16 +449,6 @@ namespace CsBoard
 					ShowAboutDialog (gameViewerWindow);
 			}
 
-			public void on_prev_clicked (System.Object o,
-						     EventArgs e)
-			{
-				int currentMoveIdx =
-					gameSession.CurrentMoveIdx;
-				if (currentMoveIdx < 0)
-					return;
-				PlayNMoves (currentMoveIdx);	// since we are passing the index, no need for -1
-			}
-
 			public void OnEditCommentActivated (object o,
 							    EventArgs e)
 			{
@@ -621,135 +458,23 @@ namespace CsBoard
 							  GetString
 							  ("Edit current comment"));
 				string currentComment =
-					gameSession.CurrentComment;
+					gameViewerWidget.ChessGameWidget.
+					BoardWidget.Session.CurrentComment;
 				if (currentComment != null)
 					dlg.Buffer = currentComment;
 				if (dlg.Run () == (int) ResponseType.Ok)
 				  {
 					  string comment = dlg.Buffer.Trim ();
-					  gameSession.CurrentComment =
+					  gameViewerWidget.ChessGameWidget.
+						  BoardWidget.Session.
+						  CurrentComment =
 						  comment.Length ==
 						  0 ? null : comment;
-					  gameWidget.Refresh ();
+					  gameViewerWidget.ChessGameWidget.
+						  NotationView.Refresh ();
 				  }
 				dlg.Hide ();
 				dlg.Dispose ();
-			}
-
-			private void PlayNMoves (int nmoves)
-			{
-				if (!gameSession.PlayNMoves (nmoves))
-				  {
-					  Console.WriteLine
-						  (Catalog.
-						   GetString
-						   ("Failed to play to go back"));
-					  // dont return now. let the position be set so that we can see
-					  // where it stopped
-				  }
-
-				UpdateMoveDetails (false);
-			}
-
-			public void on_next_clicked (System.Object o,
-						     EventArgs e)
-			{
-				if (!gameSession.HasNext ())
-				  {
-					  return;
-				  }
-				gameSession.Next ();
-				if (!gameSession.player.Move (gameSession.
-							      CurrentMove))
-				  {
-					  Console.WriteLine
-						  (Catalog.
-						   GetString
-						   ("Failed to play the move: ")
-						   + gameSession.CurrentMove);
-					  return;
-				  }
-				UpdateMoveDetails (true);
-			}
-
-			private void OnShowNthMoveEvent (object o,
-							 MoveEventArgs args)
-			{
-				int idx = args.nthMove;
-				PlayNMoves (idx + 1);
-			}
-
-			private void UpdateMoveDetails (bool next)
-			{
-				int currentMoveIdx =
-					gameSession.CurrentMoveIdx;
-				gameWidget.SetMoveIndex (currentMoveIdx);
-				if (currentMoveIdx >= 0)
-				  {
-					  string str =
-						  gameSession.CurrentPGNMove.
-						  Nags ==
-						  null ? "" : gameSession.
-						  CurrentPGNMove.Nags[0].
-						  Markup ();
-					  nagCommentLabel.Markup = str;
-					  boardWidget.lastMove =
-						  gameSession.CurrentMove;
-					  int r1, f1, r2, f2;
-					  r1 = gameSession.player.
-						  LastMoveInfo.src_rank;
-					  f1 = gameSession.player.
-						  LastMoveInfo.src_file;
-					  r2 = gameSession.player.
-						  LastMoveInfo.dest_rank;
-					  f2 = gameSession.player.
-						  LastMoveInfo.dest_file;
-					  boardWidget.Move (r1, f1, r2, f2,
-							    ' ');
-					  string move_markup =
-						  String.
-						  Format ("<b>{0}{1} {2}</b>",
-							  gameSession.
-							  CurrentMoveNumber,
-							  gameSession.
-							  IsWhitesTurn ? "." :
-							  "...",
-							  gameSession.
-							  CurrentMove);
-					  moveNumberLabel.Markup =
-						  move_markup;
-				  }
-				else
-				  {
-					  moveNumberLabel.Text = "";
-					  nagCommentLabel.Text = "";
-					  boardWidget.Move (0, 0, 0, 0, ' ');
-				  }
-				// Reload the position
-				// For next, the move is enough. but for spl positions like
-				// castling and enpassant, the position has to be reloaded
-				// for prev and other moves, the position has to be reloaded
-				if (!next
-				    || gameSession.player.LastMoveInfo.
-				    special_move)
-					boardWidget.SetPosition (gameSession.
-								 player.
-								 GetPosition
-								 ());
-				boardWidget.QueueDraw ();
-			}
-
-			void OnRowActivated (object obj,
-					     RowActivatedArgs args)
-			{
-				TreeIter iter;
-				gamesListWidget.Tree.Model.GetIter (out iter,
-								    args.
-								    Path);
-				ChessGame details =
-					(ChessGame) gamesListWidget.Tree.
-					Model.GetValue (iter, 0);
-				CurrentGame = details;
 			}
 
 			public void OnHighlightMoveMenuItemActivated (object
@@ -757,11 +482,13 @@ namespace CsBoard
 								      EventArgs
 								      args)
 			{
-				boardWidget.highLightMove =
+				gameViewerWidget.ChessGameWidget.BoardWidget.
+					Board.highLightMove =
 					highlightMoveMenuItem.Active;
 				App.Session.HighLightMove =
 					highlightMoveMenuItem.Active;
-				boardWidget.QueueDraw ();
+				gameViewerWidget.ChessGameWidget.BoardWidget.
+					Board.QueueDraw ();
 			}
 
 			public string AskForFile (Gtk.

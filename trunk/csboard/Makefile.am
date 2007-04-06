@@ -28,15 +28,18 @@ GAME_PLAYER_SOURCES = \
 VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/GameSession.cs \
 	$(top_srcdir)/src/viewer/ChessGame.cs \
+	$(top_srcdir)/src/viewer/Widgets/CairoViewerBoard.cs \
+	$(top_srcdir)/src/viewer/Widgets/ChessGameBoard.cs \
+	$(top_srcdir)/src/viewer/Widgets/ChessGameView.cs \
+	$(top_srcdir)/src/viewer/Widgets/ChessGameWidget.cs \
+	$(top_srcdir)/src/viewer/Widgets/GamesListWidget.cs \
+	$(top_srcdir)/src/viewer/Widgets/GameViewerWidget.cs \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
-	$(top_srcdir)/src/viewer/ChessGameView.cs \
 	$(top_srcdir)/src/viewer/PositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/CairoPositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/ViewerBoard.cs \
 	$(top_srcdir)/src/viewer/BufferDialog.cs \
-	$(top_srcdir)/src/viewer/CairoViewerBoard.cs \
-	$(top_srcdir)/src/viewer/PGNTree.cs \
-	$(top_srcdir)/src/viewer/GamesListWidget.cs
+	$(top_srcdir)/src/viewer/PGNTree.cs
 
 PLUGIN_SOURCES = \
 	$(top_srcdir)/src/viewer/PGNBufferLoader.cs		\

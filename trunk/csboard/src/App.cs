@@ -144,7 +144,12 @@ namespace CsBoard
 
 		public static void StartPlayer (string filename)
 		{
-			new ChessWindow (App.Session.Engine, filename);
+			App.StartPlayer (App.Session.Engine, filename);
+		}
+
+		public static void StartPlayer (string engine, string filename)
+		{
+			new ChessWindow (engine, filename);
 			appCount++;
 		}
 

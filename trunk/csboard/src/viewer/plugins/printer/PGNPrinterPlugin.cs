@@ -87,7 +87,7 @@ namespace CsBoard
 			private void on_export_ps_activate (object obj,
 							    EventArgs args)
 			{
-				if (viewer.Games == null)
+				if (viewer.GameViewerWidget.Games == null)
 					return;
 				string file =
 					viewer.AskForFile (viewer.Window,
@@ -103,8 +103,9 @@ namespace CsBoard
 							    Catalog.
 							    GetString
 							    ("Exporting..."));
-				new ExportHandler (prog, viewer.Games,
-						   printer, file);
+				new ExportHandler (prog,
+						   viewer.GameViewerWidget.
+						   Games, printer, file);
 				prog.Run ();
 				prog.Hide ();
 				prog.Dispose ();
@@ -113,7 +114,7 @@ namespace CsBoard
 			private void on_print_activate (object obj,
 							EventArgs args)
 			{
-				if (viewer.Games == null)
+				if (viewer.GameViewerWidget.Games == null)
 					return;
 				PrintWrapper printer = new PrintWrapper ();
 				PrintDialog dialog =
@@ -136,8 +137,9 @@ namespace CsBoard
 							    GetString
 							    ("Printing..."));
 				prog.ShowAll ();
-				new PrintHandler (prog, viewer.Games, printer,
-						  response);
+				new PrintHandler (prog,
+						  viewer.GameViewerWidget.
+						  Games, printer, response);
 				prog.Run ();	// The PrintHandler will bail us out!
 				prog.Hide ();
 				prog.Dispose ();

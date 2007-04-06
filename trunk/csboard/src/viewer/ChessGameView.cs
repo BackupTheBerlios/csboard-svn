@@ -339,10 +339,9 @@ namespace CsBoard
 				ChessGame game = viewer.CurrentGame;
 				if (game == null)
 					return;
-				string title =
-					String.Format ("{0} vs {1}",
-						       game.White,
-						       game.Black);
+				string title = String.Format ("{0} vs {1}",
+							      game.White,
+							      game.Black);
 
 				buffer.CreateMark ("-1", iter, true);
 				buffer.InsertWithTagsByName (ref iter, title,

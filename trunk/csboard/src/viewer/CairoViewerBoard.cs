@@ -30,7 +30,7 @@ namespace CsBoard
 	{
 		public class CairoViewerBoard:CairoBoard
 		{
-//			bool firstTime = true;
+//                      bool firstTime = true;
 
 			public CairoViewerBoard (ArrayList pos):base (pos)
 			{

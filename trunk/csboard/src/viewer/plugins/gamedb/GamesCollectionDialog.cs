@@ -70,7 +70,7 @@ namespace CsBoard
 		{
 			[Glade.Widget] private Gtk.Entry titleEntry;
 			[Glade.Widget] private Gtk.TextView descriptionView;
-			[Glade.Widget] private Gtk.TreeView gamesTreeView;
+			[Glade.Widget] private Gtk.VBox gamesListBox;
 			[Glade.Widget] private Gtk.
 				Button removeSelectedGamesButton;
 			[Glade.Widget] private Gtk.
@@ -84,7 +84,7 @@ namespace CsBoard
 				}
 			}
 
-			GamesList collectionGamesList;
+			GamesListWidget collectionGamesListWidget;
 			GameCollection col;
 
 			public EditGamesCollectionDialog (GameCollection col)
@@ -99,10 +99,11 @@ namespace CsBoard
 				removeSelectedGamesButton.Clicked +=
 					OnRemoveSelectedGamesButtonClicked;
 
-				collectionGamesList =
-					new GamesList (gamesTreeView);
+				collectionGamesListWidget =
+					new GamesListWidget ();
+				gamesListBox.Add (collectionGamesListWidget);
 
-				gamesTreeView.Selection.Mode =
+				collectionGamesListWidget.View.SelectionMode =
 					SelectionMode.Multiple;
 
 				this.col = col;
@@ -116,8 +117,8 @@ namespace CsBoard
 								    args)
 			{
 				TreePath[]selected =
-					gamesTreeView.Selection.
-					GetSelectedRows ();
+					collectionGamesListWidget.View.
+					SelectedItems;
 				if (selected == null || selected.Length == 0)
 					return;
 
@@ -125,21 +126,22 @@ namespace CsBoard
 				ArrayList iters = new ArrayList ();
 				foreach (TreePath path in selected)
 				{
-					gamesTreeView.Model.
+					collectionGamesListWidget.View.Model.
 						GetIter (out iter, path);
 					iters.Add (iter);
 					PGNGameDetails info =
 						(PGNGameDetails)
-						gamesTreeView.Model.
-						GetValue (iter, 0);
+						collectionGamesListWidget.
+						View.Model.GetValue (iter, 0);
 					col.RemoveGame (info);
 				}
 
 				for (int i = 0; i < iters.Count; i++)
 				  {
 					  iter = (TreeIter) iters[i];
-					  ((ListStore) gamesTreeView.Model).
-						  Remove (ref iter);
+					  ((ListStore)
+					   collectionGamesListWidget.View.
+					   Model).Remove (ref iter);
 				  }
 
 				GameDb.Instance.AddCollection (col);	// this will actually save the collection
@@ -152,7 +154,7 @@ namespace CsBoard
 
 				ArrayList games = new ArrayList ();
 				col.LoadGames (games);
-				collectionGamesList.Update (games);
+				collectionGamesListWidget.SetGames (games);
 			}
 		}
 	}

@@ -201,7 +201,27 @@ namespace CsBoard
 			public void on_player_clicked (System.Object b,
 						       EventArgs e)
 			{
-				App.StartPlayer (null);
+				try
+				{
+					App.StartPlayer (null);
+				}
+				catch
+				{
+					MessageDialog md =
+						new MessageDialog (null,
+								   DialogFlags.
+								   DestroyWithParent,
+								   MessageType.
+								   Error,
+								   ButtonsType.
+								   Close,
+								   Catalog.
+								   GetString
+								   ("Unknown engine"));
+					md.Run ();
+					md.Hide ();
+					md.Dispose ();
+				}
 			}
 		}
 	}

@@ -98,7 +98,7 @@ namespace CsBoard
 
 			private bool AddGamesIdleHandler ()
 			{
-				IList games = viewer.Games;
+				IList games = viewer.GameViewerWidget.Games;
 				if (games == null)
 				  {
 					  dlg.Respond (ResponseType.Ok);
@@ -146,7 +146,8 @@ namespace CsBoard
 						  collection.
 							  AddGame (updated);
 					  GameDb.Instance.DB.Set (updated);
-					  viewer.UpdateGame (game, updated);
+					  viewer.GameViewerWidget.
+						  UpdateGame (game, updated);
 
 					  ngames++;
 					  dlg.UpdateProgress (ngames /
@@ -393,7 +394,8 @@ namespace CsBoard
 								    ("Rating"))
 			{
 				this.viewer = viewer;
-				viewer.GameLoadedEvent += OnGameLoaded;
+				viewer.GameViewerWidget.GameLoadedEvent +=
+					OnGameLoaded;
 				combo = new ComboBox (new string[]
 						      {
 						      Catalog.
@@ -474,7 +476,8 @@ namespace CsBoard
 			{
 				combo.Active = -1;
 				PGNGameDetails details =
-					viewer.CurrentGame as PGNGameDetails;
+					viewer.GameViewerWidget.
+					CurrentGame as PGNGameDetails;
 				if (details != null
 				    && details.Rating != GameRating.Unknown)
 					combo.Active =
@@ -516,7 +519,8 @@ namespace CsBoard
 			private void OnSave (object o, EventArgs args)
 			{
 				save.Sensitive = false;
-				ChessGame game = viewer.CurrentGame;
+				ChessGame game =
+					viewer.GameViewerWidget.CurrentGame;
 				if (game == null)
 					return;
 				PGNGameDetails updated;
@@ -536,10 +540,12 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;}
+						 return false;
+						 }
 				);
 				if (newobj)
-					viewer.UpdateCurrentGame (updated);
+					viewer.GameViewerWidget.
+						UpdateCurrentGame (updated);
 				GameDb.Instance.SaveGame (updated);
 				UpdateTagDetails (updated);
 				GameDb.Instance.Commit ();

@@ -1,3 +1,30 @@
+2007-04-06 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* Makefile.am
+	* resource/csviewer.glade
+	* src/Window.cs
+	* src/viewer/CairoPositionSnapshot.cs
+	* src/viewer/CairoViewerBoard.cs
+	* src/viewer/ChessGameView.cs
+	* src/viewer/ChessGameWidget.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/IEcoDb.cs
+	* src/viewer/PluginManagerDialog.cs
+	* src/viewer/PositionSnapshot.cs
+	* src/viewer/ViewerBoard.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs
+	* src/viewer/plugins/gamedb/GamesEditorDialog.cs
+	* src/viewer/plugins/gamedb/gamedb.glade
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
+	* src/viewer/plugins/printer/PrintWrapper.cs
+
+	Replaced TreeView with IconView for showing games.
+	Cleaned up code and updated indentation.
+	
 2007-03-25 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

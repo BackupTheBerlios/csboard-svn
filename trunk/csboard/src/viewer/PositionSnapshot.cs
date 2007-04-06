@@ -168,11 +168,12 @@ namespace CsBoard
 							    FontDescription
 							    font)
 			{
-				if (!showCoords) {
-					fontwidth = 0;
-					fontheight = 0;
-					return;
-				}
+				if (!showCoords)
+				  {
+					  fontwidth = 0;
+					  fontheight = 0;
+					  return;
+				  }
 				layoutx = new Pango.Layout[8];
 				layouty = new Pango.Layout[8];
 				char chx = 'a';
@@ -180,31 +181,32 @@ namespace CsBoard
 				fontwidth = 0;
 				fontheight = 0;
 				for (int i = 0; i < layoutx.Length;
-				     i++, chx++, chy++) {
-					Pango.Layout layout;
-					layoutx[i] = layout =
-						new Pango.Layout (context);
-					layout.FontDescription = font;
-					layout.SetText (chx.ToString ());
-					int w, h;
-					layout.GetSize (out w, out h);
-					h = (int) Math.Round (h /
-							      Pango.Scale.
-							      PangoScale);
-					if (h > fontheight)
-						fontheight = h;
+				     i++, chx++, chy++)
+				  {
+					  Pango.Layout layout;
+					  layoutx[i] = layout =
+						  new Pango.Layout (context);
+					  layout.FontDescription = font;
+					  layout.SetText (chx.ToString ());
+					  int w, h;
+					  layout.GetSize (out w, out h);
+					  h = (int) Math.Round (h /
+								Pango.Scale.
+								PangoScale);
+					  if (h > fontheight)
+						  fontheight = h;
 
-					layouty[i] = layout =
-						new Pango.Layout (context);
-					layout.FontDescription = font;
-					layout.SetText (chy.ToString ());
-					layout.GetSize (out w, out h);
-					w = (int) Math.Round (w /
-							      Pango.Scale.
-							      PangoScale);
-					if (w > fontwidth)
-						fontwidth = w;
-				}
+					  layouty[i] = layout =
+						  new Pango.Layout (context);
+					  layout.FontDescription = font;
+					  layout.SetText (chy.ToString ());
+					  layout.GetSize (out w, out h);
+					  w = (int) Math.Round (w /
+								Pango.Scale.
+								PangoScale);
+					  if (w > fontwidth)
+						  fontwidth = w;
+				  }
 			}
 
 			private void DrawCoords ()
@@ -223,25 +225,26 @@ namespace CsBoard
 				y2 = start_y + board_height +
 					board_line_thickness + padding;
 				gc.RgbFgColor = foreground_color;
-				for (int i = 0; i < layoutx.Length; i++) {
-					int cellx = i * size;
-					if (i > 0)
-						cellx += (i - 1) * space;
+				for (int i = 0; i < layoutx.Length; i++)
+				  {
+					  int cellx = i * size;
+					  if (i > 0)
+						  cellx += (i - 1) * space;
 
-					x = start_x + cellx;
-					x += ((size - fontwidth) / 2);
-					int w, h;
-					layoutx[i].GetSize (out w, out h);
-					h = (int) Math.Round (h /
-							      Pango.Scale.
-							      PangoScale);
-					map.DrawLayout (gc, x,
-							y1 + fontheight - h,
-							layoutx[i]);
-					map.DrawLayout (gc, x,
-							y2 + fontheight - h,
-							layoutx[i]);
-				}
+					  x = start_x + cellx;
+					  x += ((size - fontwidth) / 2);
+					  int w, h;
+					  layoutx[i].GetSize (out w, out h);
+					  h = (int) Math.Round (h /
+								Pango.Scale.
+								PangoScale);
+					  map.DrawLayout (gc, x,
+							  y1 + fontheight - h,
+							  layoutx[i]);
+					  map.DrawLayout (gc, x,
+							  y2 + fontheight - h,
+							  layoutx[i]);
+				  }
 			}
 
 			private void DrawRanks ()
@@ -252,18 +255,19 @@ namespace CsBoard
 				x2 = start_x + board_width +
 					board_line_thickness + padding;
 				gc.RgbFgColor = foreground_color;
-				for (int i = 0; i < layouty.Length; i++) {
-					int celly = i * size;
-					if (i > 0)
-						celly += (i - 1) * space;
+				for (int i = 0; i < layouty.Length; i++)
+				  {
+					  int celly = i * size;
+					  if (i > 0)
+						  celly += (i - 1) * space;
 
-					y = start_y + celly;
-					y += ((size - fontheight) / 2);
-					map.DrawLayout (gc, x1, y,
-							layouty[i]);
-					map.DrawLayout (gc, x2, y,
-							layouty[i]);
-				}
+					  y = start_y + celly;
+					  y += ((size - fontheight) / 2);
+					  map.DrawLayout (gc, x1, y,
+							  layouty[i]);
+					  map.DrawLayout (gc, x2, y,
+							  layouty[i]);
+				  }
 			}
 
 			// draw
@@ -273,11 +277,12 @@ namespace CsBoard
 						      int height,
 						      int line_thickness)
 			{
-				if (line_thickness == 1) {
-					map.DrawRectangle (gc, false, x, y,
-							   width, height);
-					return;
-				}
+				if (line_thickness == 1)
+				  {
+					  map.DrawRectangle (gc, false, x, y,
+							     width, height);
+					  return;
+				  }
 				// horizontal lines
 				map.DrawRectangle (gc, true,
 						   x,
@@ -337,28 +342,30 @@ namespace CsBoard
 				// Start redrawing the Checkerboard                     
 				xcount = 0;
 				i = start_x;
-				while (xcount < 8) {
-					j = start_y;
-					ycount = xcount % 2;	//start with even/odd depending on row
-					while (ycount < 8 + xcount % 2) {
-						if (ycount % 2 != 0)
-							gc.RgbFgColor =
-								blacksq_color;
-						else
-							gc.RgbFgColor =
-								whitesq_color;
-						map.DrawRectangle (gc,
-								   true,
-								   i, j,
-								   size,
-								   size);
+				while (xcount < 8)
+				  {
+					  j = start_y;
+					  ycount = xcount % 2;	//start with even/odd depending on row
+					  while (ycount < 8 + xcount % 2)
+					    {
+						    if (ycount % 2 != 0)
+							    gc.RgbFgColor =
+								    blacksq_color;
+						    else
+							    gc.RgbFgColor =
+								    whitesq_color;
+						    map.DrawRectangle (gc,
+								       true,
+								       i, j,
+								       size,
+								       size);
 
-						j += size + space;
-						ycount++;
-					}
-					i += size + space;
-					xcount++;
-				}
+						    j += size + space;
+						    ycount++;
+					    }
+					  i += size + space;
+					  xcount++;
+				  }
 
 				DrawCoords ();
 
@@ -367,67 +374,55 @@ namespace CsBoard
 
 			private void DrawPosition ()
 			{
-				for (int i = 0; i < 8; i++) {
-					for (int j = 0; j < 8; j += 1) {
+				for (int i = 0; i < 8; i++)
+				  {
+					  for (int j = 0; j < 8; j += 1)
+					    {
 
-						FigureType fig =
-							position.
-							GetFigureAt (i,
-								     j);
+						    FigureType fig =
+							    position.
+							    GetFigureAt (i,
+									 j);
 
-						if (fig != FigureType.None) {
-							int x, y;
+						    if (fig !=
+							FigureType.None)
+						      {
+							      int x, y;
 
-							if (!side) {
-								//White
-								x = start_x +
-									i *
-									space
-									+
-									i *
-									size;
-								y = start_y +
-									j *
-									space
-									+
-									j *
-									size;
-							}
-							else {
-								//Black
-								x = start_x +
-									(7 -
-									 i) *
-									(space
-									 +
-									 size);
-								y = start_y +
-									(7 -
-									 j) *
-									(space
-									 +
-									 size);
-							}
+							      if (!side)
+								{
+									//White
+									x = start_x + i * space + i * size;
+									y = start_y + j * space + j * size;
+								}
+							      else
+								{
+									//Black
+									x = start_x + (7 - i) * (space + size);
+									y = start_y + (7 - j) * (space + size);
+								}
 
-							Gdk.Pixbuf pixbuf =
-								figure.
-								GetPixbuf
-								(fig);
-							gc.RgbFgColor =
-								blacksq_color;
-							map.DrawPixbuf (gc,
-									pixbuf,
-									0, 0,
-									x, y,
-									size,
-									size,
-									Gdk.
-									RgbDither.
-									None,
-									0, 0);
-						}
-					}
-				}
+							      Gdk.Pixbuf
+								      pixbuf =
+								      figure.
+								      GetPixbuf
+								      (fig);
+							      gc.RgbFgColor =
+								      blacksq_color;
+							      map.DrawPixbuf
+								      (gc,
+								       pixbuf,
+								       0, 0,
+								       x, y,
+								       size,
+								       size,
+								       Gdk.
+								       RgbDither.
+								       None,
+								       0, 0);
+						      }
+					    }
+				  }
 
 
 				return;

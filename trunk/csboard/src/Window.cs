@@ -201,6 +201,8 @@ namespace CsBoard
 						     DeleteEventArgs e)
 		{
 			on_quit_activate (b, null);
+			chessGameWidget.whiteClock.Stop();
+			chessGameWidget.blackClock.Stop();
 		}
 
 		public void on_quit_activate (System.Object b, EventArgs e)
@@ -717,7 +719,8 @@ namespace CsBoard
 				EngineChooser.ChooseEngine (App.Session.
 							    Engine);
 			try {
-			  App.StartPlayer(engine);
+			  Console.WriteLine("EngineChooser returned: {0}", engine);
+			  App.StartPlayer(engine, null);
 			  if (engine != null)
 			    App.Session.Engine = engine;
 			}
@@ -782,7 +785,7 @@ namespace CsBoard
 			if (gnuchessButton.Active)
 				return "gnuchess -x -e";
 			if (craftyButton.Active)
-				return null;
+				return "crafty ";
 			if (phalanxButton.Active)
 				return "phalanx -l-";
 			if (icsButton.Active)

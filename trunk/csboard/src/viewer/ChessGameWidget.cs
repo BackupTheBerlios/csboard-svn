@@ -82,9 +82,9 @@ namespace CsBoard
 				highlightWhite = white;
 				highlightMoveIndex = moveIdx;
 				if (moveIdx < 0)
-				{
-					return;
-				}
+				  {
+					  return;
+				  }
 				TreeIter iter;
 				if (!moveStore.
 				    IterNthChild (out iter, moveIdx))
@@ -100,11 +100,13 @@ namespace CsBoard
 			{
 				moveStore.Clear ();
 				PGNChessMove white = null;
-				foreach (PGNChessMove move in game.Moves) {
-					if (white == null) {
-						white = move;
-						continue;
-					}
+				foreach (PGNChessMove move in game.Moves)
+				{
+					if (white == null)
+					  {
+						  white = move;
+						  continue;
+					  }
 					moveStore.AppendValues (white, move);
 					white = null;
 				}
@@ -205,10 +207,11 @@ namespace CsBoard
 				PGNChessMove move =
 					(PGNChessMove) model.GetValue (iter,
 								       1);
-				if (move == null) {
-					renderer.Text = "";
-					return;
-				}
+				if (move == null)
+				  {
+					  renderer.Text = "";
+					  return;
+				  }
 				int idx = model.GetPath (iter).Indices[0];
 				if (!highlightWhite
 				    && (idx == highlightMoveIndex))

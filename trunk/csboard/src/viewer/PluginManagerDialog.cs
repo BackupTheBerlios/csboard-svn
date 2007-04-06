@@ -14,11 +14,15 @@ namespace CsBoard
 
 			public PluginManagerDialog (Window parent,
 						    PluginManager
-						    manager):base (Catalog.GetString("Plugins"),
+						    manager):base (Catalog.
+								   GetString
+								   ("Plugins"),
 								   parent,
 								   DialogFlags.
 								   Modal,
-								   Catalog.GetString("Close"),
+								   Catalog.
+								   GetString
+								   ("Close"),
 								   ResponseType.
 								   None)
 			{
@@ -69,7 +73,8 @@ namespace CsBoard
 						     TreeCellDataFunc
 						     (LoadedStatusCellDataFunc));
 
-				col.Title = Catalog.GetString("Plugins Details");
+				col.Title =
+					Catalog.GetString ("Plugins Details");
 				tree.AppendColumn (col);
 			}
 
@@ -113,8 +118,12 @@ namespace CsBoard
 			MenuItem toolsItem;
 
 			public PluginViewerPlugin ():base ("plugin-viewer",
-							   Catalog.GetString("Plugin Viewer"),
-							   Catalog.GetString("A plugin to show the status of other plugins!"))
+							   Catalog.
+							   GetString
+							   ("Plugin Viewer"),
+							   Catalog.
+							   GetString
+							   ("A plugin to show the status of other plugins!"))
 			{
 			}
 
@@ -123,10 +132,13 @@ namespace CsBoard
 				if ((viewer = GameViewer.Instance) == null)
 					return false;
 				Menu menu = new Menu ();
-				toolsItem = new MenuItem (Catalog.GetString("Tools"));
+				toolsItem =
+					new MenuItem (Catalog.
+						      GetString ("Tools"));
 				toolsItem.Submenu = menu;
 				MenuItem pluginsItem =
-					new MenuItem (Catalog.GetString("Plugins"));
+					new MenuItem (Catalog.
+						      GetString ("Plugins"));
 				menu.Add (pluginsItem);
 
 				pluginsItem.Activated += on_plugins_activate;
