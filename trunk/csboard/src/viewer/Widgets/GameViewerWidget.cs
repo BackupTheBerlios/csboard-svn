@@ -172,6 +172,8 @@ namespace CsBoard
 				  {
 					  CurrentGame = games[0] as ChessGame;
 				  }
+				if(games.Count == 1)
+					Page = GAME_DETAILS_PAGE;
 			}
 		}
 	}
