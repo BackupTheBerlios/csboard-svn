@@ -35,7 +35,7 @@ namespace CsBoard
 				StringBuilder buffer = new StringBuilder ();
 				  buffer.Append (String.
 						 Format
-						 ("<b>{0} {1} {2}</b>\n",
+						 ("<b><span color=\"#402080\">{0} {1} {2}</span></b>\n",
 						  MarkupEncode (this.White),
 						  Catalog.GetString ("vs"),
 						  MarkupEncode (this.Black)));

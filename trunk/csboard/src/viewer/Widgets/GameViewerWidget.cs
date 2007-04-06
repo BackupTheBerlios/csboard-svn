@@ -120,12 +120,13 @@ namespace CsBoard
 			void OnGameSelectionEvent (ChessGame game)
 			{
 				CurrentGame = game;
+				Page = GAME_DETAILS_PAGE;
 			}
 
 			private void SelectGame (ChessGame game)
 			{
 				chessGameWidget.SetGame (game);
-				Page = GAME_DETAILS_PAGE;
+				//Page = GAME_DETAILS_PAGE;
 
 				if (GameLoadedEvent != null)
 					GameLoadedEvent (this,
