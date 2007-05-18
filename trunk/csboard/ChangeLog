@@ -1,3 +1,16 @@
+2007-05-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* resource/csviewer.glade
+	* src/CairoBoard.cs
+	* src/ics/ICSDetailsWindow.cs
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/Widgets/ChessGameBoard.cs
+
+	Added 'switch sides' option to the viewer. fixes a bug also.
+	
 2007-04-06 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

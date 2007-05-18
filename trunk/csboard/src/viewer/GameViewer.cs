@@ -410,6 +410,13 @@ namespace CsBoard
 				App.Close ();
 			}
 
+			public void on_switch_side_activate (System.Object b,
+							     EventArgs e)
+			{
+				gameViewerWidget.ChessGameWidget.BoardWidget.
+					SwitchSides ();
+			}
+
 			public void on_player_clicked (System.Object o,
 						       EventArgs e)
 			{
@@ -654,7 +661,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

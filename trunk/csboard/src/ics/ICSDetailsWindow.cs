@@ -63,20 +63,20 @@ namespace CsBoard
 				frame.Add (book);
 				icsWindow.Title = title;
 
-				icsWindow.DeleteEvent +=
+				int width, height;
+				  icsWindow.DeleteEvent +=
 					delegate (object o,
 						  DeleteEventArgs args)
 				{
-					int width, height;
-					  icsWindow.GetSize (out width,
-							     out height);
-					  App.Session.ICSWinWidth = width;
-					  App.Session.ICSWinHeight = height;
-					  App.Close ();
+					icsWindow.GetSize (out width,
+							   out height);
+					App.Session.ICSWinWidth = width;
+					App.Session.ICSWinHeight = height;
+					App.Close ();
 				};
 
-				int width = App.Session.ICSWinWidth;
-				int height = App.Session.ICSWinHeight;
+				width = App.Session.ICSWinWidth;
+				height = App.Session.ICSWinHeight;
 				icsWindow.Resize (width, height);
 
 				client.AuthEvent += OnAuth;
@@ -85,9 +85,7 @@ namespace CsBoard
 
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate ();
-					       return false;
-					       }
+					       Authenticate (); return false;}
 				);
 
 				book.Sensitive = false;

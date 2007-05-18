@@ -27,6 +27,14 @@ namespace CsBoard
 		public class GameSession
 		{
 			ChessGame game;
+			public ChessGame Game
+			{
+				get
+				{
+					return game;
+				}
+			}
+
 			public ChessGamePlayer player;
 			int idx;
 			int total_moves;	// including whites and blacks
@@ -65,7 +73,7 @@ namespace CsBoard
 				if (total_moves == 0)
 					hasNext = false;
 				else
-					  hasNext = true;
+					hasNext = true;
 			}
 
 			public bool PlayNMoves (int n)
@@ -168,10 +176,11 @@ namespace CsBoard
 
 				set
 				{
-					if (idx < 0) {
-						game.Comment = value;
-						return;
-					}
+					if (idx < 0)
+					  {
+						  game.Comment = value;
+						  return;
+					  }
 					move.comment = value;
 					game.Moves[idx] = move;
 				}

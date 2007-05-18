@@ -89,6 +89,41 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkMenuItem" id="action1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Action</property>
+	      <property name="use_underline">True</property>
+
+	      <child>
+		<widget class="GtkMenu" id="action1_menu">
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="switch_side">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Switch Side</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_switch_side_activate" last_modification_time="Tue, 17 Apr 2007 12:11:41 GMT"/>
+		      <accelerator key="T" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image1">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-refresh</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="edit2">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Edit</property>

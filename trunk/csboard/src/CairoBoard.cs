@@ -83,6 +83,21 @@ namespace CsBoard
 		public event BoardMoveHandler MoveEvent;
 
 		public bool side = false;
+		public bool WhiteAtBottom
+		{
+			get
+			{
+				return side == false;
+			}
+
+			set
+			{
+				if (value == true)
+					side = false;
+				else
+					side = true;
+			}
+		}
 
 		public string lastMove = null;
 		public string moveHint = null;
@@ -295,12 +310,11 @@ namespace CsBoard
 		protected virtual void DrawLastMove (Cairo.Context cairo)
 		{
 			int x1, y1, x2, y2;
-			GetCoordinates (SrcRank, SrcFile, out x1,
-					out y1);
-			GetCoordinates (DestRank, DestFile, out x2,
-					out y2);
+			GetCoordinates (SrcRank, SrcFile, out x1, out y1);
+			GetCoordinates (DestRank, DestFile, out x2, out y2);
 			// gc.RgbFgColor = new Gdk.Color (128, 128, 240);
-			if(info.stage == MoveStage.Clear || info.stage == MoveStage.Done)
+			if (info.stage == MoveStage.Clear
+			    || info.stage == MoveStage.Done)
 				DrawArrow (cairo, x1, y1, x2, y2, size, true);
 		}
 
@@ -567,16 +581,6 @@ namespace CsBoard
 				  return;
 			  }
 
-
-			if (side)
-			  {
-				  info.start.x = 7 - info.start.x;
-				  info.start.y = 7 - info.start.y;
-				  info.end.x = 7 - info.end.x;
-				  info.end.y = 7 - info.end.y;
-			  }
-
-
 			char newFigure = ' ';
 
 			position.Move (info.start, info.end, ref newFigure,
@@ -610,35 +614,47 @@ namespace CsBoard
 			Move (true);
 		}
 
-		int SrcRank {
-			get {
+		int SrcRank
+		{
+			get
+			{
 				return 7 - info.start.y;
 			}
-			set {
+			set
+			{
 				info.start.y = 7 - value;
 			}
 		}
-		int SrcFile {
-			get {
+		int SrcFile
+		{
+			get
+			{
 				return info.start.x;
 			}
-			set {
+			set
+			{
 				info.start.x = value;
 			}
 		}
-		int DestRank {
-			get {
+		int DestRank
+		{
+			get
+			{
 				return 7 - info.end.y;
 			}
-			set {
+			set
+			{
 				info.end.y = 7 - value;
 			}
 		}
-		int DestFile {
-			get {
+		int DestFile
+		{
+			get
+			{
 				return info.end.x;
 			}
-			set {
+			set
+			{
 				info.end.x = value;
 			}
 		}
@@ -701,8 +717,7 @@ namespace CsBoard
 			return !task_finished;
 		}
 
-		public void SetMoveInfo (int sr, int sf, int dr,
-					 int df)
+		public void SetMoveInfo (int sr, int sf, int dr, int df)
 		{
 			SrcRank = sr;
 			SrcFile = sf;
@@ -719,16 +734,14 @@ namespace CsBoard
 				  file = 7 - file;
 			  }
 			//White
-			x = start_x + file * (space + size) +
-				size / 2;
-			y = start_y + (7 - rank) * (space + size) +
-				size / 2;
+			x = start_x + file * (space + size) + size / 2;
+			y = start_y + (7 - rank) * (space + size) + size / 2;
 		}
 
 		public void Reset ()
 		{
-				info.start.x = info.start.y = info.end.x = info.end.y =
-					0;
+			info.start.x = info.start.y = info.end.x =
+				info.end.y = 0;
 		}
 
 		/* This will draw an arrow from the source point to the destination.
@@ -758,9 +771,9 @@ namespace CsBoard
 					   (x2 - x1) * (x2 - x1));
 			double sin = (y2 - y1) / len;
 			double cos = (x2 - x1) / len;
-			
+
 			int alpha = size / 4;
-			
+
 			double line_portion = 0.75 * size / 2;
 			// the tip now touches the end of the square.
 			// computing it like this takes care of the direction
@@ -775,12 +788,11 @@ namespace CsBoard
 							      * sin));
 			x2 = tip.X;
 			y2 = tip.Y;
-			
+
 			Gdk.Point[]a = new Gdk.Point[2];
 			GetPerpendicularCoords (x1, y1, sin, cos,
-						alpha, out a[0],
-						out a[1]);
-			
+						alpha, out a[0], out a[1]);
+
 			// This is the point where the arrow will start.
 			// We need to draw a rectangle from the above point to this.
 			// And the a triangle to the final dest.
@@ -794,23 +806,19 @@ namespace CsBoard
 								 factor
 								 *
 								 alpha
-								 *
-								 sin));
-			
-			
+								 * sin));
+
+
 			Gdk.Point[]b = new Gdk.Point[2];
 			GetPerpendicularCoords (p.X, p.Y, sin, cos,
-						alpha, out b[0],
-						out b[1]);
+						alpha, out b[0], out b[1]);
 			Gdk.Point c, d;
 			GetPerpendicularCoords (p.X, p.Y, sin, cos,
-						3 * alpha, out c,
-						out d);
-			
+						3 * alpha, out c, out d);
+
 			Gdk.Point[]points = new Gdk.Point[]
 			{
-				a[0], a[1],
-				b[1], d, tip, c, b[0], a[0]};
+			a[0], a[1], b[1], d, tip, c, b[0], a[0]};
 			Cairo.Color color =
 				new Cairo.Color (0.5, 0.5, 0.8, 0.5);
 			cairo.Color = color;
@@ -818,7 +826,7 @@ namespace CsBoard
 			double fraction = 5;
 			if (alpha > fraction)
 				cairo.LineWidth = alpha / fraction;
-			
+
 			for (int i = 0; i < points.Length; i++)
 			  {
 				  if (i == 0)
@@ -829,9 +837,7 @@ namespace CsBoard
 							points[0].Y);
 				  else
 					  cairo.LineTo (points[i + 1].
-							X,
-							points[i +
-							       1].Y);
+							X, points[i + 1].Y);
 			  }
 			cairo.FillPreserve ();
 			color.A = 0.8;
@@ -839,7 +845,7 @@ namespace CsBoard
 			cairo.Stroke ();
 			cairo.LineWidth = orig;
 		}
-		
+
 		private static void GetPerpendicularCoords (int x,
 							    int y,
 							    double
@@ -849,20 +855,17 @@ namespace CsBoard
 							    int width,
 							    out Gdk.
 							    Point p1,
-							    out Gdk.
-							    Point p2)
+							    out Gdk.Point p2)
 		{
 			int alpha = width / 2;
 			p1 = new Gdk.Point ((int) Math.
 					    Round (x + (alpha * sin)),
 					    (int) Math.Round (y -
-							      (alpha *
-							       cos)));
+							      (alpha * cos)));
 			p2 = new Gdk.Point ((int) Math.
 					    Round (x - (alpha * sin)),
 					    (int) Math.Round (y +
-							      (alpha *
-							       cos)));
+							      (alpha * cos)));
 		}
 	}
 }

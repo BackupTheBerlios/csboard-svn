@@ -19,7 +19,6 @@ using System.Collections;
 using Chess.Parser;
 using Chess.Game;
 using Gtk;
-using Gnome;
 using System;
 using CsBoard;
 using Pango;

@@ -31,7 +31,7 @@ namespace CsBoard
 		{
 			CairoViewerBoard boardWidget;
 
-			Label whiteLabel, blackLabel;
+			Label bottomLabel, topLabel;
 			GameSession gameSession;
 
 			public GameSession Session
@@ -57,21 +57,17 @@ namespace CsBoard
 							      GetDefaultPosition
 							      ());
 				gameSession = new GameSession ();
-				whiteLabel =
-					new Label (GetMarkupForTitle
-						   (Catalog.
-						    GetString ("White")));
-				blackLabel =
-					new
-					Label (GetMarkupForTitle
-					       (Catalog.GetString ("Black")));
-				whiteLabel.UseMarkup = true;
-				blackLabel.UseMarkup = true;
-				blackLabel.Yalign = 1;	// bottom
-				whiteLabel.Yalign = 0;	// top
-				PackStart (blackLabel, false, false, 2);
+				bottomLabel = new Label ();
+				topLabel = new Label ();
+				bottomLabel.UseMarkup = true;
+				topLabel.UseMarkup = true;
+				topLabel.Yalign = 1;	// bottom
+				bottomLabel.Yalign = 0;	// top
+				PackStart (topLabel, false, false, 2);
 				PackStart (boardWidget, true, true, 2);
-				PackStart (whiteLabel, false, false, 2);
+				PackStart (bottomLabel, false, false, 2);
+
+				UpdateLabels (null);
 
 				ShowAll ();
 			}
@@ -86,6 +82,14 @@ namespace CsBoard
 							 GetPosition ());
 			}
 
+			public void SwitchSides ()
+			{
+				boardWidget.side = !boardWidget.side;
+				boardWidget.QueueDraw ();
+
+				UpdateLabels (gameSession.Game);
+			}
+
 			public void SetGame (ChessGame game)
 			{
 				gameSession.Set (game);
@@ -93,17 +97,40 @@ namespace CsBoard
 				boardWidget.Reset ();
 				boardWidget.SetPosition (gameSession.player.
 							 GetPosition ());
-				whiteLabel.Markup =
-					GetMarkupForTitle (game.
-							   GetTagValue
-							   ("White",
-							    "White"));
-				blackLabel.Markup =
-					GetMarkupForTitle (game.
-							   GetTagValue
-							   ("Black",
-							    "Black"));
+				UpdateLabels (game);
 
+			}
+
+			void UpdateLabels (ChessGame game)
+			{
+				string white, black;
+				if (game == null)
+				  {
+					  white = Catalog.GetString ("White");
+					  black = Catalog.GetString ("Black");
+				  }
+				else
+				  {
+					  white = game.GetTagValue
+						  ("White", "White");
+					  black = game.
+						  GetTagValue
+						  ("Black", "Black");
+				  }
+
+				white = GetMarkupForTitle (white);
+				black = GetMarkupForTitle (black);
+
+				if (boardWidget.WhiteAtBottom)
+				  {
+					  topLabel.Markup = black;
+					  bottomLabel.Markup = white;
+				  }
+				else
+				  {
+					  topLabel.Markup = white;
+					  bottomLabel.Markup = black;
+				  }
 			}
 
 			public void UpdateMoveFromSession (bool isNext)
