@@ -87,11 +87,6 @@ namespace CsBoard {
                                             int real_x = info.cursor.x;
 				            int real_y = info.cursor.y;
 									
-				            if (side) {
-						 real_x = 7 - real_x;
-						 real_y = 7 - real_y;
-                		            }
-									
 					    if (position.GetFigureAt(real_x, real_y) 
                                                                  != FigureType.None)  {
                                     	    
@@ -167,14 +162,8 @@ namespace CsBoard {
                         info.drag.y = y;
 
                         if (info.stage == MoveStage.Start) {
-					        	if (side) {
-					  				Point p = new Point (7 - info.start.x, 
-						       						7 - info.start.y);
-				  					position.Take (p);
-								} else {
-				        	                       	position.Take (info.start);
-								}
-                                info.stage = MoveStage.Drag;
+				position.Take (info.start);
+				info.stage = MoveStage.Drag;
                         }
 
                         QueueDraw ();
@@ -195,11 +184,6 @@ namespace CsBoard {
                                             int real_x = info.start.x;
 				            int real_y = info.start.y;
 				            
-									
-				            if (side) {
-						 real_x = 7 - real_x;
-						 real_y = 7 - real_y;
-                		            }
 									
 					    if (position.GetFigureAt(real_x, 											
 								real_y) != FigureType.None) {
@@ -241,13 +225,8 @@ namespace CsBoard {
 		private void EmitStartHint (Point where) {
 			int i, j;	
 		
-                        if (side) {
-				i = 7 - where.x;
-				j = 7 - where.y;
-			} else {
-				i = where.x;
-				j = where.y;
-			}
+			i = where.x;
+			j = where.y;
 			
                         string letter = "abcdefgh";
                         string pos = string.Format ("{0}{1}",
@@ -271,6 +250,11 @@ namespace CsBoard {
 
                         i = (x - start_x) / (space + size);
                         j = (y - start_y) / (space + size);
+
+			if(side) {
+			  i = 7 - i;
+			  j = 7 - j;
+			}
 
                         p.x = i;
                         p.y = j;

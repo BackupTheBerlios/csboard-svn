@@ -911,6 +911,10 @@ namespace CsBoard
 					  return;
 				  }
 
+				ProcessLoginOrPassword(line, start, count);
+			}
+
+			private void ProcessLoginOrPassword(string line, int start, int count) {
 				if (line.Equals ("login:"))
 				  {
 					  if (state == SessionState.NONE)
