@@ -131,11 +131,53 @@ namespace CsBoard
 								   GetString
 								   ("Shell")));
 
+				client.ChallengeEvent += OnChallengeEvent;
+			}
 
+			private void OnChallengeEvent(object o, MatchChallenge mc) {
+			  Console.WriteLine(mc);
+			  ShowChallengeDialog(mc);
 			}
 
 			public void Shutdown ()
 			{
+			}
+
+			private void ShowChallengeDialog(MatchChallenge mc) {
+			  StringBuilder buf = new StringBuilder();
+			  string rating;
+
+			  if(mc.OpponentsRating != 0)
+			    rating = mc.OpponentsRating.ToString();
+			  else
+			    rating = "----";
+			  buf.Append(String.Format("<big><b>{0} ({1}) wants to play a {2} game</b></big>\n",
+						   mc.Opponent, rating, mc.Category));
+			  buf.Append(String.Format(
+						   "<b><u>Time:</u> {0} </b><i>mins</i>, <b><u>Increment:</u></b> {1}\n",
+						   mc.Time,
+						   mc.Increment
+						   ));
+			  if(mc.Color != null)
+			    buf.Append(String.Format("\n<b><u>Color:</u></b> {0}\n", mc.Color));
+
+			  buf.Append("\n\n<b>Do you want to play?</b>");
+
+			  MessageDialog dlg = new MessageDialog(null,
+								DialogFlags.Modal,
+								MessageType.Question,
+								ButtonsType.YesNo,
+								true,
+								buf.ToString());
+			  dlg.Modal = false;
+			  dlg.GrabFocus();
+			  int ret = dlg.Run();
+			  if(ret == (int) ResponseType.Yes)
+			    client.CommandSender.SendCommand("accept");
+			  else if(ret == (int) ResponseType.No)
+			    client.CommandSender.SendCommand("decline");
+			  dlg.Hide();
+			  dlg.Dispose();
 			}
 		}
 	}

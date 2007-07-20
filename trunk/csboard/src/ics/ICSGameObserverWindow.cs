@@ -83,6 +83,38 @@ namespace CsBoard
 
 				split.ShowAll ();
 				Add (split);
+				client.GameMessageEvent += OnGameMessage;
+			}
+
+			private void OnGameMessage(object o, string user, GameMessageType type) {
+			  string msg;
+			  string typestr;
+			  switch(type) {
+			    case GameMessageType.Draw:
+			      msg = "<big><b>{0} offers a draw</b>.\nDo you want to agree?</big>";
+			      typestr = "draw";
+			      break;
+			    case GameMessageType.Abort:
+			      msg = "<big><b>{0} wants to abort the game</b>.\nDo you want to agree?</big>";
+			      typestr = "abort";
+			      break;
+			    default:
+			      return;
+			  }
+			  MessageDialog dlg = new MessageDialog(null,
+								DialogFlags.Modal,
+								MessageType.Question,
+								ButtonsType.YesNo,
+								true,
+								msg, user);
+			  dlg.Modal = false;
+			  int ret = dlg.Run();
+			  if(ret == (int) ResponseType.Yes)
+			    client.CommandSender.SendCommand("accept " + user);
+			  else if(ret == (int) ResponseType.No)
+			    client.CommandSender.SendCommand("decline " + user);
+			  dlg.Hide();
+			  dlg.Dispose();
 			}
 
 			private void OnGamesListCursorChanged (object o,
@@ -215,6 +247,9 @@ namespace CsBoard
 						(ObservingGamePage) de.Value;
 					page.StopClocks ();
 				}
+
+				client.GameMessageEvent -= OnGameMessage;
+
 				return base.OnDeleteEvent (evnt);
 			}
 		}

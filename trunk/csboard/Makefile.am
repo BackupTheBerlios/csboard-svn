@@ -70,7 +70,8 @@ ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/PlayerPage.cs \
 	$(top_srcdir)/src/ics/Graph.cs \
 	$(top_srcdir)/src/ics/GameAdvertisementGraph.cs \
-	$(top_srcdir)/src/ics/ICSSeek.cs
+	$(top_srcdir)/src/ics/ICSSeek.cs \
+	$(top_srcdir)/src/ics/MatchChallenge.cs
 
 SOURCE = \
 	$(top_srcdir)/src/App.cs \

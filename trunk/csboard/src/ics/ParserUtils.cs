@@ -70,31 +70,31 @@ namespace CsBoard
 						     ref int idx, int end,
 						     out string word)
 			{
+			  int bufend = end;
+				for (int i = idx; i < end; i++)
+				  {
+				    if (buffer[i] == delim) {
+				      bufend = i;
+				      break;
+				    }
+				  }
+
+				ReadString(buffer, ref idx, bufend, out word);
+			}
+
+			public static void ReadString (byte[]buffer,
+						     ref int idx, int bufend,
+						     out string str)
+			{
 				System.Text.Decoder decoder =
 					System.Text.Encoding.UTF8.
 					GetDecoder ();
-				for (int i = idx; i < end; i++)
-				  {
-					  if (buffer[i] == delim)
-					    {
-						    char[] chrs =
-							    new char[i - idx];
-						    decoder.GetChars (buffer,
-								      idx,
-								      i - idx,
-								      chrs,
-								      0);
-						    word = new string (chrs);
-						    idx = i;
-						    return;
-					    }
-				  }
 
-				char[] chars = new char[end - idx];
-				decoder.GetChars (buffer, idx, end - idx,
+				char[] chars = new char[bufend - idx];
+				decoder.GetChars (buffer, idx, bufend - idx,
 						  chars, 0);
-				word = new string (chars);
-				idx = end;
+				str = new string (chars);
+				idx = bufend;
 			}
 
 			public static string GetNextToken (byte[]buffer,
@@ -154,6 +154,18 @@ namespace CsBoard
 				time += millisecs;
 
 				return time;
+			}
+
+			public static bool Matches(byte[] buffer, int start, int end, string str) {
+			  if(str.Length > end - start)
+			    return false;
+			  int cur = start;
+			  foreach(char ch in str) {
+			    if(buffer[cur++] != ch)
+			      return false;
+			  }
+
+			  return true;
 			}
 		}
 	}

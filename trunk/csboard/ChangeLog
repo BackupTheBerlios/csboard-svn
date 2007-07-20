@@ -1,3 +1,19 @@
+2007-07-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* Makefile.am
+	* src/ics/GameObservationManager.cs
+	* src/ics/ICS.cs
+	* src/ics/ICSClient.cs
+	* src/ics/ICSGameObserverWindow.cs
+	* src/ics/ParserUtils.cs
+
+	added
+	* src/ics/MatchChallenge.cs
+
+	adds match challenge functionality
+
 2007-05-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

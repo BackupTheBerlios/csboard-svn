@@ -163,7 +163,10 @@ namespace CsBoard
 							   ResultNotification
 							   notification)
 			{
+			  try {
 				win.Update (notification);
+			  } catch {
+			  }
 			}
 		}
 	}
