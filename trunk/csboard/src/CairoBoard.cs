@@ -63,6 +63,7 @@ namespace CsBoard
 			public ArrayList animate_list;
 		};
 
+		protected bool highlightSquares = true;
 		// Geometry
 		protected int start_x;
 		protected int start_y;
@@ -110,7 +111,8 @@ namespace CsBoard
 		private Pango.Layout layout;
 
 		private Cairo.Color whiteSqColor, blackSqColor;
-		private Cairo.Color backgroundColor, coordColor;
+		private Cairo.Color backgroundColor, coordColor,
+			highlightSqColor;
 
 		public CairoBoard (ArrayList pos):base ()
 		{
@@ -123,6 +125,7 @@ namespace CsBoard
 			blackSqColor = new Cairo.Color (0.9, 0.8, 0.95, 1);
 			backgroundColor = new Cairo.Color (1, 0.95, 0.95, 1);
 			coordColor = new Cairo.Color (0.3, 0.1, 0.1, 1);
+			highlightSqColor = new Cairo.Color (1, 0, 0, 0.2);
 
 			layout = new Pango.Layout (PangoContext);
 		}
@@ -444,46 +447,91 @@ namespace CsBoard
 						    position.GetFigureAt (i,
 									  j);
 
-					    if (fig != FigureType.None)
+					    if (highlightSquares &&
+						(info.stage == MoveStage.Start
+						 || info.stage ==
+						 MoveStage.Drag))
 					      {
-						      int x, y;
-
-						      if (!side)
+						      Point p = new Point ();
+						      if ((info.start.x == i
+							   && info.start.y ==
+							   j)
+							  || (info.stage ==
+							      MoveStage.Drag
+							      &&
+							      GetPoint (info.
+									drag.
+									x,
+									info.
+									drag.
+									y,
+									ref p)
+							      && p.x == i
+							      && p.y == j))
 							{
-								//White
-								x = start_x +
-									i *
-									space
+								int xval =
+									start_x
 									+
-									i *
-									size;
-								y = start_y +
-									j *
-									space
+									(!side
+									 ? i
+									 : (7
+									    -
+									    i))
+									*
+									(size
+									 +
+									 space);
+								int yval =
+									start_y
 									+
-									j *
-									size;
-							}
-						      else
-							{
-								//Black
-								x = start_x +
-									(7 -
-									 i) *
-									(space
+									(!side
+									 ? j
+									 : (7
+									    -
+									    j))
+									*
+									(size
 									 +
-									 size);
-								y = start_y +
-									(7 -
-									 j) *
-									(space
-									 +
-									 size);
-							}
+									 space);
 
-						      DrawPiece (cairo, fig,
-								 x, y, size);
+								cairo.Color =
+									highlightSqColor;
+								cairo.Rectangle (xval, yval, size, size);
+								cairo.Fill ();
+							}
 					      }
+
+					    if (fig == FigureType.None)
+						    continue;
+					    int x, y;
+
+					    if (!side)
+					      {
+						      //White
+						      x = start_x +
+							      i *
+							      space
+							      + i * size;
+						      y = start_y +
+							      j *
+							      space
+							      + j * size;
+					      }
+					    else
+					      {
+						      //Black
+						      x = start_x +
+							      (7 -
+							       i) *
+							      (space + size);
+						      y = start_y +
+							      (7 -
+							       j) *
+							      (space + size);
+					      }
+
+					    DrawPiece (cairo, fig,
+						       x, y, size);
 				    }
 			  }
 
@@ -866,6 +914,34 @@ namespace CsBoard
 					    Round (x - (alpha * sin)),
 					    (int) Math.Round (y +
 							      (alpha * cos)));
+		}
+
+		protected bool GetPoint (int x, int y, ref Point p)
+		{
+
+			int i;
+			int j;
+
+			if (x <= start_x || y <= start_y)
+				return false;
+
+			if (x >= start_x + 8 * (space + size)
+			    || y >= start_y + 8 * (space + size))
+				return false;
+
+			i = (x - start_x) / (space + size);
+			j = (y - start_y) / (space + size);
+
+			if (side)
+			  {
+				  i = 7 - i;
+				  j = 7 - j;
+			  }
+
+			p.x = i;
+			p.y = j;
+
+			return true;
 		}
 	}
 }

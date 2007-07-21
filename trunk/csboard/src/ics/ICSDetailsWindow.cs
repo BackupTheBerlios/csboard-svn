@@ -175,6 +175,9 @@ namespace CsBoard
 				md.Run ();
 				md.Hide ();
 				md.Dispose ();
+
+				configwidget.Sensitive = true;
+				Authenticate ();
 			}
 
 			protected void on_quit_activate (object o,

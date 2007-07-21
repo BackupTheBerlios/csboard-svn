@@ -1,3 +1,15 @@
+2007-07-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* src/CairoBoard.cs
+	* src/CairoPlayerBoard.cs
+	* src/PlayerBoard.cs
+	* src/Position.cs
+	* src/ics/ICSDetailsWindow.cs
+
+	ui improvements for the ics player
+
 2007-07-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
