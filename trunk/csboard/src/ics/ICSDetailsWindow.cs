@@ -48,6 +48,8 @@ namespace CsBoard
 				}
 			}
 
+			ICSConfigWidget configwidget;
+
 			public ICSDetailsWindow (ICSClient client,
 						 string title)
 			{
@@ -83,14 +85,14 @@ namespace CsBoard
 				client.ConnectionErrorEvent +=
 					OnConnectionError;
 
+				ShowConfigWidget();
+
+				disconnectMenuItem.Sensitive = false;
+				icsWindow.Show ();
 				GLib.Idle.Add (delegate ()
 					       {
 					       Authenticate (); return false;}
 				);
-
-				book.Sensitive = false;
-				disconnectMenuItem.Sensitive = false;
-				icsWindow.Show ();
 			}
 
 			private void OnAuth (object o, bool successful)
@@ -106,23 +108,48 @@ namespace CsBoard
 								 client.
 								 server,
 								 client.port);
-					  book.Sensitive = true;
+
+					  RemoveConfigWidget();
 					  return;
 				  }
 
 				// on auth failure, reauthenticate
+				configwidget.Sensitive = true;
 				Authenticate ();
+			}
+
+                        private void ShowConfigWidget() {
+			  if(configwidget != null)
+			    return;
+
+				configwidget =
+					new ICSConfigWidget (client);
+				int pageidx = book.NPages;
+				book.ShowTabs = false;
+				book.AppendPage(configwidget, new Label(Catalog.GetString("Login")));
+				book.CurrentPage = pageidx;
+				configwidget.ShowAll();
+			}
+
+                        private void RemoveConfigWidget() {
+			  book.ShowTabs = true;
+			  
+			  book.RemovePage(book.CurrentPage);
+			  book.CurrentPage = 0;
+			  configwidget = null;
 			}
 
 			private void Authenticate ()
 			{
 				connectMenuItem.Sensitive = false;
-				book.Sensitive = false;
-				ICSConfigDialog dlg =
-					new ICSConfigDialog (client);
-				if (dlg.Run () == ResponseType.Ok)
+				ShowConfigWidget();
+				//align.Show();
+
+				if (configwidget.Run () == (int) ResponseType.Ok)
 				  {
 					  client.Start ();
+					  configwidget.Sensitive = false;
+
 				  }
 				else
 					connectMenuItem.Sensitive = true;
@@ -185,9 +212,9 @@ namespace CsBoard
 							       EventArgs args)
 			{
 				disconnectMenuItem.Sensitive = false;
-				book.Sensitive = false;
 				connectMenuItem.Sensitive = true;
 				client.Stop ();
+				Authenticate ();
 			}
 
 			public void on_viewer_clicked (System.Object b,

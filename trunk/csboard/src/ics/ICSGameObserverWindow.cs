@@ -88,15 +88,12 @@ namespace CsBoard
 
 			private void OnGameMessage(object o, string user, GameMessageType type) {
 			  string msg;
-			  string typestr;
 			  switch(type) {
 			    case GameMessageType.Draw:
 			      msg = "<big><b>{0} offers a draw</b>.\nDo you want to agree?</big>";
-			      typestr = "draw";
 			      break;
 			    case GameMessageType.Abort:
 			      msg = "<big><b>{0} wants to abort the game</b>.\nDo you want to agree?</big>";
-			      typestr = "abort";
 			      break;
 			    default:
 			      return;

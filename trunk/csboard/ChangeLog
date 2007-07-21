@@ -3,6 +3,19 @@
 	modified files
 
 	* Makefile.am
+	* src/ics/ICSDetailsWindow.cs
+	* src/ics/ICSGameObserverWindow.cs
+
+	added
+	* src/ics/ICSConfigWidget.cs
+
+	ui modification. aviods popping a dialog for login
+
+2007-07-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* Makefile.am
 	* src/ics/GameObservationManager.cs
 	* src/ics/ICS.cs
 	* src/ics/ICSClient.cs

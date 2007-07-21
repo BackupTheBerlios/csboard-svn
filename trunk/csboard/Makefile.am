@@ -54,6 +54,7 @@ ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/GameAdvertisement.cs \
 	$(top_srcdir)/src/ics/MoveDetails.cs \
 	$(top_srcdir)/src/ics/ICSConfigDialog.cs \
+	$(top_srcdir)/src/ics/ICSConfigWidget.cs \
 	$(top_srcdir)/src/ics/ICSShell.cs \
 	$(top_srcdir)/src/ics/GameAdvertisementsWidget.cs \
 	$(top_srcdir)/src/ics/ICSDetailsWindow.cs \
