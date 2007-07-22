@@ -35,7 +35,6 @@ namespace CsBoard
 			string pgnBuffer;
 			MenuItem menuItem;
 			bool loadingInProgress;
-			AccelGroup accel;
 
 			public PGNBufferLoader ():base ("buffer-loader",
 							Catalog.
@@ -45,7 +44,6 @@ namespace CsBoard
 							GetString
 							("Loads games from a PGN buffer"))
 			{
-				accel = new AccelGroup ();
 				ImageMenuItem item =
 					new ImageMenuItem (Catalog.
 							   GetString
@@ -55,15 +53,6 @@ namespace CsBoard
 				  menuItem = item;
 				  menuItem.Activated += on_load_pgn_activate;
 				  menuItem.Show ();
-				  menuItem.AddAccelerator ("activate", accel,
-							   new AccelKey (Gdk.
-									 Key.
-									 b,
-									 Gdk.
-									 ModifierType.
-									 ControlMask,
-									 AccelFlags.
-									 Visible));
 			}
 
 			public override bool Initialize ()
@@ -72,14 +61,21 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 
-				viewer.Window.AddAccelGroup (accel);
+				menuItem.AddAccelerator ("activate",
+							 viewer.AccelGroup,
+							 new AccelKey (Gdk.
+								       Key.b,
+								       Gdk.
+								       ModifierType.
+								       ControlMask,
+								       AccelFlags.
+								       Visible));
 				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
-				viewer.Window.RemoveAccelGroup (accel);
 				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
 			}

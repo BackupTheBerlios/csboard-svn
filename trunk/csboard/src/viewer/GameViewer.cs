@@ -46,33 +46,13 @@ namespace CsBoard
 					     out ChessGame details);
 		}
 
-		public class GameViewer
+		public class GameViewerUI:VBox
 		{
-			[Glade.Widget] private Gtk.Window gameViewerWindow;
-			[Glade.Widget] private Gtk.Toolbar toolbar;
-			[Glade.Widget] private Gtk.Statusbar statusBar;
-			[Glade.Widget] private Gtk.MenuItem fileMenuItem;
-			[Glade.Widget] private Gtk.
-				SeparatorMenuItem fileOpenSeparator;
-			[Glade.Widget] private Gtk.
-				SeparatorMenuItem saveAsSeparator;
-			[Glade.Widget] private Gtk.MenuItem printMenuItem;
-			[Glade.Widget] private Gtk.MenuItem exportAsMenuItem;
-			[Glade.Widget] private Gtk.MenuBar gameViewerMenuBar;
-			[Glade.Widget] private Gtk.
-				CheckMenuItem highlightMoveMenuItem;
-			[Glade.Widget] private Gtk.MenuItem viewMenuItem;
-			[Glade.Widget] private Gtk.VBox gameViewerBox;
+			protected Statusbar statusBar;
+			protected ViewerMenuBar menubar;
 
-			private GameViewerWidget gameViewerWidget;
 
-			public Toolbar Toolbar
-			{
-				get
-				{
-					return toolbar;
-				}
-			}
+			protected GameViewerWidget gameViewerWidget;
 
 			public ChessGameView ChessGameView
 			{
@@ -92,17 +72,6 @@ namespace CsBoard
 				}
 			}
 
-			string initialDirForFileChooser = null;
-
-
-			public Gtk.Window Window
-			{
-				get
-				{
-					return gameViewerWindow;
-				}
-			}
-
 			public Gtk.Statusbar StatusBar
 			{
 				get
@@ -115,9 +84,87 @@ namespace CsBoard
 			{
 				get
 				{
-					return gameViewerMenuBar;
+					return menubar;
 				}
 			}
+
+			public bool AddToViewMenu (Gtk.MenuItem item)
+			{
+				return AddToMenu (menubar.viewMenuItem, item,
+						  null);
+			}
+
+			public bool RemoveFromViewMenu (Gtk.MenuItem item)
+			{
+				Menu menu =
+					(Menu) menubar.viewMenuItem.Submenu;
+				menu.Remove (item);
+				return true;
+			}
+
+			public bool AddToFileMenu (Gtk.MenuItem item)
+			{
+				return AddToMenu (menubar.fileMenuItem, item,
+						  menubar.saveAsSeparator);
+			}
+
+			public bool RemoveFromFileMenu (Gtk.MenuItem item)
+			{
+				Menu menu =
+					(Menu) menubar.fileMenuItem.Submenu;
+				menu.Remove (item);
+				return true;
+			}
+
+
+			protected bool AddToMenu (Gtk.MenuItem parentMenu,
+						  Gtk.MenuItem itemToBeAdded,
+						  Gtk.MenuItem beforeThis)
+			{
+				Gtk.Menu menu = (Gtk.Menu) parentMenu.Submenu;
+				if (menu == null)
+				  {
+					  menu = new Menu ();
+					  menu.Show ();
+					  parentMenu.Submenu = menu;
+				  }
+				if (beforeThis == null)
+				  {
+					  menu.Append (itemToBeAdded);
+					  return true;
+				  }
+
+				// find the index
+				int index = 0;
+				foreach (Gtk.MenuItem item in menu.
+					 AllChildren)
+				{
+					if (beforeThis.Equals (item))
+					  {
+						  menu.Insert (itemToBeAdded,
+							       index);
+						  return true;
+					  }
+					index++;
+				}
+				return false;
+			}
+
+			public GameViewerUI ():base ()
+			{
+				menubar = new ViewerMenuBar ();
+				gameViewerWidget = new GameViewerWidget ();
+
+				PackStart (gameViewerWidget, true, true, 2);
+				statusBar = new Statusbar ();
+				PackStart (statusBar, false, true, 2);
+			}
+		}
+
+		public class GameViewer:GameViewerUI, SubApp
+		{
+
+			string initialDirForFileChooser = null;
 
 			ArrayList gameLoaders;
 			ArrayList exporters;
@@ -152,7 +199,6 @@ namespace CsBoard
 			{
 				if (viewer != null)
 				  {
-					  viewer.gameViewerWindow.Show ();
 					  return;
 				  }
 				viewer = new GameViewer ();
@@ -160,34 +206,104 @@ namespace CsBoard
 					StartPlugins ();
 			}
 
+			public Gtk.Window Window
+			{
+				get
+				{
+					return null;
+				}
+			}
+
+			ToolButton toolbutton;
+			public ToolButton ToolButton
+			{
+				get
+				{
+					return toolbutton;
+				}
+			}
+
+			public Widget Widget
+			{
+				get
+				{
+					return this;
+				}
+			}
+
+			AccelGroup accel;
+			public AccelGroup AccelGroup
+			{
+				get
+				{
+					return accel;
+				}
+			}
+
+			string title;
+			public string Title
+			{
+				get
+				{
+					return title;
+				}
+			}
+
+			bool app_visible = false;
 			private GameViewer ()
 			{
-				Glade.XML gXML =
-					Glade.XML.
-					FromAssembly ("csviewer.glade",
-						      "gameViewerWindow",
-						      null);
-				gXML.Autoconnect (this);
-
-				// FIXME: Use libglade to create toolbar                  
-
-				App.Session.
-					SetupViewerGeometry
-					(gameViewerWindow);
+				title = "Game Viewer";
+				accel = new AccelGroup ();
 				initialDirForFileChooser =
 					App.Session.CurrentFolder;
 
 				gameLoaders = new ArrayList ();
 				exporters = new ArrayList ();
 
-				gameViewerWidget = new GameViewerWidget ();
-
-				gameViewerBox.PackStart (gameViewerWidget,
-							 true, true, 2);
-
-				highlightMoveMenuItem.Active =
+				menubar.highlightMoveMenuItem.Active =
 					App.Session.HighLightMove;
-				gameViewerWindow.Show ();
+
+				menubar.saveAsMenuItem.Activated +=
+					on_save_as_activate;
+				menubar.switchSideMenuItem.Activated +=
+					on_switch_side_activate;
+				menubar.moveCommentMenuItem.Activated +=
+					OnEditCommentActivated;
+				menubar.highlightMoveMenuItem.Activated +=
+					OnHighlightMoveMenuItemActivated;
+				menubar.switchSideMenuItem.
+					AddAccelerator ("activate", accel,
+							new AccelKey (Gdk.Key.
+								      t,
+								      Gdk.
+								      ModifierType.
+								      ControlMask,
+								      AccelFlags.
+								      Visible));
+
+				menubar.quitMenuItem.
+					AddAccelerator ("activate", accel,
+							new AccelKey (Gdk.Key.
+								      q,
+								      Gdk.
+								      ModifierType.
+								      ControlMask,
+								      AccelFlags.
+								      Visible));
+
+				Gtk.Image img = new Gtk.Image ();
+				img.Stock = Stock.JustifyFill;
+				toolbutton =
+					new ToolButton (img,
+							Catalog.
+							GetString ("Viewer"));
+				ShowAll ();
+				toolbutton.ShowAll ();
+			}
+
+			public void SetVisibility (bool visible)
+			{
+				app_visible = visible;
 			}
 
 			public static void GetOpeningName (string eco,
@@ -215,8 +331,8 @@ namespace CsBoard
 							Gtk.MenuItem item)
 			{
 				gameLoaders.Add (gameLoader);
-				return AddToMenu (fileMenuItem, item,
-						  fileOpenSeparator);
+				return AddToMenu (menubar.fileMenuItem, item,
+						  menubar.fileOpenSeparator);
 			}
 
 			public void UnregisterGameLoader (IGameLoader
@@ -230,7 +346,8 @@ namespace CsBoard
 			public bool RegisterExporter (IExporter exporter,
 						      Gtk.MenuItem item)
 			{
-				if (!AddToMenu (exportAsMenuItem, item, null))
+				if (!AddToMenu
+				    (menubar.exportAsMenuItem, item, null))
 					return false;
 				exporters.Add (exporter);
 				return true;
@@ -239,41 +356,18 @@ namespace CsBoard
 			public bool UnregisterExporter (IExporter exporter,
 							Gtk.MenuItem item)
 			{
-				Menu menu = (Menu) exportAsMenuItem.Submenu;
+				Menu menu =
+					(Menu) menubar.exportAsMenuItem.
+					Submenu;
 				menu.Remove (item);
 				exporters.Remove (exporter);
-				return true;
-			}
-
-			public bool AddToViewMenu (Gtk.MenuItem item)
-			{
-				return AddToMenu (viewMenuItem, item, null);
-			}
-
-			public bool RemoveFromViewMenu (Gtk.MenuItem item)
-			{
-				Menu menu = (Menu) viewMenuItem.Submenu;
-				menu.Remove (item);
-				return true;
-			}
-
-			public bool AddToFileMenu (Gtk.MenuItem item)
-			{
-				return AddToMenu (fileMenuItem, item,
-						  saveAsSeparator);
-			}
-
-			public bool RemoveFromFileMenu (Gtk.MenuItem item)
-			{
-				Menu menu = (Menu) fileMenuItem.Submenu;
-				menu.Remove (item);
 				return true;
 			}
 
 			public bool RegisterPrintHandler (IPrintHandler
 							  handler)
 			{
-				printMenuItem.Activated +=
+				menubar.printMenuItem.Activated +=
 					handler.OnPrintActivated;
 				return true;
 			}
@@ -281,45 +375,14 @@ namespace CsBoard
 			public void UnregisterPrintHandler (IPrintHandler
 							    handler)
 			{
-				printMenuItem.Activated -=
+				menubar.printMenuItem.Activated -=
 					handler.OnPrintActivated;
-			}
-
-			private bool AddToMenu (Gtk.MenuItem parentMenu,
-						Gtk.MenuItem itemToBeAdded,
-						Gtk.MenuItem beforeThis)
-			{
-				Gtk.Menu menu = (Gtk.Menu) parentMenu.Submenu;
-				if (menu == null)
-				  {
-					  menu = new Menu ();
-					  menu.Show ();
-					  parentMenu.Submenu = menu;
-				  }
-				if (beforeThis == null)
-				  {
-					  menu.Append (itemToBeAdded);
-					  return true;
-				  }
-
-				// find the index
-				int index = 0;
-				foreach (Gtk.MenuItem item in menu.
-					 AllChildren)
-				{
-					if (beforeThis.Equals (item))
-					  {
-						  menu.Insert (itemToBeAdded,
-							       index);
-						  return true;
-					  }
-					index++;
-				}
-				return false;
 			}
 
 			public void LoadGames (TextReader reader)
 			{
+				if (!app_visible)
+					ChessWindow.Instance.ShowApp (this);
 				GameLoader loader =
 					new GameLoader (this, reader);
 				gameViewerWidget.LoadGames (loader.Games);
@@ -340,6 +403,8 @@ namespace CsBoard
 			{
 				get
 				{
+					if (viewer == null)
+						CreateInstance ();
 					return viewer;
 				}
 			}
@@ -356,6 +421,9 @@ namespace CsBoard
 
 			public void Load (string resource)
 			{
+				if (!app_visible)
+					ChessWindow.Instance.ShowApp (this);
+
 				// just ask each IGameLoader
 				foreach (IGameLoader gameLoader in
 					 gameLoaders)
@@ -371,7 +439,7 @@ namespace CsBoard
 				ArrayList games = gameViewerWidget.Games;
 				if (games == null || games.Count == 0)
 					return;
-				string file = AskForFile (gameViewerWindow,
+				string file = AskForFile (null,
 							  Catalog.
 							  GetString
 							  ("Save the game as"),
@@ -386,29 +454,22 @@ namespace CsBoard
 				}
 				writer.Close ();
 			}
-
-			public void on_window_delete_event (System.Object b,
-							    DeleteEventArgs e)
-			{
-				on_quit_activate (b, e);
-				// dont delete the window
-				e.RetVal = true;
-			}
-
-			public void on_quit_activate (System.Object b,
-						      EventArgs e)
-			{
-				App.Session.
-					SaveViewerGeometry (gameViewerWindow);
-				App.Session.CurrentFolder =
-					initialDirForFileChooser;
-				App.Session.ViewerSplitPanePosition =
-					gameViewerWidget.ChessGameWidget.
-					SplitPane.Position;
-				//CsBoard.Plugin.PluginManager.Instance.ClosePlugins ();
-				gameViewerWindow.Hide ();
-				App.Close ();
-			}
+			/*
+			   public void on_quit_activate (System.Object b,
+			   EventArgs e)
+			   {
+			   App.Session.
+			   SaveViewerGeometry (gameViewerWindow);
+			   App.Session.CurrentFolder =
+			   initialDirForFileChooser;
+			   App.Session.ViewerSplitPanePosition =
+			   gameViewerWidget.ChessGameWidget.
+			   SplitPane.Position;
+			   //CsBoard.Plugin.PluginManager.Instance.ClosePlugins ();
+			   gameViewerWindow.Hide ();
+			   App.Close ();
+			   }
+			 */
 
 			public void on_switch_side_activate (System.Object b,
 							     EventArgs e)
@@ -417,53 +478,13 @@ namespace CsBoard
 					SwitchSides ();
 			}
 
-			public void on_player_clicked (System.Object o,
-						       EventArgs e)
-			{
-				try
-				{
-					App.StartPlayer (null);
-				}
-				catch
-				{
-					MessageDialog md =
-						new MessageDialog (null,
-								   DialogFlags.
-								   DestroyWithParent,
-								   MessageType.
-								   Error,
-								   ButtonsType.
-								   Close,
-								   Catalog.
-								   GetString
-								   ("Unknown engine"));
-					md.Run ();
-					md.Hide ();
-					md.Dispose ();
-				}
-			}
-
-			public void on_icsplayer_clicked (System.Object o,
-							  EventArgs e)
-			{
-				App.StartICSPlayer ();
-			}
-
-			protected void on_about_activated (object o,
-							   EventArgs args)
-			{
-				ChessWindow.
-					ShowAboutDialog (gameViewerWindow);
-			}
-
 			public void OnEditCommentActivated (object o,
 							    EventArgs e)
 			{
-				BufferDialog dlg =
-					new BufferDialog (gameViewerWindow,
-							  Catalog.
-							  GetString
-							  ("Edit current comment"));
+				BufferDialog dlg = new BufferDialog (null,
+								     Catalog.
+								     GetString
+								     ("Edit current comment"));
 				string currentComment =
 					gameViewerWidget.ChessGameWidget.
 					BoardWidget.Session.CurrentComment;
@@ -491,9 +512,9 @@ namespace CsBoard
 			{
 				gameViewerWidget.ChessGameWidget.BoardWidget.
 					Board.highLightMove =
-					highlightMoveMenuItem.Active;
+					menubar.highlightMoveMenuItem.Active;
 				App.Session.HighLightMove =
-					highlightMoveMenuItem.Active;
+					menubar.highlightMoveMenuItem.Active;
 				gameViewerWidget.ChessGameWidget.BoardWidget.
 					Board.QueueDraw ();
 			}
@@ -661,8 +682,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

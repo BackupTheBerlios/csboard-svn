@@ -20,7 +20,6 @@ namespace CsBoard
 			MenuItem menuItem;
 			string loadUrl;
 			bool loadingInProgress;
-			AccelGroup accel;
 
 			public PGNUrlLoader ():base ("url-loader",
 						     Catalog.
@@ -30,7 +29,6 @@ namespace CsBoard
 						     GetString
 						     ("Loads games from a PGN file from a url"))
 			{
-				accel = new AccelGroup ();
 				ImageMenuItem item =
 					new ImageMenuItem (Catalog.
 							   GetString
@@ -40,15 +38,6 @@ namespace CsBoard
 				  menuItem = item;
 				  menuItem.Activated += on_open_url_activate;
 				  menuItem.Show ();
-				  menuItem.AddAccelerator ("activate", accel,
-							   new AccelKey (Gdk.
-									 Key.
-									 u,
-									 Gdk.
-									 ModifierType.
-									 ControlMask,
-									 AccelFlags.
-									 Visible));
 			}
 
 			public override bool Initialize ()
@@ -58,14 +47,21 @@ namespace CsBoard
 					return false;
 				Gnome.Vfs.Vfs.Initialize ();
 
-				viewer.Window.AddAccelGroup (accel);
+				menuItem.AddAccelerator ("activate",
+							 viewer.AccelGroup,
+							 new AccelKey (Gdk.
+								       Key.u,
+								       Gdk.
+								       ModifierType.
+								       ControlMask,
+								       AccelFlags.
+								       Visible));
 				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}
 
 			public override bool Shutdown ()
 			{
-				viewer.Window.RemoveAccelGroup (accel);
 				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
 			}
@@ -99,11 +95,12 @@ namespace CsBoard
 
 			private bool LoadGamesIdleHandler ()
 			{
-				if (loadUrl == null) {
-					loadingInProgress = false;
-					viewer.StatusBar.Pop (1);
-					return false;
-				}
+				if (loadUrl == null)
+				  {
+					  loadingInProgress = false;
+					  viewer.StatusBar.Pop (1);
+					  return false;
+				  }
 				TextReader reader = new StreamReader (new VfsStream (loadUrl, FileMode.Open));	// url
 				viewer.LoadGames (reader);
 				reader.Close ();
@@ -120,9 +117,10 @@ namespace CsBoard
 			{
 				string url = null;
 				UrlDialog dlg = new UrlDialog (viewer.Window);
-				if (dlg.Run () == (int) ResponseType.Accept) {
-					url = dlg.Url;
-				}
+				if (dlg.Run () == (int) ResponseType.Accept)
+				  {
+					  url = dlg.Url;
+				  }
 				dlg.Destroy ();
 				return url;
 			}

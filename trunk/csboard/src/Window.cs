@@ -28,11 +28,12 @@ namespace CsBoard
 	{
 		void AddApp (SubApp app);
 		void ShowApp (int i);
+		void ShowApp (SubApp app);
 	}
 
 	public interface SubApp
 	{
-		MenuBar Menu
+		MenuBar MenuBar
 		{
 			get;
 		}
@@ -46,13 +47,25 @@ namespace CsBoard
 		{
 			get;
 		}
+
+		AccelGroup AccelGroup
+		{
+			get;
+		}
+
+		string Title
+		{
+			get;
+		}
+
+		void SetVisibility (bool visible);
 	}
 
 	public class ChessWindow:MainApp, SubApp
 	{
 
 		[Glade.Widget] private Gtk.Window csboardWindow;
-		[Glade.Widget] private Gtk.Container frame;
+		[Glade.Widget] private Gtk.Container frame, appBox;
 		[Glade.Widget] private Gtk.Statusbar statusbar;
 		[Glade.Widget] private Gtk.Frame status_frame;
 
@@ -103,7 +116,16 @@ namespace CsBoard
 		{
 			get
 			{
-				return frame;
+				return appBox;
+			}
+		}
+
+		string title;
+		public string Title
+		{
+			get
+			{
+				return title;
 			}
 		}
 
@@ -115,7 +137,7 @@ namespace CsBoard
 			}
 		}
 
-		public MenuBar Menu
+		public MenuBar MenuBar
 		{
 			get
 			{
@@ -133,12 +155,20 @@ namespace CsBoard
 		}
 		ArrayList subapps;
 
+		public void SetVisibility (bool visible)
+		{
+		}
+
 		public void AddApp (SubApp app)
 		{
 			subapps.Add (app);
 
-			menusBook.AppendPage (app.Menu, new Label ());
-			appsBar.Insert (app.ToolButton, appsBar.NItems);
+			menusBook.AppendPage (app.MenuBar, new Label ());
+			int i = appsBar.NItems;
+			appsBar.Insert (app.ToolButton, i++);
+			SeparatorToolItem separator = new SeparatorToolItem();
+			separator.Show();
+			appsBar.Insert (separator, i);
 			app.ToolButton.Clicked += OnToolButtonClicked;
 			appsBook.AppendPage (app.Widget, new Label ());
 		}
@@ -157,10 +187,37 @@ namespace CsBoard
 			}
 		}
 
+		public void ShowApp (SubApp app)
+		{
+			int i = 0;
+			foreach (SubApp subapp in subapps)
+			{
+				if (subapp.Equals (app))
+				  {
+					  ShowApp (i);
+					  return;
+				  }
+				i++;
+			}
+		}
+
 		public void ShowApp (int i)
 		{
+			int curappIndex = appsBook.CurrentPage;
+			SubApp app = subapps[curappIndex] as SubApp;
+			app.SetVisibility (false);
+			if (app.AccelGroup != null)
+			  {
+				  csboardWindow.RemoveAccelGroup (app.
+								  AccelGroup);
+			  }
+
 			menusBook.CurrentPage = i;
 			appsBook.CurrentPage = i;
+			app = subapps[i] as SubApp;
+			if (app.AccelGroup != null)
+				csboardWindow.AddAccelGroup (app.AccelGroup);
+			app.SetVisibility (true);
 		}
 
 		public ChessWindow (string filename):this (null, filename)
@@ -172,7 +229,6 @@ namespace CsBoard
 			if (engine == null)
 				engine = App.Session.Engine;
 			/* try { */
-			Console.WriteLine ("Engine: " + engine);
 
 			if (engine.LastIndexOf ("crafty ") >= 0)
 			  {
@@ -210,8 +266,6 @@ namespace CsBoard
 					  ("/usr/bin/gnuchess -x -e");
 
 			  }
-			Console.WriteLine ("Control opened: " + control);
-
 
 			control.WaitEvent +=
 				new ControlWaitHandler (on_control_wait);
@@ -234,6 +288,7 @@ namespace CsBoard
 
 		public ChessWindow (string engine, string filename)
 		{
+			title = Catalog.GetString ("Welcome to CS Board");
 			instance = this;
 			subapps = new ArrayList ();
 			CreateControl (engine);
@@ -253,7 +308,8 @@ namespace CsBoard
 
 
 			subapps.Add (this);
-			AddApp (new CsBoard.ICS.ICSDetailsWidget (""));
+			AddApp (new CsBoard.ICS.ICSDetailsWidget ());
+			AddApp (CsBoard.Viewer.GameViewer.Instance);
 			playerToolButton.Clicked += OnToolButtonClicked;
 
 			gameStatusbarId = statusbar.GetContextId ("game");
@@ -262,8 +318,6 @@ namespace CsBoard
 			// FIXME: Use libglade to create toolbar                        
 
 			App.Session.SetupGeometry (csboardWindow);
-			csboardWindow.Show ();
-
 
 			// Setup board widget
 			progressbar = new ProgressBar ();
@@ -276,9 +330,6 @@ namespace CsBoard
 			chessGameWidget.White = Catalog.GetString ("White");
 
 			frame.Add (chessGameWidget);
-
-			chessGameWidget.Show ();
-			boardWidget.Show ();
 
 			SetupLevel ();
 
@@ -303,8 +354,12 @@ namespace CsBoard
 			if (filename == null)
 				control.OpenGame (App.Session.Filename);
 			else
-				control.OpenGame (filename);
+				CsBoard.Viewer.GameViewer.Instance.
+					Load (filename);
 
+			chessGameWidget.Show ();
+			boardWidget.Show ();
+			csboardWindow.Show ();
 		}
 
 		public void on_quit_window_activate (System.Object b,
@@ -317,6 +372,10 @@ namespace CsBoard
 
 		public void on_quit_activate (System.Object b, EventArgs e)
 		{
+			Quit();
+		}
+
+		public void Quit() {
 			App.Session.SaveGeometry (csboardWindow);
 			control.Shutdown ();
 			csboardWindow.Hide ();
@@ -601,6 +660,16 @@ namespace CsBoard
 		public void on_contents_activate (System.Object b,
 						  EventArgs e)
 		{
+			ShowHelpContents();
+		}
+
+		public void on_about_activate (System.Object b, EventArgs e)
+		{
+			ShowAboutDialog (csboardWindow);
+		}
+
+		public static void ShowHelpContents ()
+		{
 			System.Diagnostics.Process proc =
 				new System.Diagnostics.Process ();
 
@@ -616,11 +685,6 @@ namespace CsBoard
 			{
 				// do nothing
 			}
-		}
-
-		public void on_about_activate (System.Object b, EventArgs e)
-		{
-			ShowAboutDialog (csboardWindow);
 		}
 
 		public static void ShowAboutDialog (Gtk.Window win)

@@ -50,15 +50,8 @@ namespace CsBoard
 		{
 			try
 			{
-				if (args.Length > 0
-				    && args[0].Equals ("-viewer"))
-					StartViewer (args.Length >
-						     1 ? args[1] : null);
-				else
-				  {
-					  StartPlayer (args.Length >
-						       1 ? args[1] : null);
-				  }
+				StartPlayer (args.Length >
+					     0 ? args[0] : null);
 			}
 			catch (ApplicationException)
 			{

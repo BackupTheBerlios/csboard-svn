@@ -33,7 +33,6 @@ namespace CsBoard
 		{
 			GameViewer viewer;
 			  Gtk.MenuItem saveItem, openDbItem;
-			ToolButton dbToolButton;
 
 			ProgressDialog dlg;
 			GameEditor editor;
@@ -178,24 +177,6 @@ namespace CsBoard
 				viewer.AddToFileMenu (saveItem);
 				viewer.AddToViewMenu (openDbItem);
 
-				Image img =
-					new Image (new
-						   IconSet (Gdk.Pixbuf.
-							    LoadFromResource
-							    ("dbicon.png")),
-						   viewer.Toolbar.IconSize);
-				img.Show ();
-				dbToolButton =
-					new ToolButton (img,
-							Catalog.
-							GetString
-							("Games DB"));
-				dbToolButton.Clicked +=
-					on_open_games_db_activate;
-				dbToolButton.Show ();
-				viewer.Toolbar.Insert (dbToolButton,
-						       viewer.Toolbar.NItems);
-
 				GameViewer.GameDb = GameDb.Instance;
 				return true;
 			}
@@ -205,7 +186,6 @@ namespace CsBoard
 				viewer.ChessGameDetailsBox.Remove (editor);
 				viewer.RemoveFromViewMenu (saveItem);
 				viewer.RemoveFromViewMenu (openDbItem);
-				viewer.Toolbar.Remove (dbToolButton);
 				return true;
 			}
 		}
@@ -540,8 +520,7 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;
-						 }
+						 return false;}
 				);
 				if (newobj)
 					viewer.GameViewerWidget.

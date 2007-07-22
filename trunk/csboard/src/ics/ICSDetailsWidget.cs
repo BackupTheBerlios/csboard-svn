@@ -48,6 +48,7 @@ namespace CsBoard
 				int i = 0;
 				  menu.Insert (connectMenuItem, i++);
 				  menu.Insert (disconnectMenuItem, i++);
+
 				  ShowAll ();
 			}
 		}
@@ -63,7 +64,7 @@ namespace CsBoard
 
 			ICSMenuBar menubar;
 
-			public MenuBar Menu
+			public MenuBar MenuBar
 			{
 				get
 				{
@@ -88,6 +89,23 @@ namespace CsBoard
 				}
 			}
 
+			public string Title
+			{
+				get
+				{
+					return title;
+				}
+			}
+
+			AccelGroup accel;
+			public AccelGroup AccelGroup
+			{
+				get
+				{
+					return accel;
+				}
+			}
+
 			Notebook book;
 			public Notebook Book
 			{
@@ -100,7 +118,7 @@ namespace CsBoard
 			ICSConfigWidget configwidget;
 			string title;
 
-			public ICSDetailsWidget (string title):base ()
+			public ICSDetailsWidget ():base ()
 			{
 				menubar = new ICSMenuBar ();
 				menubar.disconnectMenuItem.Activated +=
@@ -114,11 +132,16 @@ namespace CsBoard
 				toolbutton =
 					new ToolButton (img,
 							Catalog.
-							GetString ("Player"));
+							GetString
+							("Chess Server"));
 				toolbutton.ShowAll ();
 
-				this.title = title;
 				client = new ICSClient ();
+				title = String.Format (Catalog.GetString
+						       ("ICS: {0}@{1}:{2}"),
+						       client.User,
+						       client.server,
+						       client.port);
 				book = new Notebook ();
 				book.Show ();
 
@@ -163,11 +186,24 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate ();
-					       return false;
-					       }
+					       Authenticate (); return false;}
 				);
+
+				accel = new AccelGroup();
+				menubar.quitMenuItem.
+					AddAccelerator ("activate", accel,
+							new AccelKey (Gdk.Key.
+								      q,
+								      Gdk.
+								      ModifierType.
+								      ControlMask,
+								      AccelFlags.
+								      Visible));
 				ShowAll ();
+			}
+
+			public void SetVisibility (bool visible)
+			{
 			}
 
 			private void OnAuth (object o, bool successful)

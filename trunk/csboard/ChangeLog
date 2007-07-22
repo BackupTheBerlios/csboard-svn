@@ -1,3 +1,34 @@
+2007-07-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+	
+	* Makefile.am
+	* data/csplayer.in
+	* data/csviewer.in
+	* resource/csboard.glade
+	* src/App.cs
+	* src/AppMenuBar.cs
+	* src/ChessGameWidget.cs
+	* src/Window.cs
+	* src/ics/CommandSender.cs
+	* src/ics/ICSDetailsWidget.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/PGNBufferLoader.cs
+	* src/viewer/PGNFileLoader.cs
+	* src/viewer/PluginManager.cs
+	* src/viewer/PluginManagerDialog.cs
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
+	* src/viewer/plugins/urlloader/PGNUrlLoader.cs
+
+	added files
+
+	* src/viewer/ViewerMenuBar.cs
+
+	added the viewer as a subapp
+	
 2007-07-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

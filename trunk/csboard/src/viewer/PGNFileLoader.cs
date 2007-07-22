@@ -1,3 +1,20 @@
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU Library General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// Copyright (C) 2006 Ravi Kiran UVS
+
 using System;
 using System.Collections;
 using System.IO;
@@ -30,7 +47,6 @@ namespace CsBoard
 						      GetString
 						      ("Loads games from a PGN file"))
 			{
-				accel = new AccelGroup ();
 				ImageMenuItem item =
 					new ImageMenuItem (Catalog.
 							   GetString
@@ -40,15 +56,6 @@ namespace CsBoard
 				  menuItem = item;
 				  menuItem.Activated += on_open_file_activate;
 				  menuItem.Show ();
-				  menuItem.AddAccelerator ("activate", accel,
-							   new AccelKey (Gdk.
-									 Key.
-									 o,
-									 Gdk.
-									 ModifierType.
-									 ControlMask,
-									 AccelFlags.
-									 Visible));
 			}
 
 			public override bool Initialize ()
@@ -56,7 +63,16 @@ namespace CsBoard
 				viewer = GameViewer.Instance;
 				if (viewer == null)
 					return false;
-				viewer.Window.AddAccelGroup (accel);
+				menuItem.AddAccelerator ("activate",
+							 viewer.AccelGroup,
+							 new AccelKey (Gdk.
+								       Key.o,
+								       Gdk.
+								       ModifierType.
+								       ControlMask,
+								       AccelFlags.
+								       Visible));
+				//viewer.Window.AddAccelGroup (accel);
 				viewer.RegisterGameLoader (this, menuItem);
 				return true;
 			}

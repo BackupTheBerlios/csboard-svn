@@ -34,7 +34,6 @@ namespace CsBoard
 			OpeningsDb db;
 			GameViewer viewer;
 			  Gtk.MenuItem item;
-			ToolButton ecodbToolButton;
 
 			public EcoDBPlugin ():base ("ecodb",
 						    Catalog.
@@ -82,17 +81,6 @@ namespace CsBoard
 				  db = loader.Openings;
 				  GameViewer.EcoDb = this;
 				  viewer.AddToViewMenu (item);
-
-				  ecodbToolButton =
-					new ToolButton (Stock.Info);
-				  ecodbToolButton.Label =
-					Catalog.GetString ("Openings");
-				  ecodbToolButton.Clicked +=
-					on_view_opening_browser_activate;
-				  ecodbToolButton.Show ();
-				  viewer.Toolbar.Insert (ecodbToolButton,
-							 viewer.Toolbar.
-							 NItems);
 
 				  return true;
 			}

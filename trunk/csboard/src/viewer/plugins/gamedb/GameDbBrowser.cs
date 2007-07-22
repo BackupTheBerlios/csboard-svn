@@ -141,16 +141,16 @@ namespace CsBoard
 					OnEditGameCollection;
 				  deleteGameCollectionButton.Clicked +=
 					OnDeleteGameCollection;
+				/*
+				   int width, height;
+				   GameViewer.Instance.Window.
+				   GetSize (out width, out height);
 
-				int width, height;
-				  GameViewer.Instance.Window.
-					GetSize (out width, out height);
-
-				  gameDbWindow.Resize ((int) Math.
-						       Round (0.9 * width),
-						       (int) Math.Round (0.9 *
-									 height));
-
+				   gameDbWindow.Resize ((int) Math.
+				   Round (0.9 * width),
+				   (int) Math.Round (0.9 *
+				   height));
+				 */
 				  searchGamesList.GameSelectionEvent +=
 					OnGameSelectionEvent;
 			}
