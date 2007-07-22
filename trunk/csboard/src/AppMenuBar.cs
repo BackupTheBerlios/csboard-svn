@@ -57,7 +57,7 @@ namespace CsBoard
 
 		protected virtual void OnQuit (object o, EventArgs args)
 		{
-			Application.Quit ();
+			App.Close ();
 		}
 
 		protected virtual void OnAbout (object o, EventArgs args)
