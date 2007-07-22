@@ -21,7 +21,6 @@ namespace CsBoard
 				new ImageMenuItem (Catalog.
 						   GetString ("_Quit"));
 			  item.Image = new Image (Stock.Quit, IconSize.Menu);
-			  Console.WriteLine (Stock.Quit);
 			  item.Activated += OnQuit;
 			  item.AddAccelerator ("activate",
 					       ChessWindow.Instance.
