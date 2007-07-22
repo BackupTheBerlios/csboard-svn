@@ -56,20 +56,8 @@ namespace CsBoard
 						     1 ? args[1] : null);
 				else
 				  {
-					  string engine = App.Session.Engine;
-					  if (engine != null
-					      && engine.StartsWith ("ICS"))
-						  StartICSPlayer ();
-					  else {
-					    try {
-						  StartPlayer (args.Length >
-							       1 ? args[1] :
-							       null);
-					    }
-					    catch {
-						  StartICSPlayer ();
-					    }
-					  }
+					  StartPlayer (args.Length >
+						       1 ? args[1] : null);
 				  }
 			}
 			catch (ApplicationException)
@@ -147,7 +135,8 @@ namespace CsBoard
 			App.StartPlayer (App.Session.Engine, filename);
 		}
 
-		public static void StartPlayer (string engine, string filename)
+		public static void StartPlayer (string engine,
+						string filename)
 		{
 			new ChessWindow (engine, filename);
 			appCount++;

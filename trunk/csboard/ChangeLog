@@ -2,6 +2,24 @@
 
 	modified files
 
+	* Makefile.am
+	* resource/csboard.glade
+	* src/App.cs
+	* src/Window.cs
+	* src/ics/ICSDetailsWidget.cs
+
+	added
+	
+	* src/AppMenuBar.cs
+
+	ui improvements to show all apps in a single window.
+	currently integrated ics app only. need to move other
+	apps slowly
+
+2007-07-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
 	* src/CairoBoard.cs
 	* src/CairoPlayerBoard.cs
 	* src/PlayerBoard.cs

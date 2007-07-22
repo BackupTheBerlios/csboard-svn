@@ -24,7 +24,31 @@ namespace CsBoard
 	using Gdk;
 	using Mono.Unix;
 
-	public class ChessWindow
+	public interface MainApp
+	{
+		void AddApp (SubApp app);
+		void ShowApp (int i);
+	}
+
+	public interface SubApp
+	{
+		MenuBar Menu
+		{
+			get;
+		}
+
+		Widget Widget
+		{
+			get;
+		}
+
+		ToolButton ToolButton
+		{
+			get;
+		}
+	}
+
+	public class ChessWindow:MainApp, SubApp
 	{
 
 		[Glade.Widget] private Gtk.Window csboardWindow;
@@ -60,15 +84,95 @@ namespace CsBoard
 
 		ChessGameWidget chessGameWidget;
 
+		[Glade.Widget] Notebook menusBook;
+		[Glade.Widget] Toolbar appsBar;
+		[Glade.Widget] Notebook appsBook;
+		[Glade.Widget] ToolButton playerToolButton;
+		[Glade.Widget] MenuBar menubar;
+
+		AccelGroup accel;
+		public AccelGroup AccelGroup
+		{
+			get
+			{
+				return accel;
+			}
+		}
+
+		public Widget Widget
+		{
+			get
+			{
+				return frame;
+			}
+		}
+
+		public ToolButton ToolButton
+		{
+			get
+			{
+				return playerToolButton;
+			}
+		}
+
+		public MenuBar Menu
+		{
+			get
+			{
+				return menubar;
+			}
+		}
+
+		private static ChessWindow instance;
+		public static ChessWindow Instance
+		{
+			get
+			{
+				return instance;
+			}
+		}
+		ArrayList subapps;
+
+		public void AddApp (SubApp app)
+		{
+			subapps.Add (app);
+
+			menusBook.AppendPage (app.Menu, new Label ());
+			appsBar.Insert (app.ToolButton, appsBar.NItems);
+			app.ToolButton.Clicked += OnToolButtonClicked;
+			appsBook.AppendPage (app.Widget, new Label ());
+		}
+
+		private void OnToolButtonClicked (object o, EventArgs args)
+		{
+			int i = 0;
+			foreach (SubApp app in subapps)
+			{
+				if (app.ToolButton.Equals (o))
+				  {
+					  ShowApp (i);
+					  break;
+				  }
+				i++;
+			}
+		}
+
+		public void ShowApp (int i)
+		{
+			menusBook.CurrentPage = i;
+			appsBook.CurrentPage = i;
+		}
+
 		public ChessWindow (string filename):this (null, filename)
 		{
 		}
 
-		public ChessWindow (string engine, string filename)
+		private void CreateControl (string engine)
 		{
 			if (engine == null)
 				engine = App.Session.Engine;
 			/* try { */
+			Console.WriteLine ("Engine: " + engine);
 
 			if (engine.LastIndexOf ("crafty ") >= 0)
 			  {
@@ -106,35 +210,8 @@ namespace CsBoard
 					  ("/usr/bin/gnuchess -x -e");
 
 			  }
+			Console.WriteLine ("Control opened: " + control);
 
-			/*} catch {
-
-			   MessageDialog md =
-			   new MessageDialog (null, 0, MessageType.Error,
-			   ButtonsType.Close,
-			   String.Format(Catalog.GetString (
-			   "<b>Failed to start engine</b>\n\nCheck that program '{0}' is available."),
-			   engine));
-
-			   md.Run ();
-			   md.Hide ();
-			   md.Dispose ();
-			   return;
-			   } */
-
-			Glade.XML gXML =
-				Glade.XML.FromAssembly ("csboard.glade",
-							"csboardWindow",
-							null);
-			gXML.Autoconnect (this);
-
-			gameStatusbarId = statusbar.GetContextId ("game");
-			gameStatusbarId = statusbar.GetContextId ("move");
-
-			// FIXME: Use libglade to create toolbar                        
-
-			App.Session.SetupGeometry (csboardWindow);
-			csboardWindow.Show ();
 
 			control.WaitEvent +=
 				new ControlWaitHandler (on_control_wait);
@@ -153,6 +230,39 @@ namespace CsBoard
 			control.HintEvent +=
 				new ControlHintHandler (on_control_hint);
 
+		}
+
+		public ChessWindow (string engine, string filename)
+		{
+			instance = this;
+			subapps = new ArrayList ();
+			CreateControl (engine);
+			Glade.XML gXML =
+				Glade.XML.FromAssembly ("csboard.glade",
+							"csboardWindow",
+							null);
+			gXML.Autoconnect (this);
+			accel = new AccelGroup ();
+			csboardWindow.AddAccelGroup (accel);
+			Gtk.Image img =
+				new Gtk.Image (Gdk.Pixbuf.
+					       LoadFromResource
+					       ("computer.png"));
+			img.Show ();
+			playerToolButton.IconWidget = img;
+
+
+			subapps.Add (this);
+			AddApp (new CsBoard.ICS.ICSDetailsWidget (""));
+			playerToolButton.Clicked += OnToolButtonClicked;
+
+			gameStatusbarId = statusbar.GetContextId ("game");
+			gameStatusbarId = statusbar.GetContextId ("move");
+
+			// FIXME: Use libglade to create toolbar                        
+
+			App.Session.SetupGeometry (csboardWindow);
+			csboardWindow.Show ();
 
 
 			// Setup board widget
@@ -201,8 +311,8 @@ namespace CsBoard
 						     DeleteEventArgs e)
 		{
 			on_quit_activate (b, null);
-			chessGameWidget.whiteClock.Stop();
-			chessGameWidget.blackClock.Stop();
+			chessGameWidget.whiteClock.Stop ();
+			chessGameWidget.blackClock.Stop ();
 		}
 
 		public void on_quit_activate (System.Object b, EventArgs e)
@@ -718,26 +828,30 @@ namespace CsBoard
 			string engine =
 				EngineChooser.ChooseEngine (App.Session.
 							    Engine);
-			try {
-			  Console.WriteLine("EngineChooser returned: {0}", engine);
-			  App.StartPlayer(engine, null);
-			  if (engine != null)
-			    App.Session.Engine = engine;
+			try
+			{
+				Console.WriteLine
+					("EngineChooser returned: {0}",
+					 engine);
+				App.StartPlayer (engine, null);
+				if (engine != null)
+					App.Session.Engine = engine;
 			}
-			catch {
-			  MessageDialog md =
-			    new MessageDialog (null,
-					       DialogFlags.
-					       DestroyWithParent,
-					       MessageType.
-					       Error,
-					       ButtonsType.
-					       Close, Catalog.GetString(
-									"Unknown engine")
-					       );
-			  md.Run();
-			  md.Hide();
-			  md.Dispose();
+			catch
+			{
+				MessageDialog md = new MessageDialog (null,
+								      DialogFlags.
+								      DestroyWithParent,
+								      MessageType.
+								      Error,
+								      ButtonsType.
+								      Close,
+								      Catalog.
+								      GetString
+								      ("Unknown engine"));
+				md.Run ();
+				md.Hide ();
+				md.Dispose ();
 			}
 		}
 	}

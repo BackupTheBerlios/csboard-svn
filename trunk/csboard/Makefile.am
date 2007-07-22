@@ -58,6 +58,7 @@ ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/ICSShell.cs \
 	$(top_srcdir)/src/ics/GameAdvertisementsWidget.cs \
 	$(top_srcdir)/src/ics/ICSDetailsWindow.cs \
+	$(top_srcdir)/src/ics/ICSDetailsWidget.cs \
 	$(top_srcdir)/src/ics/ICSGameObserverWindow.cs \
 	$(top_srcdir)/src/ics/ResultNotification.cs \
 	$(top_srcdir)/src/ics/GameObservationManager.cs \
@@ -94,6 +95,7 @@ SOURCE = \
 	$(top_srcdir)/src/Phalanx.cs \
 	$(top_srcdir)/src/ProgressBar.cs \
 	$(top_srcdir)/src/ChessClock.cs\
+	$(top_srcdir)/src/AppMenuBar.cs\
 	$(PARSER_SOURCES) \
 	$(GAME_PLAYER_SOURCES) \
 	$(VIEWER_SOURCES) \
