@@ -184,6 +184,11 @@ namespace CsBoard
 							GetString ("Viewer"));
 				ShowAll ();
 				toolbutton.ShowAll ();
+
+				gameViewerWidget.ChessGameWidget.SplitPane.
+					Position =
+					App.Session.ViewerSplitPanePosition;
+
 				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
 			}
 
@@ -562,7 +567,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();
