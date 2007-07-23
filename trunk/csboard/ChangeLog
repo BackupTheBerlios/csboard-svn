@@ -2,6 +2,25 @@
 
 	modified files
 
+	* Makefile.am
+	* src/App.cs
+	* src/AppMenuBar.cs
+	* src/Window.cs
+	* src/viewer/GameViewer.cs
+	* src/ics/ICSDetailsWidget.cs
+	* src/ics/ICSDetailsWindow.cs
+
+	added
+
+	* src/ChessWindowUI.cs
+	* src/viewer/GameViewerUI.cs
+	
+	reorganized files
+	
+2007-07-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
 	* src/viewer/PluginManager.cs
 	* src/viewer/plugins/gamedb/GameDb.cs
 	* src/viewer/plugins/gamedb/GameDbPlugin.cs

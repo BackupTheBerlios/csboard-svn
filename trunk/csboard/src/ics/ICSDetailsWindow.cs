@@ -85,13 +85,15 @@ namespace CsBoard
 				client.ConnectionErrorEvent +=
 					OnConnectionError;
 
-				ShowConfigWidget();
+				ShowConfigWidget ();
 
 				disconnectMenuItem.Sensitive = false;
 				icsWindow.Show ();
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate (); return false;}
+					       Authenticate ();
+					       return false;
+					       }
 				);
 			}
 
@@ -109,7 +111,7 @@ namespace CsBoard
 								 server,
 								 client.port);
 
-					  RemoveConfigWidget();
+					  RemoveConfigWidget ();
 					  return;
 				  }
 
@@ -118,34 +120,39 @@ namespace CsBoard
 				Authenticate ();
 			}
 
-                        private void ShowConfigWidget() {
-			  if(configwidget != null)
-			    return;
+			private void ShowConfigWidget ()
+			{
+				if (configwidget != null)
+					return;
 
-				configwidget =
-					new ICSConfigWidget (client);
+				configwidget = new ICSConfigWidget (client);
 				int pageidx = book.NPages;
 				book.ShowTabs = false;
-				book.AppendPage(configwidget, new Label(Catalog.GetString("Login")));
+				book.AppendPage (configwidget,
+						 new Label (Catalog.
+							    GetString
+							    ("Login")));
 				book.CurrentPage = pageidx;
-				configwidget.ShowAll();
+				configwidget.ShowAll ();
 			}
 
-                        private void RemoveConfigWidget() {
-			  book.ShowTabs = true;
-			  
-			  book.RemovePage(book.CurrentPage);
-			  book.CurrentPage = 0;
-			  configwidget = null;
+			private void RemoveConfigWidget ()
+			{
+				book.ShowTabs = true;
+
+				book.RemovePage (book.CurrentPage);
+				book.CurrentPage = 0;
+				configwidget = null;
 			}
 
 			private void Authenticate ()
 			{
 				connectMenuItem.Sensitive = false;
-				ShowConfigWidget();
+				ShowConfigWidget ();
 				//align.Show();
 
-				if (configwidget.Run () == (int) ResponseType.Ok)
+				if (configwidget.Run () ==
+				    (int) ResponseType.Ok)
 				  {
 					  client.Start ();
 					  configwidget.Sensitive = false;
@@ -195,14 +202,14 @@ namespace CsBoard
 			protected void on_about_activate (object o,
 							  EventArgs args)
 			{
-				ChessWindow.ShowAboutDialog (icsWindow);
+				CsBoardApp.ShowAboutDialog (icsWindow);
 			}
 
 			protected void on_edit_engines_activate (object o,
 								 EventArgs
 								 args)
 			{
-				ChessWindow.ShowEngineChooser ();
+				CsBoardApp.ShowEngineChooser ();
 			}
 
 			protected void on_connect_activate (object o,

@@ -186,10 +186,12 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate (); return false;}
+					       Authenticate ();
+					       return false;
+					       }
 				);
 
-				accel = new AccelGroup();
+				accel = new AccelGroup ();
 				menubar.quitMenuItem.
 					AddAccelerator ("activate", accel,
 							new AccelKey (Gdk.Key.
@@ -307,14 +309,14 @@ namespace CsBoard
 			protected void on_about_activate (object o,
 							  EventArgs args)
 			{
-				ChessWindow.ShowAboutDialog (null);
+				CsBoardApp.ShowAboutDialog (null);
 			}
 
 			protected void on_edit_engines_activate (object o,
 								 EventArgs
 								 args)
 			{
-				ChessWindow.ShowEngineChooser ();
+				CsBoardApp.ShowEngineChooser ();
 			}
 
 			protected void on_connect_activate (object o,

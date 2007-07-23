@@ -46,121 +46,6 @@ namespace CsBoard
 					     out ChessGame details);
 		}
 
-		public class GameViewerUI:VBox
-		{
-			protected Statusbar statusBar;
-			protected ViewerMenuBar menubar;
-
-
-			protected GameViewerWidget gameViewerWidget;
-
-			public ChessGameView ChessGameView
-			{
-				get
-				{
-					return gameViewerWidget.
-						ChessGameWidget.NotationView;
-				}
-			}
-
-			public SearchableGamesListWidget GamesListWidget
-			{
-				get
-				{
-					return gameViewerWidget.
-						GamesListWidget;
-				}
-			}
-
-			public Gtk.Statusbar StatusBar
-			{
-				get
-				{
-					return statusBar;
-				}
-			}
-
-			public Gtk.MenuBar MenuBar
-			{
-				get
-				{
-					return menubar;
-				}
-			}
-
-			public bool AddToViewMenu (Gtk.MenuItem item)
-			{
-				return AddToMenu (menubar.viewMenuItem, item,
-						  null);
-			}
-
-			public bool RemoveFromViewMenu (Gtk.MenuItem item)
-			{
-				Menu menu =
-					(Menu) menubar.viewMenuItem.Submenu;
-				menu.Remove (item);
-				return true;
-			}
-
-			public bool AddToFileMenu (Gtk.MenuItem item)
-			{
-				return AddToMenu (menubar.fileMenuItem, item,
-						  menubar.saveAsSeparator);
-			}
-
-			public bool RemoveFromFileMenu (Gtk.MenuItem item)
-			{
-				Menu menu =
-					(Menu) menubar.fileMenuItem.Submenu;
-				menu.Remove (item);
-				return true;
-			}
-
-
-			protected bool AddToMenu (Gtk.MenuItem parentMenu,
-						  Gtk.MenuItem itemToBeAdded,
-						  Gtk.MenuItem beforeThis)
-			{
-				Gtk.Menu menu = (Gtk.Menu) parentMenu.Submenu;
-				if (menu == null)
-				  {
-					  menu = new Menu ();
-					  menu.Show ();
-					  parentMenu.Submenu = menu;
-				  }
-				if (beforeThis == null)
-				  {
-					  menu.Append (itemToBeAdded);
-					  return true;
-				  }
-
-				// find the index
-				int index = 0;
-				foreach (Gtk.MenuItem item in menu.
-					 AllChildren)
-				{
-					if (beforeThis.Equals (item))
-					  {
-						  menu.Insert (itemToBeAdded,
-							       index);
-						  return true;
-					  }
-					index++;
-				}
-				return false;
-			}
-
-			public GameViewerUI ():base ()
-			{
-				menubar = new ViewerMenuBar ();
-				gameViewerWidget = new GameViewerWidget ();
-
-				PackStart (gameViewerWidget, true, true, 2);
-				statusBar = new Statusbar ();
-				PackStart (statusBar, false, true, 2);
-			}
-		}
-
 		public class GameViewer:GameViewerUI, SubApp
 		{
 
@@ -382,7 +267,7 @@ namespace CsBoard
 			public void LoadGames (TextReader reader)
 			{
 				if (!app_visible)
-					ChessWindow.Instance.ShowApp (this);
+					CsBoardApp.Instance.ShowApp (this);
 				GameLoader loader =
 					new GameLoader (this, reader);
 				gameViewerWidget.LoadGames (loader.Games);
@@ -422,7 +307,7 @@ namespace CsBoard
 			public void Load (string resource)
 			{
 				if (!app_visible)
-					ChessWindow.Instance.ShowApp (this);
+					CsBoardApp.Instance.ShowApp (this);
 
 				// just ask each IGameLoader
 				foreach (IGameLoader gameLoader in
@@ -682,7 +567,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

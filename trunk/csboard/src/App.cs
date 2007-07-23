@@ -131,7 +131,7 @@ namespace CsBoard
 		public static void StartPlayer (string engine,
 						string filename)
 		{
-			new ChessWindow (engine, filename);
+			new CsBoardApp (engine, filename);
 			appCount++;
 		}
 

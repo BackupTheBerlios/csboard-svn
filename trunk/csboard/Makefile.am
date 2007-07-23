@@ -36,6 +36,7 @@ VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/Widgets/GameViewerWidget.cs \
 	$(top_srcdir)/src/viewer/ViewerMenuBar.cs \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
+	$(top_srcdir)/src/viewer/GameViewerUI.cs \
 	$(top_srcdir)/src/viewer/PositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/CairoPositionSnapshot.cs \
 	$(top_srcdir)/src/viewer/ViewerBoard.cs \
@@ -79,6 +80,7 @@ ICS_PLAYER_SOURCES = \
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
 	$(top_srcdir)/src/ChessGameWidget.cs \
+	$(top_srcdir)/src/ChessWindowUI.cs \
 	$(top_srcdir)/src/Window.cs \
 	$(top_srcdir)/src/IControl.cs \
 	$(top_srcdir)/src/Board.cs \

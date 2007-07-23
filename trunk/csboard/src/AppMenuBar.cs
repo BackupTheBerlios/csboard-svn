@@ -99,17 +99,17 @@ namespace CsBoard
 
 		protected virtual void OnQuit (object o, EventArgs args)
 		{
-			ChessWindow.Instance.Quit ();
+			CsBoardApp.Instance.Quit ();
 		}
 
 		protected virtual void OnAbout (object o, EventArgs args)
 		{
-			ChessWindow.ShowAboutDialog (null);
+			CsBoardApp.ShowAboutDialog (null);
 		}
 
 		protected virtual void OnContents (object o, EventArgs args)
 		{
-			ChessWindow.ShowHelpContents();
+			CsBoardApp.ShowHelpContents ();
 		}
 	}
 }
