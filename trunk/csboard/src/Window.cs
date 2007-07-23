@@ -24,11 +24,13 @@ namespace CsBoard
 	using Gdk;
 	using Mono.Unix;
 
+	public delegate void QuitEventHandler (object o, EventArgs args);
 	public interface MainApp
 	{
 		void AddApp (SubApp app);
 		void ShowApp (int i);
 		void ShowApp (SubApp app);
+		event QuitEventHandler QuitEvent;
 	}
 
 	public interface SubApp

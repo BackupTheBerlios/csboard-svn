@@ -184,6 +184,7 @@ namespace CsBoard
 							GetString ("Viewer"));
 				ShowAll ();
 				toolbutton.ShowAll ();
+				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
 			}
 
 			public void SetVisibility (bool visible)
@@ -339,22 +340,16 @@ namespace CsBoard
 				}
 				writer.Close ();
 			}
-			/*
-			   public void on_quit_activate (System.Object b,
-			   EventArgs e)
-			   {
-			   App.Session.
-			   SaveViewerGeometry (gameViewerWindow);
-			   App.Session.CurrentFolder =
-			   initialDirForFileChooser;
-			   App.Session.ViewerSplitPanePosition =
-			   gameViewerWidget.ChessGameWidget.
-			   SplitPane.Position;
-			   //CsBoard.Plugin.PluginManager.Instance.ClosePlugins ();
-			   gameViewerWindow.Hide ();
-			   App.Close ();
-			   }
-			 */
+
+			private void OnQuitEvent (System.Object b,
+						  EventArgs e)
+			{
+				App.Session.CurrentFolder =
+					initialDirForFileChooser;
+				App.Session.ViewerSplitPanePosition =
+					gameViewerWidget.ChessGameWidget.
+					SplitPane.Position;
+			}
 
 			public void on_switch_side_activate (System.Object b,
 							     EventArgs e)
@@ -567,8 +562,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

@@ -24,7 +24,8 @@ namespace CsBoard
 	using Gdk;
 	using Mono.Unix;
 
-	public class ChessWindowUI {
+	public class ChessWindowUI
+	{
 
 		[Glade.Widget] protected Gtk.Window csboardWindow;
 		[Glade.Widget] protected Gtk.Container frame, appBox;
@@ -64,6 +65,8 @@ namespace CsBoard
 		[Glade.Widget] protected Notebook appsBook;
 		[Glade.Widget] protected ToolButton playerToolButton;
 		[Glade.Widget] protected MenuBar menubar;
+
+		public event QuitEventHandler QuitEvent;
 
 		public ChessWindowUI (string filename):this (null, filename)
 		{
@@ -190,10 +193,13 @@ namespace CsBoard
 
 		public void on_quit_activate (System.Object b, EventArgs e)
 		{
-			Quit();
+			Quit ();
 		}
 
-		public void Quit() {
+		public void Quit ()
+		{
+			if (QuitEvent != null)
+				QuitEvent (this, EventArgs.Empty);
 			App.Session.SaveGeometry (csboardWindow);
 			control.Shutdown ();
 			csboardWindow.Hide ();
@@ -478,7 +484,7 @@ namespace CsBoard
 		public void on_contents_activate (System.Object b,
 						  EventArgs e)
 		{
-			ShowHelpContents();
+			ShowHelpContents ();
 		}
 
 		public void on_about_activate (System.Object b, EventArgs e)
