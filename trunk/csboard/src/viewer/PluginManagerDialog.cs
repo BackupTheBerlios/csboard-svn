@@ -175,12 +175,11 @@ namespace CsBoard
 			public void on_plugins_activate (System.Object b,
 							 EventArgs e)
 			{
-				Dialog dlg =
-					new
-					PluginManagerDialog (viewer.Window,
-							     CsBoard.Plugin.
-							     PluginManager.
-							     Instance);
+				Dialog dlg = new PluginManagerDialog (null,
+								      CsBoard.
+								      Plugin.
+								      PluginManager.
+								      Instance);
 				dlg.Run ();
 				dlg.Hide ();
 				dlg.Dispose ();

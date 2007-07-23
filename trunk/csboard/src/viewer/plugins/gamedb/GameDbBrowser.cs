@@ -191,7 +191,7 @@ namespace CsBoard
 
 				GameViewer.Instance.GameViewerWidget.
 					LoadGames (list);
-				GameViewer.Instance.Window.Present ();
+				//GameViewer.Instance.Window.Present ();
 			}
 
 			private void OnFilterGamesCollection (object o,
@@ -407,7 +407,7 @@ namespace CsBoard
 
 				GameViewer.Instance.GameViewerWidget.
 					LoadGames (list);
-				GameViewer.Instance.Window.Present ();
+				//GameViewer.Instance.Window.Present ();
 			}
 
 			private void GetSelectedGames (ArrayList list)

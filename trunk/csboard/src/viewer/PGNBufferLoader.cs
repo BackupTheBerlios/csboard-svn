@@ -113,11 +113,10 @@ namespace CsBoard
 			string AskForPGNBuffer ()
 			{
 				string buffer = null;
-				BufferDialog dlg =
-					new BufferDialog (viewer.Window,
-							  Catalog.
-							  GetString
-							  ("Enter PGN"));
+				BufferDialog dlg = new BufferDialog (null,
+								     Catalog.
+								     GetString
+								     ("Enter PGN"));
 				if (dlg.Run () == (int) ResponseType.Ok)
 				  {
 					  buffer = dlg.Buffer;

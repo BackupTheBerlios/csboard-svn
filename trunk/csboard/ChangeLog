@@ -1,3 +1,27 @@
+2007-07-23 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* src/NullControl.cs
+	* src/ChessWindowUI.cs
+	* src/Crafty.cs
+	* src/GnuChess.cs
+	* src/ICS.cs
+	* src/IControl.cs
+	* src/Phalanx.cs
+	* src/Window.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/PGNBufferLoader.cs
+	* src/viewer/PGNFileLoader.cs
+	* src/viewer/PluginManagerDialog.cs
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
+	* src/viewer/plugins/urlloader/PGNUrlLoader.cs
+
+	some improvements to the engine configuration
+
 2007-07-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

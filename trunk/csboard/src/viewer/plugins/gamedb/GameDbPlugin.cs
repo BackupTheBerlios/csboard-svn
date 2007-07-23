@@ -73,7 +73,7 @@ namespace CsBoard
 			private void on_add_to_db_activate (object
 							    o, EventArgs args)
 			{
-				dbDlg = new AddToDbDialog (viewer.Window);
+				dbDlg = new AddToDbDialog (null);
 				if (dbDlg.Run () != (int) ResponseType.Ok)
 				  {
 					  dbDlg.Hide ();
@@ -82,7 +82,7 @@ namespace CsBoard
 				  }
 
 				dbDlg.Hide ();
-				dlg = new ProgressDialog (viewer.Window,
+				dlg = new ProgressDialog (null,
 							  Catalog.
 							  GetString
 							  ("Saving to database..."));
@@ -520,8 +520,7 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;
-						 }
+						 return false;}
 				);
 				if (newobj)
 					viewer.GameViewerWidget.

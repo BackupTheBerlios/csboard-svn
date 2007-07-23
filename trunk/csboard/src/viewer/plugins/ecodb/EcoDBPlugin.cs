@@ -56,9 +56,8 @@ namespace CsBoard
 								       EventArgs
 								       args)
 			{
-				Dialog dlg =
-					new OpeningBrowser (viewer.Window,
-							    db);
+				Dialog dlg = new OpeningBrowser (null,
+								 db);
 				  dlg.ShowAll ();
 				  dlg.Run ();
 				  dlg.Hide ();

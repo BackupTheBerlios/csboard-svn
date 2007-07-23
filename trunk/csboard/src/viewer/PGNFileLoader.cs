@@ -37,7 +37,6 @@ namespace CsBoard
 			MenuItem menuItem;
 			string file;
 			bool loadingInProgress;
-			AccelGroup accel;
 
 			public PGNFileLoader ():base ("file-loader",
 						      Catalog.
@@ -79,7 +78,7 @@ namespace CsBoard
 
 			public override bool Shutdown ()
 			{
-				viewer.Window.RemoveAccelGroup (accel);
+				//viewer.Window.RemoveAccelGroup (accel);
 				viewer.UnregisterGameLoader (this, menuItem);
 				return true;
 			}
@@ -127,7 +126,7 @@ namespace CsBoard
 				FileFilter[]filters = new FileFilter[]
 				{
 				pgn_filter, all_filter};
-				file = viewer.AskForFile (viewer.Window, Catalog.GetString ("Choose the file to open"), true, filters);	// true for open
+				file = viewer.AskForFile (null, Catalog.GetString ("Choose the file to open"), true, filters);	// true for open
 				if (file == null)
 					return;
 

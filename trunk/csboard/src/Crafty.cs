@@ -15,318 +15,427 @@
 //
 // Copyright (C) 2004 Nickolay V. Shmyrev
 
-namespace CsBoard {
+namespace CsBoard
+{
 
-        using System;
-        using System.Collections;
+	using System;
+	using System.Collections;
 	using System.Threading;
-        using System.Text.RegularExpressions;
+	using System.Text.RegularExpressions;
 
-	public class Crafty:IControl {
+	class CraftyEngineInfo:EngineInfo
+	{
+		public CraftyEngineInfo ():base ("crafty", "Crafty",
+						 "crafty ")
+		{
+		}
 
-                private System.Diagnostics.Process proc;
-                private System.IO.StreamReader output;
-                private System.IO.StreamWriter input;
-                private bool side = false;
+		public override IControl CreateInstance ()
+		{
+			return new Crafty (command);
+		}
+
+		public override bool Exists ()
+		{
+			return true;
+		}
+	}
+
+	public class Crafty:IControl
+	{
+
+		private System.Diagnostics.Process proc;
+		private System.IO.StreamReader output;
+		private System.IO.StreamWriter input;
+		private bool side = false;
 		private int depth = 1;
 		private bool WaitForOutput = false;
 
-                public event ControlBusyHandler BusyEvent;
-                public event ControlWaitHandler WaitEvent;
-                public event ControlPositionChangedHandler PositionChangedEvent;
-                public event ControlGameOverHandler GameOverEvent;
-                public event ControlSwitchSideHandler SwitchSideEvent;
-		public event ControlHintHandler HintEvent {
-    			add {}
-			remove {}
+		public event ControlBusyHandler BusyEvent;
+		public event ControlWaitHandler WaitEvent;
+		public event ControlPositionChangedHandler
+			PositionChangedEvent;
+		public event ControlGameOverHandler GameOverEvent;
+		public event ControlSwitchSideHandler SwitchSideEvent;
+		public event ControlHintHandler HintEvent
+		{
+			add
+			{
+			}
+			remove
+			{
+			}
+		}
+
+		public string Name
+		{
+			get
+			{
+				return "Crafty";
+			}
 		}
 
 
-                public Crafty (string command) {
+		static EngineInfo instance;
+		public static EngineInfo Info
+		{
+			get
+			{
+				if (instance == null)
+					instance = new CraftyEngineInfo ();
+				return instance;
+			}
+		}
 
-                        // Start child                    
-                        proc = new System.Diagnostics.Process ();
+		public Crafty (string command)
+		{
 
-                        proc.StartInfo.FileName = command.Substring (0, command.IndexOf (' '));
-			proc.StartInfo.Arguments = command.Substring (command.IndexOf (' '));
-                        proc.StartInfo.UseShellExecute = false;
-                        proc.StartInfo.RedirectStandardInput = true;
-                        proc.StartInfo.RedirectStandardOutput = true;
-                        proc.Start ();
+			// Start child                    
+			proc = new System.Diagnostics.Process ();
 
-                        input = proc.StandardInput;
-                        output = proc.StandardOutput;
+			proc.StartInfo.FileName =
+				command.Substring (0, command.IndexOf (' '));
+			proc.StartInfo.Arguments =
+				command.Substring (command.IndexOf (' '));
+			proc.StartInfo.UseShellExecute = false;
+			proc.StartInfo.RedirectStandardInput = true;
+			proc.StartInfo.RedirectStandardOutput = true;
+			proc.Start ();
+
+			input = proc.StandardInput;
+			output = proc.StandardOutput;
 
 			// Start a new thread to monitor available output
-			
-						Thread t = new Thread (new ThreadStart (MonitorThread));
-						t.IsBackground = true;
-						t.Start ();
+
+			Thread t =
+				new Thread (new ThreadStart (MonitorThread));
+			t.IsBackground = true;
+			t.Start ();
 			Put ("xboard");
-                        Get ();
+			Get ();
 
-                }
+		}
 
-                public void Shutdown () {
-                        Put ("exit");
-                }
+		public void Shutdown ()
+		{
+			Put ("exit");
+		}
 
-                public ArrayList GetPosition () {
+		public ArrayList GetPosition ()
+		{
 
-                        Put ("display");
-                        ArrayList output = Get ();
-			
+			Put ("display");
+			ArrayList output = Get ();
+
 			ArrayList result = new ArrayList ();
-			
-			result.Add ("");
-			result.Add ("");
-			
-			for (int i = 2; i < 17; i += 2) {
 
-			  string str = (string) output [i];
-			  string out_str = "";
-			  
-			  for (int j = 9; j < 38; j += 4) {
-			     if (str[j-1] == '<') {
-				     out_str = out_str + Char.ToLower(str[j]) + ' ';
-			     } else {
-				     out_str = out_str + str[j] + ' ';
-			     }
+			result.Add ("");
+			result.Add ("");
+
+			for (int i = 2; i < 17; i += 2)
+			  {
+
+				  string str = (string) output[i];
+				  string out_str = "";
+
+				  for (int j = 9; j < 38; j += 4)
+				    {
+					    if (str[j - 1] == '<')
+					      {
+						      out_str =
+							      out_str +
+							      Char.
+							      ToLower (str[j])
+							      + ' ';
+					      }
+					    else
+					      {
+						      out_str =
+							      out_str +
+							      str[j] + ' ';
+					      }
+				    }
+
+				  result.Add (out_str);
 			  }
 
-			  result.Add (out_str);
-			}
-			    
 			return result;
-                }
+		}
 
 
-                public void NewGame () {
+		public void NewGame ()
+		{
 
-                        Put ("new");
-                        Put ("depth " + depth.ToString ());
-                        Put ("white");
-                        Get ();
+			Put ("new");
+			Put ("depth " + depth.ToString ());
+			Put ("white");
+			Get ();
 
-                        SetSide (false);
+			SetSide (false);
 
-                        if (PositionChangedEvent != null) {
-                                PositionChangedEvent (GetPosition ());
-                        }
+			if (PositionChangedEvent != null)
+			  {
+				  PositionChangedEvent (GetPosition ());
+			  }
 
-                }
+		}
 
 
-                public bool MakeMove (string move) {
+		public bool MakeMove (string move)
+		{
 			Put ("force");
-                        Put (move);
-                        ArrayList result = Get ();
+			Put (move);
+			ArrayList result = Get ();
 
-                        if (result.Count > 0 && ((string)result[0]).StartsWith ("Illegal move")) {
-				
-				if (PositionChangedEvent != null) {
-				    PositionChangedEvent(GetPosition());
-				}
-                                return false;
-			} else {
+			if (result.Count > 0
+			    && ((string) result[0]).
+			    StartsWith ("Illegal move"))
+			  {
 
-                                if (PositionChangedEvent != null) {
-                                        PositionChangedEvent (GetPosition ());
-                                }
+				  if (PositionChangedEvent != null)
+				    {
+					    PositionChangedEvent (GetPosition
+								  ());
+				    }
+				  return false;
+			  }
+			else
+			  {
 
-                                if (BusyEvent != null)
-                                        BusyEvent ();
-					
-				Put ("go");
+				  if (PositionChangedEvent != null)
+				    {
+					    PositionChangedEvent (GetPosition
+								  ());
+				    }
 
-                                GLib.Timeout.Add (100,
-                                                  new GLib.
-                                                  TimeoutHandler
-                                                  (MoveTimeout));
-				WaitForOutput = true;
-                        }
+				  if (BusyEvent != null)
+					  BusyEvent ();
 
-                        return true;
-                }
+				  Put ("go");
 
-                bool MoveTimeout () {
+				  GLib.Timeout.Add (100,
+						    new GLib.
+						    TimeoutHandler
+						    (MoveTimeout));
+				  WaitForOutput = true;
+			  }
 
-			if (WaitForOutput) {
-			     return true;
-			}
+			return true;
+		}
 
-                        ArrayList result = Get ();
+		bool MoveTimeout ()
+		{
 
-                        if (PositionChangedEvent != null) {
-                                PositionChangedEvent (GetPosition ());
-                        }
+			if (WaitForOutput)
+			  {
+				  return true;
+			  }
 
-                        if (WaitEvent != null && result.Count > 0) {
-                                WaitEvent ('m' + (string) result[0]);
-                        }
-                        else {
-                                WaitEvent (null);
-                        }
+			ArrayList result = Get ();
 
-                        checkForEnd (result);
+			if (PositionChangedEvent != null)
+			  {
+				  PositionChangedEvent (GetPosition ());
+			  }
 
-                        return false;
-                }
+			if (WaitEvent != null && result.Count > 0)
+			  {
+				  WaitEvent ('m' + (string) result[0]);
+			  }
+			else
+			  {
+				  WaitEvent (null);
+			  }
 
-                public void SaveGame (string filename) {
-                }
+			checkForEnd (result);
 
-                public void OpenGame (string filename) {
+			return false;
+		}
 
-                }
+		public void SaveGame (string filename)
+		{
+		}
 
-                public void SetLevel (Level l) {
+		public void OpenGame (string filename)
+		{
 
-                        switch (l) {
+		}
 
-                        case Level.Beginner:
-                                depth = 1;
-                                break;
-                        case Level.Intermediate:
-                                depth = 2;
-                                break;
-                        case Level.Advanced:
-                                depth = 5;
-                                break;
-                        case Level.Expert:
-                                depth = 7;
-                                break;
-                        }
+		public void SetLevel (Level l)
+		{
 
-                        Put ("depth " + depth.ToString ());
-                        Get ();
-                }
+			switch (l)
+			  {
 
-                public void Undo () {
-                }
+			  case Level.Beginner:
+				  depth = 1;
+				  break;
+			  case Level.Intermediate:
+				  depth = 2;
+				  break;
+			  case Level.Advanced:
+				  depth = 5;
+				  break;
+			  case Level.Expert:
+				  depth = 7;
+				  break;
+			  }
 
-                public void SwitchSide () {
+			Put ("depth " + depth.ToString ());
+			Get ();
+		}
 
-                        SetSide (!side);
-                        Put ("go");
- 
-                        if (BusyEvent != null)
-                                BusyEvent ();
+		public void Undo ()
+		{
+		}
 
-                        GLib.Timeout.Add (100,
-                                          new GLib.
-                                          TimeoutHandler
-                                          (MoveTimeout));
+		public void SwitchSide ()
+		{
+
+			SetSide (!side);
+			Put ("go");
+
+			if (BusyEvent != null)
+				BusyEvent ();
+
+			GLib.Timeout.Add (100,
+					  new GLib.
+					  TimeoutHandler (MoveTimeout));
 
 			WaitForOutput = true;
-                }
-
-		public void Hint () {	     
 		}
-		
-                public ArrayList Book () {
-                        ArrayList result = new ArrayList ();
-			
-                        return result;
-                }
 
-		public string PossibleMoves (string pos) {
+		public void Hint ()
+		{
+		}
+
+		public ArrayList Book ()
+		{
+			ArrayList result = new ArrayList ();
+
+			return result;
+		}
+
+		public string PossibleMoves (string pos)
+		{
 			return "";
 		}
 
 		//         private methods 
 
 
-                private void SetSide (bool s) {
+		private void SetSide (bool s)
+		{
 
-                        if (side != s) {
-                                side = s;
+			if (side != s)
+			  {
+				  side = s;
 
-                                if (SwitchSideEvent != null) {
-                                        SwitchSideEvent (side);
-                                }
-                        }
-                }
+				  if (SwitchSideEvent != null)
+				    {
+					    SwitchSideEvent (side);
+				    }
+			  }
+		}
 
 
-                private ArrayList Get () {
-		
-                        string line;
-                        ArrayList result = new ArrayList ();
-			
+		private ArrayList Get ()
+		{
+
+			string line;
+			ArrayList result = new ArrayList ();
+
 			if (WaitForOutput)
 				return result;
 
-                        // This is used  
+			// This is used  
 
-                        input.WriteLine ("give_me_it");
+			input.WriteLine ("give_me_it");
 
-                        while (true) {
-                                line = output.ReadLine ();
+			while (true)
+			  {
+				  line = output.ReadLine ();
 
-				
-                                if (line.LastIndexOf ("give_me_it") < 0) {
-                                        result.Add (line);
-					if (Config.Debug) {
-    	                                    Console.WriteLine (line);
-					}
-                                }
-                                else {
-                                        break;
-                                }
-                        };
 
-                        return result;
-                }
+				  if (line.LastIndexOf ("give_me_it") < 0)
+				    {
+					    result.Add (line);
+					    if (Config.Debug)
+					      {
+						      Console.WriteLine
+							      (line);
+					      }
+				    }
+				  else
+				    {
+					    break;
+				    }
+			  };
 
-                private void Put (string text) {
-		        
-		        if (!WaitForOutput) {
-                        input.WriteLine (text);
-			
-				if (Config.Debug) {
-    	        	            Console.WriteLine (text);
-		    		}
-			}
-                }
-
-                private bool checkForEnd (ArrayList result) {
-		        Regex reg =
-                        new Regex (@"(-0|/2\-1/2|\-1)\s+\{(?<result>(.*))\}");
-
-                        foreach (string str in result) {
-
-                                Match match = reg.Match (str);
-
-                                if (match.Length > 0) {
-
-                                        if (GameOverEvent != null)
-                                                GameOverEvent
-                                                        (match.
-                                                         Groups
-                                                         ["result"].
-                                                         ToString ());
-							 
-				    return true;
-
-                                }
-                        }
-			
-			return false;
-
-                }
-		
-		private void MonitorThread () {
-		    
-			while (true) {
- 				  if (WaitForOutput == true) {
-				     output.Read ();
-				     WaitForOutput = false;
-				  } else {
-				     Thread.Sleep (100);
-				  }
-		        }
+			return result;
 		}
 
-        }
+		private void Put (string text)
+		{
+
+			if (!WaitForOutput)
+			  {
+				  input.WriteLine (text);
+
+				  if (Config.Debug)
+				    {
+					    Console.WriteLine (text);
+				    }
+			  }
+		}
+
+		private bool checkForEnd (ArrayList result)
+		{
+			Regex reg =
+				new
+				Regex
+				(@"(-0|/2\-1/2|\-1)\s+\{(?<result>(.*))\}");
+
+			foreach (string str in result)
+			{
+
+				Match match = reg.Match (str);
+
+				if (match.Length > 0)
+				  {
+
+					  if (GameOverEvent != null)
+						  GameOverEvent
+							  (match.
+							   Groups
+							   ["result"].
+							   ToString ());
+
+					  return true;
+
+				  }
+			}
+
+			return false;
+
+		}
+
+		private void MonitorThread ()
+		{
+
+			while (true)
+			  {
+				  if (WaitForOutput == true)
+				    {
+					    output.Read ();
+					    WaitForOutput = false;
+				    }
+				  else
+				    {
+					    Thread.Sleep (100);
+				    }
+			  }
+		}
+
+	}
 }

@@ -80,17 +80,16 @@ namespace CsBoard
 			{
 				if (viewer.GameViewerWidget.Games == null)
 					return;
-				string file =
-					viewer.AskForFile (viewer.Window,
-							   Catalog.
-							   GetString
-							   ("Export as a PostScript document to file"),
-							   false);
+				string file = viewer.AskForFile (null,
+								 Catalog.
+								 GetString
+								 ("Export as a PostScript document to file"),
+								 false);
 				if (file == null)
 					return;
 				PrintWrapper printer = new PrintWrapper ();
 				ProgressDialog prog =
-					new ProgressDialog (viewer.Window,
+					new ProgressDialog (null,
 							    Catalog.
 							    GetString
 							    ("Exporting..."));

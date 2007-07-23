@@ -90,6 +90,7 @@ SOURCE = \
 	$(top_srcdir)/src/PlayerBoard.cs \
 	$(top_srcdir)/src/Figure.cs \
 	$(top_srcdir)/src/GnuChess.cs \
+	$(top_srcdir)/src/NullControl.cs \
 	$(top_srcdir)/src/Book.cs \
 	$(top_srcdir)/src/Promotion.cs \
 	$(top_srcdir)/src/Position.cs \

@@ -121,7 +121,11 @@ namespace CsBoard
 		public CsBoardApp (string engine,
 				   string filename):base (engine, filename)
 		{
-			title = Catalog.GetString ("Welcome to CS Board");
+			title = String.Format (Catalog.
+					       GetString
+					       ("Welcome to CS Board ({0})"),
+					       control.Name);
+			csboardWindow.Title = title;
 			instance = this;
 			subapps = new ArrayList ();
 			accel = new AccelGroup ();
@@ -213,6 +217,7 @@ namespace CsBoard
 			app = subapps[i] as SubApp;
 			if (app.AccelGroup != null)
 				csboardWindow.AddAccelGroup (app.AccelGroup);
+			csboardWindow.Title = app.Title;
 			app.SetVisibility (true);
 		}
 	}

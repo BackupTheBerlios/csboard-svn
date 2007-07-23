@@ -91,14 +91,6 @@ namespace CsBoard
 					StartPlugins ();
 			}
 
-			public Gtk.Window Window
-			{
-				get
-				{
-					return null;
-				}
-			}
-
 			ToolButton toolbutton;
 			public ToolButton ToolButton
 			{
@@ -544,7 +536,7 @@ namespace CsBoard
 					   TextReader reader)
 			{
 				games = new ArrayList ();
-				dlg = new ProgressDialog (viewer.Window,
+				dlg = new ProgressDialog (null,
 							  Catalog.
 							  GetString
 							  ("Loading..."));
@@ -567,8 +559,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

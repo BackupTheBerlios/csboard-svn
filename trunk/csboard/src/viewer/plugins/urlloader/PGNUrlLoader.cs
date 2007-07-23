@@ -116,7 +116,7 @@ namespace CsBoard
 			string AskForUrl ()
 			{
 				string url = null;
-				UrlDialog dlg = new UrlDialog (viewer.Window);
+				UrlDialog dlg = new UrlDialog (null);
 				if (dlg.Run () == (int) ResponseType.Accept)
 				  {
 					  url = dlg.Url;

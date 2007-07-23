@@ -24,6 +24,8 @@ namespace CsBoard
 	using Gdk;
 	using Mono.Unix;
 
+	public delegate IControl ControlCreatorFunc (string command);
+
 	public class ChessWindowUI
 	{
 
@@ -67,30 +69,68 @@ namespace CsBoard
 		[Glade.Widget] protected MenuBar menubar;
 
 		public event QuitEventHandler QuitEvent;
+		static ArrayList controls = new ArrayList ();
 
 		public ChessWindowUI (string filename):this (null, filename)
 		{
 		}
 
+		public void RegisterControl (EngineInfo info)
+		{
+			controls.Add (info);
+		}
+
+		public static void GetIDFromEngine (string engine,
+						    out string id,
+						    out string args)
+		{
+			int index;
+			if ((index = engine.IndexOf (' ')) > 0)
+			  {
+				  id = engine.Substring (0, index);
+				  args = engine.Substring (index + 1);
+			  }
+			else
+			  {
+				  id = engine;
+				  args = "";
+			  }
+		}
 		private void CreateControl (string engine)
 		{
 			if (engine == null)
 				engine = App.Session.Engine;
-			/* try { */
 
-			if (engine.LastIndexOf ("crafty ") >= 0)
-			  {
-				  control = new Crafty (engine);
-			  }
-			else if (engine.LastIndexOf ("phalanx ") >= 0)
-			  {
-				  control = new Phalanx (engine);
-			  }
-			else if (engine.LastIndexOf ("gnuchess ") >= 0)
-			  {
-				  control = new GnuChess (engine);
-			  }
-			else
+			string id, args;
+			GetIDFromEngine (engine, out id, out args);
+			string msg = null;
+			try
+			{
+				foreach (EngineInfo info in controls)
+				{
+					if (info.ID.Equals (id))
+					  {
+						  control =
+							  info.
+							  CreateInstance ();
+						  break;
+					  }
+				}
+
+				if (control == null)
+					msg = Catalog.
+						GetString
+						("<b>Unknown engine</b>\n\nPlease check gconf keys of csboard");
+			}
+			catch
+			{
+				msg = String.Format (Catalog.
+						     GetString
+						     ("<b>Unable to load engine '{0}'</b>"),
+						     engine);
+
+			}
+			if (control == null)
 			  {
 				  MessageDialog md =
 					  new MessageDialog (csboardWindow,
@@ -100,19 +140,12 @@ namespace CsBoard
 							     Error,
 							     ButtonsType.
 							     Close,
-							     Catalog.
-							     GetString
-							     ("<b>Unknown engine</b>\n\nPlease check gconf keys of csboard"));
+							     msg);
 
 				  md.Run ();
 				  md.Hide ();
 				  md.Dispose ();
-
-				  control =
-					  new
-					  GnuChess
-					  ("/usr/bin/gnuchess -x -e");
-
+				  control = new NullControl ();
 			  }
 
 			control.WaitEvent +=
@@ -136,6 +169,10 @@ namespace CsBoard
 
 		public ChessWindowUI (string engine, string filename)
 		{
+			RegisterControl (GnuChess.Info);
+			RegisterControl (Phalanx.Info);
+			RegisterControl (Crafty.Info);
+			RegisterControl (NullControl.Info);
 			CreateControl (engine);
 			Glade.XML gXML =
 				Glade.XML.FromAssembly ("csboard.glade",
@@ -713,85 +750,92 @@ namespace CsBoard
 
 		public static void ShowEngineChooser ()
 		{
-			string engine =
-				EngineChooser.ChooseEngine (App.Session.
-							    Engine);
-			try
-			{
-				Console.WriteLine
-					("EngineChooser returned: {0}",
-					 engine);
-				App.StartPlayer (engine, null);
-				if (engine != null)
-					App.Session.Engine = engine;
-			}
-			catch
-			{
-				MessageDialog md = new MessageDialog (null,
-								      DialogFlags.
-								      DestroyWithParent,
-								      MessageType.
-								      Error,
-								      ButtonsType.
-								      Close,
-								      Catalog.
-								      GetString
-								      ("Unknown engine"));
-				md.Run ();
-				md.Hide ();
-				md.Dispose ();
-			}
+			string engine = EngineChooser.ChooseEngine (controls,
+								    App.
+								    Session.
+								    Engine);
+			if (engine != null)
+				App.Session.Engine = engine;
 		}
 	}
 
-	class EngineChooser
+	class EngineChooser:Dialog
 	{
-		[Glade.Widget] private Gtk.Dialog chooseEngineDialog;
-		[Glade.Widget] private Gtk.RadioButton gnuchessButton,
-			craftyButton, phalanxButton, icsButton;
-
-		  EngineChooser (string engine)
+		IList engines, radiobuttons;
+		  EngineChooser (IList engines,
+				 string engine):base (Catalog.
+						      GetString
+						      ("Choose an engine"),
+						      null, DialogFlags.Modal,
+						      Stock.Cancel,
+						      ResponseType.Cancel,
+						      Stock.Ok,
+						      ResponseType.Ok)
 		{
-			Glade.XML xml =
-				Glade.XML.FromAssembly ("csboard.glade",
-							"chooseEngineDialog",
-							null);
-			xml.Autoconnect (this);
+			radiobuttons = new ArrayList ();
+			this.engines = engines;
+			RadioButton firstButton = null;
+			string id, args;
+			  ChessWindowUI.GetIDFromEngine (engine, out id,
+							 out args);
 
-			if (engine.StartsWith ("gnuchess"))
-				gnuchessButton.Active = true;
-			else if (engine.StartsWith ("crafty"))
-				craftyButton.Active = true;
-			else if (engine.StartsWith ("phalanx"))
-				phalanxButton.Active = true;
-			else if (engine.StartsWith ("ICS"))
-				icsButton.Active = true;
+			  foreach (EngineInfo info in engines)
+			{
+				RadioButton button;
+				if (firstButton == null)
+				  {
+					  button = new RadioButton ("");
+					  firstButton = button;
+				  }
+				else
+					  button =
+						new RadioButton (firstButton,
+								 "");
+				Label label = new Label ();
+				label.UseMarkup = true;
+				label.Markup = "<b>" + info.Name + "</b>";
+				button.Image = label;
+
+				if (id.Equals (info.ID))
+					button.Active = true;
+
+				radiobuttons.Add (button);
+				if (!info.Exists ())
+					button.Sensitive = false;
+				VBox.PackStart (button, false, true, 4);
+				VBox.ShowAll ();
+			}
 		}
 
-		public static string ChooseEngine (string curengine)
+		public static string ChooseEngine (IList engines,
+						   string curengine)
 		{
-			EngineChooser chooser = new EngineChooser (curengine);
 			string engine;
-			if (chooser.chooseEngineDialog.Run () !=
-			    (int) ResponseType.Ok)
+			EngineChooser chooser =
+				new EngineChooser (engines, curengine);
+			chooser.Show ();
+			if (chooser.Run () != (int) ResponseType.Ok)
 				engine = null;
 			else
 				engine = chooser.ChosenEngine ();
-			chooser.chooseEngineDialog.Hide ();
-			chooser.chooseEngineDialog.Dispose ();
+			chooser.Hide ();
+			chooser.Dispose ();
 			return engine;
 		}
 
 		private string ChosenEngine ()
 		{
-			if (gnuchessButton.Active)
-				return "gnuchess -x -e";
-			if (craftyButton.Active)
-				return "crafty ";
-			if (phalanxButton.Active)
-				return "phalanx -l-";
-			if (icsButton.Active)
-				return "ICS ";
+			int i = 0;
+			foreach (RadioButton button in radiobuttons)
+			{
+				if (button.Active)
+				  {
+					  return (engines[i] as EngineInfo).
+						  Command;
+				  }
+				i++;
+			}
+
 			return null;
 		}
 	}
