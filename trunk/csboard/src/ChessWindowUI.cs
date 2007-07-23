@@ -52,7 +52,7 @@ namespace CsBoard
 
 		protected PlayerBoard boardWidget;
 		private ProgressBar progressbar;
-		private IControl control;
+		protected IControl control;
 
 		bool whitesTurn;
 		int nmoves = 0;
@@ -178,12 +178,6 @@ namespace CsBoard
 			boardWidget.StartMoveHintEvent +=
 				new
 				StartMoveHintHandler (on_board_start_move);
-
-			if (filename == null)
-				control.OpenGame (App.Session.Filename);
-			else
-				CsBoard.Viewer.GameViewer.Instance.
-					Load (filename);
 		}
 
 		public void on_quit_window_activate (System.Object b,

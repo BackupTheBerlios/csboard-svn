@@ -137,6 +137,11 @@ namespace CsBoard
 			AddApp (CsBoard.Viewer.GameViewer.Instance);
 			playerToolButton.Clicked += OnToolButtonClicked;
 
+			if (filename == null)
+				control.OpenGame (App.Session.Filename);
+			else
+				CsBoard.Viewer.GameViewer.Instance.
+					Load (filename);
 
 			chessGameWidget.Show ();
 			boardWidget.Show ();
