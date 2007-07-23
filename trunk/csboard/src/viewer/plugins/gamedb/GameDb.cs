@@ -120,7 +120,12 @@ namespace CsBoard
 					ObjectClass (typeof (GameCollection)).
 					CascadeOnUpdate (true);
 
-				db = Db4o.OpenFile (dbfile);
+				if ((db = Db4o.OpenFile (dbfile)) == null)
+				  {
+					  throw new CsBoard.Plugin.
+						  PluginException
+						  ("Unable to open db");
+				  }
 			}
 
 			public void AddGame (ChessGame game,

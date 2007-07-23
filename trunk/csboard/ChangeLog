@@ -1,6 +1,16 @@
 2007-07-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
+
+	* src/viewer/PluginManager.cs
+	* src/viewer/plugins/gamedb/GameDb.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+
+	fixes a crash during multiple instances
+	
+2007-07-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
 	
 	* Makefile.am
 	* data/csplayer.in

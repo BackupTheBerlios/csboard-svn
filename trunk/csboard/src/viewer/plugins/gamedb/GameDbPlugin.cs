@@ -167,6 +167,7 @@ namespace CsBoard
 				viewer = GameViewer.Instance;
 				if (viewer == null)
 					return false;
+				GameViewer.GameDb = GameDb.Instance;
 
 				editor = new GameEditor (viewer);
 				viewer.ChessGameDetailsBox.PackStart (editor,
@@ -177,7 +178,6 @@ namespace CsBoard
 				viewer.AddToFileMenu (saveItem);
 				viewer.AddToViewMenu (openDbItem);
 
-				GameViewer.GameDb = GameDb.Instance;
 				return true;
 			}
 
@@ -520,7 +520,8 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;}
+						 return false;
+						 }
 				);
 				if (newobj)
 					viewer.GameViewerWidget.

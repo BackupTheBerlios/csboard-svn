@@ -67,6 +67,13 @@ namespace CsBoard
 			public abstract bool Shutdown ();
 		}
 
+		public class PluginException:Exception
+		{
+			public PluginException (string e):base (e)
+			{
+			}
+		}
+
 		public struct PluginInfo
 		{
 			Type pluginType;
@@ -179,9 +186,21 @@ namespace CsBoard
 					    }
 
 					  if (!info.Initialized)
-						  info.Initialized =
-							  info.Plugin.
-							  Initialize ();
+					    {
+						    try
+						    {
+							    info.Initialized =
+								    info.
+								    Plugin.
+								    Initialize
+								    ();
+						    }
+						    catch (PluginException e)
+						    {
+							    Console.WriteLine
+								    (e);
+						    }
+					    }
 					  plugins[i] = info;
 				  }
 			}
