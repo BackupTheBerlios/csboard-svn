@@ -33,7 +33,6 @@ namespace CsBoard
 		{
 			OpeningsDb db;
 			GameViewer viewer;
-			  Gtk.MenuItem item;
 
 			public EcoDBPlugin ():base ("ecodb",
 						    Catalog.
@@ -43,33 +42,10 @@ namespace CsBoard
 						    GetString
 						    ("Provides the ECO database"))
 			{
-				item = new MenuItem (Catalog.
-						     GetString
-						     ("_Opening Browser"));
-				item.Activated +=
-					on_view_opening_browser_activate;
-				item.Show ();
-			}
-
-			private void on_view_opening_browser_activate (object
-								       o,
-								       EventArgs
-								       args)
-			{
-				Dialog dlg = new OpeningBrowser (null,
-								 db);
-				  dlg.ShowAll ();
-				  dlg.Run ();
-				  dlg.Hide ();
-				  dlg.Dispose ();
 			}
 
 			public override bool Initialize ()
 			{
-				viewer = GameViewer.Instance;
-				if (viewer == null)
-					return false;
-
 				System.Reflection.Assembly exec =
 					System.Reflection.Assembly.
 					GetExecutingAssembly ();
@@ -79,14 +55,14 @@ namespace CsBoard
 				EcoDbLoader loader = new EcoDbLoader (stream);
 				  db = loader.Openings;
 				  GameViewer.EcoDb = this;
-				  viewer.AddToViewMenu (item);
+				  CsBoardApp.Instance.
+					AddApp (new OpeningBrowserUI (db));
 
 				  return true;
 			}
 
 			public override bool Shutdown ()
 			{
-				viewer.RemoveFromViewMenu (item);
 				return true;
 			}
 
@@ -141,111 +117,6 @@ namespace CsBoard
 						 ("skipping this opening. econame = [{0}], name = [{1}]"),
 						 opening.ecoName,
 						 opening.name);
-			}
-		}
-
-		public class OpeningBrowser:Dialog
-		{
-			OpeningsDb db;
-			GameViewerBoard boardWidget;
-			TreeView view;
-			TreeStore store;
-			public OpeningBrowser (Window parent,
-					       OpeningsDb db):base (Catalog.
-								    GetString
-								    ("Opening Browser"),
-								    parent,
-								    DialogFlags.
-								    DestroyWithParent,
-								    Catalog.
-								    GetString
-								    ("Close"),
-								    ResponseType.
-								    Close)
-			{
-				this.db = db;
-				store = new TreeStore (typeof (string),
-						       typeof (int),
-						       typeof (string));
-				  this.db.PopulateTree (store);
-				  view = new TreeView ();
-				  view.Model = store;
-				  view.AppendColumn (Catalog.
-						     GetString ("Moves"),
-						     new CellRendererText (),
-						     "text", 0);
-				  view.AppendColumn (Catalog.
-						     GetString ("Variations"),
-						     new CellRendererText (),
-						     "text", 1);
-				  view.AppendColumn (Catalog.
-						     GetString ("Name"),
-						     new CellRendererText (),
-						     "text", 2);
-
-				ScrolledWindow win = new ScrolledWindow ();
-				  win.SetPolicy (PolicyType.Automatic,
-						 PolicyType.Automatic);
-				  win.Add (view);
-
-				  boardWidget = new GameViewerBoard ();
-				HPaned split = new HPaned ();
-				VBox box = new VBox ();
-				  box.PackStart (boardWidget, false, true, 2);
-				  split.Pack1 (box, false, true);	// resize, shrink
-				  split.Pack2 (win, true, true);
-				  split.ShowAll ();
-				  split.Position = 250;
-				  split.PositionSet = true;
-				  VBox.PackStart (split, true, true, 2);
-				  SetSizeRequest (700, 300);
-
-				  view.CursorChanged += OnCursorChanged;
-			}
-
-			private void OnCursorChanged (object o,
-						      System.EventArgs args)
-			{
-				TreePath path;
-				TreeViewColumn col;
-				view.GetCursor (out path, out col);
-				ArrayList moves = new ArrayList ();
-
-				TreePath tmppath = new TreePath ();
-				foreach (int i in path.Indices)
-				{
-					tmppath.AppendIndex (i);
-					TreeIter iter;
-					store.GetIter (out iter, tmppath);
-					moves.Add (store.GetValue (iter, 0));
-				}
-
-				boardWidget.PlayMoves (moves);
-			}
-		}
-
-		public class GameViewerBoard:ViewerBoard
-		{
-			public GameViewerBoard ():base (ChessGamePlayer.
-							GetDefaultPosition ())
-			{
-			}
-
-			public void PlayMoves (ArrayList moves)
-			{
-				ChessGamePlayer player =
-					ChessGamePlayer.CreatePlayer ();
-				foreach (string move in moves)
-				{
-					player.Move (move);
-				}
-				int r1, f1, r2, f2;
-				r1 = player.LastMoveInfo.src_rank;
-				f1 = player.LastMoveInfo.src_file;
-				r2 = player.LastMoveInfo.dest_rank;
-				f2 = player.LastMoveInfo.dest_file;
-				Move (r1, f1, r2, f2, ' ');
-				SetPosition (player.GetPosition ());
 			}
 		}
 	}

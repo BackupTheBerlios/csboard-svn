@@ -32,7 +32,8 @@ namespace CsBoard
 		public class GameDBPlugin:CsPlugin
 		{
 			GameViewer viewer;
-			  Gtk.MenuItem saveItem, openDbItem;
+			  Gtk.MenuItem saveItem;
+			//Gtk.Menuitem openDbItem;
 
 			ProgressDialog dlg;
 			GameEditor editor;
@@ -51,23 +52,26 @@ namespace CsBoard
 				saveItem.Activated += on_add_to_db_activate;
 				saveItem.Show ();
 
-				openDbItem = new MenuItem (Catalog.
-							   GetString
-							   ("Games _Database"));
+				/*
+				   openDbItem = new MenuItem (Catalog.
+				   GetString
+				   ("Games _Database"));
 
-				openDbItem.Activated +=
-					on_open_games_db_activate;
-				openDbItem.Show ();
+				   openDbItem.Activated +=
+				   on_open_games_db_activate;
+				   openDbItem.Show ();
+				 */
 			}
-
-			private void on_open_games_db_activate (object
-								o,
-								EventArgs
-								args)
-			{
-				GameDbBrowser br = new GameDbBrowser ();
-				  br.Window.Show ();
-			}
+			/*
+			   private void on_open_games_db_activate (object
+			   o,
+			   EventArgs
+			   args)
+			   {
+			   GameDbBrowser br = new GameDbBrowser ();
+			   br.Window.Show ();
+			   }
+			 */
 
 			AddToDbDialog dbDlg;
 			private void on_add_to_db_activate (object
@@ -82,17 +86,17 @@ namespace CsBoard
 				  }
 
 				dbDlg.Hide ();
-				dlg = new ProgressDialog (null,
-							  Catalog.
-							  GetString
-							  ("Saving to database..."));
-				GLib.Idle.Add (AddGamesIdleHandler);
-				dlg.Run ();
-				dlg.Hide ();
-				dlg.Dispose ();
-				dlg = null;
-				dbDlg.Dispose ();
-				dbDlg = null;
+				  dlg = new ProgressDialog (null,
+							    Catalog.
+							    GetString
+							    ("Saving to database..."));
+				  GLib.Idle.Add (AddGamesIdleHandler);
+				  dlg.Run ();
+				  dlg.Hide ();
+				  dlg.Dispose ();
+				  dlg = null;
+				  dbDlg.Dispose ();
+				  dbDlg = null;
 			}
 
 			private bool AddGamesIdleHandler ()
@@ -168,6 +172,8 @@ namespace CsBoard
 				if (viewer == null)
 					return false;
 				GameViewer.GameDb = GameDb.Instance;
+				GameDbBrowser browser = new GameDbBrowser ();
+				CsBoard.CsBoardApp.Instance.AddApp (browser);
 
 				editor = new GameEditor (viewer);
 				viewer.ChessGameDetailsBox.PackStart (editor,
@@ -176,7 +182,7 @@ namespace CsBoard
 								      2);
 
 				viewer.AddToFileMenu (saveItem);
-				viewer.AddToViewMenu (openDbItem);
+				//viewer.AddToViewMenu (openDbItem);
 
 				return true;
 			}
@@ -185,7 +191,7 @@ namespace CsBoard
 			{
 				viewer.ChessGameDetailsBox.Remove (editor);
 				viewer.RemoveFromViewMenu (saveItem);
-				viewer.RemoveFromViewMenu (openDbItem);
+				//viewer.RemoveFromViewMenu (openDbItem);
 				return true;
 			}
 		}

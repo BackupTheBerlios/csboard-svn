@@ -89,6 +89,7 @@ namespace CsBoard
 					  return;
 				  }
 				viewer = new GameViewer ();
+				CsBoardApp.Instance.AddApp (viewer);
 				CsBoard.Plugin.PluginManager.Instance.
 					StartPlugins ();
 			}
@@ -273,6 +274,12 @@ namespace CsBoard
 				gameViewerWidget.LoadGames (loader.Games);
 			}
 
+			public void LoadGames (ArrayList games)
+			{
+				if (!app_visible)
+					CsBoardApp.Instance.ShowApp (this);
+				gameViewerWidget.LoadGames (games);
+			}
 
 			public GameViewerWidget GameViewerWidget
 			{

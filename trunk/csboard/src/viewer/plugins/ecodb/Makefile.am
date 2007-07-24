@@ -13,6 +13,7 @@ ASSEMBLIES = 					\
 
 ECODB_TARGET = EcoDBPlugin.dll
 ECODB_CSFILES = 				\
+	$(srcdir)/OpeningBrowserUI.cs		\
 	$(srcdir)/EcoDBPlugin.cs		\
 	$(srcdir)/OpeningsDb.cs
 ECODB_RESOURCES = 				\

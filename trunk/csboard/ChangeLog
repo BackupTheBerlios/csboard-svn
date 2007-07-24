@@ -1,3 +1,22 @@
+2007-07-24 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* src/Window.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/gamedb/Makefile.am
+	* src/viewer/plugins/ecodb/Makefile.am
+
+	added
+
+	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs
+	* src/viewer/plugins/gamedb/GameDbBrowserUI.cs
+
+	added the game database and eco db as subapps
+
 2007-07-23 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

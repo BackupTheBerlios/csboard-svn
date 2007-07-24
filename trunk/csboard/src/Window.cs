@@ -121,6 +121,13 @@ namespace CsBoard
 		}
 		ArrayList subapps;
 
+		public Gtk.Window Window
+		{
+			get
+			{
+				return csboardWindow;
+			}
+		}
 		public CsBoardApp (string engine,
 				   string filename):base (engine, filename)
 		{
@@ -142,10 +149,11 @@ namespace CsBoard
 
 
 			subapps.Add (this);
+			playerToolButton.Sensitive = false;
 			TitleChangedEvent += OnAppTitleChanged;
 
 			AddApp (new CsBoard.ICS.ICSDetailsWidget ());
-			AddApp (CsBoard.Viewer.GameViewer.Instance);
+			CsBoard.Viewer.GameViewer.CreateInstance ();
 			playerToolButton.Clicked += OnToolButtonClicked;
 
 			if (filename == null)
@@ -165,18 +173,35 @@ namespace CsBoard
 
 		public void AddApp (SubApp app)
 		{
-			subapps.Add (app);
-
-			menusBook.AppendPage (app.MenuBar, new Label ());
-			int i = appsBar.NItems;
-			appsBar.Insert (app.ToolButton, i++);
 			SeparatorToolItem separator =
 				new SeparatorToolItem ();
 			separator.Show ();
-			appsBar.Insert (separator, i);
+			if (subapps.Count == 0)
+			  {
+				  appsBar.Insert (app.ToolButton,
+						  appsBar.NItems);
+				  appsBar.Insert (separator, appsBar.NItems);
+			  }
+			else
+			  {
+				  int index =
+					  appsBar.
+					  GetItemIndex ((subapps
+							 [subapps.Count -
+							  1] as SubApp).
+							ToolButton);
+				  index++;
+				  appsBar.Insert (separator, index++);
+				  appsBar.Insert (app.ToolButton, index);
+			  }
+
+			menusBook.AppendPage (app.MenuBar, new Label ());
+
 			app.ToolButton.Clicked += OnToolButtonClicked;
 			appsBook.AppendPage (app.Widget, new Label ());
 			app.TitleChangedEvent += OnAppTitleChanged;
+
+			subapps.Add (app);
 		}
 
 		private void OnAppTitleChanged (object o, EventArgs args)
@@ -216,7 +241,10 @@ namespace CsBoard
 		public void ShowApp (int i)
 		{
 			int curappIndex = appsBook.CurrentPage;
+			if (i == curappIndex)
+				return;
 			SubApp app = subapps[curappIndex] as SubApp;
+			app.ToolButton.Sensitive = true;
 			app.SetVisibility (false);
 			if (app.AccelGroup != null)
 			  {
@@ -231,6 +259,7 @@ namespace CsBoard
 				csboardWindow.AddAccelGroup (app.AccelGroup);
 			csboardWindow.Title = app.Title;
 			app.SetVisibility (true);
+			app.ToolButton.Sensitive = false;
 		}
 	}
 }
