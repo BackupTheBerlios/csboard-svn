@@ -54,6 +54,8 @@ namespace CsBoard
 		}
 		public class ICSDetailsWidget:Frame, SubApp
 		{
+			public event TitleChangedEventHandler
+				TitleChangedEvent;
 			GameObservationManager obManager;
 			ObservableGamesWidget observableGames;
 			GameAdvertisements ads;
@@ -186,9 +188,7 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate ();
-					       return false;
-					       }
+					       Authenticate (); return false;}
 				);
 
 				accel = new AccelGroup ();
@@ -223,6 +223,10 @@ namespace CsBoard
 								 client.port);
 
 					  RemoveConfigWidget ();
+					  if (TitleChangedEvent != null)
+						  TitleChangedEvent (this,
+								     EventArgs.
+								     Empty);
 					  return;
 				  }
 

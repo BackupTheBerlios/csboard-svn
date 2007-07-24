@@ -61,11 +61,14 @@ namespace CsBoard
 		}
 
 		void SetVisibility (bool visible);
+		event TitleChangedEventHandler TitleChangedEvent;
 	}
 
+	public delegate void TitleChangedEventHandler (object o,
+						       EventArgs args);
 	public class CsBoardApp:ChessWindowUI, MainApp, SubApp
 	{
-
+		public event TitleChangedEventHandler TitleChangedEvent;
 		AccelGroup accel;
 		public AccelGroup AccelGroup
 		{
@@ -139,6 +142,8 @@ namespace CsBoard
 
 
 			subapps.Add (this);
+			TitleChangedEvent += OnAppTitleChanged;
+
 			AddApp (new CsBoard.ICS.ICSDetailsWidget ());
 			AddApp (CsBoard.Viewer.GameViewer.Instance);
 			playerToolButton.Clicked += OnToolButtonClicked;
@@ -171,6 +176,13 @@ namespace CsBoard
 			appsBar.Insert (separator, i);
 			app.ToolButton.Clicked += OnToolButtonClicked;
 			appsBook.AppendPage (app.Widget, new Label ());
+			app.TitleChangedEvent += OnAppTitleChanged;
+		}
+
+		private void OnAppTitleChanged (object o, EventArgs args)
+		{
+			if (subapps[appsBook.CurrentPage].Equals (o))
+				csboardWindow.Title = (o as SubApp).Title;
 		}
 
 		private void OnToolButtonClicked (object o, EventArgs args)

@@ -48,6 +48,8 @@ namespace CsBoard
 
 		public class GameViewer:GameViewerUI, SubApp
 		{
+			public event TitleChangedEventHandler
+				TitleChangedEvent;
 
 			string initialDirForFileChooser = null;
 
@@ -559,7 +561,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

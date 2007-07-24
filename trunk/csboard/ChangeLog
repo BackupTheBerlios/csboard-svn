@@ -2,6 +2,16 @@
 
 	modified files
 
+	* src/Window.cs
+	* src/ics/ICSDetailsWidget.cs
+	* src/viewer/GameViewer.cs
+
+	ui modification to update title from subapp
+
+2007-07-23 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
 	* src/NullControl.cs
 	* src/ChessWindowUI.cs
 	* src/Crafty.cs
