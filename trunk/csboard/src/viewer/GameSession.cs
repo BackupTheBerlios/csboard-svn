@@ -56,6 +56,12 @@ namespace CsBoard
 				move = null;
 				total_moves = 0;
 
+				if (g == null)
+				  {
+					  player = ChessGamePlayer.
+						  CreatePlayer ();
+					  return;
+				  }
 				player = g.HasTag ("FEN") ? ChessGamePlayer.
 					CreateFromFEN (g.
 						       GetTagValue ("FEN",
@@ -119,7 +125,7 @@ namespace CsBoard
 
 			public void Prev ()
 			{
-				if (idx == 0)
+				if (idx <= 0)
 					return;
 				idx--;
 			}
@@ -169,13 +175,17 @@ namespace CsBoard
 				get
 				{
 					if (idx < 0)
-						return game.Comment;
+						return game !=
+							null ? game.
+							Comment : null;
 
 					return move.comment;
 				}
 
 				set
 				{
+					if (game == null)
+						return;
 					if (idx < 0)
 					  {
 						  game.Comment = value;

@@ -86,7 +86,7 @@ namespace CsBoard
 				}
 			}
 
-			public GameViewerWidget ()
+			public GameViewerWidget (GameViewerUI viewer)
 			{
 				gamesListWidget =
 					new SearchableGamesListWidget ();
@@ -115,6 +115,7 @@ namespace CsBoard
 						       ("Current Game")));
 
 				ShowAll ();
+				viewer.GamesLoadedEvent += OnGamesLoaded;
 			}
 
 			void OnGameSelectionEvent (ChessGame game)
@@ -157,8 +158,12 @@ namespace CsBoard
 								 game);
 			}
 
+			private void OnGamesLoaded (object o, EventArgs args)
+			{
+				LoadGames ((o as GameViewer).Games);
+			}
 
-			public void LoadGames (ArrayList games)
+			private void LoadGames (ArrayList games)
 			{
 				this.games = games;
 				if (GamesLoadedEvent != null)
@@ -172,7 +177,7 @@ namespace CsBoard
 				  {
 					  CurrentGame = games[0] as ChessGame;
 				  }
-				if(games.Count == 1)
+				if (games.Count == 1)
 					Page = GAME_DETAILS_PAGE;
 			}
 		}

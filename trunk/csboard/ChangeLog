@@ -2,6 +2,17 @@
 
 	modified files
 
+	* src/viewer/GameSession.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GameViewerUI.cs
+	* src/viewer/Widgets/GameViewerWidget.cs
+
+	bug fix
+	
+2007-07-24 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
 	* src/Window.cs
 	* src/viewer/GameViewer.cs
 	* src/viewer/plugins/ecodb/EcoDBPlugin.cs

@@ -21,6 +21,7 @@ using System.IO;
 using Gtk;
 using GLib;
 using Mono.Unix;
+using System.Collections;
 
 namespace CsBoard
 {
@@ -130,10 +131,36 @@ namespace CsBoard
 				return false;
 			}
 
+			ArrayList games;
+
+			public ArrayList Games
+			{
+				get
+				{
+					return games;
+				}
+			}
+			public event GamesLoadedEventHandler GamesLoadedEvent;
+
+			protected void SetGames (ArrayList list)
+			{
+				games = list;
+				if (GamesLoadedEvent != null)
+					GamesLoadedEvent (this,
+							  System.EventArgs.
+							  Empty);
+
+				menubar.moveCommentMenuItem.Sensitive =
+					games != null;
+			}
+
 			public GameViewerUI ():base ()
 			{
 				menubar = new ViewerMenuBar ();
-				gameViewerWidget = new GameViewerWidget ();
+				// this will be enabled as and when
+				menubar.moveCommentMenuItem.Sensitive = false;
+				gameViewerWidget =
+					new GameViewerWidget (this);
 
 				PackStart (gameViewerWidget, true, true, 2);
 				statusBar = new Statusbar ();

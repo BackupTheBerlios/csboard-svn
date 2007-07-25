@@ -271,14 +271,14 @@ namespace CsBoard
 					CsBoardApp.Instance.ShowApp (this);
 				GameLoader loader =
 					new GameLoader (this, reader);
-				gameViewerWidget.LoadGames (loader.Games);
+				SetGames (loader.Games);
 			}
 
 			public void LoadGames (ArrayList games)
 			{
 				if (!app_visible)
 					CsBoardApp.Instance.ShowApp (this);
-				gameViewerWidget.LoadGames (games);
+				SetGames (games);
 			}
 
 			public GameViewerWidget GameViewerWidget
@@ -367,6 +367,9 @@ namespace CsBoard
 			public void OnEditCommentActivated (object o,
 							    EventArgs e)
 			{
+				if (gameViewerWidget.ChessGameWidget.
+				    BoardWidget.Session.Game == null)
+					return;
 				BufferDialog dlg = new BufferDialog (null,
 								     Catalog.
 								     GetString
@@ -568,8 +571,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();
