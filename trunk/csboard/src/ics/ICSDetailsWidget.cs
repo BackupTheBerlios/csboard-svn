@@ -202,6 +202,13 @@ namespace CsBoard
 								      AccelFlags.
 								      Visible));
 				ShowAll ();
+				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
+			}
+
+			private void OnQuitEvent (System.Object b,
+						  EventArgs e)
+			{
+				client.Stop();
 			}
 
 			public void SetVisibility (bool visible)
