@@ -97,18 +97,13 @@ namespace CsBoard
 			public void OnGameFocused (object o, IGameInfo info)
 			{
 				if (info == null)
-					infoLabel.Text = "";
-				else
-					infoLabel.Markup =
-						(info as
-						 GameAdvertisementInfo).
-						Markup;
-				if (info != null && info.Computer)
-					image.Pixbuf =
-						GameAdvertisements.
-						ComputerPixbuf;
-				else
-					image.Pixbuf = null;
+					return;
+				infoLabel.Markup =
+					(info as
+					 GameAdvertisementInfo).Markup;
+				image.Pixbuf = info.Computer ?
+					GameAdvertisements.
+					ComputerPixbuf : null;
 			}
 
 			public void OnGameClicked (object o, IGameInfo info)
