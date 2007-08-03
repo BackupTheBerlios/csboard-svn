@@ -97,6 +97,8 @@ namespace CsBoard
 			public event GameFocusedHandler GameFocusedEvent;
 			public event GameClickedHandler GameClickedEvent;
 
+			Pixmap pixmap;
+
 			public Graph ():base ()
 			{
 				handCursor =
@@ -127,6 +129,7 @@ namespace CsBoard
 				y_marks = new GraphMark[2];
 
 				points = new ArrayList ();
+				ConfigureEvent += OnConfigured;
 				WidgetEventAfter += OnEventAfter;
 				MotionNotifyEvent += OnMotionNotify;
 				ExposeEvent += OnExpose;
@@ -449,10 +452,11 @@ namespace CsBoard
 				return false;
 			}
 
-			protected override bool OnConfigureEvent (Gdk.
-								  EventConfigure
-								  evnt)
+			void OnConfigured (object o, ConfigureEventArgs args)
 			{
+				pixmap = new Pixmap (args.Event.Window,
+						     Allocation.Width,
+						     Allocation.Height);
 				ArrayList oldlist = points;
 				points = new ArrayList ();
 
@@ -461,33 +465,6 @@ namespace CsBoard
 				{
 					__AddGameInfo (point.info);
 				}
-				return base.OnConfigureEvent (evnt);
-			}
-
-			protected override bool OnExposeEvent (Gdk.
-							       EventExpose
-							       evnt)
-			{
-				Cairo.Context cairo =
-					Gdk.CairoHelper.Create (evnt.Window);
-				cairo.Rectangle (evnt.Area.X, evnt.Area.Y,
-						 evnt.Area.Width,
-						 evnt.Area.Height);
-				cairo.Clip ();
-
-				DrawBackground (cairo);
-				DrawCoords (cairo);
-
-				if (graph_area_width < point_size
-				    || graph_area_height < point_size)
-					return false;
-
-				foreach (GraphPoint point in points)
-				{
-					PlotPoint (cairo, point);
-				}
-
-				return false;
 			}
 
 			int offset_x, offset_y;
@@ -503,9 +480,11 @@ namespace CsBoard
 				int width = Allocation.Width;
 				int height = Allocation.Height;
 
-				x_marks[0].name = Catalog.GetString("Lightning");
-				x_marks[1].name = Catalog.GetString("Blitz");
-				x_marks[2].name = Catalog.GetString("Standard");
+				x_marks[0].name =
+					Catalog.GetString ("Lightning");
+				x_marks[1].name = Catalog.GetString ("Blitz");
+				x_marks[2].name =
+					Catalog.GetString ("Standard");
 
 				int y_name_width = 0;
 				int x_name_height = 0;
@@ -754,8 +733,36 @@ namespace CsBoard
 
 			// Also update the cursor image if the window becomes visible
 			// (e.g. when a window covering it got iconified).
-			void OnExpose (object sender, ExposeEventArgs a)
+			void OnExpose (object sender, ExposeEventArgs args)
 			{
+				Cairo.Context cairo =
+					Gdk.CairoHelper.Create (pixmap);
+				Gdk.Rectangle area = args.Event.Area;
+				cairo.Rectangle (area.X, area.Y,
+						 area.Width, area.Height);
+				cairo.Clip ();
+
+				DrawBackground (cairo);
+				DrawCoords (cairo);
+
+				if (graph_area_width < point_size
+				    || graph_area_height < point_size)
+					return;
+
+				foreach (GraphPoint point in points)
+				{
+					PlotPoint (cairo, point);
+				}
+
+				args.Event.Window.DrawDrawable (Style.WhiteGC,
+								pixmap,
+								area.X,
+								area.Y,
+								area.X,
+								area.Y,
+								area.Width,
+								area.Height);
+
 				int wx, wy;
 				int x, y;
 

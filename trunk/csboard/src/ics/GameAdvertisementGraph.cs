@@ -94,16 +94,38 @@ namespace CsBoard
 				graph.RemoveGame (ad.gameHandle);
 			}
 
+			uint timeoutHandlerID = 0;
+
+			private bool FadeTimeout ()
+			{
+				if (showingSomething)
+					return true;	// try again
+
+				infoLabel.Markup = "";
+				image.Pixbuf = null;
+				timeoutHandlerID = 0;
+				return false;
+			}
+
+			bool showingSomething = false;
 			public void OnGameFocused (object o, IGameInfo info)
 			{
+				showingSomething = info != null;
 				if (info == null)
 					return;
+
 				infoLabel.Markup =
 					(info as
 					 GameAdvertisementInfo).Markup;
 				image.Pixbuf = info.Computer ?
 					GameAdvertisements.
 					ComputerPixbuf : null;
+				if (timeoutHandlerID == 0)
+				  {
+					  timeoutHandlerID =
+						  GLib.Timeout.Add (1000,
+								    FadeTimeout);
+				  }
 			}
 
 			public void OnGameClicked (object o, IGameInfo info)

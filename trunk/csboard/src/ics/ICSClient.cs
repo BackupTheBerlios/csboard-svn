@@ -526,17 +526,31 @@ namespace CsBoard
 			{
 				GLib.Idle.Add (delegate ()
 					       {
-					       __start (); return false;}
+					       __start ();
+					       return false;
+					       }
 				);
 			}
 
 			private bool __start ()
 			{
-				if (client == null)
-				  {
-					  Connect ();
-					  return PostReadRequest ();
-				  }
+				lock (this)
+				{
+					if (client == null)
+					  {
+						  System.Threading.
+							  Thread thread =
+							  new System.
+							  Threading.
+							  Thread (delegate ()
+								  {
+								  Connect ();
+								  PostReadRequest
+								  ();}
+						  );
+						  thread.Start ();
+					  }
+				}
 
 				// For reauth, no need to post a read request
 				// this method will be called with the new auth details
@@ -1240,9 +1254,14 @@ namespace CsBoard
 			{
 				try
 				{
-					client = new TcpClient (server,
-								int.
-								Parse (port));
+					lock (this)
+					{
+						client = new
+							TcpClient (server,
+								   int.
+								   Parse
+								   (port));
+					}
 					stream = client.GetStream ();
 					streamWriter =
 						new StreamWriter (stream);
