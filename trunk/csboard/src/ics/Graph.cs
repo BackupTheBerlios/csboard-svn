@@ -157,7 +157,7 @@ namespace CsBoard
 			public void AddGameInfo (IGameInfo info)
 			{
 				__AddGameInfo (info);
-				QueueDraw ();
+				QueueResize ();
 			}
 
 			public void RemoveGame (int id)
@@ -176,14 +176,14 @@ namespace CsBoard
 				if (found)
 				  {
 					  points.RemoveAt (i);
-					  QueueDraw ();
+					  QueueResize ();
 				  }
 			}
 
 			public void Clear ()
 			{
 				points.Clear ();
-				QueueDraw ();
+				QueueResize ();
 			}
 
 			private void PlotPoint (Cairo.Context cairo,
@@ -465,6 +465,26 @@ namespace CsBoard
 				{
 					__AddGameInfo (point.info);
 				}
+
+				Cairo.Context cairo =
+					Gdk.CairoHelper.Create (pixmap);
+				cairo.Rectangle (0, 0,
+						 Allocation.Width,
+						 Allocation.Height);
+				cairo.Clip ();
+
+				DrawBackground (cairo);
+				DrawCoords (cairo);
+
+				if (graph_area_width < point_size
+				    || graph_area_height < point_size)
+					return;
+
+				foreach (GraphPoint point in points)
+				{
+					PlotPoint (cairo, point);
+				}
+
 			}
 
 			int offset_x, offset_y;
@@ -735,25 +755,7 @@ namespace CsBoard
 			// (e.g. when a window covering it got iconified).
 			void OnExpose (object sender, ExposeEventArgs args)
 			{
-				Cairo.Context cairo =
-					Gdk.CairoHelper.Create (pixmap);
 				Gdk.Rectangle area = args.Event.Area;
-				cairo.Rectangle (area.X, area.Y,
-						 area.Width, area.Height);
-				cairo.Clip ();
-
-				DrawBackground (cairo);
-				DrawCoords (cairo);
-
-				if (graph_area_width < point_size
-				    || graph_area_height < point_size)
-					return;
-
-				foreach (GraphPoint point in points)
-				{
-					PlotPoint (cairo, point);
-				}
-
 				args.Event.Window.DrawDrawable (Style.WhiteGC,
 								pixmap,
 								area.X,
