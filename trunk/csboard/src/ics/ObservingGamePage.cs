@@ -56,7 +56,7 @@ namespace CsBoard
 			protected ChessGameWidget gameWidget;
 			protected CairoBoard board;
 			protected string white, black;
-			protected ICSGameObserverWindow win;
+			protected ICSGameObserverWidget win;
 			protected Label resultLabel;
 			protected ChessMovesWidget movesWidget;
 
@@ -72,10 +72,11 @@ namespace CsBoard
 					Relation.IamPlayingAndMyOppsMove;
 			}
 
-			public ObservingGamePage (ICSGameObserverWindow win,
+			public ObservingGamePage (ICSGameObserverWidget
+						  widget,
 						  MoveDetails details):base ()
 			{
-				this.win = win;
+				this.win = widget;
 				gameId = details.gameNumber;
 
 				InitGameWidget (details);
@@ -242,11 +243,12 @@ namespace CsBoard
 			{
 				lastMove = details;
 				UpdateTitleLabelForMove (board, details);
-				if(movesWidget.AutoAppend) {
-					SetMoveInfo (board, details);
-					board.SetPosition (details.pos);
-					board.QueueDraw ();
-				}
+				if (movesWidget.AutoAppend)
+				  {
+					  SetMoveInfo (board, details);
+					  board.SetPosition (details.pos);
+					  board.QueueDraw ();
+				  }
 
 				int factor =
 					details.inMilliseconds ? 1 : 1000;

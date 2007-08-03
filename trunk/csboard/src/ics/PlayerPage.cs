@@ -32,8 +32,8 @@ namespace CsBoard
 			Button drawButton, resignButton, adjournButton,
 				abortButton, takebackButton;
 
-			public PlayerPage (ICSGameObserverWindow win,
-					   MoveDetails details):base (win,
+			public PlayerPage (ICSGameObserverWidget widget,
+					   MoveDetails details):base (widget,
 								      details)
 			{
 				HButtonBox box = new HButtonBox ();
@@ -92,7 +92,7 @@ namespace CsBoard
 				if (o.Equals (resignButton))
 				  {
 					  if (!AskForConfirmation
-					      (win,
+					      (null,
 					       Catalog.
 					       GetString
 					       ("Do you really want to resign?")))

@@ -50,7 +50,6 @@ PLUGIN_SOURCES = \
 	$(top_srcdir)/src/viewer/PluginManagerDialog.cs
 
 ICS_PLAYER_SOURCES = \
-	$(top_srcdir)/src/ics/ICS.cs \
 	$(top_srcdir)/src/ics/ICSClient.cs \
 	$(top_srcdir)/src/ics/ParserUtils.cs \
 	$(top_srcdir)/src/ics/GameAdvertisement.cs \
@@ -59,9 +58,8 @@ ICS_PLAYER_SOURCES = \
 	$(top_srcdir)/src/ics/ICSConfigWidget.cs \
 	$(top_srcdir)/src/ics/ICSShell.cs \
 	$(top_srcdir)/src/ics/GameAdvertisementsWidget.cs \
-	$(top_srcdir)/src/ics/ICSDetailsWindow.cs \
 	$(top_srcdir)/src/ics/ICSDetailsWidget.cs \
-	$(top_srcdir)/src/ics/ICSGameObserverWindow.cs \
+	$(top_srcdir)/src/ics/ICSGameObserverWidget.cs \
 	$(top_srcdir)/src/ics/ResultNotification.cs \
 	$(top_srcdir)/src/ics/GameObservationManager.cs \
 	$(top_srcdir)/src/ics/GameDetails.cs \

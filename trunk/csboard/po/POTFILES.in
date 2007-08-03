@@ -46,9 +46,6 @@ src/ics/GameObservationManager.cs
 src/ics/Graph.cs
 src/ics/ICSClient.cs
 src/ics/ICSConfigDialog.cs
-src/ics/ICS.cs
-src/ics/ICSDetailsWindow.cs
-src/ics/ICSGameObserverWindow.cs
 src/ics/ICSSeek.cs
 src/ics/ICSShell.cs
 src/ics/MoveDetails.cs
@@ -68,11 +65,14 @@ src/parser/PGNTag.cs
 src/parser/PGNTokenizer.cs
 src/viewer/BufferDialog.cs
 src/viewer/CairoPositionSnapshot.cs
-src/viewer/CairoViewerBoard.cs
+src/viewer/Widgets/CairoViewerBoard.cs
+src/viewer/Widgets/ChessGameBoard.cs
+src/viewer/Widgets/ChessGameView.cs
+src/viewer/Widgets/ChessGameWidget.cs
+src/viewer/Widgets/GameViewerWidget.cs
+src/viewer/Widgets/GamesListWidget.cs
 src/viewer/ChessGame.cs
-src/viewer/ChessGameView.cs
 src/viewer/GameSession.cs
-src/viewer/GamesListWidget.cs
 src/viewer/GameViewer.cs
 src/viewer/PGNBufferLoader.cs
 src/viewer/PGNFileLoader.cs

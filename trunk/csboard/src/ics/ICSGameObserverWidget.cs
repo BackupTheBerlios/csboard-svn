@@ -25,7 +25,29 @@ namespace CsBoard
 {
 	namespace ICS
 	{
-		public class ICSGameObserverWindow:Window
+		public class GamePageAddedEventArgs:EventArgs
+		{
+			bool myGame;
+			public bool MyGame
+			{
+				get
+				{
+					return myGame;
+				}
+			}
+
+			public GamePageAddedEventArgs (bool mg):base ()
+			{
+				myGame = mg;
+			}
+		}
+		public delegate void GamePageRemovedEventHandler (object o,
+								  EventArgs
+								  args);
+		public delegate void GamePageAddedEventHandler (object o,
+								GamePageAddedEventArgs
+								args);
+		public class ICSGameObserverWidget:VBox
 		{
 			Notebook gamesBook;
 			ICSClient client;
@@ -33,6 +55,10 @@ namespace CsBoard
 			HPaned split;
 			TreeView gamesList;
 			ListStore gamesStore;
+			public event GamePageRemovedEventHandler
+				GamePageRemovedEvent;
+			public event GamePageAddedEventHandler
+				GamePageAddedEvent;
 
 			public HPaned SplitPane
 			{
@@ -50,10 +76,16 @@ namespace CsBoard
 				}
 			}
 
-			public ICSGameObserverWindow (ICSClient
-						      client):base (Catalog.
-								    GetString
-								    ("Observed games"))
+			public int NGames
+			{
+				get
+				{
+					return gamesBook.NPages;
+				}
+			}
+
+			public ICSGameObserverWidget (ICSClient
+						      client):base ()
 			{
 				split = new HPaned ();
 				this.client = client;
@@ -82,36 +114,47 @@ namespace CsBoard
 				split.Add2 (gamesBook);
 
 				split.ShowAll ();
-				Add (split);
+				PackStart (split, true, true, 2);
 				client.GameMessageEvent += OnGameMessage;
 			}
 
-			private void OnGameMessage(object o, string user, GameMessageType type) {
-			  string msg;
-			  switch(type) {
-			    case GameMessageType.Draw:
-			      msg = "<big><b>{0} offers a draw</b>.\nDo you want to agree?</big>";
-			      break;
-			    case GameMessageType.Abort:
-			      msg = "<big><b>{0} wants to abort the game</b>.\nDo you want to agree?</big>";
-			      break;
-			    default:
-			      return;
-			  }
-			  MessageDialog dlg = new MessageDialog(null,
-								DialogFlags.Modal,
-								MessageType.Question,
-								ButtonsType.YesNo,
-								true,
-								msg, user);
-			  dlg.Modal = false;
-			  int ret = dlg.Run();
-			  if(ret == (int) ResponseType.Yes)
-			    client.CommandSender.SendCommand("accept " + user);
-			  else if(ret == (int) ResponseType.No)
-			    client.CommandSender.SendCommand("decline " + user);
-			  dlg.Hide();
-			  dlg.Dispose();
+			private void OnGameMessage (object o, string user,
+						    GameMessageType type)
+			{
+				string msg;
+				switch (type)
+				  {
+				  case GameMessageType.Draw:
+					  msg = "<big><b>{0} offers a draw</b>.\nDo you want to agree?</big>";
+					  break;
+				  case GameMessageType.Abort:
+					  msg = "<big><b>{0} wants to abort the game</b>.\nDo you want to agree?</big>";
+					  break;
+				  default:
+					  return;
+				  }
+				MessageDialog dlg = new MessageDialog (null,
+								       DialogFlags.
+								       Modal,
+								       MessageType.
+								       Question,
+								       ButtonsType.
+								       YesNo,
+								       true,
+								       msg,
+								       user);
+				dlg.Modal = false;
+				int ret = dlg.Run ();
+				if (ret == (int) ResponseType.Yes)
+					client.CommandSender.
+						SendCommand ("accept " +
+							     user);
+				else if (ret == (int) ResponseType.No)
+					client.CommandSender.
+						SendCommand ("decline " +
+							     user);
+				dlg.Hide ();
+				dlg.Dispose ();
 			}
 
 			private void OnGamesListCursorChanged (object o,
@@ -142,8 +185,10 @@ namespace CsBoard
 							 title);
 
 				ObservingGamePage info;
-				if (ObservingGamePage.
-				    IsMyGame (details.relation))
+				bool myGame =
+					ObservingGamePage.IsMyGame (details.
+								    relation);
+				if (myGame)
 					info = new PlayerPage (this, details);
 				else
 					info = new ObservingGamePage (this,
@@ -154,8 +199,15 @@ namespace CsBoard
 				Label label = new Label (title);
 				gamesBook.AppendPage (info, label);
 				gamesBook.Page = gamesBook.NPages - 1;
+				if (GamePageAddedEvent != null)
+					GamePageAddedEvent (this,
+							    new
+							    GamePageAddedEventArgs
+							    (myGame));
 				AdjustCursorForCurrentPage ();
-				MovesGetter.GetMovesAsync(client, details.gameNumber, info.OnGetMoves);
+				MovesGetter.GetMovesAsync (client,
+							   details.gameNumber,
+							   info.OnGetMoves);
 			}
 
 			public void Remove (ObservingGamePage page)
@@ -176,6 +228,10 @@ namespace CsBoard
 				gamesBook.RemovePage (num);
 				currentGames.Remove (page.GameId);
 				AdjustCursorForCurrentPage ();
+				if (GamePageRemovedEvent != null)
+					GamePageRemovedEvent (this,
+							      EventArgs.
+							      Empty);
 			}
 
 			private void AdjustCursorForCurrentPage ()

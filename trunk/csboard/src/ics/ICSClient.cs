@@ -41,11 +41,12 @@ namespace CsBoard
 			AUTHENTICATED
 		};
 
-	  public enum GameMessageType {
-	    Draw,
-	    Abort,
-	    Adjourn
-	  };
+		public enum GameMessageType
+		{
+			Draw,
+			Abort,
+			Adjourn
+		};
 
 		public class AuthFailedException:Exception
 		{
@@ -150,10 +151,20 @@ namespace CsBoard
 								  string
 								  reason);
 
-		public delegate void ChallengeEventHandler(object o, MatchChallenge mc);
-		public delegate void UserMessageEventHandler(object o, string user, string message);
-		public delegate void UserMessageContinuationEventHandler(object o, string user, string message);
-		public delegate void GameMessageEventHandler(object o, string user, GameMessageType type);
+		public delegate void ChallengeEventHandler (object o,
+							    MatchChallenge
+							    mc);
+		public delegate void UserMessageEventHandler (object o,
+							      string user,
+							      string message);
+		public delegate void
+			UserMessageContinuationEventHandler (object o,
+							     string user,
+							     string message);
+		public delegate void GameMessageEventHandler (object o,
+							      string user,
+							      GameMessageType
+							      type);
 
 		public enum LineType
 		{
@@ -457,7 +468,8 @@ namespace CsBoard
 			public event ChallengeEventHandler ChallengeEvent;
 
 			public event UserMessageEventHandler UserMessageEvent;
-			public event UserMessageContinuationEventHandler UserMessageContinuationEvent;
+			public event UserMessageContinuationEventHandler
+				UserMessageContinuationEvent;
 			public event GameMessageEventHandler GameMessageEvent;
 
 			SessionState state = SessionState.NONE;
@@ -510,7 +522,15 @@ namespace CsBoard
 					NotificationType.GAMEINFO;
 			}
 
-			public bool Start ()
+			public void Start ()
+			{
+				GLib.Idle.Add (delegate ()
+					       {
+					       __start (); return false;}
+				);
+			}
+
+			private bool __start ()
 			{
 				if (client == null)
 				  {
@@ -929,78 +949,121 @@ namespace CsBoard
 				  }
 
 				// return if processed
-				if(TryProcessChallenge(start, start + count))
-				  return;
-				if(TryGameMessage(start, start + count))
-				  return;
+				if (TryProcessChallenge
+				    (start, start + count))
+					return;
+				if (TryGameMessage (start, start + count))
+					return;
 
-				ProcessLoginOrPassword(line, start, count);
+				ProcessLoginOrPassword (line, start, count);
 			}
 
-			private bool TryGameMessage(int start, int end) {
-			  int cur = start;
-			  if(buffer[start] == '\\')
-			    return ProcessUserMessageContinuation(start, end);
+			private bool TryGameMessage (int start, int end)
+			{
+				int cur = start;
+				if (buffer[start] == '\\')
+					return ProcessUserMessageContinuation
+						(start, end);
 
-			  ParserUtils.GotoThisChar(buffer, ' ', ref cur, end);
-			  if(cur == start || cur >= end)
-			    return false;
+				ParserUtils.GotoThisChar (buffer, ' ',
+							  ref cur, end);
+				if (cur == start || cur >= end)
+					return false;
 
-			  if(buffer[cur - 1] == ':')
-			    return ProcessUserMessage(start, cur, end);
+				if (buffer[cur - 1] == ':')
+					return ProcessUserMessage (start, cur,
+								   end);
 
-			  ParserUtils.SkipThisChar(buffer, ' ', ref cur, end);
-			  if(ParserUtils.Matches(buffer, cur, end, "offers you a draw"))
-			    return ProcessGameMessage(ParserUtils.GetNextToken(buffer, ref start, end), GameMessageType.Draw);
+				ParserUtils.SkipThisChar (buffer, ' ',
+							  ref cur, end);
+				if (ParserUtils.
+				    Matches (buffer, cur, end,
+					     "offers you a draw"))
+					return ProcessGameMessage
+						(ParserUtils.
+						 GetNextToken (buffer,
+							       ref start,
+							       end),
+						 GameMessageType.Draw);
 
-			  if(ParserUtils.Matches(buffer, cur, end, "would like to abort"))
-			    return ProcessGameMessage(ParserUtils.GetNextToken(buffer, ref start, end), GameMessageType.Abort);
+				if (ParserUtils.
+				    Matches (buffer, cur, end,
+					     "would like to abort"))
+					return ProcessGameMessage
+						(ParserUtils.
+						 GetNextToken (buffer,
+							       ref start,
+							       end),
+						 GameMessageType.Abort);
 
-			  return false;
+				return false;
 			}
 
-			private bool ProcessUserMessage(int start, int cur, int end) {
-			  string name;
-			  ParserUtils.ReadString(buffer, ref start, cur, out name);
-			  start++;
-			  ParserUtils.SkipThisChar(buffer, ' ', ref start, end);
-			  string message;
-			  ParserUtils.ReadString(buffer, ref start, end, out message);
-			  if(UserMessageEvent != null)
-			    UserMessageEvent(this, name, message);
+			private bool ProcessUserMessage (int start, int cur,
+							 int end)
+			{
+				string name;
+				ParserUtils.ReadString (buffer, ref start,
+							cur, out name);
+				start++;
+				ParserUtils.SkipThisChar (buffer, ' ',
+							  ref start, end);
+				string message;
+				ParserUtils.ReadString (buffer, ref start,
+							end, out message);
+				if (UserMessageEvent != null)
+					UserMessageEvent (this, name,
+							  message);
 
-			  lastUserMessageFrom = name;
-			  return true;
+				lastUserMessageFrom = name;
+				return true;
 			}
 
-			private bool ProcessUserMessageContinuation(int start, int end) {
-			  start++;
-			  string message;
-			  ParserUtils.ReadString(buffer, ref start, end, out message);
-			  if(UserMessageContinuationEvent != null)
-			    UserMessageContinuationEvent(this, lastUserMessageFrom, message);
-			  return true;
+			private bool ProcessUserMessageContinuation (int
+								     start,
+								     int end)
+			{
+				start++;
+				string message;
+				ParserUtils.ReadString (buffer, ref start,
+							end, out message);
+				if (UserMessageContinuationEvent != null)
+					UserMessageContinuationEvent (this,
+								      lastUserMessageFrom,
+								      message);
+				return true;
 			}
 
-			private bool ProcessGameMessage(string name, GameMessageType type) {
-			  if(GameMessageEvent != null)
-			    GameMessageEvent(this, name, type);
-			  return true;
+			private bool ProcessGameMessage (string name,
+							 GameMessageType type)
+			{
+				if (GameMessageEvent != null)
+					GameMessageEvent (this, name, type);
+				return true;
 			}
 
-			private bool TryProcessChallenge(int start, int end) {
-			  string str = "Challenge:";
-			  if(!ParserUtils.Matches(buffer, start, end, str))
-			    return false;
+			private bool TryProcessChallenge (int start, int end)
+			{
+				string str = "Challenge:";
+				if (!ParserUtils.
+				    Matches (buffer, start, end, str))
+					return false;
 
-			  MatchChallenge mc = MatchChallenge.FromBuffer(buffer, start + str.Length, end);
-			  if(ChallengeEvent != null)
-			    ChallengeEvent(this, mc);
+				MatchChallenge mc =
+					MatchChallenge.FromBuffer (buffer,
+								   start +
+								   str.Length,
+								   end);
+				if (ChallengeEvent != null)
+					ChallengeEvent (this, mc);
 
-			  return true;
+				return true;
 			}
 
-			private void ProcessLoginOrPassword(string line, int start, int count) {
+			private void ProcessLoginOrPassword (string line,
+							     int start,
+							     int count)
+			{
 				if (line.Equals ("login:"))
 				  {
 					  if (state == SessionState.NONE)

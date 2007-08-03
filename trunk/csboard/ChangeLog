@@ -1,3 +1,38 @@
+2007-07-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* src/ics/ICSClient.cs
+	* src/ics/ICSDetailsWidget.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/GameViewerUI.cs
+	* src/viewer/Widgets/GameViewerWidget.cs
+	* src/viewer/Widgets/GamesListWidget.cs
+
+	added popup menu
+
+2007-07-27 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* Makefile.am
+	* src/App.cs
+	* src/ChessWindowUI.cs
+	* src/ics/GameObservationManager.cs
+	* src/ics/ICSDetailsWidget.cs
+	* src/ics/ObservingGamePage.cs
+	* src/ics/PlayerPage.cs
+
+	added file
+
+	* src/ics/ICSGameObserverWidget.cs
+	
+	removed files
+
+	* src/ics/ICS.cs
+	* src/ics/ICSDetailsWindow.cs
+	* src/ics/ICSGameObserverWindow.cs
+
 2007-07-24 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

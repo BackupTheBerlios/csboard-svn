@@ -119,6 +119,7 @@ namespace CsBoard
 
 			ICSConfigWidget configwidget;
 			string title;
+			bool app_visible = false;
 
 			public ICSDetailsWidget ():base ()
 			{
@@ -150,7 +151,8 @@ namespace CsBoard
 				Add (book);
 
 				obManager =
-					new GameObservationManager (client);
+					new GameObservationManager (client,
+								    this);
 
 				observableGames =
 					new ObservableGamesWidget (obManager);
@@ -208,11 +210,18 @@ namespace CsBoard
 			private void OnQuitEvent (System.Object b,
 						  EventArgs e)
 			{
-				client.Stop();
+				client.Stop ();
 			}
 
 			public void SetVisibility (bool visible)
 			{
+				app_visible = visible;
+			}
+
+			public void MakeVisible ()
+			{
+				if (!app_visible)
+					CsBoardApp.Instance.ShowApp (this);
 			}
 
 			private void OnAuth (object o, bool successful)
@@ -307,8 +316,10 @@ namespace CsBoard
 				md.Hide ();
 				md.Dispose ();
 
-				configwidget.Sensitive = true;
-				Authenticate ();
+				menubar.disconnectMenuItem.Sensitive = false;
+				menubar.connectMenuItem.Sensitive = true;
+				//configwidget.Sensitive = true;
+				//Authenticate ();
 			}
 
 			protected void on_quit_activate (object o,
@@ -333,6 +344,9 @@ namespace CsBoard
 			protected void on_connect_activate (object o,
 							    EventArgs args)
 			{
+				menubar.disconnectMenuItem.Sensitive = false;
+				menubar.connectMenuItem.Sensitive = false;
+				configwidget.Sensitive = true;
 				Authenticate ();
 			}
 
@@ -343,38 +357,6 @@ namespace CsBoard
 				menubar.connectMenuItem.Sensitive = true;
 				client.Stop ();
 				Authenticate ();
-			}
-
-			public void on_viewer_clicked (System.Object b,
-						       EventArgs e)
-			{
-				App.StartViewer (null);
-			}
-
-			public void on_player_clicked (System.Object b,
-						       EventArgs e)
-			{
-				try
-				{
-					App.StartPlayer (null);
-				}
-				catch
-				{
-					MessageDialog md =
-						new MessageDialog (null,
-								   DialogFlags.
-								   DestroyWithParent,
-								   MessageType.
-								   Error,
-								   ButtonsType.
-								   Close,
-								   Catalog.
-								   GetString
-								   ("Unknown engine"));
-					md.Run ();
-					md.Hide ();
-					md.Dispose ();
-				}
 			}
 
 			private void OnChallengeEvent (object o,

@@ -250,21 +250,6 @@ namespace CsBoard
 				return true;
 			}
 
-			public bool RegisterPrintHandler (IPrintHandler
-							  handler)
-			{
-				menubar.printMenuItem.Activated +=
-					handler.OnPrintActivated;
-				return true;
-			}
-
-			public void UnregisterPrintHandler (IPrintHandler
-							    handler)
-			{
-				menubar.printMenuItem.Activated -=
-					handler.OnPrintActivated;
-			}
-
 			public void LoadGames (TextReader reader)
 			{
 				if (!app_visible)
@@ -476,14 +461,6 @@ namespace CsBoard
 			bool Export (IList games);
 		}
 
-		public interface IPrintHandler
-		{
-			EventHandler OnPrintActivated
-			{
-				get;
-			}
-		}
-
 		public class ProgressDialog:Dialog
 		{
 			public ProgressBar bar;
@@ -571,7 +548,8 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;}
+								     false;
+								     }
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

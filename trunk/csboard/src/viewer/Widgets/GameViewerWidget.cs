@@ -89,7 +89,8 @@ namespace CsBoard
 			public GameViewerWidget (GameViewerUI viewer)
 			{
 				gamesListWidget =
-					new SearchableGamesListWidget ();
+					new
+					SearchableGamesListWidget (viewer);
 				chessGameWidget = new ChessGameWidget ();
 
 				chessGameWidget.BoardWidget.Board.

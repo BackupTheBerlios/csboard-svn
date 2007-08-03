@@ -18,6 +18,7 @@
 using Gtk;
 using System;
 using System.Collections;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -34,7 +35,7 @@ namespace CsBoard
 			Hashtable gameInfos;
 			int commandId;
 
-			ICSGameObserverWindow win;
+			ICSGameObserverWidget win;
 
 			public event ObservableGameEventHandler
 				ObservableGameEvent;
@@ -43,9 +44,19 @@ namespace CsBoard
 			{
 				client.CommandSender.SendCommand ("observe " +
 								  gameid);
+				if (!label_bold)
+					label_bold = win == null;
+				UpdateTitle ();
 			}
 
-			public GameObservationManager (ICSClient client)
+			ICSDetailsWidget appwidget;
+			string label_text;
+			bool label_bold = false;
+			Label gamesPageLabel;
+
+			public GameObservationManager (ICSClient client,
+						       ICSDetailsWidget
+						       appwidget)
 			{
 				gameInfos = new Hashtable ();
 				this.client = client;
@@ -54,6 +65,9 @@ namespace CsBoard
 					OnResultNotification;
 				client.GameInfoEvent += OnGameInfo;
 				commandId = -1;
+				this.appwidget = appwidget;
+				label_text = Catalog.GetString ("Games");
+				appwidget.Book.SwitchPage += OnSwitchPage;
 			}
 
 			public void GetGames ()
@@ -116,7 +130,13 @@ namespace CsBoard
 					  win.Update (details);
 					  return;
 				  }
-				win = new ICSGameObserverWindow (client);
+				win = new ICSGameObserverWidget (client);
+				win.GamePageRemovedEvent += OnGamePageRemoved;
+				win.GamePageAddedEvent += OnGamePageAdded;
+				gamesPageLabel = new Label ();
+				appwidget.Book.AppendPage (win,
+							   gamesPageLabel);
+				win.ShowAll ();
 				win.Update (details);
 
 				if (gameInfos.
@@ -131,14 +151,54 @@ namespace CsBoard
 					  win.Update (info);
 				  }
 
-				win.DeleteEvent += OnDelete;
-				win.Resize (App.Session.ICSGamesWinWidth,
-					    App.Session.ICSGamesWinHeight);
+				/*
+				   win.Resize (App.Session.ICSGamesWinWidth,
+				   App.Session.ICSGamesWinHeight);
+				 */
 				win.SplitPane.Position =
 					App.Session.
 					ICSGamesWinSplitPanePosition;
 
-				win.Show ();
+				appwidget.MakeVisible ();
+			}
+
+			private void OnGamePageRemoved (object o,
+							EventArgs args)
+			{
+				if (win.NGames == 0)
+					RemoveGamesUI ();
+				else
+					UpdateTitle ();
+			}
+
+			private void UpdateTitle ()
+			{
+				if (win == null)
+					return;
+				string title = label_text;
+				int ngames = win.NGames;
+				if (ngames > 0)
+					title += String.Format (" ({0})",
+								ngames);
+				if (label_bold)
+					title = String.Format ("<b>{0}</b>",
+							       title);
+				gamesPageLabel.Markup = title;
+			}
+
+			private void OnGamePageAdded (object o,
+						      GamePageAddedEventArgs
+						      args)
+			{
+				label_bold =
+					!appwidget.Book.CurrentPageWidget.
+					Equals (win);
+				UpdateTitle ();
+				if (!args.MyGame)
+					return;
+				appwidget.MakeVisible ();
+				appwidget.Book.CurrentPage =
+					appwidget.Book.PageNum (win);
 			}
 
 			private void OnGameInfo (object o, GameInfo info)
@@ -147,26 +207,46 @@ namespace CsBoard
 					gameInfos[info.gameId] = info;
 			}
 
-			private void OnDelete (object o, EventArgs args)
+			private void RemoveGamesUI ()
 			{
 				client.CommandSender.SendCommand ("unobserve");	// unobserve all!
-				int width, height;
-				win.GetSize (out width, out height);
-				App.Session.ICSGamesWinWidth = width;
-				App.Session.ICSGamesWinHeight = height;
+				/*
+				   int width, height;
+				   win.GetSize (out width, out height);
+				   App.Session.ICSGamesWinWidth = width;
+				   App.Session.ICSGamesWinHeight = height;
+				 */
 				App.Session.ICSGamesWinSplitPanePosition =
 					win.SplitPane.Position;
+				int index = appwidget.Book.PageNum (win);
+				appwidget.Book.RemovePage (index);
 				win = null;
+			}
+
+			private void OnSwitchPage (object o,
+						   SwitchPageArgs args)
+			{
+				if (win == null)
+					return;
+
+				if (appwidget.Book.PageNum (win) ==
+				    args.PageNum)
+				  {
+					  label_bold = false;
+					  UpdateTitle ();
+				  }
 			}
 
 			private void OnResultNotification (object o,
 							   ResultNotification
 							   notification)
 			{
-			  try {
-				win.Update (notification);
-			  } catch {
-			  }
+				try
+				{
+					win.Update (notification);
+				} catch
+				{
+				}
 			}
 		}
 	}

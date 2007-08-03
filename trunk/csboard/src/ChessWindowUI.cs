@@ -244,17 +244,6 @@ namespace CsBoard
 			App.Close ();
 		}
 
-		public void on_viewer_clicked (System.Object b, EventArgs e)
-		{
-			App.StartViewer (null);
-		}
-
-		public void on_icsplayer_clicked (System.Object b,
-						  EventArgs e)
-		{
-			App.StartICSPlayer ();
-		}
-
 		public void on_new_activate (System.Object b, EventArgs e)
 		{
 

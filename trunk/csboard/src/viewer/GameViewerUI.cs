@@ -22,11 +22,21 @@ using Gtk;
 using GLib;
 using Mono.Unix;
 using System.Collections;
+using System;
 
 namespace CsBoard
 {
 	namespace Viewer
 	{
+
+		public interface IPrintHandler
+		{
+			EventHandler OnPrintActivated
+			{
+				get;
+			}
+		}
+
 		public class GameViewerUI:VBox
 		{
 			protected Statusbar statusBar;
@@ -97,6 +107,30 @@ namespace CsBoard
 				return true;
 			}
 
+			private IPrintHandler handler;
+			public IPrintHandler PrintHandler
+			{
+				get
+				{
+					return handler;
+				}
+			}
+
+			public bool RegisterPrintHandler (IPrintHandler
+							  handler)
+			{
+				this.handler = handler;
+				menubar.printMenuItem.Activated +=
+					handler.OnPrintActivated;
+				return true;
+			}
+
+			public void UnregisterPrintHandler (IPrintHandler
+							    handler)
+			{
+				menubar.printMenuItem.Activated -=
+					handler.OnPrintActivated;
+			}
 
 			protected bool AddToMenu (Gtk.MenuItem parentMenu,
 						  Gtk.MenuItem itemToBeAdded,

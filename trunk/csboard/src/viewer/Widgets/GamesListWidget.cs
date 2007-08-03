@@ -33,7 +33,7 @@ namespace CsBoard
 		public class GamesListWidget:VBox
 		{
 			protected ListStore gamesStore;
-			IconView view;
+			protected IconView view;
 			public event GameSelectionEventHandler
 				GameSelectionEvent;
 
@@ -113,6 +113,12 @@ namespace CsBoard
 				ChessGame details =
 					(ChessGame) view.Model.GetValue (iter,
 									 0);
+				FireGameSelectionEvent (details);
+			}
+
+			protected void FireGameSelectionEvent (ChessGame
+							       details)
+			{
 				if (GameSelectionEvent != null)
 					GameSelectionEvent (details);
 			}
@@ -160,11 +166,88 @@ namespace CsBoard
 			}
 		}
 
+		public class GameViewerGamesListWidget:GamesListWidget
+		{
+			GameViewerUI viewer;
+			public GameViewerGamesListWidget (GameViewerUI
+							  viewer):base ()
+			{
+				this.viewer = viewer;
+				view.ButtonPressEvent += OnButtonPress;
+			}
+
+			private void OnButtonPress (object o,
+						    ButtonPressEventArgs args)
+			{
+				if (args.Event.Button != 3)
+					return;
+				if (viewer.Games == null
+				    || viewer.Games.Count == 0)
+					return;
+
+				ImageMenuItem item =
+					new ImageMenuItem (Catalog.
+							   GetString
+							   ("_View Game"));
+				item.Image =
+					new Image (Stock.Open, IconSize.Menu);
+				TreePath path;
+				path = view.GetPathAtPos (System.Convert.
+							  ToInt16 (args.Event.
+								   X),
+							  System.Convert.
+							  ToInt16 (args.Event.
+								   Y));
+				Menu menu = new Menu ();
+
+				if (path != null)
+				  {
+					  view.SelectPath (path);
+					  item.Activated +=
+						  OnViewPopupItemActivated;
+					  menu.Append (item);
+				  }
+
+				if (viewer.PrintHandler != null)
+				  {
+					  ImageMenuItem printItem =
+						  new ImageMenuItem (Catalog.
+								     GetString
+								     ("_Print Games"));
+					  printItem.Image =
+						  new Image (Stock.Print,
+							     IconSize.Menu);
+					  printItem.Activated +=
+						  viewer.PrintHandler.
+						  OnPrintActivated;
+					  menu.Append (printItem);
+				  }
+
+				menu.ShowAll ();
+				menu.Popup ();
+			}
+
+			void OnViewPopupItemActivated (object o,
+						       EventArgs args)
+			{
+				TreePath[]paths = view.SelectedItems;
+				if (paths == null || paths.Length != 1)
+					return;
+				TreeIter iter;
+				view.Model.GetIter (out iter, paths[0]);
+
+				ChessGame details =
+					(ChessGame) view.Model.GetValue (iter,
+									 0);
+				FireGameSelectionEvent (details);
+			}
+		}
+
 		public class SearchableGamesListWidget:VBox
 		{
 			Entry searchEntry;
 			TreeModelFilter filter;
-			GamesListWidget gamesListWidget;
+			GameViewerGamesListWidget gamesListWidget;
 			public GamesListWidget View
 			{
 				get
@@ -173,7 +256,7 @@ namespace CsBoard
 				}
 			}
 
-			public SearchableGamesListWidget ()
+			public SearchableGamesListWidget (GameViewerUI viewer)
 			{
 				HBox box = new HBox ();
 				box.PackStart (new
@@ -185,7 +268,9 @@ namespace CsBoard
 
 				PackStart (box, false, true, 2);
 
-				gamesListWidget = new GamesListWidget ();
+				gamesListWidget =
+					new
+					GameViewerGamesListWidget (viewer);
 
 				PackStart (gamesListWidget, true, true, 2);
 				ShowAll ();

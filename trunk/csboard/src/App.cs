@@ -113,36 +113,15 @@ namespace CsBoard
 			return 0;
 		}
 
-		public static void StartICSPlayer ()
-		{
-			string engine = App.Session.Engine;
-			if (engine != null && !engine.StartsWith ("ICS"))
-				engine = "ICS ";
-
-			new CsBoard.ICS.ICS (engine);
-			appCount++;
-		}
-
-		public static void StartPlayer (string filename)
+		static void StartPlayer (string filename)
 		{
 			App.StartPlayer (App.Session.Engine, filename);
 		}
 
-		public static void StartPlayer (string engine,
-						string filename)
+		static void StartPlayer (string engine, string filename)
 		{
 			new CsBoardApp (engine, filename);
 			appCount++;
-		}
-
-		public static void StartViewer (string file)
-		{
-			bool instance_present = GameViewer.Instance != null;
-			GameViewer.CreateInstance ();
-			if (file != null)
-				GameViewer.Instance.Load (file);
-			if (!instance_present)
-				appCount++;
 		}
 	}
 }

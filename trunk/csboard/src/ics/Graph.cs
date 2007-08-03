@@ -20,6 +20,7 @@ using System.Collections;
 using Gtk;
 using Gdk;
 using Cairo;
+using Mono.Unix;
 
 namespace CsBoard
 {
@@ -502,9 +503,9 @@ namespace CsBoard
 				int width = Allocation.Width;
 				int height = Allocation.Height;
 
-				x_marks[0].name = "Lightning";
-				x_marks[1].name = "Blitz";
-				x_marks[2].name = "Standard";
+				x_marks[0].name = Catalog.GetString("Lightning");
+				x_marks[1].name = Catalog.GetString("Blitz");
+				x_marks[2].name = Catalog.GetString("Standard");
 
 				int y_name_width = 0;
 				int x_name_height = 0;
