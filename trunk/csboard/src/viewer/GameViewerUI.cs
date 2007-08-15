@@ -41,6 +41,7 @@ namespace CsBoard
 		{
 			protected Statusbar statusBar;
 			protected ViewerMenuBar menubar;
+			protected ProgressBar progressBar;
 
 
 			protected GameViewerWidget gameViewerWidget;
@@ -68,6 +69,14 @@ namespace CsBoard
 				get
 				{
 					return statusBar;
+				}
+			}
+
+			public ProgressBar ProgressBar
+			{
+				get
+				{
+					return progressBar;
 				}
 			}
 
@@ -198,7 +207,12 @@ namespace CsBoard
 
 				PackStart (gameViewerWidget, true, true, 2);
 				statusBar = new Statusbar ();
-				PackStart (statusBar, false, true, 2);
+				progressBar = new ProgressBar ();
+				progressBar.Stop ();
+				HBox box = new HBox ();
+				box.PackStart (progressBar, false, false, 2);
+				box.PackStart (statusBar, true, true, 2);
+				PackStart (box, false, true, 2);
 			}
 		}
 	}

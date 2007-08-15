@@ -102,7 +102,15 @@ namespace CsBoard
 					  return false;
 				  }
 				TextReader reader = new StreamReader (new VfsStream (loadUrl, FileMode.Open));	// url
-				viewer.LoadGames (reader);
+				viewer.StatusBar.Pop (1);
+				viewer.StatusBar.Push (1,
+						       Catalog.
+						       GetString
+						       ("Loading url: " +
+							loadUrl));
+
+				viewer.GameLoader.Load (reader);
+
 				reader.Close ();
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,

@@ -88,17 +88,9 @@ namespace CsBoard
 				if (file == null)
 					return;
 				PrintWrapper printer = new PrintWrapper ();
-				ProgressDialog prog =
-					new ProgressDialog (null,
-							    Catalog.
-							    GetString
-							    ("Exporting..."));
-				new ExportHandler (prog,
+				new ExportHandler (viewer,
 						   viewer.GameViewerWidget.
 						   Games, printer, file);
-				prog.Run ();
-				prog.Hide ();
-				prog.Dispose ();
 			}
 
 			private void on_print_activate (object obj,
@@ -121,18 +113,9 @@ namespace CsBoard
 					  dialog.Dispose ();
 					  return;
 				  }
-				ProgressDialog prog =
-					new ProgressDialog (dialog,
-							    Catalog.
-							    GetString
-							    ("Printing..."));
-				prog.ShowAll ();
-				new PrintHandler (prog,
+				new PrintHandler (viewer,
 						  viewer.GameViewerWidget.
 						  Games, printer, response);
-				prog.Run ();	// The PrintHandler will bail us out!
-				prog.Hide ();
-				prog.Dispose ();
 
 				dialog.Hide ();
 				dialog.Dispose ();
@@ -141,18 +124,18 @@ namespace CsBoard
 
 		abstract class PGNExportHandler
 		{
-			protected ProgressDialog dlg;
 			protected ArrayList games;
 			protected PrintWrapper printer;
 			protected int totalgames;
 			protected double ngames;	// so that a we can generate a fraction
+			protected GameViewer viewer;
 
-			public PGNExportHandler (ProgressDialog d,
+			public PGNExportHandler (GameViewer viewer,
 						 ArrayList games,
 						 PrintWrapper printer)
 			{
-				dlg = d;
 				this.games = games;
+				this.viewer = viewer;
 				this.printer = printer;
 				totalgames = games.Count;
 				ngames = 0;
@@ -166,7 +149,7 @@ namespace CsBoard
 						      EventArgs args)
 			{
 				ngames++;
-				dlg.UpdateProgress (ngames / totalgames);
+				viewer.UpdateProgress (ngames / totalgames);
 			}
 
 			private bool PGNExportIdleHandler ()
@@ -174,14 +157,16 @@ namespace CsBoard
 				PGNPrinter pr =
 					new PGNPrinter (games, printer);
 				pr.GamePrinted += OnGamePrinted;
+				viewer.StartProgress ();
 				pr.Print ();
-				dlg.bar.Text =
+				viewer.ProgressBar.Text =
 					Catalog.GetString ("Now printing...");
 				while (Gtk.Application.EventsPending ())
 					Gtk.Application.RunIteration ();
 				HandlePrinted ();
-				dlg.bar.Text = Catalog.GetString ("Done.");
-				dlg.Respond (ResponseType.None);
+				viewer.ProgressBar.Text =
+					Catalog.GetString ("Done.");
+				viewer.StopProgress ();
 				return false;
 			}
 
@@ -191,10 +176,11 @@ namespace CsBoard
 		class PrintHandler:PGNExportHandler
 		{
 			int response;
-			public PrintHandler (ProgressDialog d,
+			public PrintHandler (GameViewer viewer,
 					     ArrayList games,
 					     PrintWrapper printer,
-					     int response):base (d, games,
+					     int response):base (viewer,
+								 games,
 								 printer)
 			{
 				this.response = response;
@@ -224,10 +210,11 @@ namespace CsBoard
 		{
 			string file;
 
-			public ExportHandler (ProgressDialog d,
+			public ExportHandler (GameViewer viewer,
 					      ArrayList games,
 					      PrintWrapper printer,
-					      string file):base (d, games,
+					      string file):base (viewer,
+								 games,
 								 printer)
 			{
 				this.file = file;

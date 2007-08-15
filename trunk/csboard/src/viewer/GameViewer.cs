@@ -130,9 +130,20 @@ namespace CsBoard
 			}
 
 			bool app_visible = false;
+
+			GameLoader loader;
+			public GameLoader GameLoader
+			{
+				get
+				{
+					return loader;
+				}
+			}
+
 			private GameViewer ()
 			{
 				title = "Game Viewer";
+				loader = new GameLoader (this);
 				accel = new AccelGroup ();
 				initialDirForFileChooser =
 					App.Session.CurrentFolder;
@@ -179,6 +190,7 @@ namespace CsBoard
 							GetString ("Viewer"));
 				ShowAll ();
 				toolbutton.ShowAll ();
+				progressBar.Hide ();
 
 				gameViewerWidget.ChessGameWidget.SplitPane.
 					Position =
@@ -249,15 +261,13 @@ namespace CsBoard
 				exporters.Remove (exporter);
 				return true;
 			}
-
-			public void LoadGames (TextReader reader)
-			{
-				if (!app_visible)
-					CsBoardApp.Instance.ShowApp (this);
-				GameLoader loader =
-					new GameLoader (this, reader);
-				SetGames (loader.Games);
-			}
+			/*
+			   public void LoadGames (TextReader reader)
+			   {
+			   if (!app_visible)
+			   CsBoardApp.Instance.ShowApp (this);
+			   }
+			 */
 
 			public void LoadGames (ArrayList games)
 			{
@@ -449,6 +459,26 @@ namespace CsBoard
 				fc.Destroy ();
 				return file;
 			}
+
+			public void StartProgress ()
+			{
+				progressBar.Show ();
+			}
+
+			public void StopProgress ()
+			{
+				progressBar.Hide ();
+			}
+
+			public void UpdateProgress (double fraction)
+			{
+				progressBar.Fraction = fraction;
+				progressBar.Text =
+					(int) Math.Round (fraction * 100) +
+					" %";
+				while (Gtk.Application.EventsPending ())
+					Gtk.Application.RunIteration ();
+			}
 		}
 
 		public interface IGameLoader
@@ -460,53 +490,44 @@ namespace CsBoard
 		{
 			bool Export (IList games);
 		}
+		/*
+		   public class ProgressDialog:Dialog
+		   {
+		   public ProgressBar bar;
+		   public ProgressBar ProgressBar
+		   {
+		   get
+		   {
+		   return bar;
+		   }
+		   }
 
-		public class ProgressDialog:Dialog
-		{
-			public ProgressBar bar;
-			public ProgressBar ProgressBar
-			{
-				get
-				{
-					return bar;
-				}
-			}
+		   public ProgressDialog (Gtk.
+		   Window
+		   parent,
+		   string title):base (title,
+		   parent,
+		   DialogFlags.
+		   Modal)
+		   {
+		   bar = new ProgressBar ();
+		   bar.Orientation =
+		   ProgressBarOrientation.LeftToRight;
+		   bar.Show ();
+		   VBox.PackStart (bar, true, true, 4);
+		   Modal = true;
+		   }
 
-			public ProgressDialog (Gtk.
-					       Window
-					       parent,
-					       string title):base (title,
-								   parent,
-								   DialogFlags.
-								   Modal)
-			{
-				bar = new ProgressBar ();
-				bar.Orientation =
-					ProgressBarOrientation.LeftToRight;
-				bar.Show ();
-				VBox.PackStart (bar, true, true, 4);
-				Modal = true;
-			}
+		   public void Pulse ()
+		   {
+		   bar.Pulse ();
+		   while (Gtk.Application.EventsPending ())
+		   Gtk.Application.RunIteration ();
+		   }
+		   }
+		 */
 
-			public void UpdateProgress (double fraction)
-			{
-				bar.Fraction = fraction;
-				bar.Text =
-					(int) Math.Round (fraction * 100) +
-					" %";
-				while (Gtk.Application.EventsPending ())
-					Gtk.Application.RunIteration ();
-			}
-
-			public void Pulse ()
-			{
-				bar.Pulse ();
-				while (Gtk.Application.EventsPending ())
-					Gtk.Application.RunIteration ();
-			}
-		}
-
-		class GameLoader
+		public class GameLoader
 		{
 			ArrayList games;
 
@@ -518,41 +539,28 @@ namespace CsBoard
 				}
 			}
 
-			ProgressDialog dlg;
 			PGNGameLoader gameloader;
+			GameViewer viewer;
 
-			public GameLoader (GameViewer viewer,
-					   TextReader reader)
+			public GameLoader (GameViewer viewer)
 			{
 				games = new ArrayList ();
-				dlg = new ProgressDialog (null,
-							  Catalog.
-							  GetString
-							  ("Loading..."));
-				dlg.ProgressBar.PulseStep = 0.01;
-				PGNParser parser = new PGNParser (reader);
+				this.viewer = viewer;
+
 				gameloader = new PGNGameLoader ();
 				gameloader.GameLoaded += OnGameLoaded;
-				viewer.StatusBar.Pop (1);
-				viewer.StatusBar.Push (1,
-						       Catalog.
-						       GetString
-						       ("Parsing the file..."));
-				GLib.Idle.Add (new GLib.IdleHandler (delegate
-								     {
-								     parser.
-								     Parse
-								     (gameloader);
-								     dlg.
-								     Respond
-								     (ResponseType.
-								      None);
-								     return
-								     false;}
-					       ));
-				dlg.Run ();
-				dlg.Hide ();
-				dlg.Dispose ();
+			}
+
+			public void Load (TextReader reader)
+			{
+				games.Clear ();
+				viewer.StartProgress ();
+				viewer.ProgressBar.PulseStep = 0.01;
+
+				PGNParser parser = new PGNParser (reader);
+				parser.Parse (gameloader);
+				viewer.StopProgress ();
+				viewer.LoadGames (Games);
 			}
 
 			private void OnGameLoaded (System.Object o,
@@ -573,11 +581,13 @@ namespace CsBoard
 					  games.Add (dbgame);
 				  }
 
-				dlg.ProgressBar.Text =
+				viewer.ProgressBar.Text =
 					Catalog.GetString ("Loaded ") +
 					games.Count +
 					Catalog.GetString (" games");
-				dlg.Pulse ();
+				viewer.ProgressBar.Pulse ();
+				while (Gtk.Application.EventsPending ())
+					Gtk.Application.RunIteration ();
 			}
 		}
 	}

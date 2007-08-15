@@ -95,9 +95,12 @@ namespace CsBoard
 						       Catalog.
 						       GetString
 						       ("Loading from buffer..."));
-				GLib.Idle.Add (new GLib.
-					       IdleHandler
-					       (LoadGamesIdleHandler));
+				if (!Config.WindowsBuild)
+					GLib.Idle.Add (new GLib.
+						       IdleHandler
+						       (LoadGamesIdleHandler));
+				else
+					LoadGamesIdleHandler ();
 			}
 
 			public void on_load_pgn_activate (System.Object b,
@@ -133,8 +136,17 @@ namespace CsBoard
 					  return false;
 				  }
 
-				viewer.LoadGames (new
-						  StringReader (pgnBuffer));
+				StringReader reader = new
+					StringReader (pgnBuffer);
+
+				viewer.StatusBar.Pop (1);
+				viewer.StatusBar.Push (1,
+						       Catalog.
+						       GetString
+						       ("Parsing from buffer..."));
+
+				viewer.GameLoader.Load (reader);
+				reader.Close ();
 
 				viewer.StatusBar.Pop (1);
 				viewer.StatusBar.Push (1,

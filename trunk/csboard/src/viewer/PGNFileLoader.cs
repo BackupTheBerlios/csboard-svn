@@ -155,9 +155,12 @@ namespace CsBoard
 						       Catalog.
 						       GetString ("Loading: ")
 						       + file);
-				GLib.Idle.Add (new GLib.
-					       IdleHandler
-					       (LoadGamesIdleHandler));
+				if (!Config.WindowsBuild)
+					GLib.Idle.Add (new GLib.
+						       IdleHandler
+						       (LoadGamesIdleHandler));
+				else
+					LoadGamesIdleHandler ();
 			}
 
 			private bool LoadGamesIdleHandler ()
@@ -176,7 +179,13 @@ namespace CsBoard
 								      Open,
 								      FileAccess.
 								      Read));
-				viewer.LoadGames (reader);
+				viewer.StatusBar.Pop (1);
+				viewer.StatusBar.Push (1,
+						       Catalog.
+						       GetString
+						       ("Parsing the file..."));
+
+				viewer.GameLoader.Load (reader);
 				reader.Close ();
 
 				viewer.StatusBar.Pop (1);

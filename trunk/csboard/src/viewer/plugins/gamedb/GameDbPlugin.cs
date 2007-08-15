@@ -35,7 +35,6 @@ namespace CsBoard
 			  Gtk.MenuItem saveItem;
 			//Gtk.Menuitem openDbItem;
 
-			ProgressDialog dlg;
 			GameEditor editor;
 
 			public GameDBPlugin ():base ("gamedb",
@@ -86,15 +85,7 @@ namespace CsBoard
 				  }
 
 				dbDlg.Hide ();
-				  dlg = new ProgressDialog (null,
-							    Catalog.
-							    GetString
-							    ("Saving to database..."));
 				  GLib.Idle.Add (AddGamesIdleHandler);
-				  dlg.Run ();
-				  dlg.Hide ();
-				  dlg.Dispose ();
-				  dlg = null;
 				  dbDlg.Dispose ();
 				  dbDlg = null;
 			}
@@ -104,9 +95,9 @@ namespace CsBoard
 				IList games = viewer.GameViewerWidget.Games;
 				if (games == null)
 				  {
-					  dlg.Respond (ResponseType.Ok);
 					  return false;
 				  }
+				viewer.StartProgress ();
 				double totalgames = games.Count;
 				int ngames = 0;
 				GameCollection collection = null;
@@ -153,8 +144,8 @@ namespace CsBoard
 						  UpdateGame (game, updated);
 
 					  ngames++;
-					  dlg.UpdateProgress (ngames /
-							      totalgames);
+					  viewer.UpdateProgress (ngames /
+								 totalgames);
 				  }
 				if (collection != null)
 					GameDb.Instance.DB.Set (collection);
@@ -162,7 +153,7 @@ namespace CsBoard
 				if (ngames > 0)
 					GameDb.Instance.Commit ();
 
-				dlg.Respond (ResponseType.Ok);
+				viewer.StopProgress ();
 				return false;
 			}
 
@@ -526,7 +517,8 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;}
+						 return false;
+						 }
 				);
 				if (newobj)
 					viewer.GameViewerWidget.
