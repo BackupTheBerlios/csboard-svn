@@ -1,3 +1,24 @@
+2007-08-14 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified files
+
+	* configure.in
+	* src/ChessWindowUI.cs
+	* src/viewer/plugins/gamedb/GameDb.cs
+	* src/viewer/plugins/gamedb/Makefile.am
+	* src/viewer/plugins/printer/Makefile.am
+	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs
+	* src/viewer/plugins/ecodb/Makefile.am
+	* src/viewer/GameViewer.cs
+	* src/viewer/CairoPositionSnapshot.cs
+	* src/viewer/Widgets/CairoViewerBoard.cs
+	* src/CairoBoard.cs
+	* src/ics/Graph.cs
+	* Makefile.am
+	* config.cs.in
+
+	Changes to enable windows port
+
 2007-08-03 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files

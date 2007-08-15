@@ -548,8 +548,7 @@ namespace CsBoard
 								     (ResponseType.
 								      None);
 								     return
-								     false;
-								     }
+								     false;}
 					       ));
 				dlg.Run ();
 				dlg.Hide ();

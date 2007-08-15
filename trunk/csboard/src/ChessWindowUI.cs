@@ -53,7 +53,7 @@ namespace CsBoard
 		private uint gameStatusbarId;
 		private uint moveStatusbarId;
 
-		protected PlayerBoard boardWidget;
+		protected CairoPlayerBoard boardWidget;
 		private ProgressBar progressbar;
 		protected IControl control;
 
@@ -192,7 +192,7 @@ namespace CsBoard
 			status_frame.Add (progressbar);
 
 			boardWidget =
-				new PlayerBoard (control.GetPosition ());
+				new CairoPlayerBoard (control.GetPosition ());
 			chessGameWidget = new ChessGameWidget (boardWidget);
 			chessGameWidget.Black = Catalog.GetString ("Black");
 			chessGameWidget.White = Catalog.GetString ("White");

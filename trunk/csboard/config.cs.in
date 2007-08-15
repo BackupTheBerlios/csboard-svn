@@ -6,5 +6,6 @@ namespace CsBoard {
 		public static string packageName = "@PACKAGE@";
 		public static string packageVersion = "@VERSION@";
 		public static bool Debug = false;
+	public static bool WindowsBuild = @windows@;
 	}
 }

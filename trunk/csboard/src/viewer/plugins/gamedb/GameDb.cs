@@ -59,11 +59,18 @@ namespace CsBoard
 			{
 				string dir = "";
 				string gnomedir = "";
-				  gnomedir =
-					Path.
-					Combine (Environment.
-						 GetEnvironmentVariable
-						 ("HOME"), ".gnome2");
+				if (CsBoard.Config.WindowsBuild)
+					  gnomedir =
+						Environment.
+						GetFolderPath (Environment.
+							       SpecialFolder.
+							       ApplicationData);
+				else
+					  gnomedir =
+						Path.
+						Combine (Environment.
+							 GetEnvironmentVariable
+							 ("HOME"), ".gnome2");
 				if (!Directory.Exists (gnomedir))
 				  {
 					  Directory.

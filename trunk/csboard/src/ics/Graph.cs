@@ -98,7 +98,7 @@ namespace CsBoard
 			public event GameClickedHandler GameClickedEvent;
 
 			Pixmap pixmap;
-		  Cairo.Context cairo;
+			  Cairo.Context cairo;
 
 			public Graph ():base ()
 			{
@@ -159,7 +159,7 @@ namespace CsBoard
 			{
 				__AddGameInfo (info);
 				UpdatePixmap ();
-				QueueDraw();
+				QueueDraw ();
 			}
 
 			public void RemoveGame (int id)
@@ -179,7 +179,7 @@ namespace CsBoard
 				  {
 					  points.RemoveAt (i);
 					  UpdatePixmap ();
-					  QueueDraw();
+					  QueueDraw ();
 				  }
 			}
 
@@ -187,7 +187,7 @@ namespace CsBoard
 			{
 				points.Clear ();
 				UpdatePixmap ();
-				QueueDraw();
+				QueueDraw ();
 			}
 
 			private void PlotPoint (Cairo.Context cairo,
@@ -461,8 +461,7 @@ namespace CsBoard
 				pixmap = new Pixmap (args.Event.Window,
 						     Allocation.Width,
 						     Allocation.Height);
-				cairo =
-					Gdk.CairoHelper.Create (pixmap);
+				cairo = Gdk.CairoHelper.Create (pixmap);
 				cairo.Rectangle (0, 0,
 						 Allocation.Width,
 						 Allocation.Height);
@@ -477,10 +476,13 @@ namespace CsBoard
 					__AddGameInfo (point.info);
 				}
 
-				UpdatePixmap();
+				UpdatePixmap ();
 			}
 
-			private void UpdatePixmap() {
+			private void UpdatePixmap ()
+			{
+				if (cairo == null)
+					return;
 				DrawBackground (cairo);
 				DrawCoords (cairo);
 

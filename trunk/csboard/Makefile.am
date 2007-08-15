@@ -1,6 +1,6 @@
 SUBDIRS= . src po data help resource
 
-PARSER_SOURCES = \
+PARSER_SRCS = \
 	$(top_srcdir)/src/parser/PGNParserException.cs \
 	$(top_srcdir)/src/parser/PGNTokenizer.cs \
 	$(top_srcdir)/src/parser/PGNChessGame.cs \
@@ -10,7 +10,7 @@ PARSER_SOURCES = \
 	$(top_srcdir)/src/parser/PGNGameLoader.cs \
 	$(top_srcdir)/src/parser/PGNParser.cs
 
-GAME_PLAYER_SOURCES = \
+GAME_PLAYER_SRCS = \
 	$(top_srcdir)/src/game/ChessPiece.cs\
 	$(top_srcdir)/src/game/ChessSide.cs\
 	$(top_srcdir)/src/game/Rook.cs\
@@ -25,7 +25,7 @@ GAME_PLAYER_SOURCES = \
 	$(top_srcdir)/src/game/ChessException.cs\
 	$(top_srcdir)/src/game/InvalidMoveException.cs
 
-VIEWER_SOURCES = \
+VIEWER_SRCS = \
 	$(top_srcdir)/src/viewer/GameSession.cs \
 	$(top_srcdir)/src/viewer/ChessGame.cs \
 	$(top_srcdir)/src/viewer/Widgets/CairoViewerBoard.cs \
@@ -43,13 +43,13 @@ VIEWER_SOURCES = \
 	$(top_srcdir)/src/viewer/BufferDialog.cs \
 	$(top_srcdir)/src/viewer/PGNTree.cs
 
-PLUGIN_SOURCES = \
+PLUGIN_SRCS = \
 	$(top_srcdir)/src/viewer/PGNBufferLoader.cs		\
 	$(top_srcdir)/src/viewer/PGNFileLoader.cs		\
 	$(top_srcdir)/src/viewer/PluginManager.cs		\
 	$(top_srcdir)/src/viewer/PluginManagerDialog.cs
 
-ICS_PLAYER_SOURCES = \
+ICS_PLAYER_SRCS = \
 	$(top_srcdir)/src/ics/ICSClient.cs \
 	$(top_srcdir)/src/ics/ParserUtils.cs \
 	$(top_srcdir)/src/ics/GameAdvertisement.cs \
@@ -77,6 +77,7 @@ ICS_PLAYER_SOURCES = \
 
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
+	$(top_srcdir)/src/ColorProvider.cs \
 	$(top_srcdir)/src/ChessGameWidget.cs \
 	$(top_srcdir)/src/ChessWindowUI.cs \
 	$(top_srcdir)/src/Window.cs \
@@ -92,17 +93,22 @@ SOURCE = \
 	$(top_srcdir)/src/Book.cs \
 	$(top_srcdir)/src/Promotion.cs \
 	$(top_srcdir)/src/Position.cs \
-	$(top_srcdir)/src/Session.cs	\
 	$(top_srcdir)/src/Crafty.cs \
 	$(top_srcdir)/src/Phalanx.cs \
 	$(top_srcdir)/src/ProgressBar.cs \
 	$(top_srcdir)/src/ChessClock.cs\
 	$(top_srcdir)/src/AppMenuBar.cs\
-	$(PARSER_SOURCES) \
-	$(GAME_PLAYER_SOURCES) \
-	$(VIEWER_SOURCES) \
-	$(PLUGIN_SOURCES) \
-	$(ICS_PLAYER_SOURCES)
+	$(PARSER_SRCS) \
+	$(GAME_PLAYER_SRCS) \
+	$(VIEWER_SRCS) \
+	$(PLUGIN_SRCS) \
+	$(ICS_PLAYER_SRCS)
+
+if WINDOWS_BUILD
+SOURCE += $(top_srcdir)/src/DummySession.cs
+else
+SOURCE += $(top_srcdir)/src/Session.cs
+endif
 
 TEST_GAMES = \
 	test/a.pgn \
@@ -185,9 +191,25 @@ RESOURCE_FILE_DEPENDENCIES =						\
 	$(srcdir)/resource/csboard.glade				\
 	$(srcdir)/resource/csviewer.glade
 
+PACKAGE_DEPENDENCIES =							\
+	-pkg:gtk-sharp-2.0						\
+	-pkg:glade-sharp-2.0						\
+	-pkg:rsvg-sharp-2.0
+
+if !WINDOWS_BUILD
+PACKAGE_DEPENDENCIES += -pkg:gconf-sharp-2.0
+else
+app_DATA = csboard.exe compile.bat
+compile.bat: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDENCIES)
+	echo "	mcs $(PACKAGE_DEPENDENCIES) $(RESOURCES) \
+	-out:csboard.exe $(SOURCE) config.cs \
+	-r:Mono.Posix -r:Mono.Cairo" > _compile.bat
+	sed 's/\//\\/g' _compile.bat > compile.bat
+	rm _compile.bat
+endif
 
 csboard.exe: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDENCIES)
-	mcs $(BASE_DEPENDENCIES_LIBS) $(RESOURCES) \
+	mcs $(PACKAGE_DEPENDENCIES) $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
 	-r:Mono.Posix -r:Mono.Cairo
 

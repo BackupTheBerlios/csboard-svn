@@ -3,8 +3,13 @@ CSC = mcs
 CSFLAGS = 		\
 	-target:library
 
+PACKAGE_DEPENDENCIES =							\
+	-pkg:gtk-sharp-2.0						\
+	-pkg:glade-sharp-2.0						\
+	-pkg:rsvg-sharp-2.0
+
 ASSEMBLIES = 					\
-	$(BASE_DEPENDENCIES_LIBS) 		\
+	$(PACKAGE_DEPENDENCIES) 		\
 	-r:Mono.Posix				\
 	-r:$(top_builddir)/csboard.exe
 
@@ -22,11 +27,21 @@ ECODB_RESOURCES = 				\
 $(ECODB_TARGET): $(ECODB_CSFILES) $(top_builddir)/csboard.exe $(top_srcdir)/resource/eco.pgn
 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(ECODB_CSFILES) $(ECODB_RESOURCES)
 
-#
+if WINDOWS_BUILD
+compile.bat: $(ECODB_CSFILES) $(top_builddir)/csboard.exe $(top_srcdir)/resource/eco.pgn
+	echo "$(CSC) -out:$(ECODB_TARGET) $(CSFLAGS) $(ASSEMBLIES) $(ECODB_CSFILES) $(ECODB_RESOURCES)" > _compile.bat
+	sed 's/\//\\/g' _compile.bat > compile.bat
+	rm _compile.bat
+endif
 
 pluginsdir = $(prefix)/share/csboard/plugins
+
 plugins_DATA = 				\
 	$(ECODB_TARGET)
+
+if WINDOWS_BUILD
+plugins_DATA += compile.bat
+endif
 
 EXTRA_DIST =            	\
 	$(ECODB_CSFILES)

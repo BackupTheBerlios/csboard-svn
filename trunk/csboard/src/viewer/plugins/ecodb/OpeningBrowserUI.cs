@@ -134,7 +134,7 @@ namespace CsBoard
 				boardWidget = new GameViewerBoard ();
 				HPaned split = new HPaned ();
 				VBox box = new VBox ();
-				box.PackStart (boardWidget, false, true, 2);
+				box.PackStart (boardWidget, true, true, 2);
 				split.Pack1 (box, false, true);	// resize, shrink
 				split.Pack2 (win, true, true);
 				split.ShowAll ();
@@ -173,7 +173,7 @@ namespace CsBoard
 			}
 		}
 
-		public class GameViewerBoard:ViewerBoard
+		public class GameViewerBoard:CairoViewerBoard
 		{
 			public GameViewerBoard ():base (ChessGamePlayer.
 							GetDefaultPosition ())

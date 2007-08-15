@@ -72,7 +72,7 @@ namespace CsBoard
 
 
 		// Figure Renderer
-		private Figure figure;
+		//private Figure figure;
 		protected MoveInfo info;
 
 		private FigureManager fm;
@@ -109,25 +109,20 @@ namespace CsBoard
 		public bool showAnimations = false;
 
 		private Pango.Layout layout;
-
-		private Cairo.Color whiteSqColor, blackSqColor;
-		private Cairo.Color backgroundColor, coordColor,
-			highlightSqColor;
+		private IColorProvider colors;
 
 		public CairoBoard (ArrayList pos):base ()
 		{
-			figure = new Figure ();
+			//figure = new Figure ();
 			fm = new FigureManager ();
 			position = new Position (pos);
 			info = new MoveInfo ();
 
-			whiteSqColor = new Cairo.Color (1, 1, 1, 1);
-			blackSqColor = new Cairo.Color (0.9, 0.8, 0.95, 1);
-			backgroundColor = new Cairo.Color (1, 0.95, 0.95, 1);
-			coordColor = new Cairo.Color (0.3, 0.1, 0.1, 1);
-			highlightSqColor = new Cairo.Color (1, 0, 0, 0.2);
-
 			layout = new Pango.Layout (PangoContext);
+			if (Config.WindowsBuild)
+				colors = new CustomColorProvider ();
+			else
+				colors = new GtkBasedColorProvider (this);
 		}
 
 		///////////////////////////////////////////////////////////
@@ -143,7 +138,7 @@ namespace CsBoard
 
 			int d = Math.Min (width, height) / 2;
 			size = (10 * (d - 3 * space)) / 42 - 1;
-			figure.SetSize (size);
+			//figure.SetSize (size);
 			fm.SetSize (size);
 
 			start_x = width / 2 - 4 * size - 3 * space;
@@ -236,7 +231,7 @@ namespace CsBoard
 				  int x = start_x + i * (space + size);
 				  int y = start_y + j * (space + size);
 
-				  cairo.Color = backgroundColor;
+				  cairo.Color = colors.MoveHintColor;
 				  cairo.Rectangle (x, y, size, size);
 				  cairo.Fill ();
 			  }
@@ -246,7 +241,7 @@ namespace CsBoard
 		private void DrawCoords (Cairo.Context cairo)
 		{
 
-			cairo.Color = coordColor;
+			cairo.Color = colors.CoordColor;
 			cairo.Rectangle (start_x - space - size / 5,
 					 start_y - space - size / 5,
 					 (size + space) * 8 +
@@ -256,7 +251,8 @@ namespace CsBoard
 
 			string letters = "abcdefgh";
 
-			cairo.Color = new Cairo.Color (0, 0, 0);
+			//cairo.Color = new Cairo.Color (0, 0, 0);
+			cairo.Color = colors.CoordColor;
 			double scale = Pango.Scale.PangoScale;
 			for (int i = 0; i < 8; i++)
 			  {
@@ -318,7 +314,9 @@ namespace CsBoard
 			// gc.RgbFgColor = new Gdk.Color (128, 128, 240);
 			if (info.stage == MoveStage.Clear
 			    || info.stage == MoveStage.Done)
-				DrawArrow (cairo, x1, y1, x2, y2, size, true);
+				DrawArrow (cairo,
+					   colors.ArrowColor, x1, y1, x2,
+					   y2, size, true);
 		}
 
 		private void DrawDrag (Cairo.Context cairo)
@@ -333,9 +331,9 @@ namespace CsBoard
 
 			// Defining the color of the Checks
 			int i, j, xcount, ycount;
-			cairo.Color = backgroundColor;
-			cairo.Rectangle (start_x - space,
-					 start_y - space,
+			//cairo.Color = backgroundColor;
+			cairo.Color = colors.BackgroundColor;
+			cairo.Rectangle (start_x - space, start_y - space,
 					 (size + space) * 8 + space,
 					 (size + space) * 8 + space);
 			cairo.Stroke ();
@@ -352,12 +350,14 @@ namespace CsBoard
 					    if (ycount % 2 != 0)
 					      {
 						      cairo.Color =
-							      blackSqColor;
+							      colors.
+							      BlackSqColor;
 					      }
 					    else
 					      {
 						      cairo.Color =
-							      whiteSqColor;
+							      colors.
+							      WhiteSqColor;
 					      }
 					    cairo.Rectangle (i, j,
 							     size, size);
@@ -495,7 +495,8 @@ namespace CsBoard
 									 space);
 
 								cairo.Color =
-									highlightSqColor;
+									colors.
+									HighlightSqColor;
 								cairo.Rectangle (xval, yval, size, size);
 								cairo.Fill ();
 							}
@@ -542,7 +543,9 @@ namespace CsBoard
 		private void DrawPiece (Cairo.Context cairo, FigureType fig,
 					int x, int y, int size)
 		{
-			DrawPiece (cairo, fm, fig, x, y, size);
+			DrawPiece (cairo,
+				   colors.ForegroundColor, fm,
+				   fig, x, y, size);
 		}
 
 		public static void DrawPiece (Cairo.Context cairo,
@@ -550,7 +553,17 @@ namespace CsBoard
 					      FigureType fig, int x, int y,
 					      int size)
 		{
-			Cairo.Color fill = new Cairo.Color (0, 0, 0, 1);
+			DrawPiece (cairo, new Cairo.Color (0, 0, 0, 1), fm,
+				   fig, x, y, size);
+		}
+
+		public static void DrawPiece (Cairo.Context cairo,
+					      Cairo.Color fill,
+					      FigureManager fm,
+					      FigureType fig, int x, int y,
+					      int size)
+		{
+			//fill = new Cairo.Color (0, 0, 0, 1);
 
 			ArrayList list = fm.GetPoints (fig);
 
@@ -595,7 +608,7 @@ namespace CsBoard
 				  int y = start_y +
 					  info.start.y * (space + size);
 
-				  cairo.Color = backgroundColor;
+				  cairo.Color = colors.BackgroundColor;
 				  cairo.Rectangle (x, y, size, size);
 				  cairo.Stroke ();
 			  }
@@ -607,7 +620,7 @@ namespace CsBoard
 				  int y = start_y +
 					  info.cursor.y * (space + size);
 
-				  cairo.Color = backgroundColor;
+				  cairo.Color = colors.BackgroundColor;
 				  cairo.Rectangle (x, y, size, size);
 				  cairo.Stroke ();
 			  }
@@ -814,6 +827,16 @@ namespace CsBoard
 					      int y1, int x2, int y2,
 					      int size, bool filled)
 		{
+			DrawArrow (cairo,
+				   new Cairo.Color (0.5, 0.5, 0.8, 0.5), x1,
+				   y1, x2, y2, size, filled);
+		}
+
+		public static void DrawArrow (Cairo.Context cairo,
+					      Cairo.Color color, int x1,
+					      int y1, int x2, int y2,
+					      int size, bool filled)
+		{
 			double len =
 				Math.Sqrt ((y2 - y1) * (y2 - y1) +
 					   (x2 - x1) * (x2 - x1));
@@ -867,8 +890,10 @@ namespace CsBoard
 			Gdk.Point[]points = new Gdk.Point[]
 			{
 			a[0], a[1], b[1], d, tip, c, b[0], a[0]};
-			Cairo.Color color =
-				new Cairo.Color (0.5, 0.5, 0.8, 0.5);
+			/*
+			   Cairo.Color color =
+			   new Cairo.Color (0.5, 0.5, 0.8, 0.5);
+			 */
 			cairo.Color = color;
 			double orig = cairo.LineWidth;
 			double fraction = 5;
