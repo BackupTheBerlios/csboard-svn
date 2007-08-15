@@ -110,12 +110,19 @@ namespace CsBoard
 				movesWidget.Show ();
 
 				HBox box = new HBox ();
-				Button closeButton = new Button ("");
+				Button closeButton;
+				if (Config.WindowsBuild)
+					closeButton =
+						new Button (Stock.Close);
+				else
+				  {
+					  closeButton = new Button ("");
+					  closeButton.Image =
+						  new Image (Stock.Close,
+							     IconSize.Menu);
+				  }
 				resultLabel = new Label ();
 				resultLabel.Xalign = 0;
-				closeButton.Image =
-					new Image (Stock.Close,
-						   IconSize.Menu);
 				box.PackStart (resultLabel, true, true, 2);
 				box.PackStart (closeButton, false, false, 2);
 

@@ -15,7 +15,6 @@
 //
 // Copyright (C) 2006 Ravi Kiran UVS
 
-using Glade;
 using Gtk;
 using System.Collections;
 using System;

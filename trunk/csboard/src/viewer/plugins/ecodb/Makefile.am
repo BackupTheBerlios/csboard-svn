@@ -4,9 +4,7 @@ CSFLAGS = 		\
 	-target:library
 
 PACKAGE_DEPENDENCIES =							\
-	-pkg:gtk-sharp-2.0						\
-	-pkg:glade-sharp-2.0						\
-	-pkg:rsvg-sharp-2.0
+	-pkg:gtk-sharp-2.0
 
 ASSEMBLIES = 					\
 	$(PACKAGE_DEPENDENCIES) 		\
