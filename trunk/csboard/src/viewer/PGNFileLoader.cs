@@ -155,12 +155,7 @@ namespace CsBoard
 						       Catalog.
 						       GetString ("Loading: ")
 						       + file);
-				if (!Config.WindowsBuild)
-					GLib.Idle.Add (new GLib.
-						       IdleHandler
-						       (LoadGamesIdleHandler));
-				else
-					LoadGamesIdleHandler ();
+				LoadGamesIdleHandler ();
 			}
 
 			private bool LoadGamesIdleHandler ()

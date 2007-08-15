@@ -95,12 +95,7 @@ namespace CsBoard
 						       Catalog.
 						       GetString
 						       ("Loading from buffer..."));
-				if (!Config.WindowsBuild)
-					GLib.Idle.Add (new GLib.
-						       IdleHandler
-						       (LoadGamesIdleHandler));
-				else
-					LoadGamesIdleHandler ();
+				LoadGamesIdleHandler ();
 			}
 
 			public void on_load_pgn_activate (System.Object b,

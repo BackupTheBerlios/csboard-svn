@@ -556,7 +556,6 @@ namespace CsBoard
 				games.Clear ();
 				viewer.StartProgress ();
 				viewer.ProgressBar.PulseStep = 0.01;
-
 				PGNParser parser = new PGNParser (reader);
 				parser.Parse (gameloader);
 				viewer.StopProgress ();

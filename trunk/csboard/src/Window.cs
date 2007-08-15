@@ -159,8 +159,17 @@ namespace CsBoard
 			if (filename == null)
 				control.OpenGame (App.Session.Filename);
 			else
-				CsBoard.Viewer.GameViewer.Instance.
-					Load (filename);
+			  {
+				  ShowApp (CsBoard.Viewer.GameViewer.
+					   Instance);
+				  GLib.Idle.Add (delegate
+						 {
+						 CsBoard.Viewer.GameViewer.
+						 Instance.Load (filename);
+						 return false;
+						 }
+				  );
+			  }
 
 			chessGameWidget.Show ();
 			boardWidget.Show ();
