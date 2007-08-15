@@ -124,7 +124,7 @@ namespace CsBoard
 				view.AppendColumn (Catalog.
 						   GetString ("Name"),
 						   new CellRendererText (),
-						   "text", 2);
+						   "markup", 2);
 
 				ScrolledWindow win = new ScrolledWindow ();
 				win.SetPolicy (PolicyType.Automatic,

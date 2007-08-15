@@ -66,9 +66,10 @@ namespace CsBoard
 
 			public string GetName (string eco)
 			{
-				if (!openings.ContainsKey (eco)) {
-					return null;
-				}
+				if (!openings.ContainsKey (eco))
+				  {
+					  return null;
+				  }
 				ArrayList list = (ArrayList) openings[eco];
 				if (list.Count == 0)
 					return null;
@@ -84,63 +85,45 @@ namespace CsBoard
 				if (node == null)
 					return;
 				PGNTreeNode last;
-				if (reverseTraversal) {
-					last = node;
-					node = node.prev;
-				}
+				if (reverseTraversal)
+				  {
+					  last = node;
+					  node = node.prev;
+				  }
 				else
 					last = node.prev;
 
-				for (;;) {
-					TreeIter newiter;
-					Opening opening =
-						(Opening) node.value;
-					if (iter.Equals (TreeIter.Zero))
-						newiter =
-							store.
-							AppendValues (node.
-								      move,
-								      node.
-								      count,
-								      opening
-								      ==
-								      null ?
-								      "" :
-								      String.
-								      Format
-								      ("{0}:{1}",
-								       opening.
-								       name,
-								       opening.
-								       variation));
-					else
-						newiter =
-							store.
-							AppendValues (iter,
-								      node.
-								      move,
-								      node.
-								      count,
-								      opening
-								      ==
-								      null ?
-								      "" :
-								      String.
-								      Format
-								      ("{0}:{1}",
-								       opening.
-								       name,
-								       opening.
-								       variation));
-					AppendMove (store, newiter,
-						    node.firstChild);
-					if (node == last)
-						break;
-					if (reverseTraversal)
-						node = node.prev;
-					else
-						node = node.next;
-				}
+				for (;;)
+				  {
+					  TreeIter newiter;
+					  Opening opening =
+						  (Opening) node.value;
+					  string name = opening == null ? "" :
+						  String.
+						  Format
+						  ("<b><span color=\"#222266\">{2}</span> {0}:{1} </b>",
+						   opening.name,
+						   opening.variation,
+						   opening.ecoName);
+					  newiter =
+						  iter.Equals (TreeIter.
+							       Zero) ? store.
+						  AppendValues (node.move,
+								node.count,
+								name) : store.
+						  AppendValues (iter,
+								node.move,
+								node.count,
+								name);
+					  AppendMove (store, newiter,
+						      node.firstChild);
+					  if (node == last)
+						  break;
+					  if (reverseTraversal)
+						  node = node.prev;
+					  else
+						  node = node.next;
+				  }
 			}
 		}
 	}
