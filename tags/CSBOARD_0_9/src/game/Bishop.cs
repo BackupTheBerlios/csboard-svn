@@ -1,0 +1,102 @@
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU Library General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// Copyright (C) 2006 Ravi Kiran UVS
+
+using System;
+using System.Collections;
+
+namespace Chess
+{
+	namespace Game
+	{
+		public class Bishop:ChessPiece
+		{
+			public Bishop (ColorType color, int rank, int file,
+				       ChessSide myside,
+				       ChessSide oppside):base (PieceType.
+								BISHOP, color,
+								rank, file,
+								myside,
+								oppside)
+			{
+			}
+
+			public override int getPoints ()
+			{
+				return 3;
+			}
+
+			public override string getNotationPrefix ()
+			{
+				return "B";
+			}
+
+			protected override IList getNotationCandidates ()
+			{
+				return myside.Bishops;
+			}
+
+			public override bool isValidMove (int i, int j,
+							  ChessPiece[,]
+							  positions,
+							  int flags)
+			{
+				if (!base.
+				    isValidMove (i, j, positions, flags))
+					return false;
+
+				int tmp_r = rank, tmp_f = file;
+				int rinc, finc, rdiff, fdiff;
+				if (rank < i)
+				  {
+					  rinc = 1;
+					  rdiff = i - rank;
+				  }
+				else
+				  {
+					  rinc = -1;
+					  rdiff = rank - i;
+				  }
+
+				if (file < j)
+				  {
+					  finc = 1;
+					  fdiff = j - file;
+				  }
+				else
+				  {
+					  finc = -1;
+					  fdiff = file - j;
+				  }
+
+				if (rdiff != fdiff)
+					return false;
+
+				for (int dist = rdiff - 1; dist > 0; dist--)
+				  {
+					  tmp_r += rinc;
+					  tmp_f += finc;
+					  if (positions[tmp_r, tmp_f] != null)
+					    {
+						    return false;
+					    }
+				  }
+
+				return true;
+			}
+		}
+	}
+}

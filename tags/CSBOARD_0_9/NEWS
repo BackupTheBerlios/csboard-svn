@@ -1,0 +1,62 @@
+Release 0.9 contains:
+
+* New unified look, everything is shown in a single window
+* Initial windows port
+* Numerous bug fixes and UI improvements
+
+Release 0.8 contains:
+
+Lot of new features in this release
+* Internet Chess Server (ICS) client
+* You can play on the ICS server, watch other games (especially the games played by Grand Masters live, if there are any tournaments going on)
+* save games into a database and organize them into collections
+* rate games and tag them so that they can be searched easily
+* Encyclopaedia of Chess Openings (ECO) database
+* 'csboard' is the main command to start the app. The viewer can be started with 'csviewer'
+* Screencasts posted on the site http://csboard.berlios.de
+
+Release 0.7 contains:
+
+* New viewer for PGN files (Ravi Kiran U V S), printing, playing
+  and exporting is supported. Try it with csviewer command.
+* Build fixes for recent mono.
+* Turkish translation (Semih Gokalp), 
+  Czhech translation (Michal Turek), Telugu translation (Ravi Kiran).
+
+Release 0.6 contains:
+
+* Update to gtk-sharp2 and mono 1.1
+* Fix for nasty bug with gconf when schema is not loaded
+* Port to gnome doc utils
+* Minor bugfixes
+
+Release 0.5 contains:
+
+* UI improvments, like progress bar on thinking, possible move highligh for
+  newbies, animation.
+* Better error handling.
+* Updated documentation.
+* Work for playing with ICS servers.
+
+Release 0.4, where you can find:
+
+* Some UI options help you customize CSBoard look.
+* Now we use GConf to store preferences.
+* Support for Crafty and Phalanx engines (check GConf key).
+
+Release 0.3 can break the world with:
+
+* Full build process. Now you can just configure && make && make install
+* Keyboard navigation. Just play with arrows without mouse.
+* Full GNOME integration. In this release, we support pgn mime type, icons and 
+  documentation.
+* Internationalization started. Russian translation already in place.
+
+This release 0.2 has number of features:
+
+* Usage of gtk-2.4 file dialogs.
+* Figures dragging.
+* Hints and book openening
+* Level adjustment.
+* Session saving and implemented revert.
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<omf>
+  <resource>
+    <subject category="GNOME|Games"/>
+    <type>
+      user's guide
+    </type>
+    <relation seriesid="0b658a8e-ba19-11d8-8272-f34b51e056de"/>
+    <rights type="GNU FDL" license.version="1.1" holder="Sun Microsystems"/>
+  </resource>
+</omf>

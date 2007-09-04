@@ -1,0 +1,217 @@
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/csboard/engine</key>
+      <applyto>/apps/csboard/engine</applyto>
+      <owner>csboard</owner>
+      <type>string</type>
+      <default>gnuchess -x -e</default>
+      <locale name="C">
+	<short>Command line to start engine</short>
+	<long>Command line to start engine. Be careful, this key can
+	break programm. Possible engines are 'gnuchess', 'crafty', 'ICS' and 'phalanx'.
+	For crafty please give path to log, books and databases as arguments.
+	For phalanx please disable learing with argument -l- or give the
+	path to learning directory, also give path to Phalanx books. For 
+	details look at engine's help. For ICS this string should look like:
+	&quot;ICS --server freechess.org --user jimmy --password bar&quot;. </long>
+      </locale>
+    </schema>
+    
+    <schema>
+      <key>/schemas/apps/csboard/session/level</key>
+      <applyto>/apps/csboard/session/level</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>1</default>
+      <locale name="C">
+	<short>Level of player</short>
+	<long>This key adjusts engine strenght</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/width</key>
+      <applyto>/apps/csboard/session/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Window width</short>
+	<long>Saved board window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/height</key>
+      <applyto>/apps/csboard/session/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Window height</short>
+	<long>Saved board window height</long>
+      </locale>
+    </schema>
+
+
+    <schema>
+      <key>/schemas/apps/csboard/viewer/session/width</key>
+      <applyto>/apps/csboard/viewer/session/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Viewer window width</short>
+	<long>Saved viewer window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/viewer/session/height</key>
+      <applyto>/apps/csboard/viewer/session/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>Viewer window height</short>
+	<long>Saved game viewer window height</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/icswin/width</key>
+      <applyto>/apps/csboard/icswin/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>400</default>
+      <locale name="C">
+	<short>ICS window width</short>
+	<long>ICS window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/icswin/height</key>
+      <applyto>/apps/csboard/icswin/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>500</default>
+      <locale name="C">
+	<short>ICS window height</short>
+	<long>ICS window height</long>
+      </locale>
+    </schema>
+
+
+    <schema>
+      <key>/schemas/apps/csboard/icsgames/width</key>
+      <applyto>/apps/csboard/icsgames/width</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>500</default>
+      <locale name="C">
+	<short>ICS games window width</short>
+	<long>ICS games window width</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/icsgames/height</key>
+      <applyto>/apps/csboard/icsgames/height</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>600</default>
+      <locale name="C">
+	<short>ICS games window height</short>
+	<long>ICS games window height</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/icsgames/split_pane_position</key>
+      <applyto>/apps/csboard/icsgames/split_pane_position</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>150</default>
+      <locale name="C">
+	<short>Split pane position</short>
+	<long>Split pane position</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/show_coords</key>
+      <applyto>/apps/csboard/session/show_coords</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Show Coords</short>
+	<long>Show Coordinates on Chess Board</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/last_move</key>
+      <applyto>/apps/csboard/session/last_move</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Highligh last move</short>
+	<long>Draw rectangle around last move</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/current_folder</key>
+      <applyto>/apps/csboard/session/current_folder</applyto>
+      <owner>csboard</owner>
+      <type>string</type>
+      <default> </default>
+      <locale name="C">
+	<short>Current folder</short>
+	<long>Current folder selected by the file chooser dialog</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/possible_moves</key>
+      <applyto>/apps/csboard/session/possible_moves</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+	<short>Highligh possible moves</short>
+	<long>Should I highlight all possible moves for newbe.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/session/animate</key>
+      <applyto>/apps/csboard/session/animate</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Animate moves</short>
+	<long>Add nice visual animate effect.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/csboard/viewer/session/viewer_split_pane_position</key>
+      <applyto>/apps/csboard/viewer/session/viewer_split_pane_position</applyto>
+      <owner>csboard</owner>
+      <type>int</type>
+      <default>300</default>
+      <locale name="C">
+	<short>Split pane position</short>
+	<long>Split pane position</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

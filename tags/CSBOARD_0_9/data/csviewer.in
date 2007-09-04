@@ -1,0 +1,7 @@
+#!/bin/sh
+
+CSBOARD_DATA_PATH=@prefix@/share/csboard 
+
+cd $CSBOARD_DATA_PATH
+
+mono ./csboard.exe "$@"
