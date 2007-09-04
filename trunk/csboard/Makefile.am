@@ -133,7 +133,8 @@ IMAGES= \
 	images/white-knight.svg		\
 	images/white-pawn.svg		\
 	images/white-queen.svg		\
-	images/white-rook.svg
+	images/white-rook.svg		\
+	images/computer.png
 
 EXTRA_DIST = \
 	COPYING \
@@ -172,10 +173,10 @@ RESOURCES =										\
 	-resource:$(top_srcdir)/images/black-pawn.svg,black-pawn.svg			\
 	-resource:$(top_srcdir)/images/black-knight.svg,black-knight.svg		\
 	-resource:$(top_srcdir)/images/computer.png,computer.png			\
-	-resource:$(srcdir)/resource/csboard.glade,csboard.glade			\
-	-resource:$(srcdir)/resource/csviewer.glade,csviewer.glade
+	-resource:$(top_srcdir)/resource/csviewer.glade,csviewer.glade			\
+	-resource:$(top_srcdir)/resource/csboard.glade,csboard.glade
 
-RESOURCE_FILE_DEPENDENCIES =						\
+RESOURCE_FILE_DEPENDS =						\
 	$(top_srcdir)/images/white-rook.svg				\
 	$(top_srcdir)/images/white-king.svg				\
 	$(top_srcdir)/images/white-queen.svg				\
@@ -188,28 +189,32 @@ RESOURCE_FILE_DEPENDENCIES =						\
 	$(top_srcdir)/images/black-bishop.svg				\
 	$(top_srcdir)/images/black-pawn.svg				\
 	$(top_srcdir)/images/black-knight.svg				\
-	$(srcdir)/resource/csboard.glade				\
-	$(srcdir)/resource/csviewer.glade
+	$(top_srcdir)/images/black-knight.svg				\
+	$(top_srcdir)/resource/eco.pgn					\
+	$(top_srcdir)/resource/csboard.glade				\
+	$(top_srcdir)/resource/csviewer.glade
 
-PACKAGE_DEPENDENCIES =							\
+PACKAGE_DEPENDS =							\
 	-pkg:gtk-sharp-2.0						\
 	-pkg:glade-sharp-2.0						\
 	-pkg:rsvg-sharp-2.0
 
 if !WINDOWS_BUILD
-PACKAGE_DEPENDENCIES += -pkg:gconf-sharp-2.0
+PACKAGE_DEPENDS += -pkg:gconf-sharp-2.0
 else
-app_DATA = csboard.exe compile.bat
-compile.bat: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDENCIES)
-	echo "	mcs $(PACKAGE_DEPENDENCIES) $(RESOURCES) \
+app_DATA += compile.bat
+
+compile.bat: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDS)
+	echo "	mcs $(PACKAGE_DEPENDS) $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
 	-r:Mono.Posix -r:Mono.Cairo" > _compile.bat
 	sed 's/\//\\/g' _compile.bat > compile.bat
 	rm _compile.bat
+
 endif
 
-csboard.exe: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDENCIES)
-	mcs $(PACKAGE_DEPENDENCIES) $(RESOURCES) \
+csboard.exe: $(SOURCE) config.cs $(RESOURCE_FILE_DEPENDS)
+	mcs $(PACKAGE_DEPENDS) $(RESOURCES) \
 	-out:csboard.exe $(SOURCE) config.cs \
 	-r:Mono.Posix -r:Mono.Cairo
 

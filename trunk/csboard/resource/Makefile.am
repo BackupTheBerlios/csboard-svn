@@ -1,4 +1,4 @@
-gladedir=$(prefix)/share/csboard/resource
-glade_DATA = csboard.glade
+resourcedir=$(prefix)/share/csboard/resource
+resource_DATA = csboard.glade csviewer.glade eco.pgn
 
-EXTRA_DIST = $(glade_DATA)
+EXTRA_DIST = $(resource_DATA)

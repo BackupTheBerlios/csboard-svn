@@ -1,3 +1,16 @@
+2007-09-04  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
+
+	* Makefile.am:
+	* NEWS:
+	* configure.in:
+	* resource/Makefile.am:
+	* src/viewer/plugins/ecodb/Makefile.am:
+	* src/viewer/plugins/gamedb/Makefile.am:
+	* src/viewer/plugins/printer/Makefile.am:
+	* src/viewer/plugins/urlloader/Makefile.am:
+	
+	Update to make distcheck pass and release 0.9
+
 2007-08-14 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* configure.in:

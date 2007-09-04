@@ -3,12 +3,12 @@ CSC = mcs
 CSFLAGS = 		\
 	-target:library
 
-PACKAGE_DEPENDENCIES =							\
+PACKAGE_DEPENDS =							\
 	-pkg:gtk-sharp-2.0						\
 	-pkg:gnome-sharp-2.0
 
 ASSEMBLIES = 					\
-	$(PACKAGE_DEPENDENCIES) 		\
+	$(PACKAGE_DEPENDS)	 		\
 	-r:Mono.Posix				\
 	-r:$(top_builddir)/csboard.exe
 

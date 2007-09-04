@@ -3,12 +3,12 @@ CSC = mcs
 CSFLAGS = 		\
 	-target:library
 
-PACKAGE_DEPENDENCIES =							\
+PACKAGE_DEPENDS =							\
 	-pkg:gtk-sharp-2.0						\
 	-pkg:glade-sharp-2.0
 
 ASSEMBLIES = 					\
-	$(PACKAGE_DEPENDENCIES) 		\
+	$(PACKAGE_DEPENDS)	 		\
 	-r:Mono.Posix				\
 	-r:$(srcdir)/db4o.dll			\
 	-r:$(top_builddir)/csboard.exe
@@ -52,8 +52,14 @@ endif
 db4odir=$(prefix)/share/csboard
 db4o_DATA = db4o.dll
 
+resources = \
+	dbicon.png \
+	gamedb.glade
+
 EXTRA_DIST =            	\
-	$(GAMEDB_CSFILES)
+	$(GAMEDB_CSFILES)	\
+	$(db4o_DATA)		\
+	$(resources)
 
 CLEANFILES =			\
 	$(GAMEDB_TARGET)
