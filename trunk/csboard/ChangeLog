@@ -1,21 +1,19 @@
 2007-08-14 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	modified files
-
-	* configure.in
-	* src/ChessWindowUI.cs
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/Makefile.am
-	* src/viewer/plugins/printer/Makefile.am
-	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs
-	* src/viewer/plugins/ecodb/Makefile.am
-	* src/viewer/GameViewer.cs
-	* src/viewer/CairoPositionSnapshot.cs
-	* src/viewer/Widgets/CairoViewerBoard.cs
-	* src/CairoBoard.cs
-	* src/ics/Graph.cs
-	* Makefile.am
-	* config.cs.in
+	* configure.in:
+	* src/ChessWindowUI.cs:
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/Makefile.am:
+	* src/viewer/plugins/printer/Makefile.am:
+	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs:
+	* src/viewer/plugins/ecodb/Makefile.am:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/CairoPositionSnapshot.cs:
+	* src/viewer/Widgets/CairoViewerBoard.cs:
+	* src/CairoBoard.cs:
+	* src/ics/Graph.cs:
+	* Makefile.am:
+	* config.cs.in:
 
 	Changes to enable windows port
 
@@ -23,22 +21,20 @@
 
 	modified files
 
-	* src/ics/ICSClient.cs
-	* src/ics/GameAdvertisementGraph.cs
-	* src/ics/Graph.cs
+	* src/ics/ICSClient.cs:
+	* src/ics/GameAdvertisementGraph.cs:
+	* src/ics/Graph.cs:
 
 	ui improvement in ics
 
 2007-07-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	modified files
-
-	* src/ics/ICSClient.cs
-	* src/ics/ICSDetailsWidget.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GameViewerUI.cs
-	* src/viewer/Widgets/GameViewerWidget.cs
-	* src/viewer/Widgets/GamesListWidget.cs
+	* src/ics/ICSClient.cs:
+	* src/ics/ICSDetailsWidget.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GameViewerUI.cs:
+	* src/viewer/Widgets/GameViewerWidget.cs:
+	* src/viewer/Widgets/GamesListWidget.cs:
 
 	added popup menu
 
@@ -46,51 +42,49 @@
 
 	modified files
 
-	* Makefile.am
-	* src/App.cs
-	* src/ChessWindowUI.cs
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICSDetailsWidget.cs
-	* src/ics/ObservingGamePage.cs
-	* src/ics/PlayerPage.cs
+	* Makefile.am:
+	* src/App.cs:
+	* src/ChessWindowUI.cs:
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICSDetailsWidget.cs:
+	* src/ics/ObservingGamePage.cs:
+	* src/ics/PlayerPage.cs:
 
 	added file
 
-	* src/ics/ICSGameObserverWidget.cs
-	
+	* src/ics/ICSGameObserverWidget.cs:
+
 	removed files
 
-	* src/ics/ICS.cs
-	* src/ics/ICSDetailsWindow.cs
-	* src/ics/ICSGameObserverWindow.cs
+	* src/ics/ICS.cs:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/ics/ICSGameObserverWindow.cs:
 
 2007-07-24 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	modified files
-
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GameViewerUI.cs
-	* src/viewer/Widgets/GameViewerWidget.cs
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GameViewerUI.cs:
+	* src/viewer/Widgets/GameViewerWidget.cs:
 
 	bug fix
-	
+
 2007-07-24 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* src/Window.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/gamedb/Makefile.am
-	* src/viewer/plugins/ecodb/Makefile.am
+	* src/Window.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/gamedb/Makefile.am:
+	* src/viewer/plugins/ecodb/Makefile.am:
 
 	added
 
-	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs
-	* src/viewer/plugins/gamedb/GameDbBrowserUI.cs
+	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowserUI.cs:
 
 	added the game database and eco db as subapps
 
@@ -98,9 +92,9 @@
 
 	modified files
 
-	* src/Window.cs
-	* src/ics/ICSDetailsWidget.cs
-	* src/viewer/GameViewer.cs
+	* src/Window.cs:
+	* src/ics/ICSDetailsWidget.cs:
+	* src/viewer/GameViewer.cs:
 
 	ui modification to update title from subapp
 
@@ -108,23 +102,23 @@
 
 	modified files
 
-	* src/NullControl.cs
-	* src/ChessWindowUI.cs
-	* src/Crafty.cs
-	* src/GnuChess.cs
-	* src/ICS.cs
-	* src/IControl.cs
-	* src/Phalanx.cs
-	* src/Window.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/PGNBufferLoader.cs
-	* src/viewer/PGNFileLoader.cs
-	* src/viewer/PluginManagerDialog.cs
-	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
-	* src/viewer/plugins/urlloader/PGNUrlLoader.cs
+	* src/NullControl.cs:
+	* src/ChessWindowUI.cs:
+	* src/Crafty.cs:
+	* src/GnuChess.cs:
+	* src/ICS.cs:
+	* src/IControl.cs:
+	* src/Phalanx.cs:
+	* src/Window.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/PGNBufferLoader.cs:
+	* src/viewer/PGNFileLoader.cs:
+	* src/viewer/PluginManagerDialog.cs:
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs:
+	* src/viewer/plugins/urlloader/PGNUrlLoader.cs:
 
 	some improvements to the engine configuration
 
@@ -132,75 +126,75 @@
 
 	modified files
 
-	* Makefile.am
-	* src/App.cs
-	* src/AppMenuBar.cs
-	* src/Window.cs
-	* src/viewer/GameViewer.cs
-	* src/ics/ICSDetailsWidget.cs
-	* src/ics/ICSDetailsWindow.cs
+	* Makefile.am:
+	* src/App.cs:
+	* src/AppMenuBar.cs:
+	* src/Window.cs:
+	* src/viewer/GameViewer.cs:
+	* src/ics/ICSDetailsWidget.cs:
+	* src/ics/ICSDetailsWindow.cs:
 
 	added
 
-	* src/ChessWindowUI.cs
-	* src/viewer/GameViewerUI.cs
-	
+	* src/ChessWindowUI.cs:
+	* src/viewer/GameViewerUI.cs:
+
 	reorganized files
-	
+
 2007-07-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* src/viewer/PluginManager.cs
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/PluginManager.cs:
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
 
 	fixes a crash during multiple instances
-	
+
 2007-07-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
-	
-	* Makefile.am
-	* data/csplayer.in
-	* data/csviewer.in
-	* resource/csboard.glade
-	* src/App.cs
-	* src/AppMenuBar.cs
-	* src/ChessGameWidget.cs
-	* src/Window.cs
-	* src/ics/CommandSender.cs
-	* src/ics/ICSDetailsWidget.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/PGNBufferLoader.cs
-	* src/viewer/PGNFileLoader.cs
-	* src/viewer/PluginManager.cs
-	* src/viewer/PluginManagerDialog.cs
-	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
-	* src/viewer/plugins/urlloader/PGNUrlLoader.cs
+
+	* Makefile.am:
+	* data/csplayer.in:
+	* data/csviewer.in:
+	* resource/csboard.glade:
+	* src/App.cs:
+	* src/AppMenuBar.cs:
+	* src/ChessGameWidget.cs:
+	* src/Window.cs:
+	* src/ics/CommandSender.cs:
+	* src/ics/ICSDetailsWidget.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/PGNBufferLoader.cs:
+	* src/viewer/PGNFileLoader.cs:
+	* src/viewer/PluginManager.cs:
+	* src/viewer/PluginManagerDialog.cs:
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs:
+	* src/viewer/plugins/urlloader/PGNUrlLoader.cs:
 
 	added files
 
-	* src/viewer/ViewerMenuBar.cs
+	* src/viewer/ViewerMenuBar.cs:
 
 	added the viewer as a subapp
-	
+
 2007-07-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* Makefile.am
-	* resource/csboard.glade
-	* src/App.cs
-	* src/Window.cs
-	* src/ics/ICSDetailsWidget.cs
+	* Makefile.am:
+	* resource/csboard.glade:
+	* src/App.cs:
+	* src/Window.cs:
+	* src/ics/ICSDetailsWidget.cs:
 
 	added
-	
-	* src/AppMenuBar.cs
+
+	* src/AppMenuBar.cs:
 
 	ui improvements to show all apps in a single window.
 	currently integrated ics app only. need to move other
@@ -210,11 +204,11 @@
 
 	modified files
 
-	* src/CairoBoard.cs
-	* src/CairoPlayerBoard.cs
-	* src/PlayerBoard.cs
-	* src/Position.cs
-	* src/ics/ICSDetailsWindow.cs
+	* src/CairoBoard.cs:
+	* src/CairoPlayerBoard.cs:
+	* src/PlayerBoard.cs:
+	* src/Position.cs:
+	* src/ics/ICSDetailsWindow.cs:
 
 	ui improvements for the ics player
 
@@ -222,12 +216,12 @@
 
 	modified files
 
-	* Makefile.am
-	* src/ics/ICSDetailsWindow.cs
-	* src/ics/ICSGameObserverWindow.cs
+	* Makefile.am:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/ics/ICSGameObserverWindow.cs:
 
 	added
-	* src/ics/ICSConfigWidget.cs
+	* src/ics/ICSConfigWidget.cs:
 
 	ui modification. aviods popping a dialog for login
 
@@ -235,15 +229,16 @@
 
 	modified files
 
-	* Makefile.am
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICS.cs
-	* src/ics/ICSClient.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/ics/ParserUtils.cs
+	* Makefile.am:
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICS.cs:
+	* src/ics/ICSClient.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/ics/ParserUtils.cs:
 
 	added
-	* src/ics/MatchChallenge.cs
+
+	* src/ics/MatchChallenge.cs:
 
 	adds match challenge functionality
 
@@ -251,169 +246,169 @@
 
 	modified files
 
-	* resource/csviewer.glade
-	* src/CairoBoard.cs
-	* src/ics/ICSDetailsWindow.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/Widgets/ChessGameBoard.cs
+	* resource/csviewer.glade:
+	* src/CairoBoard.cs:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/Widgets/ChessGameBoard.cs:
 
 	Added 'switch sides' option to the viewer. fixes a bug also.
-	
+
 2007-04-06 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* Makefile.am
-	* resource/csviewer.glade
-	* src/Window.cs
-	* src/viewer/CairoPositionSnapshot.cs
-	* src/viewer/CairoViewerBoard.cs
-	* src/viewer/ChessGameView.cs
-	* src/viewer/ChessGameWidget.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/IEcoDb.cs
-	* src/viewer/PluginManagerDialog.cs
-	* src/viewer/PositionSnapshot.cs
-	* src/viewer/ViewerBoard.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs
-	* src/viewer/plugins/gamedb/GamesEditorDialog.cs
-	* src/viewer/plugins/gamedb/gamedb.glade
-	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
-	* src/viewer/plugins/printer/PrintWrapper.cs
+	* Makefile.am:
+	* resource/csviewer.glade:
+	* src/Window.cs:
+	* src/viewer/CairoPositionSnapshot.cs:
+	* src/viewer/CairoViewerBoard.cs:
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/ChessGameWidget.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/IEcoDb.cs:
+	* src/viewer/PluginManagerDialog.cs:
+	* src/viewer/PositionSnapshot.cs:
+	* src/viewer/ViewerBoard.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs:
+	* src/viewer/plugins/gamedb/GamesEditorDialog.cs:
+	* src/viewer/plugins/gamedb/gamedb.glade:
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs:
+	* src/viewer/plugins/printer/PrintWrapper.cs:
 
 	Replaced TreeView with IconView for showing games.
 	Cleaned up code and updated indentation.
-	
+
 2007-03-25 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* resource/csboard.glade
-	* resource/csviewer.glade
-	* src/App.cs
-	* src/Window.cs
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICSDetailsWindow.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/PluginManager.cs
-	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
-	* src/viewer/plugins/ecodb/Makefile.am
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/gamedb/Makefile.am
+	* resource/csboard.glade:
+	* resource/csviewer.glade:
+	* src/App.cs:
+	* src/Window.cs:
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/PluginManager.cs:
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs:
+	* src/viewer/plugins/ecodb/Makefile.am:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/gamedb/Makefile.am:
 
 	added a toolbar
-	
+
 2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* po/POTFILES.in
-	* po/te.po
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* po/POTFILES.in:
+	* po/te.po:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
 
 	updated the translations
-	
+
 2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	added files
 
-	* src/ics/Graph.cs
-	* src/ics/GameAdvertisementGraph.cs
+	* src/ics/Graph.cs:
+	* src/ics/GameAdvertisementGraph.cs:
 
 	modified files
 
-	* src/ics/GameAdvertisement.cs
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICS.cs
-	* src/ics/MovesGetter.cs
+	* src/ics/GameAdvertisement.cs:
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICS.cs:
+	* src/ics/MovesGetter.cs:
 
 	added a seek graph that shows the available game seeks
-	
+
 2007-03-08 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	added files
 
-	* src/ics/ChessMovesWidget.cs
-	* src/ics/MovesGetter.cs
-	* src/ics/ObservingGamePage.cs
-	* src/ics/PlayerPage.cs
+	* src/ics/ChessMovesWidget.cs:
+	* src/ics/MovesGetter.cs:
+	* src/ics/ObservingGamePage.cs:
+	* src/ics/PlayerPage.cs:
 
 	modified files
 
-	* Makefile.am
-	* src/game/ChessGamePlayer.cs
-	* src/ics/CommandSender.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/ics/MoveDetails.cs
+	* Makefile.am:
+	* src/game/ChessGamePlayer.cs:
+	* src/ics/CommandSender.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/ics/MoveDetails.cs:
 
 	adds a feature to browse the moves of observed games
-	
+
 2007-03-05 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* resource/csviewer.glade
-	* src/viewer/GameViewer.cs
-	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* resource/csviewer.glade:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
 
 2007-03-04 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* configure.in
-	* src/ics/ICSClient.cs
-	* src/ics/ObservableGamesWidget.cs
-	* src/viewer/ChessGameView.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GamesListWidget.cs
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* resource/csboard.glade
-	* resource/csviewer.glade
+	* configure.in:
+	* src/ics/ICSClient.cs:
+	* src/ics/ObservableGamesWidget.cs:
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GamesListWidget.cs:
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* resource/csboard.glade:
+	* resource/csviewer.glade:
 
 	more ui changes
-	
+
 2007-02-24 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* configure.in
-	* src/viewer/ChessGameView.cs
-	* src/ics/ICSShell.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* configure.in:
+	* src/viewer/ChessGameView.cs:
+	* src/ics/ICSShell.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
 
 	replaced gtkhtml with textview
-	
+
 2007-02-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* data/csboard.schemas.in
-	* resource/csboard.glade
-	* src/App.cs
-	* src/Session.cs
-	* src/Window.cs
-	* src/ics/CommandSender.cs
-	* src/ics/GameAdvertisement.cs
-	* src/ics/GameAdvertisementsWidget.cs
-	* src/ics/GameDetails.cs
-	* src/ics/GameInfo.cs
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICS.cs
-	* src/ics/ICSClient.cs
-	* src/ics/ICSConfigDialog.cs
-	* src/ics/ICSDetailsWindow.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/ics/MoveDetails.cs
-	* src/ics/ObservableGamesWidget.cs
-	* src/ics/ParserUtils.cs
-	* src/viewer/CairoViewerBoard.cs
-	* src/viewer/GameViewer.cs
+	* data/csboard.schemas.in:
+	* resource/csboard.glade:
+	* src/App.cs:
+	* src/Session.cs:
+	* src/Window.cs:
+	* src/ics/CommandSender.cs:
+	* src/ics/GameAdvertisement.cs:
+	* src/ics/GameAdvertisementsWidget.cs:
+	* src/ics/GameDetails.cs:
+	* src/ics/GameInfo.cs:
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICS.cs:
+	* src/ics/ICSClient.cs:
+	* src/ics/ICSConfigDialog.cs:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/ics/MoveDetails.cs:
+	* src/ics/ObservableGamesWidget.cs:
+	* src/ics/ParserUtils.cs:
+	* src/viewer/CairoViewerBoard.cs:
+	* src/viewer/GameViewer.cs:
 
 	more ui improvements
 
@@ -421,17 +416,17 @@
 
 	modified files
 
-	* src/CairoBoard.cs
-	* src/CairoPlayerBoard.cs
-	* src/ChessClock.cs
-	* src/Window.cs
-	* src/ics/CommandSender.cs
-	* src/ics/GameAdvertisementsWidget.cs
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/ics/ICSShell.cs
-	* src/viewer/CairoViewerBoard.cs
-	* src/viewer/GameViewer.cs
+	* src/CairoBoard.cs:
+	* src/CairoPlayerBoard.cs:
+	* src/ChessClock.cs:
+	* src/Window.cs:
+	* src/ics/CommandSender.cs:
+	* src/ics/GameAdvertisementsWidget.cs:
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/ics/ICSShell.cs:
+	* src/viewer/CairoViewerBoard.cs:
+	* src/viewer/GameViewer.cs:
 
 	adds feature to play games on the ics
 
@@ -439,57 +434,57 @@
 
 	added file
 
-	* src/ics/CommandSender.cs
+	* src/ics/CommandSender.cs:
 
 	modified files
 
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICSClient.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/ics/ICSConfigDialog.cs
-	* Makefile.am
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICSClient.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/ics/ICSConfigDialog.cs:
+	* Makefile.am:
 
 	adds block command feature for receiving command responses
 	gives more information while parsing command responses
-	
+
 2007-02-16 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified files
 
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICS.cs
-	* src/ics/ICSClient.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/ics/ICSConfigDialog.cs
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICS.cs:
+	* src/ics/ICSClient.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/ics/ICSConfigDialog.cs:
 
 	ui changes for observed games. guest login
-	
+
 2007-02-15 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	added files
 
-	* src/ChessGameWidget.cs
-	* src/ics/GameDetails.cs
-	* src/ics/GameObservationManager.cs
-	* src/ics/ICSGameObserverWindow.cs
-	* src/ics/ObservableGamesWidget.cs
-	* src/ics/ResultNotification.cs
-	* src/ics/GameInfo.cs
+	* src/ChessGameWidget.cs:
+	* src/ics/GameDetails.cs:
+	* src/ics/GameObservationManager.cs:
+	* src/ics/ICSGameObserverWindow.cs:
+	* src/ics/ObservableGamesWidget.cs:
+	* src/ics/ResultNotification.cs:
+	* src/ics/GameInfo.cs:
 
 	modified files
 
-	* Makefile.am
-	* resource/csboard.glade
-	* src/ChessClock.cs
-	* src/Window.cs
-	* src/ics/GameAdvertisement.cs
-	* src/ics/GameAdvertisementsWidget.cs
-	* src/ics/ICS.cs
-	* src/ics/ICSClient.cs
-	* src/ics/ICSDetailsWindow.cs
-	* src/ics/MoveDetails.cs
-	* src/ics/ParserUtils.cs
-	* src/viewer/CairoViewerBoard.cs
+	* Makefile.am:
+	* resource/csboard.glade:
+	* src/ChessClock.cs:
+	* src/Window.cs:
+	* src/ics/GameAdvertisement.cs:
+	* src/ics/GameAdvertisementsWidget.cs:
+	* src/ics/ICS.cs:
+	* src/ics/ICSClient.cs:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/ics/MoveDetails.cs:
+	* src/ics/ParserUtils.cs:
+	* src/viewer/CairoViewerBoard.cs:
 
 	added game observation functionality for ics
 
@@ -497,33 +492,33 @@
 
 	added files
 
-	* src/ChessClock.cs
-	* src/ics/GameAdvertisement.cs
-	* src/ics/GameAdvertisementsWidget.cs
-	* src/ics/ICSConfigDialog.cs
-	* src/ics/ICSShell.cs
-	* src/ics/MoveDetails.cs
-	* src/ics/ParserUtils.cs
-	* images/computer.png
+	* src/ChessClock.cs:
+	* src/ics/GameAdvertisement.cs:
+	* src/ics/GameAdvertisementsWidget.cs:
+	* src/ics/ICSConfigDialog.cs:
+	* src/ics/ICSShell.cs:
+	* src/ics/MoveDetails.cs:
+	* src/ics/ParserUtils.cs:
+	* images/computer.png:
 
 	Modified files
 
-	* Makefile.am
-	* data/csboard.schemas.in
-	* resource/csboard.glade
-	* src/GnuChess.cs
-	* src/Session.cs
-	* src/Window.cs
-	* src/ics/ICS.cs
-	* src/ics/ICSClient.cs
-	* src/ics/ICSDetailsWindow.cs
-	* src/ics/ICSSeek.cs
-	* src/viewer/GameViewer.cs
+	* Makefile.am:
+	* data/csboard.schemas.in:
+	* resource/csboard.glade:
+	* src/GnuChess.cs:
+	* src/Session.cs:
+	* src/Window.cs:
+	* src/ics/ICS.cs:
+	* src/ics/ICSClient.cs:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/ics/ICSSeek.cs:
+	* src/viewer/GameViewer.cs:
 
 	Removed files
 
-	* src/ics/ICSParser.cs
-	* src/ics/GameAdvertisements.cs
+	* src/ics/ICSParser.cs:
+	* src/ics/GameAdvertisements.cs:
 
 	cleaned up code and added more functionality for ics client. need to do
 	a lot before we can start playing :-)
@@ -532,26 +527,26 @@
 
 	Modified files
 
-	* resource/csboard.glade
-	* src/FigureManager.cs
-	* src/Session.cs
-	* src/Window.cs
-	* src/GnuChess.cs
+	* resource/csboard.glade:
+	* src/FigureManager.cs:
+	* src/Session.cs:
+	* src/Window.cs:
+	* src/GnuChess.cs:
 
 	Moved files to src/ics
 
-	* src/ICSSeek.cs
-	* src/ICS.cs
-	* src/ICSClient.cs
-	
+	* src/ICSSeek.cs:
+	* src/ICS.cs:
+	* src/ICSClient.cs:
+
 	Added files
 
-	* src/ics/GameAdvertisements.cs
-	* src/ics/ICSClient.cs
-	* src/ics/ICS.cs
-	* src/ics/ICSDetailsWindow.cs
-	* src/ics/ICSParser.cs
-	* src/ics/ICSSeek.cs
+	* src/ics/GameAdvertisements.cs:
+	* src/ics/ICSClient.cs:
+	* src/ics/ICS.cs:
+	* src/ics/ICSDetailsWindow.cs:
+	* src/ics/ICSParser.cs:
+	* src/ics/ICSSeek.cs:
 
 	Fixes the Double.Parse bug with LANG=ru_RU
 	Adds ui to choose the chess engine
@@ -562,34 +557,34 @@
 
 	Modified files
 
-	* configure.in
-	* data/Makefile.am
-	* src/App.cs
-	* src/GnuChess.cs
-	* data/csboard.desktop.in
-	* resource/csboard.glade
+	* configure.in:
+	* data/Makefile.am:
+	* src/App.cs:
+	* src/GnuChess.cs:
+	* data/csboard.desktop.in:
+	* resource/csboard.glade:
 
 	Added files
 
-	* data/csplayer.in
-	* data/csplayer.desktop.in
+	* data/csplayer.in:
+	* data/csplayer.desktop.in:
 
 	Modified the UI to show a window to pick the player or the viewer.
 	Added another script 'csplayer' to start the player
-	
+
 2007-02-07 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Modified files
 
-	* src/viewer/ChessGameView.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GamesListWidget.cs
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs
-	* src/viewer/plugins/gamedb/GamesEditorDialog.cs
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GamesListWidget.cs:
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs:
+	* src/viewer/plugins/gamedb/GamesEditorDialog.cs:
 
 	some ui improvements while adding the files to the database.
 
@@ -597,32 +592,32 @@
 
 	Added file
 
-	* src/viewer/ChessGame.cs
+	* src/viewer/ChessGame.cs:
 
 	Modified
 
-	* Makefile.am
-	* src/parser/PGNChessGame.cs
-	* src/viewer/ChessGameInfoWidget.cs
-	* src/viewer/ChessGameView.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GamesListWidget.cs
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs
-	* src/viewer/plugins/gamedb/Makefile.am
-	* src/viewer/plugins/gamedb/gamedb.glade
-	* src/viewer/plugins/printer/PGNExporter.cs
+	* Makefile.am:
+	* src/parser/PGNChessGame.cs:
+	* src/viewer/ChessGameInfoWidget.cs:
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GamesListWidget.cs:
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs:
+	* src/viewer/plugins/gamedb/Makefile.am:
+	* src/viewer/plugins/gamedb/gamedb.glade:
+	* src/viewer/plugins/printer/PGNExporter.cs:
 
 	Moved
 
-	* src/viewer/PGNGameDetails.cs
+	* src/viewer/PGNGameDetails.cs:
 
 	to
-	
-	* src/viewer/plugins/gamedb/PGNGameDetails.cs
+
+	* src/viewer/plugins/gamedb/PGNGameDetails.cs:
 
 	Code cleanup
 
@@ -630,16 +625,16 @@
 
 	Added file
 
-	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs
+	* src/viewer/plugins/gamedb/GamesCollectionDialog.cs:
 
 	Modified
 
-	* src/viewer/PGNGameDetails.cs
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/gamedb/Makefile.am
-	* src/viewer/plugins/gamedb/gamedb.glade
+	* src/viewer/PGNGameDetails.cs:
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/gamedb/Makefile.am:
+	* src/viewer/plugins/gamedb/gamedb.glade:
 
 	Adds game collections feature. collections are a group of games.
 
@@ -647,78 +642,78 @@
 
 	Added file
 
-	* src/viewer/plugins/gamedb/GamesEditorDialog.cs
+	* src/viewer/plugins/gamedb/GamesEditorDialog.cs:
 
 	Modified
 
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/Makefile.am
-	* src/viewer/plugins/gamedb/gamedb.glade
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/Makefile.am:
+	* src/viewer/plugins/gamedb/gamedb.glade:
 
 	Adds tags capability to the games database.
 
 2007-01-11 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Added files
-	* src/viewer/BufferDialog.cs
-	* src/viewer/PGNGameDetails.cs
-	* src/viewer/plugins/gamedb/GameDbBrowser.cs
-	* src/viewer/plugins/gamedb/gamedb.glade
+	* src/viewer/BufferDialog.cs:
+	* src/viewer/PGNGameDetails.cs:
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs:
+	* src/viewer/plugins/gamedb/gamedb.glade:
 
 	Modified files
-	
-	* src/viewer/ChessGameView.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GamesListWidget.cs
-	* src/viewer/PGNBufferLoader.cs
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/printer/PGNExporter.cs
+
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GamesListWidget.cs:
+	* src/viewer/PGNBufferLoader.cs:
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/printer/PGNExporter.cs:
 
 	Adds a game database browser with search functionality.
 
 2007-01-07 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	Added files
-	
-	* src/viewer/CairoPositionSnapshot.cs
-	* src/viewer/CairoViewerBoard.cs
-	* src/FigureManager.cs
-	* src/CairoBoard.cs
+
+	* src/viewer/CairoPositionSnapshot.cs:
+	* src/viewer/CairoViewerBoard.cs:
+	* src/FigureManager.cs:
+	* src/CairoBoard.cs:
 
 	Modified
 
-	* Makefile.am
-	* src/game/ChessGamePlayer.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/printer/PGNExporter.cs
+	* Makefile.am:
+	* src/game/ChessGamePlayer.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/printer/PGNExporter.cs:
 
 	Added cairo support to the viewer.
 
 2007-01-04 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* configure.in
-	* resource/csviewer.glade
-	* src/game/ChessGamePlayer.cs
-	* src/parser/PGNChessGame.cs
-	* src/parser/PGNChessMove.cs
-	* src/parser/PGNGameLoader.cs
-	* src/viewer/ChessGameView.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/PGNTree.cs
-	* src/viewer/plugins/Makefile.am
-	* src/viewer/plugins/printer/PGNExporter.cs
+	* configure.in:
+	* resource/csviewer.glade:
+	* src/game/ChessGamePlayer.cs:
+	* src/parser/PGNChessGame.cs:
+	* src/parser/PGNChessMove.cs:
+	* src/parser/PGNGameLoader.cs:
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/PGNTree.cs:
+	* src/viewer/plugins/Makefile.am:
+	* src/viewer/plugins/printer/PGNExporter.cs:
 
 	Added files
 
-	* src/viewer/plugins/gamedb/GameDb.cs
-	* src/viewer/plugins/gamedb/GameDbPlugin.cs
-	* src/viewer/plugins/gamedb/Makefile.am
-	* src/viewer/plugins/gamedb/db4o.dll
+	* src/viewer/plugins/gamedb/GameDb.cs:
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/gamedb/Makefile.am:
+	* src/viewer/plugins/gamedb/db4o.dll:
 
 	Cleaned up some code.
 	Adds a new feature to store games in a database. Feature implemented as a plugin
@@ -726,205 +721,205 @@
 
 2006-12-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* configure.in
-	* Makefile.am
-	* src/viewer/Makefile.am
+	* configure.in:
+	* Makefile.am:
+	* src/viewer/Makefile.am:
 
 	Moved the files
 
-	* src/viewer/plugins/EcoDBPlugin.cs
-	* src/viewer/plugins/OpeningsDb.cs
-	* src/viewer/plugins/PGNExporter.cs
-	* src/viewer/plugins/PGNPrinterPlugin.cs
-	* src/viewer/plugins/PrintWrapper.cs
-	* src/viewer/plugins/PGNUrlLoader.cs
+	* src/viewer/plugins/EcoDBPlugin.cs:
+	* src/viewer/plugins/OpeningsDb.cs:
+	* src/viewer/plugins/PGNExporter.cs:
+	* src/viewer/plugins/PGNPrinterPlugin.cs:
+	* src/viewer/plugins/PrintWrapper.cs:
+	* src/viewer/plugins/PGNUrlLoader.cs:
 
 	as
-	
-	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
-	* src/viewer/plugins/ecodb/OpeningsDb.cs
-	* src/viewer/plugins/urlloader/PGNUrlLoader.cs
-	* src/viewer/plugins/printer/PrintWrapper.cs
-	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
-	* src/viewer/plugins/printer/PGNExporter.cs
+
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs:
+	* src/viewer/plugins/ecodb/OpeningsDb.cs:
+	* src/viewer/plugins/urlloader/PGNUrlLoader.cs:
+	* src/viewer/plugins/printer/PrintWrapper.cs:
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs:
+	* src/viewer/plugins/printer/PGNExporter.cs:
 
 	created makefiles
-	
-	* src/viewer/plugins/ecodb/Makefile.am
-	* src/viewer/plugins/urlloader/Makefile.am
-	* src/viewer/plugins/printer/Makefile.am
+
+	* src/viewer/plugins/ecodb/Makefile.am:
+	* src/viewer/plugins/urlloader/Makefile.am:
+	* src/viewer/plugins/printer/Makefile.am:
 
 	Arranged the plugins under separate sub folders.
 
 2006-12-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* Makefile.am
-	* src/Figure.cs
-	* src/viewer/PositionSnapshot.cs
+	* Makefile.am:
+	* src/Figure.cs:
+	* src/viewer/PositionSnapshot.cs:
 
 	Use the image files from the assembly and cache them
 
 2006-12-28 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* src/viewer/PGNTree.cs
-	* src/viewer/ViewerBoard.cs
-	* src/viewer/plugins/EcoDBPlugin.cs
-	* src/viewer/plugins/OpeningsDb.cs
+	* src/viewer/PGNTree.cs:
+	* src/viewer/ViewerBoard.cs:
+	* src/viewer/plugins/EcoDBPlugin.cs:
+	* src/viewer/plugins/OpeningsDb.cs:
 
 	Adds a viewer for the opening browser
 
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* src/viewer/PositionSnapshot.cs
-	* src/Figure.cs
+	* src/viewer/PositionSnapshot.cs:
+	* src/Figure.cs:
 
 	Added this file
-	
-	* src/viewer/CachingFigure.cs
+
+	* src/viewer/CachingFigure.cs:
 
 	Extracts the svg files from the assembly and caches them to speed up
 	the snapshot generation during printing.
 
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* resource/csviewer.glade
-	* src/Figure.cs
-	* src/game/ChessGamePlayer.cs
-	* src/parser/PGNChessGame.cs
-	* src/viewer/ChessGameView.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/PositionSnapshot.cs
-	* src/viewer/plugins/EcoDBPlugin.cs
-	* src/viewer/plugins/PGNExporter.cs
+	* resource/csviewer.glade:
+	* src/Figure.cs:
+	* src/game/ChessGamePlayer.cs:
+	* src/parser/PGNChessGame.cs:
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/PositionSnapshot.cs:
+	* src/viewer/plugins/EcoDBPlugin.cs:
+	* src/viewer/plugins/PGNExporter.cs:
 
 	Added files
-	
-	* src/viewer/PGNTree.cs
-	* src/viewer/plugins/OpeningsDb.cs
+
+	* src/viewer/PGNTree.cs:
+	* src/viewer/plugins/OpeningsDb.cs:
 
 	Organizes the moves as a tree. Falls back to the older implementation
 	of the Figure as the scale operation is taking a lot of time.
 
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* Makefile.am
-	* src/Figure.cs
+	* Makefile.am:
+	* src/Figure.cs:
 
 	Modified to load the images from the assembly
 
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* resource/csboard.glade
-	* src/viewer/ChessGameView.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
+	* resource/csboard.glade:
+	* src/viewer/ChessGameView.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
 
 	Added
 
-	* resource/csviewer.glade
+	* resource/csviewer.glade:
 
 	more ui changes.
-	
+
 2006-12-26 Ravi Kiran UVS <uvsravikiran at gmail dot com>
-	
-	* Makefile.am
-	* configure.in
-	* resource/csboard.glade
-	* src/parser/PGNParser.cs
-	* src/viewer/ChessGameInfoWidget.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/plugins/Makefile.am
+
+	* Makefile.am:
+	* configure.in:
+	* resource/csboard.glade:
+	* src/parser/PGNParser.cs:
+	* src/viewer/ChessGameInfoWidget.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/plugins/Makefile.am:
 
 	Added the files
-	
-	* src/viewer/IEcoDb.cs
-	* src/viewer/plugins/EcoDBPlugin.cs
-	* src/viewer/ChessGameView.cs
-	* resource/eco.pgn
+
+	* src/viewer/IEcoDb.cs:
+	* src/viewer/plugins/EcoDBPlugin.cs:
+	* src/viewer/ChessGameView.cs:
+	* resource/eco.pgn:
 
 	Modifies the viewer ui. also adds support for ECO database.
-	
+
 2006-12-22 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* Makefile.am
-	* src/parser/PGNGameLoader.cs
+	* Makefile.am:
+	* src/parser/PGNGameLoader.cs:
 
 	Added this file
 
-	* src/parser/PGNParser.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GamesListWidget.cs
+	* src/parser/PGNParser.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GamesListWidget.cs:
 
 	Escapes special chars in pango markup. Also makes the parser
 	generic by making it call the methods of a listener.
 
 2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* resource/csboard.glade
-	* src/viewer/ChessGameWidget.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/GamesListWidget.cs
+	* resource/csboard.glade:
+	* src/viewer/ChessGameWidget.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/GamesListWidget.cs:
 
 	ui changes
 
 2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* resource/csboard.glade
-	* data/csboard.schemas.in
-	* src/Board.cs
-	* src/Session.cs
-	* src/parser/PGNNAG.cs
-	* src/viewer/ViewerBoard.cs
+	* resource/csboard.glade:
+	* data/csboard.schemas.in:
+	* src/Board.cs:
+	* src/Session.cs:
+	* src/parser/PGNNAG.cs:
+	* src/viewer/ViewerBoard.cs:
 
 	modified the ui layout
-	
+
 2006-12-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* resource/csboard.glade
-	* src/Position.cs
-	* src/parser/PGNChessMove.cs
-	* src/parser/PGNNAG.cs
-	* src/parser/PGNParser.cs
-	* src/viewer/ChessGameWidget.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/GameViewer.cs
-	* src/viewer/ViewerBoard.cs
-	* src/viewer/plugins/PGNUrlLoader.cs
+	* resource/csboard.glade:
+	* src/Position.cs:
+	* src/parser/PGNChessMove.cs:
+	* src/parser/PGNNAG.cs:
+	* src/parser/PGNParser.cs:
+	* src/viewer/ChessGameWidget.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/GameViewer.cs:
+	* src/viewer/ViewerBoard.cs:
+	* src/viewer/plugins/PGNUrlLoader.cs:
 
 	Added support for showing 'numerical annotated glyphs'. Changing the
 	ui layout. will need some more changes but committing the initial changes.
 	Also fixes a minor bug (it shows the pawn promotion dialog in the viewer)
-	
+
 2006-12-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* src/parser/PGNChessGame.cs
-	* src/parser/PGNParser.cs
-	* src/viewer/ChessGameWidget.cs
-	* src/viewer/GameSession.cs
-	* src/viewer/plugins/PGNExporter.cs
-	* Makefile.am
-	* src/parser/PGNNAG.cs
-	* src/parser/PGNChessMove.cs
-	* src/parser/PGNTag.cs
+	* src/parser/PGNChessGame.cs:
+	* src/parser/PGNParser.cs:
+	* src/viewer/ChessGameWidget.cs:
+	* src/viewer/GameSession.cs:
+	* src/viewer/plugins/PGNExporter.cs:
+	* Makefile.am:
+	* src/parser/PGNNAG.cs:
+	* src/parser/PGNChessMove.cs:
+	* src/parser/PGNTag.cs:
 
 	cleaned up the parser code. needs more cleanup.
 
 2006-12-18 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* src/viewer/plugins/PGNPrinterPlugin.cs
+	* src/viewer/plugins/PGNPrinterPlugin.cs:
 
 	The actual export function was removed by mistake. adding it again.
 
 2006-12-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* src/viewer/GameViewer.cs
+	* src/viewer/GameViewer.cs:
 
 	Added a handler that somehow got deleted
 
 2006-12-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
-	* po/te.po
-	* src/viewer/ChessGameInfoWidget.cs
+	* po/te.po:
+	* src/viewer/ChessGameInfoWidget.cs:
 
 	Changed to use the table to layout the labels
 
@@ -932,11 +927,11 @@
 
 	* configure.in:
 	* NEWS:
-	
+
 	Bump version to 0.7
-	
+
 	* help/C/csboard.xml:
-	
+
 	Fixes warning
 
 2006-12-17  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
@@ -954,7 +949,7 @@
 	* src/viewer/PluginManagerDialog.cs:
 	* src/viewer/plugins/PGNPrinterPlugin.cs:
 	* src/viewer/plugins/PrintWrapper.cs:
-	
+
 	Fixes build warnings
 
 2006-12-17  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
@@ -1022,7 +1017,7 @@
 	* src/viewer/plugins/PGNPrinterPlugin.cs:
 	* src/viewer/plugins/PGNUrlLoader.cs:
 	* src/viewer/plugins/PrintWrapper.cs:
-	
+
 	Update I18N framework
 
 2006-12-16  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
@@ -1130,7 +1125,7 @@
 	* src/viewer/Makefile.am:
 	* src/viewer/plugins/Makefile.am:
 	* data/csviewer.in:
-	
+
 	Added a plugin layer and organized some functions into plugins
 
 2006-12-08  Ravi Kiran UVS  <uvsravikiran at gmail dot com>
@@ -1236,7 +1231,7 @@
 	* src/viewer/GameViewer.cs:
 	* src/viewer/GamesListWidget.cs:
 	* src/viewer/ChessGameInfoWidget.cs:
-	
+
 	Replaced the HTML widgets with TreeView and Labels. Changed
 	the layout to have three columns one each for games list,
 	chess board and the game details.
@@ -1251,7 +1246,7 @@
 	* data/debian/csboard.1:
 	* data/debian/menu:
 	* data/debian/rules:
-	
+
 	Add debian package files by Michal Turek.
 
 2006-11-18  Ravi Kiran UVS <uvsravikiran at gmail dot com>
@@ -1280,32 +1275,32 @@
 	* src/viewer/GameViewer.cs:
 	* src/viewer/ChessGameWidget.cs:
 	* src/viewer/GamesListWidget.cs:
-	
+
 	Add new code to view games from PGN files.
 	Viewer functionality under the 'viewer' directory.
 	PGN parser functionality under the 'parser' directory.
 	Chess game player functionality under the 'game' directory.
-	App.cs modified to start the viewer when '-viewer' 
+	App.cs modified to start the viewer when '-viewer'
 	is passed as the argument
 
 2006-11-11  Michal Turek <michal.turek@gmail.com>
 
 	* po/cs.po:
 	* configure.in:
-	
+
 	Add cs to ALL_LINGUAS.
 
 2006-10-08  Semih Gokalp <semgok@hotmail.com>
 
 	* po/tr.po:
 	* configure.in:
-	
+
 	Add tr to ALL_LINGUAS.
 
 2006-10-07  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* src/ICSSeek.cs:
-	
+
 	Add comment about R/U translation.
 
 2006-09-23  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
@@ -1316,44 +1311,44 @@
 	* src/ICS.cs:
 	* src/ICSClient.cs:
 	* src/Window.cs:
-	
+
 	Update to work with mono 1.1.17 and bump requirements
 	due to API incompatibility. Fixes bug #8873.
 
 2006-07-28  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
-	* src/Window.cs: 
-	
+	* src/Window.cs:
+
 	- Use Gtk.AboutDialog, fixes bug 005225.
 
-	* src/Crafty.cs, src/ICS.cs: 
-	
+	* src/Crafty.cs, src/ICS.cs:
+
 	- Drop warnings, bug 005224.
-	
+
 	* src/FileChooser.cs:
-	
+
 	- removed, use standard one, fixes bug 008063.
-	
+
 	* help/*:
-	
+
 	- Updated to gtk doc utils.
-	
+
 	* po/ru.po:
-	
+
 	- Updated translation.
-	
+
 	* configure.ac:
-	
+
 	- Bump gtk requirements.
-	
+
 	* data/Makefile.am:
-	
+
 	- reload Gconf, fixes bug 005222.
 
 2006-07-04  Sergey E. Kvyato <kvantos@plotinka.ru>
 
-	* src/App.cs: 
-	
+	* src/App.cs:
+
 	- Escape markup before passing to message dialog
 
 2005-10-10  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
@@ -1362,4 +1357,4 @@
 	* autogen.sh:
 
 	- New files. Created ChangeLog. Good beginning :)
- 
+
