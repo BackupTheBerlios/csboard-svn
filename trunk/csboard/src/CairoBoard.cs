@@ -107,6 +107,17 @@ namespace CsBoard
 		public bool showCoords = false;
 		public bool showMoveHint = false;
 		public bool showAnimations = false;
+		private uint animation_timeout = 20;
+		protected float AnimationTimeoutInSeconds
+		{
+			set
+			{
+				animation_step =
+					1 / (1000 * value /
+					     animation_timeout);
+			}
+		}
+		private float animation_step;
 
 		private Pango.Layout layout;
 		private IColorProvider colors;
@@ -123,6 +134,7 @@ namespace CsBoard
 				colors = new CustomColorProvider ();
 			else
 				colors = new GtkBasedColorProvider (this);
+			AnimationTimeoutInSeconds = 0.2f;
 		}
 
 		///////////////////////////////////////////////////////////
@@ -636,6 +648,11 @@ namespace CsBoard
 
 		protected void Move (bool explicitly)
 		{
+			Move (explicitly, true);
+		}
+
+		protected void Move (bool explicitly, bool animate)
+		{
 
 			if (info.stage != MoveStage.Done)
 			  {
@@ -644,8 +661,33 @@ namespace CsBoard
 
 			char newFigure = ' ';
 
-			position.Move (info.start, info.end, ref newFigure,
-				       explicitly);
+			if (showAnimations && animate)
+			  {
+				  info.stage = MoveStage.SetPosition;
+				  if (info.animate_timeout_id > 0)
+				    {
+					    GLib.Source.Remove (info.
+								animate_timeout_id);
+				    }
+				  info.animate_timeout_id =
+					  GLib.Timeout.Add (animation_timeout,
+							    new GLib.
+							    TimeoutHandler
+							    (on_animate_timeout));
+
+				  info.animate_list =
+					  position.MoveAnimate (info.start,
+								info.end,
+								ref newFigure,
+								explicitly);
+			  }
+			else
+			  {
+				  info.stage = MoveStage.Clear;
+				  position.Move (info.start, info.end,
+						 ref newFigure, explicitly);
+				  QueueDraw ();
+			  }
 
 			string letter = "abcdefgh";
 			string move = string.Format ("{0}{1}{2}{3}",
@@ -665,14 +707,14 @@ namespace CsBoard
 
 		public virtual void Move (int src_rank, int src_file,
 					  int dest_rank, int dest_file,
-					  char promotion_type)
+					  char promotion_type, bool animate)
 		{
 			SrcFile = src_file;	// file from left
 			SrcRank = src_rank;
 			DestFile = dest_file;
 			DestRank = dest_rank;
 			info.stage = MoveStage.Done;
-			Move (true);
+			Move (true, animate);
 		}
 
 		int SrcRank
@@ -734,7 +776,7 @@ namespace CsBoard
 								animate_timeout_id);
 				    }
 				  info.animate_timeout_id =
-					  GLib.Timeout.Add (100,
+					  GLib.Timeout.Add (animation_timeout,
 							    new GLib.
 							    TimeoutHandler
 							    (on_animate_timeout));
@@ -761,7 +803,7 @@ namespace CsBoard
 					  animate_list[i];
 				  if (item.progress < 0.95)
 				    {
-					    item.progress += 0.2;
+					    item.progress += animation_step;
 					    task_finished = false;
 				    }
 			  }

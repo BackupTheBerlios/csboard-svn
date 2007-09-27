@@ -35,6 +35,8 @@ namespace CsBoard
 			{
 				highLightMove = true;
 				position.AskForPromotion = false;
+				showAnimations = true;
+				AnimationTimeoutInSeconds = 0.2f;
 			}
 /*
 		

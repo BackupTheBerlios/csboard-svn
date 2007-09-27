@@ -577,7 +577,7 @@ namespace CsBoard
 			  }
 
 			SetSensitive (true);
-			progressbar.Stop ();
+			//progressbar.Stop ();
 
 			UpdateAfterMove ();
 		}
@@ -679,7 +679,7 @@ namespace CsBoard
 			statusbar.Push (moveStatusbarId,
 					Catalog.GetString ("Thinking"));
 			SetSensitive (false);
-			progressbar.Start ();
+			//progressbar.Start ();
 
 		}
 

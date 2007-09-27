@@ -187,33 +187,28 @@ namespace CsBoard
 				currentMoveIdx = session.CurrentMoveIdx;
 				gameView.SetMoveIndex (currentMoveIdx);
 
-				if (currentMoveIdx >= 0)
-				  {
-					  string str =
-						  session.CurrentPGNMove.
-						  Nags ==
-						  null ? "" : session.
-						  CurrentPGNMove.Nags[0].
-						  Markup ();
-					  nagCommentLabel.Markup = str;
-					  string move_markup =
-						  String.
-						  Format ("<b>{0}{1} {2}</b>",
-							  session.
-							  CurrentMoveNumber,
-							  session.
-							  IsWhitesTurn ? "." :
-							  "...",
-							  session.
-							  CurrentMove);
-					  moveNumberLabel.Markup =
-						  move_markup;
-				  }
-				else
+				if (currentMoveIdx < 0)
 				  {
 					  moveNumberLabel.Text = "";
 					  nagCommentLabel.Text = "";
+					  return;
 				  }
+
+				string str =
+					session.CurrentPGNMove.
+					Nags ==
+					null ? "" : session.
+					CurrentPGNMove.Nags[0].Markup ();
+				nagCommentLabel.Markup = str;
+				string move_markup =
+					String.Format ("<b>{0}{1} {2}</b>",
+						       session.
+						       CurrentMoveNumber,
+						       session.
+						       IsWhitesTurn ? "." :
+						       "...",
+						       session.CurrentMove);
+				moveNumberLabel.Markup = move_markup;
 			}
 
 			private VBox GetRightPane ()

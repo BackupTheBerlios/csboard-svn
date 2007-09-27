@@ -256,13 +256,14 @@ namespace CsBoard
 				if (game == null)
 					return;
 
-				if(game.Comment != null) {
-					buffer.InsertWithTags (ref
-							       iter,
-							       game.Comment,
-							       commentTag);
-					buffer.Insert (ref iter, "\n");
-				}
+				if (game.Comment != null)
+				  {
+					  buffer.InsertWithTags (ref
+								 iter,
+								 game.Comment,
+								 commentTag);
+					  buffer.Insert (ref iter, "\n");
+				  }
 
 				int i = 0;
 				int moveno = 1;
@@ -300,14 +301,55 @@ namespace CsBoard
 								 "\n");
 						  buffer.InsertWithTags (ref
 									 iter,
-									 move.
-									 comment,
+									 FormatComment
+									 (move.
+									  comment),
 									 commentTag);
 						  buffer.Insert (ref iter,
 								 "\n");
 					  }
 					i++;
 				}
+			}
+
+			private string FormatComment (string comment)
+			{
+				return RemoveChar (comment, '\r', '\n', '\t');
+			}
+
+			private static string RemoveChar (string str,
+							  params char[]chars)
+			{
+				int len = str.Length;
+				System.Text.StringBuilder buf =
+					new System.Text.StringBuilder ();
+				for (int i = 0; i < len; i++)
+				  {
+					  char ch = str[i];
+					  bool found = false;
+					  for (int j = 0; j < chars.Length;
+					       j++)
+					    {
+						    if (chars[j] == ch)
+						      {
+							      found = true;
+							      break;
+						      }
+					    }
+					  if (!found)
+					    {
+						    buf.Append (ch);
+					    }
+					  else
+					    {
+						    if (str[i + 1] != ' '
+							&& (i > 0
+							    && str[i - 1] !=
+							    ' '))
+							    buf.Append (' ');
+					    }
+				  }
+				return buf.ToString ();
 			}
 
 			bool hoveringOverLink = false;

@@ -285,8 +285,73 @@ namespace CsBoard
 		public void Move (Point start, Point end, ref char figure,
 				  bool explicitly)
 		{
+			MoveAnimate (start, end, ref figure, explicitly);
+		}
+
+		public ArrayList MoveAnimate (Point start, Point end,
+					      ref char figure,
+					      bool explicitly)
+		{
 
 			Promotion dialog;
+			ArrayList list = new ArrayList ();
+			AnimationTaskItem item = null;
+
+			FigureType ft;
+			ft = GetFigureAt (start.x, start.y);
+			item = new AnimationTaskItem (ft, start, end);
+			list.Add (item);
+
+			for (int i = 0; i < 8; i++)
+				for (int j = 0; j < 8; j++)
+				  {
+					  if (i == start.x && j == start.y)
+						  continue;
+					  ft = GetFigureAt (i, j);
+					  if (ft == FigureType.None)
+						  continue;
+					  Point p = new Point (i, j);
+					  list.Add (new
+						    AnimationTaskItem (ft, p,
+								       p));
+				  }
+
+			// castling case
+			bool castling = false;
+			if (ft == FigureType.WhiteKing && start.y == 0
+			    && end.y == 0 && start.x == 4 && (end.x == 2
+							      || end.x == 6))
+				castling = true;
+			else if (ft == FigureType.BlackKing && start.y == 7
+				 && end.y == 7 && start.x == 4 && (end.x == 2
+								   || end.x ==
+								   6))
+				castling = true;
+			if (castling)
+			  {
+				  int src_file, dst_file;
+				  if (end.x == 2)
+				    {
+					    src_file = 0;
+					    dst_file = 3;
+				    }
+				  else
+				    {
+					    src_file = 7;
+					    dst_file = 5;
+				    }
+				  item = new
+					  AnimationTaskItem (GetFigureAt
+							     (src_file,
+							      start.y),
+							     new
+							     Point (src_file,
+								    start.y),
+							     new
+							     Point (dst_file,
+								    end.y));
+				  list.Add (item);
+			  }
 
 			if (askForPromotion && start.y == 1
 			    && end.y == 0 &&
@@ -340,7 +405,7 @@ namespace CsBoard
 				  position[end.y + 2] = str_new;
 			  }
 
-			return;
+			return list;
 		}
 
 		public void Take (Point point)

@@ -150,26 +150,38 @@ namespace CsBoard
 						  LastMoveInfo.dest_rank;
 					  f2 = gameSession.player.
 						  LastMoveInfo.dest_file;
-					  boardWidget.Move (r1, f1, r2, f2,
-							    ' ');
+					  boardWidget.SetMoveInfo (r1, f1, r2,
+								   f2);
+					  boardWidget.
+						  SetPosition (gameSession.
+							       player.
+							       GetPosition
+							       ());
+					  /*
+					     boardWidget.Move (r1, f1, r2, f2,
+					     ' ', isNext);
+					   */
 				  }
 				else
 				  {
-					  boardWidget.Move (0, 0, 0, 0, ' ');
+					  boardWidget.Move (0, 0, 0, 0, ' ',
+							    isNext);
 				  }
 
 				// Reload the position
 				// For next, the move is enough. but for spl positions like
 				// castling and enpassant, the position has to be reloaded
 				// for prev and other moves, the position has to be reloaded
-				if (!isNext
-				    || gameSession.player.LastMoveInfo.
-				    special_move)
-					boardWidget.SetPosition (gameSession.
-								 player.
-								 GetPosition
-								 ());
-				boardWidget.QueueDraw ();
+				/*
+				   if (!isNext
+				   || gameSession.player.LastMoveInfo.
+				   special_move)
+				   boardWidget.SetPosition (gameSession.
+				   player.
+				   GetPosition
+				   ());
+				   boardWidget.QueueDraw ();
+				 */
 			}
 
 			private static string GetMarkupForTitle (string str)

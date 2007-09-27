@@ -132,6 +132,7 @@ namespace CsBoard
 				win.Add (view);
 
 				boardWidget = new GameViewerBoard ();
+				boardWidget.showAnimations = false;
 				HPaned split = new HPaned ();
 				VBox box = new VBox ();
 				box.PackStart (boardWidget, true, true, 2);
@@ -193,7 +194,7 @@ namespace CsBoard
 				f1 = player.LastMoveInfo.src_file;
 				r2 = player.LastMoveInfo.dest_rank;
 				f2 = player.LastMoveInfo.dest_file;
-				Move (r1, f1, r2, f2, ' ');
+				Move (r1, f1, r2, f2, ' ', true);
 				SetPosition (player.GetPosition ());
 			}
 		}

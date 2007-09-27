@@ -86,8 +86,6 @@ namespace CsBoard
 
 				dbDlg.Hide ();
 				  GLib.Idle.Add (AddGamesIdleHandler);
-				  dbDlg.Dispose ();
-				  dbDlg = null;
 			}
 
 			private bool AddGamesIdleHandler ()
@@ -95,6 +93,8 @@ namespace CsBoard
 				IList games = viewer.GameViewerWidget.Games;
 				if (games == null)
 				  {
+					  dbDlg.Dispose ();
+					  dbDlg = null;
 					  return false;
 				  }
 				viewer.StartProgress ();
@@ -154,6 +154,8 @@ namespace CsBoard
 					GameDb.Instance.Commit ();
 
 				viewer.StopProgress ();
+				dbDlg.Dispose ();
+				dbDlg = null;
 				return false;
 			}
 
@@ -517,8 +519,7 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;
-						 }
+						 return false;}
 				);
 				if (newobj)
 					viewer.GameViewerWidget.

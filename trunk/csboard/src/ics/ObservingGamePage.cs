@@ -215,6 +215,8 @@ namespace CsBoard
 							       details)
 			{
 				board = new CairoViewerBoard (details.pos);
+				board.showAnimations =
+					App.Session.showAnimations;
 				gameWidget = new ChessGameWidget (board);
 			}
 

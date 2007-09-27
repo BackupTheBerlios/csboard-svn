@@ -1,3 +1,18 @@
+2007-09-04 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs:
+	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs:
+	* src/viewer/Widgets/ChessGameWidget.cs:
+	* src/viewer/Widgets/CairoViewerBoard.cs:
+	* src/viewer/Widgets/ChessGameBoard.cs:
+	* src/viewer/Widgets/ChessGameView.cs:
+	* src/Position.cs:
+	* src/ics/ObservingGamePage.cs:
+	* src/ChessWindowUI.cs:
+	* src/CairoBoard.cs:
+	
+	animation improvements and some bug fixes
+	
 2007-09-04  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
 
 	* Makefile.am:
