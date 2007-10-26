@@ -1,3 +1,9 @@
+2007-10-25 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* src/viewer/Widgets/ChessGameWidget.cs
+
+	Adds auto-play feature to the viewer.
+
 2007-09-27 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* src/viewer/plugins/gamedb/GameDbPlugin.cs:

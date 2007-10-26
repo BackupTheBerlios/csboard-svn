@@ -32,6 +32,7 @@ namespace CsBoard
 			Label moveNumberLabel;
 			public Button firstButton, prevButton, nextButton,
 				lastButton;
+		  PlayPauseButton playButton;
 			VBox chessGameDetailsBox;
 			ChessGameView gameView;
 
@@ -109,6 +110,7 @@ namespace CsBoard
 						      EventArgs e)
 			{
 				Reset ();
+			  playButton.Pause();
 			}
 
 			public void on_last_clicked (System.Object o,
@@ -121,6 +123,7 @@ namespace CsBoard
 						 ("Operation failed"));
 
 				UpdateMoveDetails (false);
+			  playButton.Pause();
 			}
 
 			public void on_prev_clicked (System.Object o,
@@ -130,6 +133,7 @@ namespace CsBoard
 					boardWidget.Session.CurrentMoveIdx;
 				if (currentMoveIdx < 0)
 					return;
+			  playButton.Pause();
 				PlayNMoves (currentMoveIdx);	// since we are passing the index, no need for -1
 			}
 
@@ -151,6 +155,11 @@ namespace CsBoard
 			public void on_next_clicked (System.Object o,
 						     EventArgs e)
 			{
+			  playButton.Pause();
+				handle_next();
+			}
+
+		  private void handle_next() {
 				if (!boardWidget.Session.HasNext ())
 				  {
 					  return;
@@ -237,6 +246,9 @@ namespace CsBoard
 
 
 				// buttons
+				playButton = new PlayPauseButton ();
+				playButton.PlayNextEvent += on_play_next_event;
+
 				firstButton = new Button ();
 				firstButton.Clicked += on_first_clicked;
 				firstButton.Image =
@@ -261,6 +273,7 @@ namespace CsBoard
 				HBox bbox = new HBox ();
 				bbox.PackStart (firstButton, false, false, 1);
 				bbox.PackStart (prevButton, false, false, 1);
+				bbox.PackStart (playButton, false, false, 1);
 				bbox.PackStart (nextButton, false, false, 1);
 				bbox.PackStart (lastButton, false, false, 1);
 				Alignment alignment =
@@ -272,7 +285,77 @@ namespace CsBoard
 
 				return vbox;
 			}
+
+		  private void on_play_next_event(object o, EventArgs args) {
+		    handle_next();
+		    if (!boardWidget.Session.HasNext ())
+		    {
+		      playButton.Pause();
+		    }
+		  }
 		}
+
+		  public delegate void PlayNextEventHandler(object o, EventArgs args);
+		  class PlayPauseButton : Button {
+		    Image playImg, pauseImg;
+		    bool playing;
+				public event PlayNextEventHandler PlayNextEvent;
+		    uint timeout;
+		    uint timeoutid;
+		    public PlayPauseButton() : base() {
+		      playImg = new Image(Stock.MediaPlay, IconSize.Button);
+		      pauseImg = new Image(Stock.MediaPause, IconSize.Button);
+		      playing = false;
+		      Image = playImg;
+		      timeout = 1500;
+
+		      Clicked += OnClicked;
+		    }
+
+private void OnClicked(object o, EventArgs args) {
+  Toggle();
+}
+
+public void Toggle() {
+  if(playing)
+    Pause();
+  else
+    Play();
+}
+
+		    public void Play() {
+		      if(playing)
+			return;
+		      playing = true;
+		      Image = pauseImg;
+
+		      if(PlayNextEvent != null)
+			PlayNextEvent(this, EventArgs.Empty);
+
+		      timeoutid = GLib.Timeout.Add(timeout, new GLib.TimeoutHandler(on_timeout));
+		    }
+
+		    public void Pause() {
+		      if(!playing)
+			return;
+		      playing = false;
+		      Image = playImg;
+		      if(timeoutid > 0) {
+			GLib.Source.Remove(timeoutid);
+			timeoutid = 0;
+		      }
+		    }
+
+		    private bool on_timeout() {
+		      if(!playing)
+			return false;
+
+		      if(PlayNextEvent != null)
+			PlayNextEvent(this, EventArgs.Empty);
+
+		      return true;
+		    }
+		  }
 
 	}
 }
