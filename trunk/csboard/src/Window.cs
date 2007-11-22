@@ -33,37 +33,6 @@ namespace CsBoard
 		event QuitEventHandler QuitEvent;
 	}
 
-	public interface SubApp
-	{
-		MenuBar MenuBar
-		{
-			get;
-		}
-
-		Widget Widget
-		{
-			get;
-		}
-
-		ToolButton ToolButton
-		{
-			get;
-		}
-
-		AccelGroup AccelGroup
-		{
-			get;
-		}
-
-		string Title
-		{
-			get;
-		}
-
-		void SetVisibility (bool visible);
-		event TitleChangedEventHandler TitleChangedEvent;
-	}
-
 	public delegate void TitleChangedEventHandler (object o,
 						       EventArgs args);
 	public class CsBoardApp:ChessWindowUI, MainApp, SubApp
@@ -95,6 +64,14 @@ namespace CsBoard
 			}
 		}
 
+		public string ID
+		{
+			get
+			{
+				return "player";
+			}
+		}
+
 		public ToolButton ToolButton
 		{
 			get
@@ -120,6 +97,7 @@ namespace CsBoard
 			}
 		}
 		ArrayList subapps;
+	  Hashtable subAppsMap;
 
 		public Gtk.Window Window
 		{
@@ -128,6 +106,7 @@ namespace CsBoard
 				return csboardWindow;
 			}
 		}
+
 		public CsBoardApp (string engine,
 				   string filename):base (engine, filename)
 		{
@@ -138,6 +117,7 @@ namespace CsBoard
 			csboardWindow.Title = title;
 			instance = this;
 			subapps = new ArrayList ();
+			subAppsMap = new Hashtable();
 			accel = new AccelGroup ();
 			csboardWindow.AddAccelGroup (accel);
 			Gtk.Image img =
@@ -156,8 +136,10 @@ namespace CsBoard
 			CsBoard.Viewer.GameViewer.CreateInstance ();
 			playerToolButton.Clicked += OnToolButtonClicked;
 
-			if (filename == null)
+			if (filename == null) {
 				control.OpenGame (App.Session.Filename);
+				ShowAppFromLastSession();
+			}
 			else
 			  {
 				  ShowApp (CsBoard.Viewer.GameViewer.
@@ -180,8 +162,23 @@ namespace CsBoard
 		{
 		}
 
+	  private void ShowAppFromLastSession() {
+	    string lastappname = null;
+	    try {
+	      lastappname = App.Session.LastAppName;
+	    }
+	    catch(Exception) {
+	    }
+	    if(lastappname == null || !subAppsMap.ContainsKey(lastappname))
+	      return;
+	    ShowApp(subAppsMap[lastappname] as SubApp);
+	  }
+
 		public void AddApp (SubApp app)
 		{
+			if(subAppsMap.ContainsKey(app.ID))
+				return;
+			subAppsMap[app.ID] = app;
 			SeparatorToolItem separator =
 				new SeparatorToolItem ();
 			separator.Show ();
@@ -269,6 +266,7 @@ namespace CsBoard
 			csboardWindow.Title = app.Title;
 			app.SetVisibility (true);
 			app.ToolButton.Sensitive = false;
+			App.Session.LastAppName = app.ID;
 		}
 	}
 }

@@ -1,3 +1,22 @@
+2007-11-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/ecodb/EcoDBPlugin.cs
+	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs
+	* src/viewer/GameViewer.cs
+	* src/Window.cs
+	* src/ics/ICSDetailsWidget.cs
+	* src/Session.cs
+	* data/csboard.schemas.in
+	* Makefile.am
+
+	Added
+	
+	* src/SubApp.cs
+
+	support to remember the last visible subapp and
+	loads that in the next session
+
 2007-10-25 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* src/viewer/Widgets/ChessGameWidget.cs

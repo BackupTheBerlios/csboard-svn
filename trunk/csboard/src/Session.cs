@@ -314,6 +314,15 @@ namespace CsBoard
 			}
 		}
 
+public string LastAppName {
+  get {
+    return (string) gconfClient.Get("/apps/csboard/session/lastappname");
+  }
+  set {
+    gconfClient.Set("/apps/csboard/session/lastappname", value);
+  }
+}
+
 		private void SessionChanged (object obj,
 					     GConf.NotifyEventArgs args)
 		{

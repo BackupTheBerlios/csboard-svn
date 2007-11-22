@@ -56,7 +56,7 @@ namespace CsBoard
 				  db = loader.Openings;
 				  GameViewer.EcoDb = this;
 				  CsBoardApp.Instance.
-					AddApp (new OpeningBrowserUI (db));
+				    AddApp (new OpeningBrowserUI (db));
 
 				  return true;
 			}

@@ -129,6 +129,14 @@ namespace CsBoard
 				}
 			}
 
+		public string ID
+		{
+			get
+			{
+				return "viewer";
+			}
+		}
+
 			bool app_visible = false;
 
 			GameLoader loader;

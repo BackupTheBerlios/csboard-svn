@@ -99,6 +99,14 @@ namespace CsBoard
 				}
 			}
 
+		public string ID
+		{
+			get
+			{
+				return "icsplayer";
+			}
+		}
+
 			AccelGroup accel;
 			public AccelGroup AccelGroup
 			{

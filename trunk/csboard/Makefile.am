@@ -81,6 +81,7 @@ SOURCE = \
 	$(top_srcdir)/src/ChessGameWidget.cs \
 	$(top_srcdir)/src/ChessWindowUI.cs \
 	$(top_srcdir)/src/Window.cs \
+	$(top_srcdir)/src/SubApp.cs \
 	$(top_srcdir)/src/IControl.cs \
 	$(top_srcdir)/src/Board.cs \
 	$(top_srcdir)/src/FigureManager.cs \

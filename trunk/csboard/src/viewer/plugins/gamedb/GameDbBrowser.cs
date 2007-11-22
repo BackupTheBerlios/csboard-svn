@@ -64,6 +64,14 @@ namespace CsBoard
 				}
 			}
 
+		public string ID
+		{
+			get
+			{
+			  return "gamedb";
+			}
+		}
+
 			public event TitleChangedEventHandler
 				TitleChangedEvent;
 

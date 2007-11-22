@@ -212,6 +212,18 @@
 	<long>Split pane position</long>
       </locale>
     </schema>
+    
+    <schema>
+      <key>/schemas/apps/csboard/session/lastappname</key>
+      <applyto>/apps/csboard/session/lastappname</applyto>
+      <owner>csboard</owner>
+      <type>string</type>
+      <default></default>
+      <locale name="C">
+	<short>Last subapp name</short>
+	<long>Name of the last visible subapp. This will be shown in the next session.</long>
+      </locale>
+    </schema>
 
   </schemalist>
 </gconfschemafile>
