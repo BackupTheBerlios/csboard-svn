@@ -154,6 +154,7 @@ namespace CsBoard
 						       client.server,
 						       client.port);
 				book = new Notebook ();
+				book.TabPos = PositionType.Left;
 				book.Show ();
 
 				Add (book);
@@ -166,10 +167,15 @@ namespace CsBoard
 					new ObservableGamesWidget (obManager);
 
 				graph = new GameAdvertisementGraph (client);
+				/*
 				book.AppendPage (graph,
 						 new Label (Catalog.
 							    GetString
 							    ("Seek Graph")));
+				*/
+				
+				book.AppendPage (graph,
+						 GetLabelImage("graphicon.png"));
 				ads = new GameAdvertisements (client);
 				book.AppendPage (ads,
 						 new Label (Catalog.
@@ -214,6 +220,11 @@ namespace CsBoard
 				ShowAll ();
 				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
 			}
+
+private static Image GetLabelImage(string name) {
+  Image img = Image.LoadFromResource(name);
+  return new Image(img.Pixbuf.ScaleSimple(30, 30, Gdk.InterpType.Bilinear));
+}
 
 			private void OnQuitEvent (System.Object b,
 						  EventArgs e)

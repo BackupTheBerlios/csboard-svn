@@ -1,3 +1,28 @@
+2007-12-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	moved the following files to src/ics/UI
+	* src/ics/ICSShell.cs
+	* src/ics/ICSConfigDialog.cs
+	* src/ics/ICSConfigWidget.cs
+	* src/ics/GameAdvertisementsWidget.cs
+	* src/ics/ICSDetailsWidget.cs
+	* src/ics/ICSGameObserverWidget.cs
+	* src/ics/GameObservationManager.cs
+	* src/ics/ObservableGamesWidget.cs
+	* src/ics/ChessMovesWidget.cs
+	* src/ics/ObservingGamePage.cs
+	* src/ics/PlayerPage.cs
+	* src/ics/Graph.cs
+	* src/ics/GameAdvertisementGraph
+
+	moved the following files to src/
+	* src/viewer/PluginManager.cs
+	* src/viewer/PluginManagerDialog.cs
+
+	modified
+	* Makefile.am
+	
+
 2007-11-21 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	* src/viewer/plugins/gamedb/GameDbBrowser.cs

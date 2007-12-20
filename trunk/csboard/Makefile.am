@@ -46,34 +46,34 @@ VIEWER_SRCS = \
 PLUGIN_SRCS = \
 	$(top_srcdir)/src/viewer/PGNBufferLoader.cs		\
 	$(top_srcdir)/src/viewer/PGNFileLoader.cs		\
-	$(top_srcdir)/src/viewer/PluginManager.cs		\
-	$(top_srcdir)/src/viewer/PluginManagerDialog.cs
+	$(top_srcdir)/src/PluginManager.cs		\
+	$(top_srcdir)/src/PluginManagerDialog.cs
 
 ICS_PLAYER_SRCS = \
 	$(top_srcdir)/src/ics/ICSClient.cs \
 	$(top_srcdir)/src/ics/ParserUtils.cs \
 	$(top_srcdir)/src/ics/GameAdvertisement.cs \
 	$(top_srcdir)/src/ics/MoveDetails.cs \
-	$(top_srcdir)/src/ics/ICSConfigDialog.cs \
-	$(top_srcdir)/src/ics/ICSConfigWidget.cs \
-	$(top_srcdir)/src/ics/ICSShell.cs \
-	$(top_srcdir)/src/ics/GameAdvertisementsWidget.cs \
-	$(top_srcdir)/src/ics/ICSDetailsWidget.cs \
-	$(top_srcdir)/src/ics/ICSGameObserverWidget.cs \
 	$(top_srcdir)/src/ics/ResultNotification.cs \
-	$(top_srcdir)/src/ics/GameObservationManager.cs \
 	$(top_srcdir)/src/ics/GameDetails.cs \
 	$(top_srcdir)/src/ics/GameInfo.cs \
-	$(top_srcdir)/src/ics/ObservableGamesWidget.cs \
 	$(top_srcdir)/src/ics/CommandSender.cs \
-	$(top_srcdir)/src/ics/ChessMovesWidget.cs \
 	$(top_srcdir)/src/ics/MovesGetter.cs \
-	$(top_srcdir)/src/ics/ObservingGamePage.cs \
-	$(top_srcdir)/src/ics/PlayerPage.cs \
-	$(top_srcdir)/src/ics/Graph.cs \
-	$(top_srcdir)/src/ics/GameAdvertisementGraph.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs \
-	$(top_srcdir)/src/ics/MatchChallenge.cs
+	$(top_srcdir)/src/ics/MatchChallenge.cs \
+	$(top_srcdir)/src/ics/UI/ICSShell.cs \
+	$(top_srcdir)/src/ics/UI/ICSConfigDialog.cs \
+	$(top_srcdir)/src/ics/UI/ICSConfigWidget.cs \
+	$(top_srcdir)/src/ics/UI/GameAdvertisementsWidget.cs \
+	$(top_srcdir)/src/ics/UI/ICSDetailsWidget.cs \
+	$(top_srcdir)/src/ics/UI/ICSGameObserverWidget.cs \
+	$(top_srcdir)/src/ics/UI/GameObservationManager.cs \
+	$(top_srcdir)/src/ics/UI/ObservableGamesWidget.cs \
+	$(top_srcdir)/src/ics/UI/ChessMovesWidget.cs \
+	$(top_srcdir)/src/ics/UI/ObservingGamePage.cs \
+	$(top_srcdir)/src/ics/UI/PlayerPage.cs \
+	$(top_srcdir)/src/ics/UI/Graph.cs \
+	$(top_srcdir)/src/ics/UI/GameAdvertisementGraph.cs
 
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
@@ -135,6 +135,7 @@ IMAGES= \
 	images/white-pawn.svg		\
 	images/white-queen.svg		\
 	images/white-rook.svg		\
+	images/graphicon.png		\
 	images/computer.png
 
 EXTRA_DIST = \
@@ -174,6 +175,7 @@ RESOURCES =										\
 	-resource:$(top_srcdir)/images/black-pawn.svg,black-pawn.svg			\
 	-resource:$(top_srcdir)/images/black-knight.svg,black-knight.svg		\
 	-resource:$(top_srcdir)/images/computer.png,computer.png			\
+	-resource:$(top_srcdir)/images/graphicon.png,graphicon.png			\
 	-resource:$(top_srcdir)/resource/csviewer.glade,csviewer.glade			\
 	-resource:$(top_srcdir)/resource/csboard.glade,csboard.glade
 
