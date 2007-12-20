@@ -135,7 +135,6 @@ IMAGES= \
 	images/white-pawn.svg		\
 	images/white-queen.svg		\
 	images/white-rook.svg		\
-	images/graphicon.png		\
 	images/computer.png
 
 EXTRA_DIST = \
@@ -175,7 +174,6 @@ RESOURCES =										\
 	-resource:$(top_srcdir)/images/black-pawn.svg,black-pawn.svg			\
 	-resource:$(top_srcdir)/images/black-knight.svg,black-knight.svg		\
 	-resource:$(top_srcdir)/images/computer.png,computer.png			\
-	-resource:$(top_srcdir)/images/graphicon.png,graphicon.png			\
 	-resource:$(top_srcdir)/resource/csviewer.glade,csviewer.glade			\
 	-resource:$(top_srcdir)/resource/csboard.glade,csboard.glade
 
