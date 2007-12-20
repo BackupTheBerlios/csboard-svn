@@ -25,7 +25,7 @@ namespace Chess
 		{
 			public InvalidMoveException (string
 						     move):base
-				(Catalog.GetString("Invalid move ") + move)
+				(Catalog.GetString ("Invalid move ") + move)
 			{
 			}
 		}

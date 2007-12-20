@@ -16,7 +16,8 @@
 // Copyright (C) 2006 Ravi Kiran UVS
 
 using Gtk;
-namespace CsBoard {
+namespace CsBoard
+{
 
 	public interface SubApp
 	{

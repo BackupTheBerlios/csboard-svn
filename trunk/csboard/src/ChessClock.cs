@@ -171,10 +171,11 @@ namespace CsBoard
 				(countdown ? remaining_msecs : elapsed_time) /
 				1000;
 
-			if(secs < 0) {
-				buffer.Append("-");
-				secs = -secs;
-			}
+			if (secs < 0)
+			  {
+				  buffer.Append ("-");
+				  secs = -secs;
+			  }
 
 			long mins = secs / 60;
 			long hrs = mins / 60;

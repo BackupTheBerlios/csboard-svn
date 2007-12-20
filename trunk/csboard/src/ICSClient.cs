@@ -15,7 +15,8 @@
 //
 // Copyright (C) 2004 Jamin Gray
 
-namespace CsBoard {
+namespace CsBoard
+{
 
 	using System;
 	using System.IO;
@@ -24,7 +25,8 @@ namespace CsBoard {
 	using System.Threading;
 	using Mono.Unix;
 
-	public class ICSClient {
+	public class ICSClient
+	{
 
 		public string server = "www.freechess.org";
 		public string port = "6667";
@@ -45,19 +47,31 @@ namespace CsBoard {
 		public StreamWriter streamWriter;
 
 
-		public ICSClient () {
+		public ICSClient ()
+		{
 		}
 
-		public void Write (string message) {
+		public void Write (string message)
+		{
 		}
 
-		public void Connect () {
-			try {
-	 		    client = new TcpClient (server, int.Parse(port));
-			    stream = client.GetStream ();
-			    streamWriter = new StreamWriter (stream);
-			} catch {
-				throw new ApplicationException (String.Format(Catalog.GetString("Can't connect to {0} port {1}"), server, port));
+		public void Connect ()
+		{
+			try
+			{
+				client = new TcpClient (server,
+							int.Parse (port));
+				stream = client.GetStream ();
+				streamWriter = new StreamWriter (stream);
+			} catch
+			{
+				throw new ApplicationException (String.
+								Format
+								(Catalog.
+								 GetString
+								 ("Can't connect to {0} port {1}"),
+								 server,
+								 port));
 			}
 
 		}

@@ -52,13 +52,16 @@ namespace CsBoard
 		public class
 			SimpleCommandResponseListener:IAsyncCommandResponseListener
 		{
-			public virtual void CommandResponseLine (int id, byte[]buffer,
-							 int start, int end)
+			public virtual void CommandResponseLine (int id,
+								 byte[]buffer,
+								 int start,
+								 int end)
 			{
 			}
 
 			public virtual void CommandCodeReceived (int id,
-							 CommandCode code)
+								 CommandCode
+								 code)
 			{
 			}
 

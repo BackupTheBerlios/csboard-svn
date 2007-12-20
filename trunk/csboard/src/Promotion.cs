@@ -15,56 +15,62 @@
 //
 // Copyright (C) 2004 Nickolay V. Shmyrev
 
-namespace CsBoard {
+namespace CsBoard
+{
 
-        using Gtk;
-        using System;
+	using Gtk;
+	using System;
 	using Mono.Unix;
-	
-        public class Promotion:Dialog {
 
-                Glade.XML gXML;
+	public class Promotion:Dialog
+	{
 
-                [Glade.Widget] ToggleButton radiobutton4;
-                [Glade.Widget] ToggleButton radiobutton5;
-                [Glade.Widget] ToggleButton radiobutton6;
-                [Glade.Widget] ToggleButton radiobutton7;
-                [Glade.Widget] Widget hbox_contents;
+		Glade.XML gXML;
+
+		[Glade.Widget] ToggleButton radiobutton4;
+		[Glade.Widget] ToggleButton radiobutton5;
+		[Glade.Widget] ToggleButton radiobutton6;
+		[Glade.Widget] ToggleButton radiobutton7;
+		[Glade.Widget] Widget hbox_contents;
 
 
 
-                public Promotion () {
+		public Promotion ()
+		{
 
-                        gXML = Glade.XML.FromAssembly ("csboard.glade",
-                                              "hbox_contents", null);
-                        gXML.Autoconnect (this);
+			gXML = Glade.XML.FromAssembly ("csboard.glade",
+						       "hbox_contents", null);
+			gXML.Autoconnect (this);
 
-                        HasSeparator = false;
-                        this.Title = Catalog.GetString("Select a figure to promote");
-                        this.SetSizeRequest (300, 150);
+			HasSeparator = false;
+			this.Title =
+				Catalog.
+				GetString ("Select a figure to promote");
+			this.SetSizeRequest (300, 150);
 
-                        VBox.PackStart (hbox_contents, true, true, 10);
-                        VBox.Show ();
+			VBox.PackStart (hbox_contents, true, true, 10);
+			VBox.Show ();
 
-                        AddButton (Stock.Close, (int) ResponseType.Close);
-                } 
-		
-		public char GetResult () {
+			AddButton (Stock.Close, (int) ResponseType.Close);
+		}
 
-                        char result;
+		public char GetResult ()
+		{
 
-                          result = ' ';
+			char result;
 
-                        if (radiobutton4.Active)
-                                  result = 'Q';
-                        if (radiobutton5.Active)
-                                  result = 'K';
-                        if (radiobutton6.Active)
-                                  result = 'B';
-                        if (radiobutton7.Active)
-                                  result = 'R';
+			  result = ' ';
 
-                          return result;
-	         }
-        }		
+			if (radiobutton4.Active)
+				  result = 'Q';
+			if (radiobutton5.Active)
+				  result = 'K';
+			if (radiobutton6.Active)
+				  result = 'B';
+			if (radiobutton7.Active)
+				  result = 'R';
+
+			  return result;
+		}
+	}
 }

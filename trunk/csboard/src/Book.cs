@@ -15,108 +15,126 @@
 //
 // Copyright (C) 2004 Nickolay V. Shmyrev
 
-namespace CsBoard {
+namespace CsBoard
+{
 
-        using Gtk;
-        using System;
-        using System.Collections;
+	using Gtk;
+	using System;
+	using System.Collections;
 	using Mono.Unix;
 
-        public class BookDialog:Dialog {
+	public class BookDialog:Dialog
+	{
 
-                [Glade.Widget] TreeView treeview;
-                [Glade.Widget] Widget vbox_contents;
+		[Glade.Widget] TreeView treeview;
+		[Glade.Widget] Widget vbox_contents;
 
-                public BookDialog (ArrayList result) {
+		public BookDialog (ArrayList result)
+		{
 
-                        Glade.XML gXML =
-                                Glade.XML.FromAssembly ("csboard.glade",
-                                     "vbox_contents", null);
-                        gXML.Autoconnect (this);
+			Glade.XML gXML =
+				Glade.XML.FromAssembly ("csboard.glade",
+							"vbox_contents",
+							null);
+			gXML.Autoconnect (this);
 
-                        HasSeparator = false;
-                        this.Title = Catalog.GetString("Book Opening");
-                        this.SetSizeRequest (380, 260);
+			HasSeparator = false;
+			this.Title = Catalog.GetString ("Book Opening");
+			this.SetSizeRequest (380, 260);
 
-                        VBox.Add (vbox_contents);
-                        AddButton (Stock.Close, (int) ResponseType.Close);
-                        AddButton (Stock.GoForward, (int) ResponseType.Apply);
+			VBox.Add (vbox_contents);
+			AddButton (Stock.Close, (int) ResponseType.Close);
+			AddButton (Stock.GoForward, (int) ResponseType.Apply);
 
-                        Gtk.ListStore store =
-                                new ListStore (typeof (string),
-                                               typeof (int),
-                                               typeof (int),
-                                               typeof (int), typeof (int));
+			Gtk.ListStore store =
+				new ListStore (typeof (string),
+					       typeof (int),
+					       typeof (int),
+					       typeof (int), typeof (int));
 
-                          treeview.Model = store;
-                          treeview.RulesHint = true;
-                          foreach (BookMove m in result) {
+			  treeview.Model = store;
+			  treeview.RulesHint = true;
+			  foreach (BookMove m in result)
+			{
 
-                                int score =
-                                        100 * (m.Wins +
-                                               (m.Draws / 2)) /
-                                        Math.Max (m.Wins + m.Loses + m.Draws,
-                                                  1) + m.Wins / 2;
+				int score =
+					100 * (m.Wins +
+					       (m.Draws / 2)) /
+					Math.Max (m.Wins + m.Loses + m.Draws,
+						  1) + m.Wins / 2;
 
-                                  store.AppendValues (m.Move, score,
-                                                      m.Wins, m.Loses,
-                                                      m.Draws);
-                        } TreeViewColumn column;
-                          column = treeview.AppendColumn (Catalog.GetString("Move"),
-                                                          new
-                                                          CellRendererText
-                                                          (), "text", 0);
-                          column.SortColumnId = 0;
+				  store.AppendValues (m.Move, score,
+						      m.Wins, m.Loses,
+						      m.Draws);
+			} TreeViewColumn column;
+			  column =
+				treeview.AppendColumn (Catalog.
+						       GetString ("Move"),
+						       new
+						       CellRendererText (),
+						       "text", 0);
+			  column.SortColumnId = 0;
 
-                          column = treeview.AppendColumn (Catalog.GetString("Score"),
-                                                          new
-                                                          CellRendererText
-                                                          (), "text", 1);
-                          column.SortColumnId = 1;
+			  column =
+				treeview.AppendColumn (Catalog.
+						       GetString ("Score"),
+						       new
+						       CellRendererText (),
+						       "text", 1);
+			  column.SortColumnId = 1;
 
-                          column = treeview.AppendColumn (Catalog.GetString("Wins"),
-                                                          new
-                                                          CellRendererText
-                                                          (), "text", 2);
-                          column.SortColumnId = 2;
+			  column =
+				treeview.AppendColumn (Catalog.
+						       GetString ("Wins"),
+						       new
+						       CellRendererText (),
+						       "text", 2);
+			  column.SortColumnId = 2;
 
-                          column = treeview.AppendColumn (Catalog.GetString("Loses"),
-                                                          new
-                                                          CellRendererText
-                                                          (), "text", 3);
-                          column.SortColumnId = 3;
+			  column =
+				treeview.AppendColumn (Catalog.
+						       GetString ("Loses"),
+						       new
+						       CellRendererText (),
+						       "text", 3);
+			  column.SortColumnId = 3;
 
-                          column = treeview.AppendColumn (Catalog.GetString("Draws"),
-                                                          new
-                                                          CellRendererText
-                                                          (), "text", 4);
-                          column.SortColumnId = 4;
+			  column =
+				treeview.AppendColumn (Catalog.
+						       GetString ("Draws"),
+						       new
+						       CellRendererText (),
+						       "text", 4);
+			  column.SortColumnId = 4;
 
 
-                          ((TreeSortable) store).SetSortColumnId (1,
-                                                                  SortType.
-                                                                  Descending);
+			  ((TreeSortable) store).SetSortColumnId (1,
+								  SortType.
+								  Descending);
 
-                          vbox_contents.ShowAll ();
+			  vbox_contents.ShowAll ();
 
-                          treeview.RowActivated +=
-                                new RowActivatedHandler (activate);
-                } public string GetMove () {
+			  treeview.RowActivated +=
+				new RowActivatedHandler (activate);
+		} public string GetMove ()
+		{
 
-                        TreeSelection selection = treeview.Selection;
-                        TreeIter iter;
-                        TreeModel model;
+			TreeSelection selection = treeview.Selection;
+			TreeIter iter;
+			TreeModel model;
 
-                        if (selection.GetSelected (out model, out iter)) {
-                                return model.GetValue (iter, 0).ToString ();
-                        }
+			if (selection.GetSelected (out model, out iter))
+			  {
+				  return model.GetValue (iter, 0).ToString ();
+			  }
 
-                        return null;
+			return null;
 
-                }
+		}
 
-                private void activate (System.Object b, RowActivatedArgs e) {
-                        this.Respond (ResponseType.Apply);
-                }
-        }
+		private void activate (System.Object b, RowActivatedArgs e)
+		{
+			this.Respond (ResponseType.Apply);
+		}
+	}
 }

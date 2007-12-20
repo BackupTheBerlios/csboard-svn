@@ -526,9 +526,7 @@ namespace CsBoard
 			{
 				GLib.Idle.Add (delegate ()
 					       {
-					       __start ();
-					       return false;
-					       }
+					       __start (); return false;}
 				);
 			}
 
@@ -546,7 +544,8 @@ namespace CsBoard
 								  {
 								  Connect ();
 								  PostReadRequest
-								  ();}
+								  ();
+								  }
 						  );
 						  thread.Start ();
 					  }

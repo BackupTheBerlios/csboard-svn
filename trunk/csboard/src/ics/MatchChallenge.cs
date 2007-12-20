@@ -27,58 +27,150 @@ namespace CsBoard
 		public class MatchChallenge
 		{
 			bool rated;
-			public bool Rated { get { return rated; } }
+			public bool Rated
+			{
+				get
+				{
+					return rated;
+				}
+			}
 			string color;
-			public string Color { get { return color; } }
+			public string Color
+			{
+				get
+				{
+					return color;
+				}
+			}
 			int time;
-			public int Time { get { return time; } }
+			public int Time
+			{
+				get
+				{
+					return time;
+				}
+			}
 			int increment;
-			public int Increment { get { return increment; } }
+			public int Increment
+			{
+				get
+				{
+					return increment;
+				}
+			}
 			string opp;
-			public string Opponent { get { return opp; } }
+			public string Opponent
+			{
+				get
+				{
+					return opp;
+				}
+			}
 			int opprating;
-			public int OpponentsRating { get { return opprating; } }
+			public int OpponentsRating
+			{
+				get
+				{
+					return opprating;
+				}
+			}
 			string category;
-			public string Category { get { return category; } }
-
-			public static MatchChallenge FromBuffer(byte[] buffer, int start, int end) {
-			  MatchChallenge mc = new MatchChallenge();
-			  string me;
-			  string opprating;
-
-			  mc.opp = ParserUtils.GetNextToken(buffer, ref start, end);
-			  Console.WriteLine("OPP: " + mc.opp);
-			  opprating = ParserUtils.GetNextToken(buffer, ref start, end);
-			  try {
-			    mc.opprating = Int32.Parse(opprating.Substring(1, opprating.Length - 2));
-			  } catch {
-			    mc.opprating = 0;
-			  }
-
-			  me = ParserUtils.GetNextToken(buffer, ref start, end);
-			  Console.WriteLine("ME: " + me);
-			  if(me[0] == '[') {
-			    mc.color = me.Substring(1, me.Length - 2);
-			    me = ParserUtils.GetNextToken(buffer, ref start, end);
-			  }
-			  Console.WriteLine("MY RATING: " + ParserUtils.GetNextToken(buffer, ref start, end));
-
-			  mc.rated = ParserUtils.GetNextToken(buffer, ref start, end).Equals("rated");
-			  Console.WriteLine(mc.rated);
-			  mc.category = ParserUtils.GetNextToken(buffer, ref start, end);
-			  mc.time = Int32.Parse(ParserUtils.GetNextToken(buffer, ref start, end));
-			  mc.increment = Int32.Parse(ParserUtils.GetNextToken(buffer, '.', ref start, end));
-
-			  return mc;
+			public string Category
+			{
+				get
+				{
+					return category;
+				}
 			}
 
-			public override string ToString() {
-			  StringBuilder buf = new StringBuilder();
-			  buf.Append(String.Format("Challenge for a {0} game from {1} ({2})\n",
-						   category, opp, opprating));
-			  buf.Append(String.Format("\tTime: {0}, Increment: {1}", time, increment));
-			  
-			  return buf.ToString();
+			public static MatchChallenge FromBuffer (byte[]buffer,
+								 int start,
+								 int end)
+			{
+				MatchChallenge mc = new MatchChallenge ();
+				string me;
+				string opprating;
+
+				mc.opp = ParserUtils.GetNextToken (buffer,
+								   ref start,
+								   end);
+				Console.WriteLine ("OPP: " + mc.opp);
+				opprating =
+					ParserUtils.GetNextToken (buffer,
+								  ref start,
+								  end);
+				try
+				{
+					mc.opprating =
+						Int32.Parse (opprating.
+							     Substring (1,
+									opprating.
+									Length
+									- 2));
+				} catch
+				{
+					mc.opprating = 0;
+				}
+
+				me = ParserUtils.GetNextToken (buffer,
+							       ref start,
+							       end);
+				Console.WriteLine ("ME: " + me);
+				if (me[0] == '[')
+				  {
+					  mc.color =
+						  me.Substring (1,
+								me.Length -
+								2);
+					  me = ParserUtils.
+						  GetNextToken (buffer,
+								ref start,
+								end);
+				  }
+				Console.WriteLine ("MY RATING: " +
+						   ParserUtils.
+						   GetNextToken (buffer,
+								 ref start,
+								 end));
+
+				mc.rated =
+					ParserUtils.GetNextToken (buffer,
+								  ref start,
+								  end).
+					Equals ("rated");
+				Console.WriteLine (mc.rated);
+				mc.category =
+					ParserUtils.GetNextToken (buffer,
+								  ref start,
+								  end);
+				mc.time =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   ref start,
+								   end));
+				mc.increment =
+					Int32.Parse (ParserUtils.
+						     GetNextToken (buffer,
+								   '.',
+								   ref start,
+								   end));
+
+				return mc;
+			}
+
+			public override string ToString ()
+			{
+				StringBuilder buf = new StringBuilder ();
+				buf.Append (String.
+					    Format
+					    ("Challenge for a {0} game from {1} ({2})\n",
+					     category, opp, opprating));
+				buf.Append (String.
+					    Format
+					    ("\tTime: {0}, Increment: {1}",
+					     time, increment));
+
+				return buf.ToString ();
 			}
 		}
 	}

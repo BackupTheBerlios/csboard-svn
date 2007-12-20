@@ -70,21 +70,24 @@ namespace CsBoard
 						     ref int idx, int end,
 						     out string word)
 			{
-			  int bufend = end;
+				int bufend = end;
 				for (int i = idx; i < end; i++)
 				  {
-				    if (buffer[i] == delim) {
-				      bufend = i;
-				      break;
-				    }
+					  if (buffer[i] == delim)
+					    {
+						    bufend = i;
+						    break;
+					    }
 				  }
 
-				ReadString(buffer, ref idx, bufend, out word);
+				ReadString (buffer, ref idx, bufend,
+					    out word);
 			}
 
 			public static void ReadString (byte[]buffer,
-						     ref int idx, int bufend,
-						     out string str)
+						       ref int idx,
+						       int bufend,
+						       out string str)
 			{
 				System.Text.Decoder decoder =
 					System.Text.Encoding.UTF8.
@@ -156,16 +159,19 @@ namespace CsBoard
 				return time;
 			}
 
-			public static bool Matches(byte[] buffer, int start, int end, string str) {
-			  if(str.Length > end - start)
-			    return false;
-			  int cur = start;
-			  foreach(char ch in str) {
-			    if(buffer[cur++] != ch)
-			      return false;
-			  }
+			public static bool Matches (byte[]buffer, int start,
+						    int end, string str)
+			{
+				if (str.Length > end - start)
+					return false;
+				int cur = start;
+				foreach (char ch in str)
+				{
+					if (buffer[cur++] != ch)
+						return false;
+				}
 
-			  return true;
+				return true;
 			}
 		}
 	}

@@ -124,7 +124,9 @@ namespace Chess
 				    && positions[i, j].Color == color)
 				  {
 					  debug (flags,
-						 Catalog.GetString("\t\tAnother piece of the same color present at the destination (")
+						 Catalog.
+						 GetString
+						 ("\t\tAnother piece of the same color present at the destination (")
 						 + i + ", " + j + ")");
 					  return false;
 				  }
@@ -138,38 +140,46 @@ namespace Chess
 					  positions[rank, file] = null;
 					  positions[i, j] = this;
 
-					  bool king_under_attack = isMyKingUnderAttack(i, j, positions, dest_orig, flags);
+					  bool king_under_attack =
+						  isMyKingUnderAttack (i, j,
+								       positions,
+								       dest_orig,
+								       flags);
 
 					  positions[rank, file] = this;	// restore
 					  positions[i, j] = dest_orig;
 
-					  if(king_under_attack)
+					  if (king_under_attack)
 						  return false;
 				  }
 
 				return true;
 			}
 
-			protected virtual bool isMyKingUnderAttack(int i, int j,
-							 ChessPiece[,]
-							 positions, ChessPiece ignore, int flags) {
+			protected virtual bool isMyKingUnderAttack (int i,
+								    int j,
+								    ChessPiece
+								    [,]
+								    positions,
+								    ChessPiece
+								    ignore,
+								    int flags)
+			{
 				// This will serve both the cases of King under check, or
 				// king under pin
 				IList attackers = new ArrayList ();
 				int myking_rank, myking_file;
-				
+
 				myking_rank =
 					this !=
-					myside.King ? myside.King.
-					Rank : i;
+					myside.King ? myside.King.Rank : i;
 				myking_file =
 					this !=
-					myside.King ? myside.King.
-					File : j;
-				
+					myside.King ? myside.King.File : j;
+
 				getAttackers (myside, oppside, myking_rank, myking_file, positions, ignore,	/* this will be ignored */
 					      attackers);
-				
+
 				return attackers.Count > 0;
 			}
 
@@ -302,12 +312,11 @@ namespace Chess
 
 			public bool isAttackingKing (ChessPiece[,] positions)
 			{
-				bool res =
-					isValidMove (oppside.King.Rank,
-						     oppside.King.File,
-						     positions,
-						     ChessBoardConstants.
-						     MOVE_EXCHANGE);
+				bool res = isValidMove (oppside.King.Rank,
+							oppside.King.File,
+							positions,
+							ChessBoardConstants.
+							MOVE_EXCHANGE);
 				return res;
 			}
 

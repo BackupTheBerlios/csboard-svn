@@ -80,13 +80,13 @@ namespace CsBoard
 				}
 			}
 
-		public string ID
-		{
-			get
+			public string ID
 			{
-			  return "ecodb";
+				get
+				{
+					return "ecodb";
+				}
 			}
-		}
 
 			public void SetVisibility (bool visible)
 			{

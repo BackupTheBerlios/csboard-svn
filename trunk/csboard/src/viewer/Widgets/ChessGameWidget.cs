@@ -32,7 +32,7 @@ namespace CsBoard
 			Label moveNumberLabel;
 			public Button firstButton, prevButton, nextButton,
 				lastButton;
-		  PlayPauseButton playButton;
+			PlayPauseButton playButton;
 			VBox chessGameDetailsBox;
 			ChessGameView gameView;
 
@@ -110,7 +110,7 @@ namespace CsBoard
 						      EventArgs e)
 			{
 				Reset ();
-			  playButton.Pause();
+				playButton.Pause ();
 			}
 
 			public void on_last_clicked (System.Object o,
@@ -123,7 +123,7 @@ namespace CsBoard
 						 ("Operation failed"));
 
 				UpdateMoveDetails (false);
-			  playButton.Pause();
+				playButton.Pause ();
 			}
 
 			public void on_prev_clicked (System.Object o,
@@ -133,7 +133,7 @@ namespace CsBoard
 					boardWidget.Session.CurrentMoveIdx;
 				if (currentMoveIdx < 0)
 					return;
-			  playButton.Pause();
+				playButton.Pause ();
 				PlayNMoves (currentMoveIdx);	// since we are passing the index, no need for -1
 			}
 
@@ -155,11 +155,12 @@ namespace CsBoard
 			public void on_next_clicked (System.Object o,
 						     EventArgs e)
 			{
-			  playButton.Pause();
-				handle_next();
+				playButton.Pause ();
+				handle_next ();
 			}
 
-		  private void handle_next() {
+			private void handle_next ()
+			{
 				if (!boardWidget.Session.HasNext ())
 				  {
 					  return;
@@ -247,7 +248,8 @@ namespace CsBoard
 
 				// buttons
 				playButton = new PlayPauseButton ();
-				playButton.PlayNextEvent += on_play_next_event;
+				playButton.PlayNextEvent +=
+					on_play_next_event;
 
 				firstButton = new Button ();
 				firstButton.Clicked += on_first_clicked;
@@ -286,76 +288,95 @@ namespace CsBoard
 				return vbox;
 			}
 
-		  private void on_play_next_event(object o, EventArgs args) {
-		    handle_next();
-		    if (!boardWidget.Session.HasNext ())
-		    {
-		      playButton.Pause();
-		    }
-		  }
+			private void on_play_next_event (object o,
+							 EventArgs args)
+			{
+				handle_next ();
+				if (!boardWidget.Session.HasNext ())
+				  {
+					  playButton.Pause ();
+				  }
+			}
 		}
 
-		  public delegate void PlayNextEventHandler(object o, EventArgs args);
-		  class PlayPauseButton : Button {
-		    Image playImg, pauseImg;
-		    bool playing;
-				public event PlayNextEventHandler PlayNextEvent;
-		    uint timeout;
-		    uint timeoutid;
-		    public PlayPauseButton() : base() {
-		      playImg = new Image(Stock.MediaPlay, IconSize.Button);
-		      pauseImg = new Image(Stock.MediaPause, IconSize.Button);
-		      playing = false;
-		      Image = playImg;
-		      timeout = 1500;
+		public delegate void PlayNextEventHandler (object o,
+							   EventArgs args);
+		class PlayPauseButton:Button
+		{
+			Image playImg, pauseImg;
+			bool playing;
+			public event PlayNextEventHandler PlayNextEvent;
+			uint timeout;
+			uint timeoutid;
+			public PlayPauseButton ():base ()
+			{
+				playImg =
+					new Image (Stock.MediaPlay,
+						   IconSize.Button);
+				pauseImg =
+					new Image (Stock.MediaPause,
+						   IconSize.Button);
+				playing = false;
+				Image = playImg;
+				timeout = 1500;
 
-		      Clicked += OnClicked;
-		    }
+				Clicked += OnClicked;
+			}
 
-private void OnClicked(object o, EventArgs args) {
-  Toggle();
-}
+			private void OnClicked (object o, EventArgs args)
+			{
+				Toggle ();
+			}
 
-public void Toggle() {
-  if(playing)
-    Pause();
-  else
-    Play();
-}
+			public void Toggle ()
+			{
+				if (playing)
+					Pause ();
+				else
+					Play ();
+			}
 
-		    public void Play() {
-		      if(playing)
-			return;
-		      playing = true;
-		      Image = pauseImg;
+			public void Play ()
+			{
+				if (playing)
+					return;
+				playing = true;
+				Image = pauseImg;
 
-		      if(PlayNextEvent != null)
-			PlayNextEvent(this, EventArgs.Empty);
+				if (PlayNextEvent != null)
+					PlayNextEvent (this, EventArgs.Empty);
 
-		      timeoutid = GLib.Timeout.Add(timeout, new GLib.TimeoutHandler(on_timeout));
-		    }
+				timeoutid =
+					GLib.Timeout.Add (timeout,
+							  new GLib.
+							  TimeoutHandler
+							  (on_timeout));
+			}
 
-		    public void Pause() {
-		      if(!playing)
-			return;
-		      playing = false;
-		      Image = playImg;
-		      if(timeoutid > 0) {
-			GLib.Source.Remove(timeoutid);
-			timeoutid = 0;
-		      }
-		    }
+			public void Pause ()
+			{
+				if (!playing)
+					return;
+				playing = false;
+				Image = playImg;
+				if (timeoutid > 0)
+				  {
+					  GLib.Source.Remove (timeoutid);
+					  timeoutid = 0;
+				  }
+			}
 
-		    private bool on_timeout() {
-		      if(!playing)
-			return false;
+			private bool on_timeout ()
+			{
+				if (!playing)
+					return false;
 
-		      if(PlayNextEvent != null)
-			PlayNextEvent(this, EventArgs.Empty);
+				if (PlayNextEvent != null)
+					PlayNextEvent (this, EventArgs.Empty);
 
-		      return true;
-		    }
-		  }
+				return true;
+			}
+		}
 
 	}
 }

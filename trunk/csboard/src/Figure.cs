@@ -52,7 +52,8 @@ namespace CsBoard
 
 		int cursize = -1;
 
-		  string[] files = {
+		  string[] files =
+		{
 		"white-rook.svg",
 				"white-king.svg",
 				"white-queen.svg",
@@ -78,13 +79,14 @@ namespace CsBoard
 		public virtual void SetSize (int s)
 		{
 			s = Math.Max (s, 10);
-			if(cursize == s)
+			if (cursize == s)
 				return;
 			cursize = s;
 
 			pixbufs = new ArrayList ();
 
-			foreach (string filename in files) {
+			foreach (string filename in files)
+			{
 				pixbufs.Add (GetPixbuf (filename, s));
 			}
 		}
@@ -129,12 +131,13 @@ namespace CsBoard
 		public string GetFile (string filename)
 		{
 			string path;
-			if (!GetFilePath (filename, out path)) {
-				FileDetails details;
-				GetFileFromAsm (filename, out details);
-				cache[filename] = details;
-				path = details.filepath;
-			}
+			if (!GetFilePath (filename, out path))
+			  {
+				  FileDetails details;
+				  GetFileFromAsm (filename, out details);
+				  cache[filename] = details;
+				  path = details.filepath;
+			  }
 
 			return path;
 		}
@@ -173,23 +176,28 @@ namespace CsBoard
 			int nread;
 			int ntotal = 0;
 			while ((nread =
-				asmstream.Read (buf, 0, buf.Length)) > 0) {
-				stream.Write (buf, 0, nread);
-				ntotal += nread;
-			}
+				asmstream.Read (buf, 0, buf.Length)) > 0)
+			  {
+				  stream.Write (buf, 0, nread);
+				  ntotal += nread;
+			  }
 			asmstream.Close ();
 			stream.Close ();
 			details.filepath = tmpfile;
 			details.length = ntotal;
 		}
 
-		~SvgFileManager () {
-			foreach (DictionaryEntry de in cache) {
+		~SvgFileManager ()
+		{
+			foreach (DictionaryEntry de in cache)
+			{
 				FileDetails details = (FileDetails) de.Value;
-				try {
+				try
+				{
 					File.Delete (details.filepath);
 				}
-				finally {
+				finally
+				{
 				}
 			}
 		}

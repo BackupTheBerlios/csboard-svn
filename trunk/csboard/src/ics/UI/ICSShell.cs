@@ -98,11 +98,11 @@ namespace CsBoard
 					  // remove a line from the beginning of the buffer
 					  TextIter startIter =
 						  buffer.StartIter;
-					  TextIter endIter =
-						  startIter;
+					  TextIter endIter = startIter;
 					  if (!endIter.ForwardToLineEnd ())
 						  break;
-					  buffer.Delete (ref startIter, ref endIter);
+					  buffer.Delete (ref startIter,
+							 ref endIter);
 				  }
 
 				TextIter iter = buffer.EndIter;

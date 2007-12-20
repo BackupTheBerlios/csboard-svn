@@ -99,13 +99,13 @@ namespace CsBoard
 				}
 			}
 
-		public string ID
-		{
-			get
+			public string ID
 			{
-				return "icsplayer";
+				get
+				{
+					return "icsplayer";
+				}
 			}
-		}
 
 			AccelGroup accel;
 			public AccelGroup AccelGroup
@@ -168,14 +168,15 @@ namespace CsBoard
 
 				graph = new GameAdvertisementGraph (client);
 				/*
+				   book.AppendPage (graph,
+				   new Label (Catalog.
+				   GetString
+				   ("Seek Graph")));
+				 */
+
 				book.AppendPage (graph,
-						 new Label (Catalog.
-							    GetString
-							    ("Seek Graph")));
-				*/
-				
-				book.AppendPage (graph,
-						 GetLabelImage("graphicon.png"));
+						 GetLabelImage
+						 ("graphicon.png"));
 				ads = new GameAdvertisements (client);
 				book.AppendPage (ads,
 						 new Label (Catalog.
@@ -204,7 +205,9 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate (); return false;}
+					       Authenticate ();
+					       return false;
+					       }
 				);
 
 				accel = new AccelGroup ();
@@ -221,10 +224,14 @@ namespace CsBoard
 				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
 			}
 
-private static Image GetLabelImage(string name) {
-  Image img = Image.LoadFromResource(name);
-  return new Image(img.Pixbuf.ScaleSimple(30, 30, Gdk.InterpType.Bilinear));
-}
+			private static Image GetLabelImage (string name)
+			{
+				Image img = Image.LoadFromResource (name);
+				return new Image (img.Pixbuf.
+						  ScaleSimple (30, 30,
+							       Gdk.InterpType.
+							       Bilinear));
+			}
 
 			private void OnQuitEvent (System.Object b,
 						  EventArgs e)

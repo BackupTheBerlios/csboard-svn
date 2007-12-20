@@ -335,18 +335,19 @@ namespace CsBoard
 					       Format
 					       ("<big><b>{0}</b></big> vs <big><b>{1}</b></big>\n",
 						WhiteStr, BlackStr));
-				if(!exam) {
-					buffer.Append (String.
-						       Format
-						       ("Time left for {0}: {1}\n",
-							white,
-							whites_remaining_time_str));
-					buffer.Append (String.
-						       Format
-						       ("Time left for {0}: {1}\n",
-							black,
-							blacks_remaining_time_str));
-				}
+				if (!exam)
+				  {
+					  buffer.Append (String.
+							 Format
+							 ("Time left for {0}: {1}\n",
+							  white,
+							  whites_remaining_time_str));
+					  buffer.Append (String.
+							 Format
+							 ("Time left for {0}: {1}\n",
+							  black,
+							  blacks_remaining_time_str));
+				  }
 				buffer.Append (String.
 					       Format
 					       ("<i>Move number: </i> {0}, {1} to move",

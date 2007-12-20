@@ -120,7 +120,8 @@ namespace CsBoard
 							      int start,
 							      int end)
 			{
-				MoveDetails details = new MoveDetails (new ArrayList());
+				MoveDetails details =
+					new MoveDetails (new ArrayList ());
 
 				// <12> rnbqkb-r pppppppp -----n-- -------- ---P---- -------- PPP-PPPP RNBQKBNR
 				for (int i = 0; i < 8; i++)
@@ -139,7 +140,7 @@ namespace CsBoard
 						    if (ch == '-')
 							    ch = '.';
 						    buf.Append (ch);
-						    if(j != 7)
+						    if (j != 7)
 							    buf.Append (' ');
 					    }
 					  details.pos.Add (buf.ToString ());
@@ -280,13 +281,17 @@ namespace CsBoard
 						     whiteToMove ? "white" :
 						     "black",
 						     details.
-						     whiteCanCastleShort ? 'K' : ' ',
+						     whiteCanCastleShort ? 'K'
+						     : ' ',
 						     details.
-						     whiteCanCastleLong ? 'Q' : ' ',
+						     whiteCanCastleLong ? 'Q'
+						     : ' ',
 						     details.
-						     blackCanCastleShort ? 'k' : ' ',
+						     blackCanCastleShort ? 'k'
+						     : ' ',
 						     details.
-						     blackCanCastleLong ? 'q' : ' '));
+						     blackCanCastleLong ? 'q'
+						     : ' '));
 				details.pos.Insert (0, "");
 
 				return details;

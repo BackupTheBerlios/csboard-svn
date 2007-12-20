@@ -23,7 +23,7 @@ namespace Chess
 		{
 			public CannotMoveException (String
 						    move):base
-				(Catalog.GetString("Cannot move: ") + move)
+				(Catalog.GetString ("Cannot move: ") + move)
 			{
 			}
 		}

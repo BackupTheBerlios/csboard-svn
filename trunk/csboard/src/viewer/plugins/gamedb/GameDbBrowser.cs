@@ -64,13 +64,13 @@ namespace CsBoard
 				}
 			}
 
-		public string ID
-		{
-			get
+			public string ID
 			{
-			  return "gamedb";
+				get
+				{
+					return "gamedb";
+				}
 			}
-		}
 
 			public event TitleChangedEventHandler
 				TitleChangedEvent;

@@ -190,25 +190,28 @@ namespace Chess
 			{
 				string format =
 					"<b><i><span foreground=\"{0}\">{1}</span></i></b>";
-				if (value >= 1 && value <= 9) {	// abt the move
-					return String.
-						Format
-						(format,
-						 "#800000", ToString ());
-				}
+				if (value >= 1 && value <= 9)
+				  {	// abt the move
+					  return String.
+						  Format
+						  (format,
+						   "#800000", ToString ());
+				  }
 
-				if (value >= 10 && value <= 135) {	// current position
-					return String.
-						Format
-						(format,
-						 "#008000", ToString ());
-				}
-				if (value > 136 && value <= 139) {	// time pressure
-					return String.
-						Format
-						(format,
-						 "#000080", ToString ());
-				}
+				if (value >= 10 && value <= 135)
+				  {	// current position
+					  return String.
+						  Format
+						  (format,
+						   "#008000", ToString ());
+				  }
+				if (value > 136 && value <= 139)
+				  {	// time pressure
+					  return String.
+						  Format
+						  (format,
+						   "#000080", ToString ());
+				  }
 
 				return ToString ();
 			}

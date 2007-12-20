@@ -129,13 +129,13 @@ namespace CsBoard
 				}
 			}
 
-		public string ID
-		{
-			get
+			public string ID
 			{
-				return "viewer";
+				get
+				{
+					return "viewer";
+				}
 			}
-		}
 
 			bool app_visible = false;
 

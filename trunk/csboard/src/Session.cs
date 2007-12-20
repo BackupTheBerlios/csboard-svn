@@ -47,16 +47,16 @@ namespace CsBoard
 					      ".gnome2");
 
 			if (!Directory.Exists (gnomedir))
-			{
-				Directory.CreateDirectory (gnomedir);
-			}
+			  {
+				  Directory.CreateDirectory (gnomedir);
+			  }
 
 			dir = Path.Combine (gnomedir, "csboard");
 
 			if (!Directory.Exists (dir))
-			{
-				Directory.CreateDirectory (dir);
-			}
+			  {
+				  Directory.CreateDirectory (dir);
+			  }
 
 			Filename = Path.Combine (dir, "session.pgn");
 		}
@@ -197,17 +197,23 @@ namespace CsBoard
 			}
 		}
 
-		public int ViewerWidth {
-			get {
+		public int ViewerWidth
+		{
+			get
+			{
 				return (int) gconfClient.
-					Get ("/apps/csboard/viewer/session/width");
+					Get
+					("/apps/csboard/viewer/session/width");
 			}
 		}
 
-		public int ViewerHeight {
-			get {
+		public int ViewerHeight
+		{
+			get
+			{
 				return (int) gconfClient.
-					Get ("/apps/csboard/viewer/session/height");
+					Get
+					("/apps/csboard/viewer/session/height");
 			}
 		}
 
@@ -229,8 +235,9 @@ namespace CsBoard
 			w.GetSize (out width, out height);
 			gconfClient.Set ("/apps/csboard/viewer/session/width",
 					 width);
-			gconfClient.Set ("/apps/csboard/viewer/session/height",
-					 height);
+			gconfClient.
+				Set ("/apps/csboard/viewer/session/height",
+				     height);
 		}
 
 		public int ViewerSplitPanePosition
@@ -257,9 +264,9 @@ namespace CsBoard
 				int pos = (int) gconfClient.
 					Get
 					("/apps/csboard/icsgames/split_pane_position");
-				if(pos > ICSGamesWinWidth / 2)
-					pos = ICSGamesWinWidth / 2;
-				return pos;
+				if (pos > ICSGamesWinWidth / 2)
+					  pos = ICSGamesWinWidth / 2;
+				  return pos;
 			}
 			set
 			{
@@ -270,58 +277,84 @@ namespace CsBoard
 			}
 		}
 
-		public int ICSWinWidth {
-			get {
+		public int ICSWinWidth
+		{
+			get
+			{
 				return (int) gconfClient.
 					Get ("/apps/csboard/icswin/width");
 			}
-			set {
+			set
+			{
 				gconfClient.
-					Set ("/apps/csboard/icswin/width", value);
+					Set ("/apps/csboard/icswin/width",
+					     value);
 			}
 		}
 
-		public int ICSWinHeight {
-			get {
+		public int ICSWinHeight
+		{
+			get
+			{
 				return (int) gconfClient.
 					Get ("/apps/csboard/icswin/height");
 			}
 
-			set {
-				gconfClient.Set("/apps/csboard/icswin/height", value);
+			set
+			{
+				gconfClient.
+					Set ("/apps/csboard/icswin/height",
+					     value);
 			}
 		}
 
-		public int ICSGamesWinWidth {
-			get {
+		public int ICSGamesWinWidth
+		{
+			get
+			{
 				return (int) gconfClient.
 					Get ("/apps/csboard/icsgames/width");
 			}
-			set {
+			set
+			{
 				gconfClient.
-					Set ("/apps/csboard/icsgames/width", value);
+					Set ("/apps/csboard/icsgames/width",
+					     value);
 			}
 		}
 
-		public int ICSGamesWinHeight {
-			get {
+		public int ICSGamesWinHeight
+		{
+			get
+			{
 				return (int) gconfClient.
 					Get ("/apps/csboard/icsgames/height");
 			}
 
-			set {
-				gconfClient.Set("/apps/csboard/icsgames/height", value);
+			set
+			{
+				gconfClient.
+					Set ("/apps/csboard/icsgames/height",
+					     value);
 			}
 		}
 
-public string LastAppName {
-  get {
-    return (string) gconfClient.Get("/apps/csboard/session/lastappname");
-  }
-  set {
-    gconfClient.Set("/apps/csboard/session/lastappname", value);
-  }
-}
+		public string LastAppName
+		{
+			get
+			{
+				return (string) gconfClient.
+					Get
+					("/apps/csboard/session/lastappname");
+			}
+			set
+			{
+				gconfClient.
+					Set
+					("/apps/csboard/session/lastappname",
+					 value);
+			}
+		}
 
 		private void SessionChanged (object obj,
 					     GConf.NotifyEventArgs args)

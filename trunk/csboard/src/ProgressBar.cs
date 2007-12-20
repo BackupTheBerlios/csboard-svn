@@ -15,34 +15,44 @@
 //
 // Copyright (C) 2004 Nickolay V. Shmyrev
 
-namespace CsBoard {	
+namespace CsBoard
+{
 
-	public class ProgressBar : Gtk.ProgressBar {
-	
-	    private uint timeout_id = 0;
+	public class ProgressBar:Gtk.ProgressBar
+	{
 
-	    public ProgressBar () : base () {
-	    }
-	    
-    
-	    public void Start () {
-	      timeout_id = GLib.Timeout.Add (300, new GLib.TimeoutHandler(timeout_cb)); 
-	      Show ();
-	    }
-	    
-	    public void Stop () {
-	      if (timeout_id > 0) {
-		      GLib.Source.Remove (timeout_id);
-		      timeout_id = 0;
-	      }
-	      Hide ();
-	    }
-	    
-	    private bool timeout_cb ()
-	    {
-		Pulse ();
-		return true;
-	    }
-	    
+		private uint timeout_id = 0;
+
+		public ProgressBar ():base ()
+		{
+		}
+
+
+		public void Start ()
+		{
+			timeout_id =
+				GLib.Timeout.Add (300,
+						  new GLib.
+						  TimeoutHandler
+						  (timeout_cb));
+			Show ();
+		}
+
+		public void Stop ()
+		{
+			if (timeout_id > 0)
+			  {
+				  GLib.Source.Remove (timeout_id);
+				  timeout_id = 0;
+			  }
+			Hide ();
+		}
+
+		private bool timeout_cb ()
+		{
+			Pulse ();
+			return true;
+		}
+
 	}
 }

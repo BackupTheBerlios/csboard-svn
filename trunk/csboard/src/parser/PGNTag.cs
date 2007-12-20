@@ -19,31 +19,46 @@ namespace Chess
 {
 	namespace Parser
 	{
-	public class PGNTag {
-		string tagname;
-		string tagvalue;
+		public class PGNTag
+		{
+			string tagname;
+			string tagvalue;
 
-		public string Name {
-			get { return tagname; }
-		}
-		public string Value {
-			get { return tagvalue; }
-			set { tagvalue = value; }
-		}
+			public string Name
+			{
+				get
+				{
+					return tagname;
+				}
+			}
+			public string Value
+			{
+				get
+				{
+					return tagvalue;
+				}
+				set
+				{
+					tagvalue = value;
+				}
+			}
 
-		public PGNTag(string n, string v) {
-			tagname = n;
-			tagvalue = v;
-		}
+			public PGNTag (string n, string v)
+			{
+				tagname = n;
+				tagvalue = v;
+			}
 
-		public override bool Equals(object o) {
-			PGNTag t = (PGNTag) o;
-			return Name.Equals(t.Name);
-		}
+			public override bool Equals (object o)
+			{
+				PGNTag t = (PGNTag) o;
+				return Name.Equals (t.Name);
+			}
 
-		public override int GetHashCode() {
-			return Name.GetHashCode();
+			public override int GetHashCode ()
+			{
+				return Name.GetHashCode ();
+			}
 		}
-	}
 	}
 }

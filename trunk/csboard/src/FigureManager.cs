@@ -67,8 +67,10 @@ namespace CsBoard
 			// This is to fix the bug which causes Double.Parse to throw an exception
 			// when LANG=ru_RU
 			// TODO: find a better method of rendering svg
-			CultureInfo orig = Thread.CurrentThread.CurrentCulture;
-			Thread.CurrentThread.CurrentCulture = new CultureInfo("en-us");
+			CultureInfo orig =
+				Thread.CurrentThread.CurrentCulture;
+			Thread.CurrentThread.CurrentCulture =
+				new CultureInfo ("en-us");
 			Parse (svg);
 			Thread.CurrentThread.CurrentCulture = orig;
 		}
@@ -114,7 +116,9 @@ namespace CsBoard
 			string str = new string (chars, i, j - i);
 
 			i = j;
-			return Double.Parse (str, System.Globalization.NumberStyles.Any);
+			return Double.Parse (str,
+					     System.Globalization.
+					     NumberStyles.Any);
 		}
 	}
 
