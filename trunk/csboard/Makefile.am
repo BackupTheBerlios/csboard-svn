@@ -61,19 +61,20 @@ ICS_PLAYER_SRCS = \
 	$(top_srcdir)/src/ics/MovesGetter.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs \
 	$(top_srcdir)/src/ics/MatchChallenge.cs \
+	$(top_srcdir)/src/ics/GameObservationManager.cs \
 	$(top_srcdir)/src/ics/UI/ICSShell.cs \
 	$(top_srcdir)/src/ics/UI/ICSConfigDialog.cs \
 	$(top_srcdir)/src/ics/UI/ICSConfigWidget.cs \
 	$(top_srcdir)/src/ics/UI/GameAdvertisementsWidget.cs \
 	$(top_srcdir)/src/ics/UI/ICSDetailsWidget.cs \
 	$(top_srcdir)/src/ics/UI/ICSGameObserverWidget.cs \
-	$(top_srcdir)/src/ics/UI/GameObservationManager.cs \
 	$(top_srcdir)/src/ics/UI/ObservableGamesWidget.cs \
 	$(top_srcdir)/src/ics/UI/ChessMovesWidget.cs \
 	$(top_srcdir)/src/ics/UI/ObservingGamePage.cs \
 	$(top_srcdir)/src/ics/UI/PlayerPage.cs \
 	$(top_srcdir)/src/ics/UI/Graph.cs \
-	$(top_srcdir)/src/ics/UI/GameAdvertisementGraph.cs
+	$(top_srcdir)/src/ics/UI/GameAdvertisementGraph.cs \
+	$(top_srcdir)/src/ics/UI/ICSMenuBar.cs
 
 SOURCE = \
 	$(top_srcdir)/src/App.cs \

@@ -1,3 +1,19 @@
+2007-12-31 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	moved
+	* src/ics/UI/GameObservationManager.cs to UI
+
+	modified
+	* src/ics/UI/ObservingGamePage.cs
+	* src/ics/UI/ICSDetailsWidget.cs
+	* src/ics/UI/ICSMenuBar.cs
+	* src/ics/UI/PlayerPage.cs
+	* src/Session.cs
+	* data/csboard.schemas.in
+	* Makefile.am
+
+	UI changes
+
 2007-12-20 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	moved the following files to src/ics/UI

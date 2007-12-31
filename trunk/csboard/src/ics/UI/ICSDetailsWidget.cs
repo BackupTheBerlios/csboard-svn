@@ -24,34 +24,6 @@ namespace CsBoard
 {
 	namespace ICS
 	{
-		class ICSMenuBar:AppMenuBar
-		{
-			public ImageMenuItem connectMenuItem,
-				disconnectMenuItem;
-			public ICSMenuBar ():base ()
-			{
-				Menu menu = fileMenuItem.Submenu as Menu;
-				  connectMenuItem =
-					new ImageMenuItem (Catalog.
-							   GetString
-							   ("_Connect"));
-				  connectMenuItem.Image =
-					new Image (Stock.Connect,
-						   IconSize.Menu);
-				  disconnectMenuItem =
-					new ImageMenuItem (Catalog.
-							   GetString
-							   ("_Disconnect"));
-				  disconnectMenuItem.Image =
-					new Image (Stock.Disconnect,
-						   IconSize.Menu);
-				int i = 0;
-				  menu.Insert (connectMenuItem, i++);
-				  menu.Insert (disconnectMenuItem, i++);
-
-				  ShowAll ();
-			}
-		}
 		public class ICSDetailsWidget:Frame, SubApp
 		{
 			public event TitleChangedEventHandler
@@ -154,7 +126,7 @@ namespace CsBoard
 						       client.server,
 						       client.port);
 				book = new Notebook ();
-				book.TabPos = PositionType.Top;
+				book.TabPos = PositionType.Left;
 				book.Show ();
 
 				Add (book);
@@ -166,33 +138,10 @@ namespace CsBoard
 				observableGames =
 					new ObservableGamesWidget (obManager);
 
-				graph = new GameAdvertisementGraph (client);
-				   book.AppendPage (graph,
-				   new Label (Catalog.
-				   GetString
-				   ("Seek Graph")));
-
-				/*
-				book.AppendPage (graph,
-						 GetLabelImage
-						 ("graphicon.png"));
-				 */
-				ads = new GameAdvertisements (client);
-				book.AppendPage (ads,
-						 new Label (Catalog.
-							    GetString
-							    ("Game Seeks")));
-
-				book.AppendPage (observableGames,
-						 new Label (Catalog.
-							    GetString
-							    ("Watch Games")));
-
-				shell = new ICSShell (client);
-				book.AppendPage (shell,
-						 new Label (Catalog.
-							    GetString
-							    ("Shell")));
+				add_seek_graph_page ();
+				add_game_seeks_page ();
+				add_watch_games_page ();
+				add_shell_page ();
 
 				client.ChallengeEvent += OnChallengeEvent;
 
@@ -205,9 +154,7 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate ();
-					       return false;
-					       }
+					       Authenticate (); return false;}
 				);
 
 				accel = new AccelGroup ();
@@ -222,6 +169,86 @@ namespace CsBoard
 								      Visible));
 				ShowAll ();
 				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
+				menubar.showTabsMenuItem.Activated +=
+					on_showtabs_activated;
+			}
+
+			public void AddPage (Widget page, Widget label,
+					     MenuItem item)
+			{
+				Menu menu =
+					menubar.viewMenuItem.Submenu as Menu;
+				book.AppendPage (page, label);
+				menu.Append (item);
+			}
+
+			public void RemovePage (Widget page, MenuItem item)
+			{
+				int index = book.PageNum (page);
+				book.RemovePage (index);
+				(menubar.viewMenuItem.Submenu as Menu).
+					Remove (item);
+			}
+
+			private void add_seek_graph_page ()
+			{
+				graph = new GameAdvertisementGraph (client);
+				MenuItem item =
+					new PageMenuItem (Catalog.
+							  GetString
+							  ("Seek _Graph"),
+							  graph, book);
+				AddPage (graph,
+					 new Label (Catalog.
+						    GetString ("Seek Graph")),
+					 item);
+			}
+
+			private void add_game_seeks_page ()
+			{
+				/*
+				   book.AppendPage (graph,
+				   GetLabelImage
+				   ("graphicon.png"));
+				 */
+				ads = new GameAdvertisements (client);
+				MenuItem item =
+					new PageMenuItem (Catalog.
+							  GetString
+							  ("Game _Seeks"),
+							  ads, book);
+				AddPage (ads,
+					 new Label (Catalog.
+						    GetString ("Game Seeks")),
+					 item);
+			}
+
+			private void add_watch_games_page ()
+			{
+				MenuItem item =
+					new PageMenuItem (Catalog.
+							  GetString
+							  ("_Watch Games"),
+							  observableGames,
+							  book);
+				AddPage (observableGames,
+					 new Label (Catalog.
+						    GetString
+						    ("Watch Games")), item);
+			}
+
+			private void add_shell_page ()
+			{
+				shell = new ICSShell (client);
+				MenuItem item =
+					new PageMenuItem (Catalog.
+							  GetString
+							  ("S_hell"), shell,
+							  book);
+				AddPage (shell,
+					 new Label (Catalog.
+						    GetString ("Shell")),
+					 item);
 			}
 
 			private static Image GetLabelImage (string name)
@@ -237,6 +264,15 @@ namespace CsBoard
 						  EventArgs e)
 			{
 				client.Stop ();
+			}
+
+			private void on_showtabs_activated (object o,
+							    EventArgs args)
+			{
+				book.ShowTabs =
+					menubar.showTabsMenuItem.Active;
+				App.Session.ICSShowTabs =
+					menubar.showTabsMenuItem.Active;
 			}
 
 			public void SetVisibility (bool visible)
@@ -291,15 +327,36 @@ namespace CsBoard
 							    ("Login")));
 				book.CurrentPage = pageidx;
 				configwidget.ShowAll ();
+				DisableSubmenu (menubar.viewMenuItem);
 			}
 
 			private void RemoveConfigWidget ()
 			{
-				book.ShowTabs = true;
+				book.ShowTabs =
+					menubar.showTabsMenuItem.Active;
 
 				book.RemovePage (book.CurrentPage);
 				book.CurrentPage = 0;
 				configwidget = null;
+				EnableSubmenu (menubar.viewMenuItem);
+			}
+
+			private void DisableSubmenu (MenuItem item)
+			{
+				foreach (Widget child
+					 in (item.Submenu as Menu))
+				{
+					child.Sensitive = false;
+				}
+			}
+
+			private void EnableSubmenu (MenuItem item)
+			{
+				foreach (Widget child
+					 in (item.Submenu as Menu))
+				{
+					child.Sensitive = true;
+				}
 			}
 
 			private void Authenticate ()

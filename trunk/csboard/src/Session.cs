@@ -356,6 +356,21 @@ namespace CsBoard
 			}
 		}
 
+		public bool ICSShowTabs
+		{
+			get
+			{
+				return (bool) gconfClient.
+					Get ("/apps/csboard/icswin/showtabs");
+			}
+			set
+			{
+				gconfClient.
+					Set ("/apps/csboard/icswin/showtabs",
+					     value);
+			}
+		}
+
 		private void SessionChanged (object obj,
 					     GConf.NotifyEventArgs args)
 		{

@@ -64,6 +64,7 @@ namespace CsBoard
 			protected Button firstButton, prevButton, nextButton,
 				lastButton;
 
+			protected VBox movesBox;
 			public static bool IsMyGame (Relation relation)
 			{
 				return relation ==
@@ -135,7 +136,7 @@ namespace CsBoard
 					PolicyType.Automatic;
 				scroll.Add (movesWidget);
 
-				VBox movesBox = new VBox ();
+				movesBox = new VBox ();
 				movesBox.PackStart (scroll, true, true, 2);
 				AddGameNavigationButtons (movesBox);
 

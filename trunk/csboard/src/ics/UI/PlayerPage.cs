@@ -36,7 +36,7 @@ namespace CsBoard
 					   MoveDetails details):base (widget,
 								      details)
 			{
-				HButtonBox box = new HButtonBox ();
+				Table table = new Table (5, 2, true);
 
 				  drawButton =
 					new Button (Catalog.
@@ -60,18 +60,25 @@ namespace CsBoard
 				  adjournButton.Clicked += OnClicked;
 				  takebackButton.Clicked += OnClicked;
 
-				  box.LayoutStyle = ButtonBoxStyle.Start;
-				  box.PackStart (drawButton, false, false, 2);
-				  box.PackStart (resignButton, false, false,
-						 2);
-				  box.PackStart (abortButton, false, false,
-						 2);
-				  box.PackStart (adjournButton, false, false,
-						 2);
-				  box.PackStart (takebackButton, false, false,
-						 2);
-				  box.ShowAll ();
-				  PackStart (box, false, true, 2);
+				uint row = 0, col = 0;
+				  table.Attach (drawButton, col, col + 1, row,
+						row + 1);
+				  col++;
+				  table.Attach (resignButton, col, col + 1,
+						row, row + 1);
+				  col = 0;
+				  row++;
+				  table.Attach (abortButton, col, col + 1,
+						row, row + 1);
+				  col++;
+				  table.Attach (adjournButton, col, col + 1,
+						row, row + 1);
+				  col = 0;
+				  row++;
+				  table.Attach (takebackButton, col, col + 1,
+						row, row + 1);
+				  table.ShowAll ();
+				  movesBox.PackEnd (table, false, true, 2);
 			}
 
 			public override void Update (MoveDetails details)

@@ -53,6 +53,7 @@ namespace CsBoard
 			string label_text;
 			bool label_bold = false;
 			Label gamesPageLabel;
+			MenuItem menuitem;
 
 			public GameObservationManager (ICSClient client,
 						       ICSDetailsWidget
@@ -134,8 +135,13 @@ namespace CsBoard
 				win.GamePageRemovedEvent += OnGamePageRemoved;
 				win.GamePageAddedEvent += OnGamePageAdded;
 				gamesPageLabel = new Label ();
-				appwidget.Book.AppendPage (win,
-							   gamesPageLabel);
+				menuitem =
+					new PageMenuItem (Catalog.
+							  GetString
+							  ("Ga_mes"), win,
+							  appwidget.Book);
+				appwidget.AddPage (win, gamesPageLabel,
+						   menuitem);
 				win.ShowAll ();
 				win.Update (details);
 
@@ -218,9 +224,9 @@ namespace CsBoard
 				 */
 				App.Session.ICSGamesWinSplitPanePosition =
 					win.SplitPane.Position;
-				int index = appwidget.Book.PageNum (win);
-				appwidget.Book.RemovePage (index);
+				appwidget.RemovePage (win, menuitem);
 				win = null;
+				menuitem = null;
 			}
 
 			private void OnSwitchPage (object o,

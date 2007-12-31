@@ -106,6 +106,18 @@
 
 
     <schema>
+      <key>/schemas/apps/csboard/icswin/showtabs</key>
+      <applyto>/apps/csboard/icswin/showtabs</applyto>
+      <owner>csboard</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Show tabs in ICS window</short>
+	<long>Show tabs in ICS window</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/csboard/icsgames/width</key>
       <applyto>/apps/csboard/icsgames/width</applyto>
       <owner>csboard</owner>
