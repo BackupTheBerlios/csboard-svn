@@ -526,7 +526,9 @@ namespace CsBoard
 			{
 				GLib.Idle.Add (delegate ()
 					       {
-					       __start (); return false;}
+					       __start ();
+					       return false;
+					       }
 				);
 			}
 
@@ -544,8 +546,7 @@ namespace CsBoard
 								  {
 								  Connect ();
 								  PostReadRequest
-								  ();
-								  }
+								  ();}
 						  );
 						  thread.Start ();
 					  }
@@ -685,8 +686,8 @@ namespace CsBoard
 					  else if (expecting_auth
 						   && buffer[i] == ':')
 					    {
-						    ProcessLine (m_start, i - m_start + 1);	// including the delim
-						    m_start = i + 1;
+						    process_auth (ref m_start,
+								  i);
 					    }
 				  }
 
@@ -702,6 +703,28 @@ namespace CsBoard
 				  }
 
 				PostReadRequest ();
+			}
+
+			private void process_auth (ref int m_start, int i)
+			{
+				int start = m_start;
+				int count = i - m_start;
+
+				if (buffer[m_start] == '\r')
+				  {
+					  start++;
+					  count--;
+				  }
+				string tok =
+					encoding.GetString (buffer, start,
+							    count);
+				if (tok.Equals ("login")
+				    || (!guestLogin
+					&& tok.Equals ("password")))
+				  {
+					  ProcessLine (m_start, i - m_start + 1);	// including the delim
+					  m_start = i + 1;
+				  }
 			}
 
 			private NotificationType GetNotificationType (ref int
@@ -850,7 +873,7 @@ namespace CsBoard
 				return LineType.Normal;
 			}
 
-			private void ProcessLine (int start, int count)
+			private bool ProcessLine (int start, int count)
 			{
 				if (buffer[start + count - 1] == '\r')
 				  {
@@ -862,7 +885,7 @@ namespace CsBoard
 					  count--;
 				  }
 				if (count <= 0)
-					return;
+					return false;
 				try
 				{
 					__ProcessLine (start, count);
@@ -876,6 +899,7 @@ namespace CsBoard
 							    count));
 					Console.WriteLine (e);
 				}
+				return true;
 			}
 
 			private static bool GotoBlockStart (byte[]buffer,

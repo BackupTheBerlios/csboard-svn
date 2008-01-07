@@ -27,20 +27,14 @@ namespace CsBoard
 		{
 			Button sendButton;
 			Entry commandEntry;
-			TextView textView;
-			int max_chars;
+			ShellTextView textView;
 
 			ICSClient client;
 
 			public ICSShell (ICSClient client):base ()
 			{
 				this.client = client;
-				max_chars = 16 * 1024;
-				textView = new TextView ();
-				textView.ModifyFont (Pango.FontDescription.
-						     FromString
-						     ("Monospace 9"));
-				client.LineReceivedEvent += OnLineReceived;
+				textView = new ShellTextView (client);
 
 				commandEntry = new Entry ();
 				sendButton =
@@ -74,42 +68,7 @@ namespace CsBoard
 					return;
 
 				  client.CommandSender.SendCommand (cmd);
-				  AddLineToBuffer (cmd);
-			}
-
-			private void OnLineReceived (object o,
-						     LineReceivedEventArgs
-						     args)
-			{
-				if (args.LineType != LineType.Normal
-				    && args.LineType != LineType.Talk)
-					return;
-				string line = args.Line;
-				  AddLineToBuffer (line);
-			}
-
-			private void AddLineToBuffer (string line)
-			{
-				TextBuffer buffer = textView.Buffer;
-				int len = line.Length;
-
-				while (buffer.CharCount + len > max_chars)
-				  {
-					  // remove a line from the beginning of the buffer
-					  TextIter startIter =
-						  buffer.StartIter;
-					  TextIter endIter = startIter;
-					  if (!endIter.ForwardToLineEnd ())
-						  break;
-					  buffer.Delete (ref startIter,
-							 ref endIter);
-				  }
-
-				TextIter iter = buffer.EndIter;
-				buffer.Insert (ref iter, line);
-				buffer.Insert (ref iter, "\n");
-				textView.ScrollToIter (buffer.EndIter, 0,
-						       false, 0, 0);
+				  textView.AddCommandToBuffer (cmd);
 			}
 		}
 	}

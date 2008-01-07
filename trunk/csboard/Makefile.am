@@ -74,7 +74,8 @@ ICS_PLAYER_SRCS = \
 	$(top_srcdir)/src/ics/UI/PlayerPage.cs \
 	$(top_srcdir)/src/ics/UI/Graph.cs \
 	$(top_srcdir)/src/ics/UI/GameAdvertisementGraph.cs \
-	$(top_srcdir)/src/ics/UI/ICSMenuBar.cs
+	$(top_srcdir)/src/ics/UI/ICSMenuBar.cs \
+	$(top_srcdir)/src/ics/UI/ShellTextView.cs
 
 SOURCE = \
 	$(top_srcdir)/src/App.cs \
