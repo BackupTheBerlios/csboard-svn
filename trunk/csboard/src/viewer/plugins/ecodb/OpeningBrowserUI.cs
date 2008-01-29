@@ -62,12 +62,11 @@ namespace CsBoard
 				}
 			}
 
-			AccelGroup accel;
 			public AccelGroup AccelGroup
 			{
 				get
 				{
-					return accel;
+					return menubar.AccelGroup;
 				}
 			}
 
@@ -99,16 +98,6 @@ namespace CsBoard
 			{
 				menubar = new AppMenuBar ();
 				title = Catalog.GetString ("Opening Browser");
-				accel = new AccelGroup ();
-				menubar.quitMenuItem.
-					AddAccelerator ("activate", accel,
-							new AccelKey (Gdk.Key.
-								      q,
-								      Gdk.
-								      ModifierType.
-								      ControlMask,
-								      AccelFlags.
-								      Visible));
 				toolbutton = new ToolButton (Stock.Info);
 				toolbutton.Label =
 					Catalog.GetString ("Openings");

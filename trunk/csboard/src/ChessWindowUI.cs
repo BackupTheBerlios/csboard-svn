@@ -218,6 +218,24 @@ namespace CsBoard
 			boardWidget.StartMoveHintEvent +=
 				new
 				StartMoveHintHandler (on_board_start_move);
+			csboardWindow.WindowStateEvent += OnWindowStateEvent;
+		}
+
+		void OnWindowStateEvent (object o, WindowStateEventArgs args)
+		{
+			if ((args.Event.ChangedMask & Gdk.WindowState.
+			     Fullscreen) == 0)
+				return;
+
+			if ((args.Event.NewWindowState & Gdk.WindowState.
+			     Fullscreen) != 0)
+			  {
+				  appsBar.Hide ();
+			  }
+			else
+			  {
+				  appsBar.Show ();
+			  }
 		}
 
 		public void on_quit_window_activate (System.Object b,

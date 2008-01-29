@@ -79,18 +79,16 @@ namespace CsBoard
 			{
 			}
 
-			AccelGroup accel;
 			public AccelGroup AccelGroup
 			{
 				get
 				{
-					return accel;
+					return menubar.AccelGroup;
 				}
 			}
 
 			public GameDbBrowser ():base ()
 			{
-				accel = new AccelGroup ();
 				title = Catalog.GetString ("Game Database");
 				menubar = new AppMenuBar ();
 				menubar.ShowAll ();
@@ -103,15 +101,6 @@ namespace CsBoard
 							GetString
 							("Database"));
 				toolbutton.ShowAll ();
-				menubar.quitMenuItem.
-					AddAccelerator ("activate", accel,
-							new AccelKey (Gdk.Key.
-								      q,
-								      Gdk.
-								      ModifierType.
-								      ControlMask,
-								      AccelFlags.
-								      Visible));
 			}
 		}
 	}

@@ -79,12 +79,11 @@ namespace CsBoard
 				}
 			}
 
-			AccelGroup accel;
 			public AccelGroup AccelGroup
 			{
 				get
 				{
-					return accel;
+					return menubar.AccelGroup;
 				}
 			}
 
@@ -154,19 +153,11 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate (); return false;}
+					       Authenticate ();
+					       return false;
+					       }
 				);
 
-				accel = new AccelGroup ();
-				menubar.quitMenuItem.
-					AddAccelerator ("activate", accel,
-							new AccelKey (Gdk.Key.
-								      q,
-								      Gdk.
-								      ModifierType.
-								      ControlMask,
-								      AccelFlags.
-								      Visible));
 				ShowAll ();
 				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
 				menubar.showTabsMenuItem.Activated +=

@@ -24,11 +24,19 @@ namespace CsBoard
 	public class AppMenuBar:MenuBar
 	{
 		public MenuItem fileMenuItem, editMenuItem, viewMenuItem,
-			helpMenuItem, quitMenuItem;
+			helpMenuItem, quitMenuItem, fullscreenMenuItem,
+			unfullscreenMenuItem;
+		AccelGroup accel;
+		public AccelGroup AccelGroup
+		{
+			get
+			{
+				return accel;
+			}
+		}
 
 		public AppMenuBar ():base ()
 		{
-
 			/* File menu */
 			fileMenuItem =
 				new MenuItem (Catalog.GetString ("_File"));
@@ -58,6 +66,28 @@ namespace CsBoard
 			  viewMenuItem.Submenu = new Menu ();
 			  Append (viewMenuItem);
 
+			  menu = new Menu ();
+			  viewMenuItem.Submenu = menu;
+
+			  fullscreenMenuItem = item =
+				new ImageMenuItem (Catalog.
+						   GetString ("_Fullscreen"));
+			  item.Activated += OnFullscreenActivated;
+			  item.Image =
+				new Image (Stock.Fullscreen, IconSize.Menu);
+			  menu.Append (item);
+
+			  unfullscreenMenuItem = item =
+				new ImageMenuItem (Catalog.
+						   GetString
+						   ("_Leave Fullscreen"));
+			  item.Activated += OnUnfullscreenActivated;
+			  item.Image =
+				new Image (Stock.LeaveFullscreen,
+					   IconSize.Menu);
+			  item.Show ();
+			//menu.Append(item);                    
+
 			/* Help menu */
 			  helpMenuItem =
 				new MenuItem (Catalog.GetString ("_Help"));
@@ -79,12 +109,49 @@ namespace CsBoard
 			  menu.Append (item);
 
 			  ShowAll ();
+
+			  CsBoardApp.Instance.Window.WindowStateEvent +=
+				OnWindowStateEvent;
+			  accel = new AccelGroup ();
+			  set_accel_group (accel);
+		}
+
+		void set_accel_group (AccelGroup accel)
+		{
+			quitMenuItem.
+				AddAccelerator ("activate", accel,
+						new AccelKey (Gdk.Key.
+							      q,
+							      Gdk.
+							      ModifierType.
+							      ControlMask,
+							      AccelFlags.
+							      Visible));
+
+			fullscreenMenuItem.
+				AddAccelerator ("activate", accel,
+						new AccelKey (Gdk.Key.
+							      F11,
+							      Gdk.
+							      ModifierType.
+							      None,
+							      AccelFlags.
+							      Visible));
+			unfullscreenMenuItem.
+				AddAccelerator ("activate", accel,
+						new AccelKey (Gdk.Key.
+							      F11,
+							      Gdk.
+							      ModifierType.
+							      None,
+							      AccelFlags.
+							      Visible));
 		}
 
 		protected void AppendAfter (MenuItem item, MenuItem itemToAdd)
 		{
 			int i = 0;
-			  foreach (Widget child in AllChildren)
+			foreach (Widget child in AllChildren)
 			{
 				if (child.Equals (item))
 				  {
@@ -110,6 +177,58 @@ namespace CsBoard
 		protected virtual void OnContents (object o, EventArgs args)
 		{
 			CsBoardApp.ShowHelpContents ();
+		}
+
+		protected virtual void OnFullscreenActivated (object o,
+							      EventArgs args)
+		{
+			CsBoardApp.Instance.Window.Fullscreen ();
+		}
+
+		protected virtual void OnUnfullscreenActivated (object o,
+								EventArgs
+								args)
+		{
+			CsBoardApp.Instance.Window.Unfullscreen ();
+		}
+
+		protected virtual void OnWindowStateEvent (object o,
+							   WindowStateEventArgs
+							   args)
+		{
+			if ((args.Event.ChangedMask & Gdk.WindowState.
+			     Fullscreen) == 0)
+				return;
+
+			if ((args.Event.NewWindowState & Gdk.WindowState.
+			     Fullscreen) != 0)
+			  {
+				  replace_viewitem (fullscreenMenuItem,
+						    unfullscreenMenuItem);
+			  }
+			else
+			  {
+				  replace_viewitem (unfullscreenMenuItem,
+						    fullscreenMenuItem);
+			  }
+		}
+
+		private void replace_viewitem (MenuItem item,
+					       MenuItem newitem)
+		{
+			Menu menu = viewMenuItem.Submenu as Menu;
+			int i = 0;
+			foreach (MenuItem child in menu.Children)
+			{
+				if (child.Equals (item))
+				  {
+					  break;
+				  }
+				i++;
+			}
+
+			menu.Remove (item);
+			menu.Insert (newitem, i);
 		}
 	}
 }

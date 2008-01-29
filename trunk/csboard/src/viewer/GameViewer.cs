@@ -111,12 +111,11 @@ namespace CsBoard
 				}
 			}
 
-			AccelGroup accel;
 			public AccelGroup AccelGroup
 			{
 				get
 				{
-					return accel;
+					return menubar.AccelGroup;
 				}
 			}
 
@@ -152,7 +151,6 @@ namespace CsBoard
 			{
 				title = "Game Viewer";
 				loader = new GameLoader (this);
-				accel = new AccelGroup ();
 				initialDirForFileChooser =
 					App.Session.CurrentFolder;
 
@@ -171,19 +169,10 @@ namespace CsBoard
 				menubar.highlightMoveMenuItem.Activated +=
 					OnHighlightMoveMenuItemActivated;
 				menubar.switchSideMenuItem.
-					AddAccelerator ("activate", accel,
+					AddAccelerator ("activate",
+							menubar.AccelGroup,
 							new AccelKey (Gdk.Key.
 								      t,
-								      Gdk.
-								      ModifierType.
-								      ControlMask,
-								      AccelFlags.
-								      Visible));
-
-				menubar.quitMenuItem.
-					AddAccelerator ("activate", accel,
-							new AccelKey (Gdk.Key.
-								      q,
 								      Gdk.
 								      ModifierType.
 								      ControlMask,

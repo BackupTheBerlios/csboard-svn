@@ -1,3 +1,16 @@
+2008-01-29 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified
+	* src/AppMenuBar.cs
+	* src/viewer/plugins/gamedb/GameDbBrowser.cs
+	* src/viewer/plugins/ecodb/OpeningBrowserUI.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/Widgets/ChessGameView.cs
+	* src/ics/UI/ICSDetailsWidget.cs
+	* src/ChessWindowUI.cs
+
+	Adds full screen support
+
 2008-01-06 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	added
