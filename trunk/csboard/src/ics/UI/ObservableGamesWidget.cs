@@ -26,6 +26,29 @@ namespace CsBoard
 {
 	namespace ICS
 	{
+		public class ObservableGamesView:Notebook
+		{
+			RelayTournamentsView relayTournamentsView;
+			ObservableGamesWidget observableGamesWidget;
+			public ObservableGamesView (GameObservationManager
+						    observer,
+						    ICSClient client)
+			{
+				observableGamesWidget =
+					new ObservableGamesWidget (observer);
+				relayTournamentsView =
+					new RelayTournamentsView (client);
+				AppendPage (observableGamesWidget,
+					    new Label (Catalog.
+						       GetString ("Games")));
+				AppendPage (relayTournamentsView,
+					    new Label (Catalog.
+						       GetString
+						       ("Relayed Tournaments")));
+				ShowAll ();
+			}
+		}
+
 		public class ObservableGamesWidget:VBox
 		{
 			private Gtk.TreeView gamesView;
@@ -103,7 +126,23 @@ namespace CsBoard
 				  AddParentIters ();
 
 				  infoLabel.UseMarkup = true;
-				  PackStart (infoLabel, false, true, 4);
+				Button refreshButton =
+					new Button (Stock.Refresh);
+				  refreshButton.Clicked +=
+					delegate (object o, EventArgs args)
+				{
+					Clear ();
+					obManager.GetGames ();
+				};
+				Alignment align = new Alignment (0, 1, 0, 0);
+				  align.Add (refreshButton);
+
+				HBox hbox = new HBox ();
+				  hbox.PackStart (infoLabel, true, true, 4);
+				  hbox.PackStart (align, false, false, 4);
+
+				  PackStart (hbox, false, true, 4);
+
 				Label tipLabel = new Label ();
 				  tipLabel.Xalign = 0;
 				  tipLabel.Xpad = 4;
@@ -116,18 +155,6 @@ namespace CsBoard
 				  PackStart (tipLabel, false, true, 4);
 				  PackStart (filterEntry, false, true, 4);
 				  PackStart (win, true, true, 4);
-
-				Button refreshButton =
-					new Button (Stock.Refresh);
-				Alignment align = new Alignment (0, 1, 0, 0);
-				  align.Add (refreshButton);
-				  PackStart (align, false, false, 4);
-				  refreshButton.Clicked +=
-					delegate (object o, EventArgs args)
-				{
-					Clear ();
-					obManager.GetGames ();
-				};
 
 				  gamesView.RowActivated += OnRowActivated;
 				  SetSizeRequest (600, 400);

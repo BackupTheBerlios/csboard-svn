@@ -17,6 +17,7 @@
 
 using Gtk;
 using System;
+using System.Collections;
 using System.Text;
 using Mono.Unix;
 
@@ -29,7 +30,7 @@ namespace CsBoard
 			public event TitleChangedEventHandler
 				TitleChangedEvent;
 			GameObservationManager obManager;
-			ObservableGamesWidget observableGames;
+			ObservableGamesView observableGames;
 			GameAdvertisements ads;
 			ICSShell shell;
 			GameAdvertisementGraph graph;
@@ -135,7 +136,8 @@ namespace CsBoard
 								    this);
 
 				observableGames =
-					new ObservableGamesWidget (obManager);
+					new ObservableGamesView (obManager,
+								 client);
 
 				add_seek_graph_page ();
 				add_game_seeks_page ();

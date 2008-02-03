@@ -1,3 +1,22 @@
+2008-02-02 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified
+
+	* src/ics/UI/ICSDetailsWidget.cs
+	* src/ics/UI/ObservableGamesWidget.cs
+	* Makefile.am
+
+	added
+
+	* src/ics/RelayTournamentsGetter.cs
+	* src/ics/RelayGetter.cs
+	* src/ics/RelayTournament.cs
+	* src/ics/RelayGamesGetter.cs
+	* src/ics/RelayGame.cs
+	* src/ics/UI/RelayTournamentsView.cs
+
+	adds relay tournament support
+	
 2008-01-29 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified

@@ -59,6 +59,11 @@ ICS_PLAYER_SRCS = \
 	$(top_srcdir)/src/ics/GameInfo.cs \
 	$(top_srcdir)/src/ics/CommandSender.cs \
 	$(top_srcdir)/src/ics/MovesGetter.cs \
+	$(top_srcdir)/src/ics/RelayGetter.cs \
+	$(top_srcdir)/src/ics/RelayTournamentsGetter.cs \
+	$(top_srcdir)/src/ics/RelayGamesGetter.cs \
+	$(top_srcdir)/src/ics/RelayTournament.cs \
+	$(top_srcdir)/src/ics/RelayGame.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs \
 	$(top_srcdir)/src/ics/MatchChallenge.cs \
 	$(top_srcdir)/src/ics/GameObservationManager.cs \
@@ -75,6 +80,7 @@ ICS_PLAYER_SRCS = \
 	$(top_srcdir)/src/ics/UI/Graph.cs \
 	$(top_srcdir)/src/ics/UI/GameAdvertisementGraph.cs \
 	$(top_srcdir)/src/ics/UI/ICSMenuBar.cs \
+	$(top_srcdir)/src/ics/UI/RelayTournamentsView.cs \
 	$(top_srcdir)/src/ics/UI/ShellTextView.cs
 
 SOURCE = \
