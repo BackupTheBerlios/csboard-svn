@@ -30,6 +30,7 @@ namespace CsBoard
 			RelayGetter:IAsyncCommandResponseListener
 		{
 			bool start_parsing;
+			bool first_colon_seen;
 			protected ICSClient client;
 
 			protected RelayGetter (ICSClient c)
@@ -71,18 +72,20 @@ namespace CsBoard
 				  {
 					  return;
 				  }
-				if (args.LineType != LineType.Normal
-				    && args.LineType != LineType.Talk)
-				  {
-					  return;
-				  }
 				string line = args.Line;
-				if (line.Length == 0 || line[0] != ':')
+				if (first_colon_seen
+				    && (line.Length == 0 || line[0] != ':'))
 				  {
 					  client.LineReceivedEvent -=
 						  OnLineReceived;
 					  HandleCompletion ();
 					  return;
+				  }
+				else
+				  {
+					  if (line.Length > 0
+					      && line[0] == ':')
+						  first_colon_seen = true;
 				  }
 				if (line.Length == 1)
 					return;
