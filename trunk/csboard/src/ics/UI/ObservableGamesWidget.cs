@@ -38,13 +38,13 @@ namespace CsBoard
 					new ObservableGamesWidget (observer);
 				relayTournamentsView =
 					new RelayTournamentsView (client);
-				AppendPage (observableGamesWidget,
-					    new Label (Catalog.
-						       GetString ("Games")));
 				AppendPage (relayTournamentsView,
 					    new Label (Catalog.
 						       GetString
 						       ("Relayed Tournaments")));
+				AppendPage (observableGamesWidget,
+					    new Label (Catalog.
+						       GetString ("Games")));
 				ShowAll ();
 			}
 		}

@@ -41,9 +41,6 @@ namespace CsBoard
 				client = c;
 				store = new TreeStore (typeof (int),
 						       typeof (string),
-						       typeof (string),
-						       typeof (string),
-						       typeof (string),
 						       typeof (string));
 				  create_tree ();
 				  refreshButton = new Button (Stock.Refresh);
@@ -52,8 +49,8 @@ namespace CsBoard
 				  infoLabel.UseMarkup = true;
 				  infoLabel.Xalign = 0;
 				  infoLabel.Xpad = 4;
-				  infoLabel.Yalign = 0;
-				  infoLabel.Ypad = 4;
+				  //infoLabel.Yalign = 0;
+				  //infoLabel.Ypad = 4;
 				HBox box = new HBox ();
 				  box.PackStart (infoLabel, true, true, 4);
 				  box.PackStart (refreshButton, false, false,
@@ -74,6 +71,7 @@ namespace CsBoard
 			{
 				if (!successful)
 					return;
+				tree.Hide();
 				UpdateTournaments ();
 			}
 
@@ -86,38 +84,26 @@ namespace CsBoard
 			{
 				tree = new TreeView ();
 				tree.Model = store;
-				tree.HeadersVisible = true;
-				tree.HeadersClickable = true;
+				tree.HeadersVisible = false;
+				//tree.HeadersClickable = true;
 
 				CellRendererText renderer =
 					new CellRendererText ();
 				renderer.Yalign = 0;
 
 				TreeViewColumn col = new TreeViewColumn ();
-				col.Title = Catalog.GetString ("Tournament");
+				//col.Title = Catalog.GetString ("Tournament");
 				col.PackStart (renderer, false);
 				col.SetAttributes (renderer, "markup", 1);
+				CellRendererText resultRenderer =
+					new CellRendererText ();
+				resultRenderer.Xpad = 5;
+				resultRenderer.Yalign = 0;
+				col.PackStart (resultRenderer, false);
+				col.SetAttributes (resultRenderer, "markup",
+						   2);
+
 				tree.AppendColumn (col);
-
-				tree.AppendColumn (Catalog.
-						   GetString ("White"),
-						   new CellRendererText (),
-						   "text", 2);
-
-				tree.AppendColumn (Catalog.
-						   GetString ("Black"),
-						   new CellRendererText (),
-						   "text", 3);
-
-				tree.AppendColumn (Catalog.
-						   GetString ("Result"),
-						   new CellRendererText (),
-						   "text", 4);
-
-				tree.AppendColumn (Catalog.
-						   GetString ("Opening"),
-						   new CellRendererText (),
-						   "text", 5);
 				tree.RowActivated += OnRowActivated;
 			}
 
@@ -151,7 +137,7 @@ namespace CsBoard
 						  OnRelayTournament;
 					  getter.RelayTournamentGameEvent -=
 						  OnRelayTournamentGame;
-					  if (ntourneys == 0)
+					  if (ntourneys == 0) {
 						  infoLabel.Markup =
 							  String.
 							  Format
@@ -159,6 +145,8 @@ namespace CsBoard
 							   Catalog.
 							   GetString
 							   ("There are no relay tournaments"));
+						  tree.Hide();
+					  }
 					  else
 						  infoLabel.Markup =
 							  String.
@@ -170,14 +158,16 @@ namespace CsBoard
 					  relay_pending = false;
 					  return;
 				  }
+
+				tree.Show();
+
 				store.AppendValues (args.Tournament.ID,
 						    String.
 						    Format
-						    ("<b>{0}</b>\n<i>{1}</i>",
+						    ("<span color=\"#702020\"><b>{0}</b>\n<small><i>{1}</i></small></span>",
 						     args.Tournament.Name,
 						     args.Tournament.
-						     RoundInfo), "", "", "",
-						    "");
+						     RoundInfo), "");
 				ntourneys++;
 				infoLabel.Markup =
 					String.Format (Catalog.
@@ -227,20 +217,55 @@ namespace CsBoard
 					opening = game.Opening;
 				else
 					opening =
-						String.Format ("{0} ({1})",
-							       opening,
-							       game.Opening);
+						String.
+						Format ("<b>{0}</b> ({1})",
+							opening,
+							game.Opening);
 
-				store.AppendValues (iter, game.ID, "",
-						    game.White, game.Black,
-						    game.Result, opening);
+				string result;
+				if (game.Result.Equals ("*"))
+				  {
+					  result = String.
+						  Format
+						  ("<span color=\"#808080\">{0}</span>",
+						   Catalog.
+						   GetString ("In Progress"));
+				  }
+				else if (game.Result.Equals ("1/2-1/2"))
+				  {
+					  result = Catalog.GetString ("Draw");
+				  }
+				else if (game.Result.Equals ("1-0"))
+				  {
+					  result = Catalog.
+						  GetString ("White Won");
+				  }
+				else if (game.Result.Equals ("0-1"))
+				  {
+					  result = Catalog.
+						  GetString ("Black Won");
+				  }
+				else
+				  {
+					  result = game.Result;
+				  }
+
+				store.AppendValues (iter, game.ID,
+						    String.
+						    Format
+						    ("<b>{0}</b> - <b>{1}</b>\n"
+						     + "<small>{2}</small>",
+						     game.White, game.Black,
+						     opening),
+						    String.
+						    Format ("<b>{0}</b>",
+							    result));
 				infoLabel.Markup =
 					String.Format (Catalog.
 						       GetString
 						       ("<b>Tournaments: {0}, Games {1} ...</b>"),
 						       ntourneys, ngames);
 			}
-
 
 			private void OnRowActivated (object o,
 						     RowActivatedArgs args)
