@@ -2,6 +2,24 @@
 
 	modified
 
+	* src/viewer/Widgets/ChessGameWidget.cs
+	* src/Window.cs
+	* src/ics/UI/ICSDetailsWidget.cs
+	* src/ics/UI/ObservableGamesWidget.cs
+	* src/ics/UI/RelayTournamentsView.cs
+	* Makefile.am
+
+	added
+
+	* src/ics/UI/NotificationWidget.cs
+
+	adds notification mechanism to alert about relay tournaments
+	needs improvement
+
+2008-02-02 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified
+
 	* src/ics/UI/ICSDetailsWidget.cs
 	* src/ics/UI/ObservableGamesWidget.cs
 	* Makefile.am

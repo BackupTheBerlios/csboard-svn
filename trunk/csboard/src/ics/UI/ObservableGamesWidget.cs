@@ -47,6 +47,11 @@ namespace CsBoard
 						       GetString ("Games")));
 				ShowAll ();
 			}
+
+			public void ShowRelayTournamentsPage ()
+			{
+				CurrentPage = 0;	// relay tournaments page
+			}
 		}
 
 		public class ObservableGamesWidget:VBox
@@ -135,30 +140,30 @@ namespace CsBoard
 					obManager.GetGames ();
 				};
 				Alignment align = new Alignment (0, 1, 0, 0);
-				  align.Add (refreshButton);
+				align.Add (refreshButton);
 
 				HBox hbox = new HBox ();
-				  hbox.PackStart (infoLabel, true, true, 4);
-				  hbox.PackStart (align, false, false, 4);
+				hbox.PackStart (infoLabel, true, true, 4);
+				hbox.PackStart (align, false, false, 4);
 
-				  PackStart (hbox, false, true, 4);
+				PackStart (hbox, false, true, 4);
 
 				Label tipLabel = new Label ();
-				  tipLabel.Xalign = 0;
-				  tipLabel.Xpad = 4;
-				  tipLabel.Markup =
+				tipLabel.Xalign = 0;
+				tipLabel.Xpad = 4;
+				tipLabel.Markup =
 					String.
 					Format ("<small><i>{0}</i></small>",
 						Catalog.
 						GetString
 						("Press the refresh button to get an updated list of games.\nDouble click on a game to observe it."));
-				  PackStart (tipLabel, false, true, 4);
-				  PackStart (filterEntry, false, true, 4);
-				  PackStart (win, true, true, 4);
+				PackStart (tipLabel, false, true, 4);
+				PackStart (filterEntry, false, true, 4);
+				PackStart (win, true, true, 4);
 
-				  gamesView.RowActivated += OnRowActivated;
-				  SetSizeRequest (600, 400);
-				  ShowAll ();
+				gamesView.RowActivated += OnRowActivated;
+				SetSizeRequest (600, 400);
+				ShowAll ();
 			}
 
 			private void AddCategoryIters (int type,

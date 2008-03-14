@@ -25,7 +25,7 @@ namespace CsBoard
 {
 	namespace ICS
 	{
-		public class ICSDetailsWidget:Frame, SubApp
+		public class ICSDetailsWidget:VBox, SubApp
 		{
 			public event TitleChangedEventHandler
 				TitleChangedEvent;
@@ -38,6 +38,14 @@ namespace CsBoard
 			ICSClient client;
 
 			ICSMenuBar menubar;
+			NotificationWidget notification;
+			public NotificationWidget NotificationWidget
+			{
+				get
+				{
+					return notification;
+				}
+			}
 
 			public MenuBar MenuBar
 			{
@@ -101,6 +109,19 @@ namespace CsBoard
 			string title;
 			bool app_visible = false;
 
+			static ICSDetailsWidget instance;
+			public static ICSDetailsWidget Instance
+			{
+				get
+				{
+					if (instance == null)
+						instance =
+							new
+							ICSDetailsWidget ();
+					return instance;
+				}
+			}
+
 			public ICSDetailsWidget ():base ()
 			{
 				menubar = new ICSMenuBar ();
@@ -129,7 +150,10 @@ namespace CsBoard
 				book.TabPos = PositionType.Left;
 				book.Show ();
 
-				Add (book);
+				notification = new NotificationWidget ();
+				//notification.AcceptLabel = "Go";
+				PackStart (notification, false, true, 4);
+				PackStart (book, true, true, 4);
 
 				obManager =
 					new GameObservationManager (client,
@@ -155,15 +179,14 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate ();
-					       return false;
-					       }
+					       Authenticate (); return false;}
 				);
 
 				ShowAll ();
 				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
 				menubar.showTabsMenuItem.Activated +=
 					on_showtabs_activated;
+				notification.Hide ();
 			}
 
 			public void AddPage (Widget page, Widget label,
@@ -242,6 +265,23 @@ namespace CsBoard
 					 new Label (Catalog.
 						    GetString ("Shell")),
 					 item);
+			}
+
+			public void ShowTournamentsPage ()
+			{
+				int index = 0;
+				foreach (Widget w in book.Children)
+				{
+					if (w.Equals (observableGames))
+					  {
+						  book.CurrentPage = index;
+						  observableGames.
+							  ShowRelayTournamentsPage
+							  ();
+						  break;
+					  }
+					index++;
+				}
 			}
 
 			private static Image GetLabelImage (string name)

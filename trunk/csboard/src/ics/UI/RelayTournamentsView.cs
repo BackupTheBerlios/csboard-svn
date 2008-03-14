@@ -36,6 +36,7 @@ namespace CsBoard
 			Label infoLabel;
 			int ntourneys, ngames;
 			TournamentsGetter getter;
+		  bool sendnotification = false;
 			public RelayTournamentsView (ICSClient c)
 			{
 				client = c;
@@ -73,6 +74,7 @@ namespace CsBoard
 					return;
 				tree.Hide();
 				UpdateTournaments ();
+				sendnotification = true;
 			}
 
 			private void OnClicked (object o, EventArgs args)
@@ -146,16 +148,21 @@ namespace CsBoard
 							   GetString
 							   ("There are no relay tournaments"));
 						  tree.Hide();
+						  return;
 					  }
-					  else
-						  infoLabel.Markup =
-							  String.
-							  Format (Catalog.
-								  GetString
-								  ("<b>Tournaments: {0}, Games {1}</b>"),
-								  ntourneys,
-								  ngames);
+					  infoLabel.Markup =
+					    String.
+					    Format (Catalog.
+						    GetString
+						    ("<b>Tournaments: {0}, Games {1}</b>"),
+						    ntourneys,
+						    ngames);
 					  relay_pending = false;
+					  if(sendnotification) {
+					    ICSDetailsWidget ics = ICSDetailsWidget.Instance;
+					    ics.NotificationWidget.SetNotification(new TournamentInfoNotification(ics, ntourneys + " tournaments available. Show?"), 5);
+					    sendnotification = false;
+					  }
 					  return;
 				  }
 

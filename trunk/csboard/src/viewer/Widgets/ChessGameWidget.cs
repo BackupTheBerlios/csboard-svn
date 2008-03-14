@@ -289,9 +289,14 @@ namespace CsBoard
 			}
 
 			private void on_play_next_event (object o,
-							 EventArgs args)
+							 PlayNextEventArgs
+							 args)
 			{
 				handle_next ();
+				if (boardWidget.Session.CurrentComment !=
+				    null)
+					args.StopTimer = true;
+
 				if (!boardWidget.Session.HasNext ())
 				  {
 					  playButton.Pause ();
@@ -299,8 +304,30 @@ namespace CsBoard
 			}
 		}
 
+		public class PlayNextEventArgs:EventArgs
+		{
+			bool stop;
+			public bool StopTimer
+			{
+				set
+				{
+					stop = value;
+				}
+				get
+				{
+					return stop;
+				}
+			}
+
+			public PlayNextEventArgs ():base ()
+			{
+				stop = false;
+			}
+		}
+
 		public delegate void PlayNextEventHandler (object o,
-							   EventArgs args);
+							   PlayNextEventArgs
+							   args);
 		class PlayPauseButton:Button
 		{
 			Image playImg, pauseImg;
@@ -343,9 +370,16 @@ namespace CsBoard
 				playing = true;
 				Image = pauseImg;
 
+				PlayNextEventArgs args =
+					new PlayNextEventArgs ();
 				if (PlayNextEvent != null)
-					PlayNextEvent (this, EventArgs.Empty);
+					PlayNextEvent (this, args);
 
+				if (args.StopTimer)
+				  {
+					  Pause ();
+					  return;
+				  }
 				timeoutid =
 					GLib.Timeout.Add (timeout,
 							  new GLib.
@@ -371,8 +405,17 @@ namespace CsBoard
 				if (!playing)
 					return false;
 
+
+				PlayNextEventArgs args =
+					new PlayNextEventArgs ();
 				if (PlayNextEvent != null)
-					PlayNextEvent (this, EventArgs.Empty);
+					PlayNextEvent (this, args);
+
+				if (args.StopTimer)
+				  {
+					  Pause ();
+					  return false;
+				  }
 
 				return true;
 			}

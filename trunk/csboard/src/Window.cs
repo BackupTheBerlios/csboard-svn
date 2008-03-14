@@ -132,7 +132,7 @@ namespace CsBoard
 			playerToolButton.Sensitive = false;
 			TitleChangedEvent += OnAppTitleChanged;
 
-			AddApp (new CsBoard.ICS.ICSDetailsWidget ());
+			AddApp (CsBoard.ICS.ICSDetailsWidget.Instance);
 			CsBoard.Viewer.GameViewer.CreateInstance ();
 			playerToolButton.Clicked += OnToolButtonClicked;
 
@@ -149,7 +149,8 @@ namespace CsBoard
 						 {
 						 CsBoard.Viewer.GameViewer.
 						 Instance.Load (filename);
-						 return false;}
+						 return false;
+						 }
 				  );
 			  }
 
