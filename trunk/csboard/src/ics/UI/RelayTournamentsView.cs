@@ -36,7 +36,8 @@ namespace CsBoard
 			Label infoLabel;
 			int ntourneys, ngames;
 			TournamentsGetter getter;
-		  bool sendnotification = false;
+			bool sendnotification = false;
+			const int TOURNAMENTS_NOTIFICATION_TIMEOUT = 10;
 			public RelayTournamentsView (ICSClient c)
 			{
 				client = c;
@@ -148,6 +149,7 @@ namespace CsBoard
 							   GetString
 							   ("There are no relay tournaments"));
 						  tree.Hide();
+						  relay_pending = false;
 						  return;
 					  }
 					  infoLabel.Markup =
@@ -160,7 +162,7 @@ namespace CsBoard
 					  relay_pending = false;
 					  if(sendnotification) {
 					    ICSDetailsWidget ics = ICSDetailsWidget.Instance;
-					    ics.NotificationWidget.SetNotification(new TournamentInfoNotification(ics, ntourneys + " tournaments available. Show?"), 5);
+					    ics.NotificationWidget.SetNotification(new TournamentInfoNotification(ics, ntourneys + " tournaments available. Show?"), TOURNAMENTS_NOTIFICATION_TIMEOUT);
 					    sendnotification = false;
 					  }
 					  return;
