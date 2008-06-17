@@ -28,14 +28,6 @@ namespace CsBoard
 		{
 			public class Tournament
 			{
-				int id;
-				public int ID
-				{
-					get
-					{
-						return id;
-					}
-				}
 				string name;
 				public string Name
 				{
@@ -44,20 +36,11 @@ namespace CsBoard
 						return name;
 					}
 				}
-				string roundinfo;
 				public string RoundInfo
 				{
 					get
 					{
-						return roundinfo;
-					}
-				}
-				string extrainfo;
-				public string ExtraInfo
-				{
-					get
-					{
-						return extrainfo;
+						return "";
 					}
 				}
 
@@ -68,41 +51,16 @@ namespace CsBoard
 					Regex reg =
 						new
 						Regex
-						(":(?<id>\\d+)\\s+(?<name>.*)\\s+-?\\s+(?<extra>\\w.*)");
-					//new Regex(":(?<id>\\d+)\\s+(?<name>.*)\\s+-\\s+(?<extra>\\w.*)");
+						(":There are (?<id>\\d+) games in the (?<name>.*)");
+					//(":(?<id>\\d+)\\s+(?<name>.*)\\s+-?\\s+(?<extra>\\w.*)");
 					Match m = reg.Match (line);
 					if (!m.Success)
 					  {
 						  return null;
 					  }
-					try
-					{
-						t.id = Int32.Parse (m.
-								    Groups
-								    ["id"].
-								    Value);
-					}
-					catch
-					{
-						return null;
-					}
 					t.name = m.Groups["name"].Value.
 						Trim ();
-					string extra =
-						m.Groups["extra"].Value;
-					int index;
-					if ((index =
-					     extra.IndexOf ("  ")) < 0)
-					  {
-						  t.roundinfo = extra;
-						  t.extrainfo = null;
-						  return t;
-					  }
-					t.roundinfo =
-						extra.Substring (0, index);
-					t.extrainfo =
-						extra.Substring (index + 2);
-					return t;
+					  return t;
 				}
 
 				public override string ToString ()
@@ -110,12 +68,8 @@ namespace CsBoard
 					StringBuilder buf =
 						new StringBuilder ();
 					buf.Append (String.
-						    Format ("ID: {0}\n" +
-							    "Name: {1}\n" +
-							    "Round: {2}\n" +
-							    "Extra: {3}", id,
-							    name, roundinfo,
-							    extrainfo));
+						    Format ("Name: {0}",
+							    name));
 					return buf.ToString ();
 				}
 			}

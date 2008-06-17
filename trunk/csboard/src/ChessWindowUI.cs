@@ -559,7 +559,7 @@ namespace CsBoard
 		{
 			AboutDialog ad = new AboutDialog ();
 
-			ad.Name = "CsBoard";
+			ad.ProgramName = "CsBoard";
 			ad.Authors = new string[]
 			{
 			"Nickolay V. Shmyrev <nshmyrev@yandex.ru>",

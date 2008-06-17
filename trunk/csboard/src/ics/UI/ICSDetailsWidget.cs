@@ -147,7 +147,7 @@ namespace CsBoard
 						       client.server,
 						       client.port);
 				book = new Notebook ();
-				book.TabPos = PositionType.Left;
+				book.TabPos = PositionType.Top;
 				book.Show ();
 
 				notification = new NotificationWidget ();
@@ -179,7 +179,9 @@ namespace CsBoard
 				menubar.disconnectMenuItem.Sensitive = false;
 				GLib.Idle.Add (delegate ()
 					       {
-					       Authenticate (); return false;}
+					       Authenticate ();
+					       return false;
+					       }
 				);
 
 				ShowAll ();

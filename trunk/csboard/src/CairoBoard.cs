@@ -170,47 +170,65 @@ namespace CsBoard
 		{
 			// HACK: generate one more expose event by QueueDraw
 			// TODO: Avoid this hack. Find a better way
-			Cairo.Context cairo =
-				Gdk.CairoHelper.Create (evnt.Window);
-			cairo.Rectangle (evnt.Area.X, evnt.Area.Y,
-					 evnt.Area.Width, evnt.Area.Height);
-			cairo.Clip ();
+#if OLD_SYSTEMS
+			//
+			// For old versions of Gtk# (before 2.8), you need the helper class
+			// available in gtk-sharp/sample/GtkCairo.cs
+			//
+			using (Cairo.Context cairo =
+			       Gdk.Graphics.CreateDrawable (evnt.Window))
+			{
+#else
+			//
+			// Starting with Gtk 2.8 Gtk has direct support for
+			// Cairo, as its built on top of it, on older
+			// versions, a helper routine is used
+			//
+			using (Context cairo =
+			       Gdk.CairoHelper.Create (evnt.Window))
+			{
+#endif
+				cairo.Rectangle (evnt.Area.X, evnt.Area.Y,
+						 evnt.Area.Width,
+						 evnt.Area.Height);
+				cairo.Clip ();
 
-			DrawBackground (cairo);
+				DrawBackground (cairo);
 
-			if (showMoveHint
-			    && (info.stage == MoveStage.Drag
-				|| info.stage == MoveStage.Start))
-			  {
-				  DrawMoveHint (cairo);
-			  }
+				if (showMoveHint
+				    && (info.stage == MoveStage.Drag
+					|| info.stage == MoveStage.Start))
+				  {
+					  DrawMoveHint (cairo);
+				  }
 
-			if (showCoords)
-			  {
-				  DrawCoords (cairo);
-			  }
+				if (showCoords)
+				  {
+					  DrawCoords (cairo);
+				  }
 
-			if (info.stage != MoveStage.SetPosition)
-			  {
-				  DrawPosition (cairo);
-			  }
-			else
-			  {
-				  DrawAnimate (cairo);
-			  }
+				if (info.stage != MoveStage.SetPosition)
+				  {
+					  DrawPosition (cairo);
+				  }
+				else
+				  {
+					  DrawAnimate (cairo);
+				  }
 
-			if (highLightMove
-			    && info.stage != MoveStage.SetPosition)
-			  {
-				  DrawLastMove (cairo);
-			  }
+				if (highLightMove
+				    && info.stage != MoveStage.SetPosition)
+				  {
+					  DrawLastMove (cairo);
+				  }
 
-			DrawMove (cairo);
+				DrawMove (cairo);
 
-			if (info.stage == MoveStage.Drag)
-			  {
-				  DrawDrag (cairo);
-			  }
+				if (info.stage == MoveStage.Drag)
+				  {
+					  DrawDrag (cairo);
+				  }
+			}
 
 			return false;
 		}

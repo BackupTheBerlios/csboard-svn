@@ -149,8 +149,7 @@ namespace CsBoard
 						 {
 						 CsBoard.Viewer.GameViewer.
 						 Instance.Load (filename);
-						 return false;
-						 }
+						 return false;}
 				  );
 			  }
 

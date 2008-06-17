@@ -26,24 +26,32 @@ namespace CsBoard
 {
 	namespace ICS
 	{
-		public abstract class
-			RelayGetter:IAsyncCommandResponseListener
+		public delegate void RelayGameEventHandler (object o,
+							    Game game);
+		public delegate void RelayTournamentEventHandler (object o,
+								  Tournament
+								  t);
+		public class RelayGetter:IAsyncCommandResponseListener
 		{
 			bool start_parsing;
 			bool first_colon_seen;
 			protected ICSClient client;
+			public event RelayGameEventHandler RelayGameEvent;
+			public event RelayTournamentEventHandler
+				RelayTournamentEvent;
 
-			protected RelayGetter (ICSClient c)
+			public RelayGetter (ICSClient c)
 			{
 				start_parsing = false;
 				client = c;
 				client.LineReceivedEvent += OnLineReceived;
 			}
 
-			protected void SendCommand (string command)
+			public void Start ()
 			{
-				client.CommandSender.SendCommand (command,
-								  this);
+				client.CommandSender.
+					SendCommand ("xtell relay listgames",
+						     this);
 			}
 
 			public virtual void CommandResponseLine (int id,
@@ -64,36 +72,55 @@ namespace CsBoard
 				start_parsing = true;
 			}
 
-			private void OnLineReceived (object o,
-						     LineReceivedEventArgs
-						     args)
+			void OnLineReceived (object o,
+					     LineReceivedEventArgs args)
 			{
 				if (!start_parsing)
 				  {
 					  return;
 				  }
-				string line = args.Line;
-				if (first_colon_seen
-				    && (line.Length == 0 || line[0] != ':'))
-				  {
-					  client.LineReceivedEvent -=
-						  OnLineReceived;
-					  HandleCompletion ();
-					  return;
-				  }
-				else
+				string line = args.Line.Trim ();
+
+				if (first_colon_seen)
 				  {
 					  if (line.Length > 0
-					      && line[0] == ':')
-						  first_colon_seen = true;
+					      && line[0] != ':')
+						  HandleCompletion ();
+					  else
+						  ProcessLine (line);
+					  return;
 				  }
-				if (line.Length == 1)
-					return;
-				ProcessLine (line);
+
+				if (!first_colon_seen && line.Length > 0
+				    && line[0] == ':')
+					first_colon_seen = true;
 			}
 
-			protected abstract void ProcessLine (string line);
-			protected abstract void HandleCompletion ();
+			void ProcessLine (string line)
+			{
+				Tournament t = Tournament.FromLine (line);
+				if (t != null)
+				  {
+					  if (RelayTournamentEvent != null)
+						  RelayTournamentEvent (this,
+									t);
+					  return;
+				  }
+
+				Game g = Game.FromLine (line);
+				if (g != null)
+				  {
+					  if (RelayGameEvent != null)
+						  RelayGameEvent (this, g);
+					  return;
+				  }
+			}
+			void HandleCompletion ()
+			{
+				client.LineReceivedEvent -= OnLineReceived;
+				if (RelayTournamentEvent != null)
+					RelayTournamentEvent (this, null);
+			}
 		}
 	}
 }

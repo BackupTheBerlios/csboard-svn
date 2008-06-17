@@ -250,17 +250,19 @@ namespace CsBoard
 		}
 		public string LastAppName
 		{
-		  get {
-		    return null;
-		  }
-		  set {
-		  }
+			get
+			{
+				return null;
+			}
+			set
+			{
+			}
 		}
 		public bool ICSShowTabs
 		{
 			get
 			{
-			  return true;
+				return true;
 			}
 			set
 			{

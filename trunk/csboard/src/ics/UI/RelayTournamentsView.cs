@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text;
 using Mono.Unix;
 using CsBoard.Viewer;
+using CsBoard.ICS.Relay;
 
 namespace CsBoard
 {
@@ -35,12 +36,15 @@ namespace CsBoard
 			Button refreshButton;
 			Label infoLabel;
 			int ntourneys, ngames;
-			TournamentsGetter getter;
+			RelayGetter getter;
 			bool sendnotification = false;
 			const int TOURNAMENTS_NOTIFICATION_TIMEOUT = 10;
+			TreeIter tournamentIter;
+
 			public RelayTournamentsView (ICSClient c)
 			{
 				client = c;
+				tournamentIter = TreeIter.Zero;
 				store = new TreeStore (typeof (int),
 						       typeof (string),
 						       typeof (string));
@@ -51,8 +55,8 @@ namespace CsBoard
 				  infoLabel.UseMarkup = true;
 				  infoLabel.Xalign = 0;
 				  infoLabel.Xpad = 4;
-				  //infoLabel.Yalign = 0;
-				  //infoLabel.Ypad = 4;
+				//infoLabel.Yalign = 0;
+				//infoLabel.Ypad = 4;
 				HBox box = new HBox ();
 				  box.PackStart (infoLabel, true, true, 4);
 				  box.PackStart (refreshButton, false, false,
@@ -73,7 +77,7 @@ namespace CsBoard
 			{
 				if (!successful)
 					return;
-				tree.Hide();
+				tree.Hide ();
 				UpdateTournaments ();
 				sendnotification = true;
 			}
@@ -116,6 +120,7 @@ namespace CsBoard
 					return;
 				relay_pending = true;
 				store.Clear ();
+				tournamentIter = TreeIter.Zero;
 				ntourneys = 0;
 				ngames = 0;
 				infoLabel.Markup =
@@ -123,100 +128,81 @@ namespace CsBoard
 					GetString
 					("<b>Getting tournament info...</b>");
 
-				getter = new TournamentsGetter (client);
+				getter = new RelayGetter (client);
 				getter.RelayTournamentEvent +=
 					OnRelayTournament;
-				getter.RelayTournamentGameEvent +=
+				getter.RelayGameEvent +=
 					OnRelayTournamentGame;
 				getter.Start ();
 			}
-			void OnRelayTournament (object o,
-						RelayTournamentEventArgs args)
+
+			void OnRelayTournament (object o, Tournament t)
 			{
 				//addsample();
-				if (args.IsEndOfList)
+				if (t != null)
 				  {
-					  getter.RelayTournamentEvent -=
-						  OnRelayTournament;
-					  getter.RelayTournamentGameEvent -=
-						  OnRelayTournamentGame;
-					  if (ntourneys == 0) {
-						  infoLabel.Markup =
-							  String.
-							  Format
-							  ("<span color=\"#800000\"><big><b>{0}</b></big></span>",
-							   Catalog.
-							   GetString
-							   ("There are no relay tournaments"));
-						  tree.Hide();
-						  relay_pending = false;
-						  return;
-					  }
+					  tree.Show ();
+
+					  tournamentIter =
+						  store.AppendValues (0,
+								      String.
+								      Format
+								      ("<span color=\"#702020\"><b>{0}</b>\n<small><i>{1}</i></small></span>",
+								       t.Name,
+								       t.
+								       RoundInfo),
+								      "");
+					  ntourneys++;
 					  infoLabel.Markup =
-					    String.
-					    Format (Catalog.
-						    GetString
-						    ("<b>Tournaments: {0}, Games {1}</b>"),
-						    ntourneys,
-						    ngames);
+						  String.Format (Catalog.
+								 GetString
+								 ("<b>Tournaments: {0}, Games {1} ...</b>"),
+								 ntourneys,
+								 ngames);
+					  return;
+				  }
+				getter.RelayTournamentEvent -=
+					OnRelayTournament;
+				getter.RelayGameEvent -=
+					OnRelayTournamentGame;
+				if (ntourneys == 0)
+				  {
+					  infoLabel.Markup =
+						  String.
+						  Format
+						  ("<span color=\"#800000\"><big><b>{0}</b></big></span>",
+						   Catalog.
+						   GetString
+						   ("There are no relay tournaments"));
+					  tree.Hide ();
 					  relay_pending = false;
-					  if(sendnotification) {
-					    ICSDetailsWidget ics = ICSDetailsWidget.Instance;
-					    ics.NotificationWidget.SetNotification(new TournamentInfoNotification(ics, ntourneys + " tournaments available. Show?"), TOURNAMENTS_NOTIFICATION_TIMEOUT);
-					    sendnotification = false;
-					  }
 					  return;
 				  }
-
-				tree.Show();
-
-				store.AppendValues (args.Tournament.ID,
-						    String.
-						    Format
-						    ("<span color=\"#702020\"><b>{0}</b>\n<small><i>{1}</i></small></span>",
-						     args.Tournament.Name,
-						     args.Tournament.
-						     RoundInfo), "");
-				ntourneys++;
 				infoLabel.Markup =
-					String.Format (Catalog.
-						       GetString
-						       ("<b>Tournaments: {0}, Games {1} ...</b>"),
-						       ntourneys, ngames);
+					String.
+					Format (Catalog.
+						GetString
+						("<b>Tournaments: {0}, Games {1}</b>"),
+						ntourneys, ngames);
+				relay_pending = false;
+				if (!sendnotification)
+					return;
+				ICSDetailsWidget ics =
+					ICSDetailsWidget.Instance;
+				ics.NotificationWidget.
+					SetNotification (new
+							 TournamentInfoNotification
+							 (ics,
+							  ntourneys
+							  +
+							  " tournaments available. Show?"),
+							 TOURNAMENTS_NOTIFICATION_TIMEOUT);
+				sendnotification = false;
 			}
 
-			private bool find_iter (int tournamentid,
-						out TreeIter iter)
+			void OnRelayTournamentGame (object o, Game game)
 			{
-				TreeIter curiter;
-				bool ret;
-				for (ret = store.GetIterFirst (out curiter);
-				     ret; ret = store.IterNext (ref curiter))
-				  {
-					  if (tournamentid ==
-					      (int) store.GetValue (curiter,
-								    0))
-					    {
-						    iter = curiter;
-						    return true;
-					    }
-				  }
-
-				iter = TreeIter.Zero;
-				return false;
-			}
-
-			void OnRelayTournamentGame (object o,
-						    RelayTournamentGameEventArgs
-						    args)
-			{
-				TreeIter iter;
-				if (!find_iter (args.Tournament.ID, out iter))
-				  {
-					  return;
-				  }
 				ngames++;
-				CsBoard.ICS.Relay.Game game = args.Game;
 				string opening = null;
 				if (GameViewer.EcoDb != null)
 					opening =
@@ -259,7 +245,7 @@ namespace CsBoard
 					  result = game.Result;
 				  }
 
-				store.AppendValues (iter, game.ID,
+				store.AppendValues (tournamentIter, game.ID,
 						    String.
 						    Format
 						    ("<b>{0}</b> - <b>{1}</b>\n"

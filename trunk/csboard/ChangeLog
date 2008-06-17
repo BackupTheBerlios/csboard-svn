@@ -1,3 +1,37 @@
+2008-06-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified
+	
+	* configure.in
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/Window.cs
+	* src/ics/ICSClient.cs
+	* src/ics/UI/ICSDetailsWidget.cs
+	* src/ics/UI/NotificationWidget.cs
+	* src/ics/UI/ObservableGamesWidget.cs
+	* src/ics/UI/RelayTournamentsView.cs
+	* src/ChessWindowUI.cs
+	* src/DummySession.cs
+	* src/CairoBoard.cs
+	* Makefile.am
+
+	removed
+	
+	* src/ics/RelayTournamentsGetter.cs
+	* src/ics/RelayGamesGetter.cs
+
+	moved the following files from src/ics to src/ics/relay
+	
+	* src/ics/RelayGetter.cs
+	* src/ics/RelayGame.cs
+	* src/ics/RelayTournament.cs
+	* src/ics/relay/RelayGame.cs
+	* src/ics/relay/RelayGetter.cs
+	* src/ics/relay/RelayTournament.cs
+
+	modified the tournament relay code since the 'listgames' relay
+	command was behaving differently. rearranged the code a bit
+
 2008-03-14 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified

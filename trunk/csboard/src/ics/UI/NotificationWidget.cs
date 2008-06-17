@@ -57,31 +57,43 @@ namespace CsBoard
 			}
 		}
 
-		public class NotificationWidget:HBox
+		public class NotificationWidget:EventBox
 		{
 			Button acceptButton, closeButton;
 			Label label;
 			uint timeoutid;
 			public Notification notification;
 
-			public NotificationWidget ()
+			public NotificationWidget ():base ()
 			{
-				label = new Label ();
-				label.Xalign = 0;
-				closeButton = new Button ();
-				closeButton.Image =
+				HBox box = new HBox ();
+				  label = new Label ();
+				  label.Xalign = 0;
+				  closeButton = new Button ();
+				  closeButton.Image =
 					new Image (Stock.Close,
 						   IconSize.Button);
-				closeButton.Clicked += on_close;
-				acceptButton = new Button (Stock.Ok);
-				acceptButton.Image =
+				  closeButton.Clicked += on_close;
+				  acceptButton = new Button (Stock.Ok);
+				  acceptButton.Image =
 					new Image (Stock.Ok, IconSize.Button);
-				acceptButton.Clicked += on_accept;
-				PackStart (label, true, true, 5);
-				PackStart (acceptButton, false, false, 5);
-				PackStart (closeButton, false, false, 5);
-				label.Show ();
-				closeButton.Show ();
+				  acceptButton.Clicked += on_accept;
+				  ModifyBg (StateType.Normal,
+					    new Gdk.Color (0xff, 0xff, 0xc0));
+
+				  box.PackStart (label, true, true, 5);
+				  box.PackStart (acceptButton, false, false,
+						 5);
+				  box.PackStart (closeButton, false, false,
+						 5);
+				  label.Show ();
+				  closeButton.Show ();
+
+				// This box will add some vertical padding
+				VBox b = new VBox ();
+				  b.PackStart (box, false, true, 5);
+
+				  Add (b);
 			}
 
 			public string AcceptLabel

@@ -519,8 +519,7 @@ namespace CsBoard
 						 (string) model.
 						 GetValue (iter, 0);
 						 updated.AddTag (tag);
-						 return false;
-						 }
+						 return false;}
 				);
 				if (newobj)
 					viewer.GameViewerWidget.

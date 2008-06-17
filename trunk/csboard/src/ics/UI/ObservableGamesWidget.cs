@@ -38,10 +38,11 @@ namespace CsBoard
 					new ObservableGamesWidget (observer);
 				relayTournamentsView =
 					new RelayTournamentsView (client);
+				TabPos = PositionType.Left;
 				AppendPage (relayTournamentsView,
 					    new Label (Catalog.
 						       GetString
-						       ("Relayed Tournaments")));
+						       ("Tournaments")));
 				AppendPage (observableGamesWidget,
 					    new Label (Catalog.
 						       GetString ("Games")));

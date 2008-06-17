@@ -59,11 +59,9 @@ ICS_PLAYER_SRCS = \
 	$(top_srcdir)/src/ics/GameInfo.cs \
 	$(top_srcdir)/src/ics/CommandSender.cs \
 	$(top_srcdir)/src/ics/MovesGetter.cs \
-	$(top_srcdir)/src/ics/RelayGetter.cs \
-	$(top_srcdir)/src/ics/RelayTournamentsGetter.cs \
-	$(top_srcdir)/src/ics/RelayGamesGetter.cs \
-	$(top_srcdir)/src/ics/RelayTournament.cs \
-	$(top_srcdir)/src/ics/RelayGame.cs \
+	$(top_srcdir)/src/ics/relay/RelayGetter.cs \
+	$(top_srcdir)/src/ics/relay/RelayTournament.cs \
+	$(top_srcdir)/src/ics/relay/RelayGame.cs \
 	$(top_srcdir)/src/ics/ICSSeek.cs \
 	$(top_srcdir)/src/ics/MatchChallenge.cs \
 	$(top_srcdir)/src/ics/GameObservationManager.cs \
@@ -207,7 +205,7 @@ RESOURCE_FILE_DEPENDS =						\
 PACKAGE_DEPENDS =							\
 	-pkg:gtk-sharp-2.0						\
 	-pkg:glade-sharp-2.0						\
-	-pkg:rsvg-sharp-2.0
+	-pkg:rsvg2-sharp-2.0
 
 if !WINDOWS_BUILD
 PACKAGE_DEPENDS += -pkg:gconf-sharp-2.0
