@@ -33,7 +33,6 @@ VIEWER_SRCS = \
 	$(top_srcdir)/src/viewer/Widgets/ChessGameView.cs \
 	$(top_srcdir)/src/viewer/Widgets/ChessGameWidget.cs \
 	$(top_srcdir)/src/viewer/Widgets/GamesListWidget.cs \
-	$(top_srcdir)/src/viewer/Widgets/GameViewerWidget.cs \
 	$(top_srcdir)/src/viewer/ViewerMenuBar.cs \
 	$(top_srcdir)/src/viewer/GameViewer.cs \
 	$(top_srcdir)/src/viewer/GameViewerUI.cs \

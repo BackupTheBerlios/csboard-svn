@@ -78,7 +78,7 @@ namespace CsBoard
 			private void on_export_ps_activate (object obj,
 							    EventArgs args)
 			{
-				if (viewer.GameViewerWidget.Games == null)
+				if (viewer.ChessGameWidget.Games == null)
 					return;
 				string file = viewer.AskForFile (null,
 								 Catalog.
@@ -89,14 +89,14 @@ namespace CsBoard
 					return;
 				PrintWrapper printer = new PrintWrapper ();
 				new ExportHandler (viewer,
-						   viewer.GameViewerWidget.
+						   viewer.ChessGameWidget.
 						   Games, printer, file);
 			}
 
 			private void on_print_activate (object obj,
 							EventArgs args)
 			{
-				if (viewer.GameViewerWidget.Games == null)
+				if (viewer.ChessGameWidget.Games == null)
 					return;
 				PrintWrapper printer = new PrintWrapper ();
 				PrintDialog dialog =
@@ -114,7 +114,7 @@ namespace CsBoard
 					  return;
 				  }
 				new PrintHandler (viewer,
-						  viewer.GameViewerWidget.
+						  viewer.ChessGameWidget.
 						  Games, printer, response);
 
 				dialog.Hide ();
@@ -124,14 +124,14 @@ namespace CsBoard
 
 		abstract class PGNExportHandler
 		{
-			protected ArrayList games;
+			protected IList games;
 			protected PrintWrapper printer;
 			protected int totalgames;
 			protected double ngames;	// so that a we can generate a fraction
 			protected GameViewer viewer;
 
 			public PGNExportHandler (GameViewer viewer,
-						 ArrayList games,
+						 IList games,
 						 PrintWrapper printer)
 			{
 				this.games = games;
@@ -177,7 +177,7 @@ namespace CsBoard
 		{
 			int response;
 			public PrintHandler (GameViewer viewer,
-					     ArrayList games,
+					     IList games,
 					     PrintWrapper printer,
 					     int response):base (viewer,
 								 games,
@@ -211,7 +211,7 @@ namespace CsBoard
 			string file;
 
 			public ExportHandler (GameViewer viewer,
-					      ArrayList games,
+					      IList games,
 					      PrintWrapper printer,
 					      string file):base (viewer,
 								 games,

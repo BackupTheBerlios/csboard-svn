@@ -44,14 +44,13 @@ namespace CsBoard
 			protected ProgressBar progressBar;
 
 
-			protected GameViewerWidget gameViewerWidget;
+			protected ChessGameWidget chessGameWidget;
 
 			public ChessGameView ChessGameView
 			{
 				get
 				{
-					return gameViewerWidget.
-						ChessGameWidget.NotationView;
+					return chessGameWidget.NotationView;
 				}
 			}
 
@@ -59,7 +58,7 @@ namespace CsBoard
 			{
 				get
 				{
-					return gameViewerWidget.
+					return chessGameWidget.
 						GamesListWidget;
 				}
 			}
@@ -202,10 +201,9 @@ namespace CsBoard
 				menubar = new ViewerMenuBar ();
 				// this will be enabled as and when
 				menubar.moveCommentMenuItem.Sensitive = false;
-				gameViewerWidget =
-					new GameViewerWidget (this);
+				chessGameWidget = new ChessGameWidget (this);
 
-				PackStart (gameViewerWidget, true, true, 2);
+				PackStart (chessGameWidget, true, true, 2);
 				statusBar = new Statusbar ();
 				progressBar = new ProgressBar ();
 				progressBar.Stop ();

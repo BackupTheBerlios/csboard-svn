@@ -90,7 +90,7 @@ namespace CsBoard
 
 			private bool AddGamesIdleHandler ()
 			{
-				IList games = viewer.GameViewerWidget.Games;
+				IList games = viewer.ChessGameWidget.Games;
 				if (games == null)
 				  {
 					  dbDlg.Dispose ();
@@ -140,7 +140,7 @@ namespace CsBoard
 						  collection.
 							  AddGame (updated);
 					  GameDb.Instance.DB.Set (updated);
-					  viewer.GameViewerWidget.
+					  viewer.ChessGameWidget.
 						  UpdateGame (game, updated);
 
 					  ngames++;
@@ -373,7 +373,7 @@ namespace CsBoard
 								    ("Rating"))
 			{
 				this.viewer = viewer;
-				viewer.GameViewerWidget.GameLoadedEvent +=
+				viewer.ChessGameWidget.GameLoadedEvent +=
 					OnGameLoaded;
 				combo = new ComboBox (new string[]
 						      {
@@ -455,7 +455,7 @@ namespace CsBoard
 			{
 				combo.Active = -1;
 				PGNGameDetails details =
-					viewer.GameViewerWidget.
+					viewer.ChessGameWidget.
 					CurrentGame as PGNGameDetails;
 				if (details != null
 				    && details.Rating != GameRating.Unknown)
@@ -499,7 +499,7 @@ namespace CsBoard
 			{
 				save.Sensitive = false;
 				ChessGame game =
-					viewer.GameViewerWidget.CurrentGame;
+					viewer.ChessGameWidget.CurrentGame;
 				if (game == null)
 					return;
 				PGNGameDetails updated;
@@ -522,7 +522,7 @@ namespace CsBoard
 						 return false;}
 				);
 				if (newobj)
-					viewer.GameViewerWidget.
+					viewer.ChessGameWidget.
 						UpdateCurrentGame (updated);
 				GameDb.Instance.SaveGame (updated);
 				UpdateTagDetails (updated);

@@ -16,6 +16,7 @@
 // Copyright (C) 2006 Ravi Kiran UVS
 
 using System;
+using System.Collections;
 using Gtk;
 using Chess.Parser;
 using Mono.Unix;
@@ -24,10 +25,17 @@ namespace CsBoard
 {
 	namespace Viewer
 	{
+		public delegate void GameLoadedEventHandler (object o,
+							     EventArgs args);
+
+		public delegate void GamesLoadedEventHandler (object o,
+							      EventArgs args);
 		/* This widget will show the chess game notation as well as the board
 		 */
 		public class ChessGameWidget:VBox
 		{
+			public event GameLoadedEventHandler GameLoadedEvent;
+			public event GamesLoadedEventHandler GamesLoadedEvent;
 			Label nagCommentLabel;
 			Label moveNumberLabel;
 			public Button firstButton, prevButton, nextButton,
@@ -37,6 +45,14 @@ namespace CsBoard
 			ChessGameView gameView;
 
 			HPaned splitPane;
+			ArrayList games;
+			public IList Games
+			{
+				get
+				{
+					return games;
+				}
+			}
 
 			ChessGameBoard boardWidget;
 
@@ -70,13 +86,37 @@ namespace CsBoard
 					return splitPane;
 				}
 			}
+			ChessGame currentGame;
+			public ChessGame CurrentGame
+			{
+				get
+				{
+					return currentGame;
+				}
+			}
 
-			public ChessGameWidget ():base ()
+			Notebook book;
+			const int CURRENT_GAME_PAGE = 1;
+			SearchableGamesListWidget gamesListWidget;
+			public SearchableGamesListWidget GamesListWidget
+			{
+				get
+				{
+					return gamesListWidget;
+				}
+			}
+
+			public ChessGameWidget (GameViewerUI viewer):base ()
 			{
 				gameView = new ChessGameView ();
+				gamesListWidget =
+					new
+					SearchableGamesListWidget (viewer);
+
 				gameView.ShowNthMove += OnShowNthMoveEvent;
 
 				boardWidget = new ChessGameBoard ();
+				book = new Notebook ();
 
 				splitPane = new HPaned ();
 
@@ -85,16 +125,35 @@ namespace CsBoard
 
 				PackStart (splitPane, true, true, 2);
 
+				BoardWidget.Board.highLightMove =
+					App.Session.HighLightMove;
+
+				int pos = App.Session.ViewerSplitPanePosition;
+				int height = App.Session.ViewerHeight;
+				if (pos > height)
+					pos = height / 2;
+				splitPane.Position = pos;
+
+				gamesListWidget.View.GameSelectionEvent +=
+					OnGameSelectionEvent;
+				viewer.GamesLoadedEvent += OnGamesLoaded;
+
 				ShowAll ();
 			}
 
 			public void SetGame (ChessGame game)
 			{
+				currentGame = game;
+
 				boardWidget.SetGame (game);
 				gameView.SetGame (game);
 
 				moveNumberLabel.Text = "";
 				nagCommentLabel.Text = "";
+
+				if (GameLoadedEvent != null)
+					GameLoadedEvent (this,
+							 EventArgs.Empty);
 			}
 
 			public void Reset ()
@@ -221,7 +280,7 @@ namespace CsBoard
 				moveNumberLabel.Markup = move_markup;
 			}
 
-			private VBox GetRightPane ()
+			private Widget GetRightPane ()
 			{
 				VBox vbox = new VBox ();
 
@@ -284,8 +343,16 @@ namespace CsBoard
 				alignment.Show ();
 
 				vbox.PackStart (alignment, false, false, 2);
+				book.AppendPage (gamesListWidget,
+						 new Label (Catalog.
+							    GetString
+							    ("Games")));
+				book.AppendPage (vbox,
+						 new Label (Catalog.
+							    GetString
+							    ("Current Game")));
 
-				return vbox;
+				return book;
 			}
 
 			private void on_play_next_event (object o,
@@ -301,6 +368,63 @@ namespace CsBoard
 				  {
 					  playButton.Pause ();
 				  }
+			}
+
+			void OnGameSelectionEvent (ChessGame game)
+			{
+				book.CurrentPage = CURRENT_GAME_PAGE;
+				if (game.Equals (currentGame))
+					return;
+				SetGame (game);
+				//Page = GAME_DETAILS_PAGE;
+			}
+
+
+			/* This replaces the current game with the new game!
+			 * This needs to replace the object in the list and also
+			 * from the tree views (including the filter)
+			 * The game is assumed to be an exact copy of the existing
+			 * game but a subclass of it.
+			 */
+
+			public void UpdateCurrentGame (ChessGame game)
+			{
+				UpdateGame (currentGame, game);
+			}
+
+			public void UpdateGame (ChessGame curgame,
+						ChessGame game)
+			{
+				int idx = games.IndexOf (curgame);
+				games.RemoveAt (idx);
+				games.Insert (idx, game);
+				// TODO: fire an event
+				// Replace it in the stores
+				gamesListWidget.View.UpdateGame (curgame,
+								 game);
+			}
+
+			private void OnGamesLoaded (object o, EventArgs args)
+			{
+				LoadGames ((o as GameViewer).Games);
+			}
+
+			private void LoadGames (ArrayList games)
+			{
+				this.games = games;
+				if (GamesLoadedEvent != null)
+				  {
+					  GamesLoadedEvent (this,
+							    EventArgs.Empty);
+				  }
+
+				gamesListWidget.SetGames (games);
+				if (games.Count > 0)
+				  {
+					  SetGame (games[0] as ChessGame);
+				  }
+				if (games.Count == 1)
+					book.CurrentPage = CURRENT_GAME_PAGE;
 			}
 		}
 

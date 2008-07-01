@@ -1,3 +1,20 @@
+2008-07-01 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified
+
+	* Makefile.am
+	* src/viewer/plugins/gamedb/GameDbPlugin.cs
+	* src/viewer/plugins/printer/PGNPrinterPlugin.cs
+	* src/viewer/GameViewerUI.cs
+	* src/viewer/GameViewer.cs
+	* src/viewer/Widgets/ChessGameWidget.cs
+
+	removed
+	
+	* src/viewer/Widgets/GameViewerWidget.cs
+
+	Modified the viewer UI
+
 2008-06-17 Ravi Kiran UVS <uvsravikiran at gmail dot com>
 
 	modified

@@ -189,9 +189,11 @@ namespace CsBoard
 				toolbutton.ShowAll ();
 				progressBar.Hide ();
 
-				gameViewerWidget.ChessGameWidget.SplitPane.
-					Position =
-					App.Session.ViewerSplitPanePosition;
+				/*
+				   chessGameWidget.SplitPane.
+				   Position =
+				   App.Session.ViewerSplitPanePosition;
+				 */
 
 				CsBoardApp.Instance.QuitEvent += OnQuitEvent;
 			}
@@ -273,11 +275,11 @@ namespace CsBoard
 				SetGames (games);
 			}
 
-			public GameViewerWidget GameViewerWidget
+			public ChessGameWidget ChessGameWidget
 			{
 				get
 				{
-					return gameViewerWidget;
+					return chessGameWidget;
 				}
 			}
 
@@ -297,8 +299,7 @@ namespace CsBoard
 			{
 				get
 				{
-					return gameViewerWidget.
-						ChessGameWidget.
+					return chessGameWidget.
 						ChessGameDetailsBox;
 				}
 			}
@@ -320,7 +321,7 @@ namespace CsBoard
 			public void on_save_as_activate (System.Object b,
 							 EventArgs e)
 			{
-				ArrayList games = gameViewerWidget.Games;
+				IList games = chessGameWidget.Games;
 				if (games == null || games.Count == 0)
 					return;
 				string file = AskForFile (null,
@@ -345,21 +346,19 @@ namespace CsBoard
 				App.Session.CurrentFolder =
 					initialDirForFileChooser;
 				App.Session.ViewerSplitPanePosition =
-					gameViewerWidget.ChessGameWidget.
-					SplitPane.Position;
+					chessGameWidget.SplitPane.Position;
 			}
 
 			public void on_switch_side_activate (System.Object b,
 							     EventArgs e)
 			{
-				gameViewerWidget.ChessGameWidget.BoardWidget.
-					SwitchSides ();
+				chessGameWidget.BoardWidget.SwitchSides ();
 			}
 
 			public void OnEditCommentActivated (object o,
 							    EventArgs e)
 			{
-				if (gameViewerWidget.ChessGameWidget.
+				if (chessGameWidget.
 				    BoardWidget.Session.Game == null)
 					return;
 				BufferDialog dlg = new BufferDialog (null,
@@ -367,19 +366,19 @@ namespace CsBoard
 								     GetString
 								     ("Edit current comment"));
 				string currentComment =
-					gameViewerWidget.ChessGameWidget.
+					chessGameWidget.
 					BoardWidget.Session.CurrentComment;
 				if (currentComment != null)
 					dlg.Buffer = currentComment;
 				if (dlg.Run () == (int) ResponseType.Ok)
 				  {
 					  string comment = dlg.Buffer.Trim ();
-					  gameViewerWidget.ChessGameWidget.
+					  chessGameWidget.
 						  BoardWidget.Session.
 						  CurrentComment =
 						  comment.Length ==
 						  0 ? null : comment;
-					  gameViewerWidget.ChessGameWidget.
+					  chessGameWidget.
 						  NotationView.Refresh ();
 				  }
 				dlg.Hide ();
@@ -391,12 +390,12 @@ namespace CsBoard
 								      EventArgs
 								      args)
 			{
-				gameViewerWidget.ChessGameWidget.BoardWidget.
+				chessGameWidget.BoardWidget.
 					Board.highLightMove =
 					menubar.highlightMoveMenuItem.Active;
 				App.Session.HighLightMove =
 					menubar.highlightMoveMenuItem.Active;
-				gameViewerWidget.ChessGameWidget.BoardWidget.
+				chessGameWidget.BoardWidget.
 					Board.QueueDraw ();
 			}
 
