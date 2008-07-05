@@ -2,6 +2,26 @@
 
 	modified
 
+	* src/Position.cs
+	* src/ics/UI/ICSDetailsWidget.cs
+	* src/ics/UI/ICSConfigWidget.cs
+	* src/ChessWindowUI.cs
+	* Makefile.am
+
+	added
+	
+	* src/ProcIO.cs
+	* src/players
+	* src/players/GnuChess1.cs
+
+	Modified the GnuChess code to use async IO instead
+	of a separate thread. A new file has been created so
+	that the code can be replaced once it becomes stable.
+
+2008-07-01 Ravi Kiran UVS <uvsravikiran at gmail dot com>
+
+	modified
+
 	* Makefile.am
 	* src/viewer/plugins/gamedb/GameDbPlugin.cs
 	* src/viewer/plugins/printer/PGNPrinterPlugin.cs

@@ -67,6 +67,7 @@ namespace CsBoard
 		[Glade.Widget] protected Notebook appsBook;
 		[Glade.Widget] protected ToolButton playerToolButton;
 		[Glade.Widget] protected MenuBar menubar;
+		EngineInfo chosenEngine;
 
 		public event QuitEventHandler QuitEvent;
 		static ArrayList controls = new ArrayList ();
@@ -113,6 +114,7 @@ namespace CsBoard
 						  control =
 							  info.
 							  CreateInstance ();
+						  chosenEngine = info;
 						  break;
 					  }
 				}
@@ -122,12 +124,13 @@ namespace CsBoard
 						GetString
 						("<b>Unknown engine</b>\n\nPlease check gconf keys of csboard");
 			}
-			catch
+			catch (Exception e)
 			{
 				msg = String.Format (Catalog.
 						     GetString
 						     ("<b>Unable to load engine '{0}'</b>"),
 						     engine);
+				Console.WriteLine (e.StackTrace);
 
 			}
 			if (control == null)
@@ -194,8 +197,11 @@ namespace CsBoard
 			boardWidget =
 				new CairoPlayerBoard (control.GetPosition ());
 			chessGameWidget = new ChessGameWidget (boardWidget);
-			chessGameWidget.Black = Catalog.GetString ("Black");
-			chessGameWidget.White = Catalog.GetString ("White");
+			UpdateGameDetails ();
+			/*
+			   chessGameWidget.Black = Catalog.GetString ("Black");
+			   chessGameWidget.White = Catalog.GetString ("White");
+			 */
 
 			frame.Add (chessGameWidget);
 
@@ -287,12 +293,18 @@ namespace CsBoard
 
 		private string GetWhitePlayerName ()
 		{
-			return "White";
+			if (chessGameWidget.WhiteAtBottom
+			    || chosenEngine == null)
+				return Catalog.GetString ("White");
+			return chosenEngine.Name;
 		}
 
 		private string GetBlackPlayerName ()
 		{
-			return "Black";
+			if (!chessGameWidget.WhiteAtBottom
+			    || chosenEngine == null)
+				return Catalog.GetString ("Black");
+			return chosenEngine.Name;
 		}
 
 		public void on_open_activate (System.Object b, EventArgs e)
@@ -392,6 +404,7 @@ namespace CsBoard
 						     EventArgs e)
 		{
 			control.SwitchSide ();
+			UpdateGameDetails ();
 			return;
 		}
 
@@ -466,15 +479,15 @@ namespace CsBoard
 							      + hint);
 
 			md.DefaultResponse = ResponseType.Ok;
-			int response = md.Run ();
+			ResponseType response = (ResponseType) md.Run ();
+			Console.WriteLine ("Response: " + response);
+			md.Hide ();
+			md.Dispose ();
 
-			if (response == (int) ResponseType.Ok)
+			if (response == ResponseType.Ok)
 			  {
 				  control.MakeMove (hint);
 			  }
-
-			md.Hide ();
-			md.Dispose ();
 		}
 
 		public void on_level_activate (System.Object b, EventArgs e)

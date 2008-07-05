@@ -354,6 +354,8 @@ namespace CsBoard
 					return;
 
 				configwidget = new ICSConfigWidget (client);
+				configwidget.ConfigResponseEvent +=
+					OnConfigResponse;
 				int pageidx = book.NPages;
 				book.ShowTabs = false;
 				book.AppendPage (configwidget,
@@ -399,18 +401,18 @@ namespace CsBoard
 				menubar.connectMenuItem.Sensitive = false;
 				ShowConfigWidget ();
 				//align.Show();
+			}
 
-				if (configwidget.Run () ==
-				    (int) ResponseType.Ok)
+			void OnConfigResponse (object o, ResponseType r)
+			{
+				if (r != ResponseType.Ok)
 				  {
-					  client.Start ();
-					  configwidget.Sensitive = false;
-
+					  menubar.connectMenuItem.Sensitive =
+						  true;
+					  return;
 				  }
-				else
-					menubar.connectMenuItem.Sensitive =
-						true;
-
+				client.Start ();
+				configwidget.Sensitive = false;
 			}
 
 			private void OnConnectionError (object o,

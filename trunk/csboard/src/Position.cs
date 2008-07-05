@@ -77,6 +77,13 @@ namespace CsBoard
 
 		private ArrayList position;
 		private ArrayList takenPosition;
+		public ArrayList Pos
+		{
+			get
+			{
+				return position;
+			}
+		}
 
 		bool askForPromotion = true;
 		public bool AskForPromotion

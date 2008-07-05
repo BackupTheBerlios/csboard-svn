@@ -95,7 +95,8 @@ SOURCE = \
 	$(top_srcdir)/src/CairoPlayerBoard.cs \
 	$(top_srcdir)/src/PlayerBoard.cs \
 	$(top_srcdir)/src/Figure.cs \
-	$(top_srcdir)/src/GnuChess.cs \
+	$(top_srcdir)/src/players/ProcIO.cs \
+	$(top_srcdir)/src/players/GnuChess1.cs \
 	$(top_srcdir)/src/NullControl.cs \
 	$(top_srcdir)/src/Book.cs \
 	$(top_srcdir)/src/Promotion.cs \
